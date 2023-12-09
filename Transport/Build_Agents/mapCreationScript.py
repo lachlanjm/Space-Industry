@@ -135,12 +135,23 @@ for start in nodes:
     while len(queue):
         curr = queue.pop(0)
         if found_nodes[curr[0]][0] is None:
-            found_nodes[curr[0]] = [curr[2], curr[1]]
             new_path = curr[2] + [curr[0]]
+            found_nodes[curr[0]][0] = new_path
+            found_nodes[curr[0]][1] = curr[1]
+
+            ### LOGS DISCOVERED PATHS
+            #for n in new_path:
+            #    print(n, end=' => ')
+            #print()
 
             for conn in curr[0].connections:
                 if found_nodes[conn.dest][0] is None:
-                    new_dist = curr[1] + conn.distance
+                    if conn.type == "Terrestrial":
+                        new_dist = curr[1] + conn.distance
+                    elif conn.type == "Transit":
+                        new_dist = curr[1] + launch_weight * conn.distance
+                    elif conn.type == "Space":
+                        new_dist = curr[1] + space_weight * conn.distance
                     # Insert sort
                     i = 0
                     while i < len(queue) and queue[i][1] <= new_dist:
