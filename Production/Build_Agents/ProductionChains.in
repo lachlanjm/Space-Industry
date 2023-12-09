@@ -1,0 +1,188 @@
+Refinement Iron
+    Input:
+    1 x Iron Ore
+    Output:
+    1 x Iron
+
+Refinement Copper
+    Input:
+    1 x Copper Ore
+    Output:
+    1 x Copper
+
+Refinement Carbon
+    Input:
+    10 x Coal
+    2 x Oxygen
+    Output:
+    9 x Carbon
+    1 x Sulfur Dioxide
+
+Refinement Silicon
+    Input:
+    1 x Sand
+    2 x Carbon
+    Output:
+    1 x Silicon
+    2 x Carbon Monoxide
+
+Crush Rock
+    Energy: -1
+    Input:
+    2 x Rock
+    Output:
+    2 x Crushed Rock
+
+Fractional Distillation
+    Energy: -30
+    Input:
+    100 x Crude Oil
+    Output:
+    4 x Petroleum Gas
+    46 x Gasoline
+    2 x Naptha
+    11 x Kerosene
+    30 x Diesel
+    2 x Fuel Oil
+    1 x Lubricating Oil
+    2 x Bitumen
+    5 x Carbon
+
+Refinement Aviation Fuel
+    Input:
+    1 x Kerosene
+    Output:
+    1 x Aviation Fuel
+
+Plastic Production
+    Input:
+    1 x Naptha
+    Output:
+    1 x Plastic
+
+Asphalt Production
+    Input:
+    5 x Crushed Rock
+    5 x Sand
+    5 x Lime
+    1 x Bitumen
+    Output:
+    15 x Asphalt
+
+Steel Production
+    Input:
+    49 x Iron
+    1 x Carbon
+    Output:
+    50 x Steel
+
+Copper Wire Production
+    Input:
+    1 x Copper
+    Output:
+    1 x Copper Wire
+
+Electrolysis
+    Energy: -10
+    Input:
+    1 x Water
+    Output:
+    2 x Hydrogen
+    1 x Oxygen
+
+Carbonic Acid Production
+    Input:
+    1 x Water
+    1 x Carbon Dioxide
+    Output:
+    1 x Carbonic Acid
+
+Combustion Hydrogen
+    Energy: +10
+    Input:
+    2 x Hydrogen
+    1 x Oxygen
+    Output:
+    1 x Water
+
+Combustion Coal
+    Energy: +200
+    Input:
+    10 x Coal
+    20 x Oxygen
+    Output:
+    9 x Carbon Dioxide
+    1 x Sulfur Dioxide
+
+Combustion Carbon
+    Energy: +20
+    Input:
+    1 x Carbon
+    2 x Oxygen
+    Output:
+    1 x Carbon Dioxide
+
+Combustion Sulfur
+    Energy: +20
+    Input:
+    1 x Sulfur
+    2 x Oxygen
+    Output:
+    1 x Sulfur Dioxide
+
+Combustion Crude Oil
+    Energy: +200
+    Input:
+    10 x Crude Oil
+    41 x Oxygen
+    Output:
+    9 x Carbon Dioxide
+    7 x Water
+    2 x Nitrogen Dioxide
+    6 x Sulfur Dioxide
+
+Combustion Petroleum Gas
+    Energy: +200
+    Input:
+    10 x Petroleum Gas
+    13 x Oxygen
+    Output:
+    4 x Carbon Dioxide
+    5 x Water
+
+Combustion Gasoline
+    Energy: +100
+    Input:
+    5 x Gasoline
+    50 x Oxygen
+    Output:
+    16 x Carbon Dioxide
+    18 x Water
+
+Combustion Kerosene
+    Energy: +40
+    Input:
+    2 x Kerosene
+    54 x Oxygen
+    Output:
+    24 x Carbon Dioxide
+    26 x Water
+
+Combustion Aviation Fuel
+    Energy: +40
+    Input:
+    2 x Aviation Fuel
+    50 x Oxygen
+    Output:
+    16 x Carbon Dioxide
+    18 x Water
+
+Combustion Diesel
+    Energy: +40
+    Input:
+    2 x Diesel
+    72 x Oxygen
+    Output:
+    24 x Carbon Dioxide
+    24 x Water
+

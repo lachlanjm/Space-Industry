@@ -1,0 +1,125 @@
+North America
+    Earth Orbit ===> Transit: 10
+    South America ===> Terrestrial: 5
+    Western Europe ===> Terrestrial: 5
+    West Africa ===> Terrestrial: 5
+    East Asia ===> Terrestrial: 5
+
+South America
+    Earth Orbit ===> Transit: 10
+    North America ===> Terrestrial: 5
+    South Africa ===> Terrestrial: 5
+    West Africa ===> Terrestrial: 5
+    Oceania ===> Terrestrial: 5
+
+Western Europe
+    North America ===> Terrestrial: 5
+    Eastern Europe ===> Terrestrial: 5
+    North Africa ===> Terrestrial: 5
+
+Eastern Europe
+    Western Europe ===> Terrestrial: 5
+    Middle East ===> Terrestrial: 5
+    Central Asia ===> Terrestrial: 5
+    North Africa ===> Terrestrial: 5
+
+West Africa
+    Earth Orbit ===> Transit: 10
+    North America ===> Terrestrial: 5
+    South America ===> Terrestrial: 5
+    North Africa ===> Terrestrial: 5
+    South Africa ===> Terrestrial: 5
+
+North Africa
+    Earth Orbit ===> Transit: 10
+    West Africa ===> Terrestrial: 5
+    South Africa ===> Terrestrial: 5
+    Western Europe ===> Terrestrial: 5
+    Eastern Europe ===> Terrestrial: 5
+    Middle East ===> Terrestrial: 5
+
+South Africa
+    West Africa ===> Terrestrial: 5
+    North Africa ===> Terrestrial: 5
+    South America ===> Terrestrial: 5
+    South Asia ===> Terrestrial: 5
+    Oceania ===> Terrestrial: 5
+
+Middle East
+    Earth Orbit ===> Transit: 10
+    Eastern Europe ===> Terrestrial: 5
+    North Africa ===> Terrestrial: 5
+    Central Asia ===> Terrestrial: 5
+    South Asia ===> Terrestrial: 5
+
+Central Asia
+    Earth Orbit ===> Transit: 10
+    Middle East ===> Terrestrial: 5
+    Eastern Europe ===> Terrestrial: 5
+    East Asia ===> Terrestrial: 5
+    South Asia ===> Terrestrial: 5
+
+East Asia
+    Earth Orbit ===> Transit: 10
+    Central Asia ===> Terrestrial: 5
+    South Asia ===> Terrestrial: 5
+    South East Asia ===> Terrestrial: 5
+    North America ===> Terrestrial: 5
+
+South Asia
+    Earth Orbit ===> Transit: 10
+    Central Asia ===> Terrestrial: 5
+    East Asia ===> Terrestrial: 5
+    South East Asia ===> Terrestrial: 5
+    Middle East ===> Terrestrial: 5
+    South Africa ===> Terrestrial: 5
+
+South East Asia
+    Earth Orbit ===> Transit: 10
+    East Asia ===> Terrestrial: 5
+    South Asia ===> Terrestrial: 5
+    Oceania ===> Terrestrial: 5
+
+Oceania
+    South East Asia ===> Terrestrial: 5
+    South Africa ===> Terrestrial: 5
+    South America ===> Terrestrial: 5
+
+Earth Orbit
+    Mars Orbit ===> Space: 1
+    North America ===> Transit: 10
+    South America ===> Transit: 10
+    North Africa ===> Transit: 10
+    West Africa ===> Transit: 10
+    Middle East ===> Transit: 10
+    East Asia ===> Transit: 10
+    South Asia ===> Transit: 10
+    Central Asia ===> Transit: 10
+    South East Asia ===> Transit: 10
+
+Mars Orbit
+    Earth Orbit ===> Space: 1
+    Tharsis Rise ===> Transit: 3
+    Utopia Basin ===> Transit: 3
+
+Tharsis Rise
+    Mars orbit ===> Transit: 3
+    Hellas Basin ===> Terrestrial: 5
+    Utopia Basin ===> Terrestrial: 5
+    Vastitas Borealis ===> Terrestrial: 5
+
+Hellas Basin
+    Tharsis Rise ===> Terrestrial: 5
+    Utopia Basin ===> Terrestrial: 5
+    Vastitas Borealis ===> Terrestrial: 5
+
+Utopia Basin
+    Mars orbit ===> Transit: 3
+    Tharsis Rise ===> Terrestrial: 5
+    Hellas Basin ===> Terrestrial: 5
+    Vastitas Borealis ===> Terrestrial: 5
+
+Vastitas Borealis
+    Tharsis Rise ===> Terrestrial: 5
+    Hellas Basin ===> Terrestrial: 5
+    Utopia Basin ===> Terrestrial: 5

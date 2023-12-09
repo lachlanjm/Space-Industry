@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "stdint.h": "c",
+        "product.h": "c",
+        "factory.h": "c",
+        "stockpile.h": "c",
+        "transportconnection.h": "c",
+        "transportconnectiontype.h": "c",
+        "currentlocationtype.h": "c",
+        "vehicle.h": "c",
+        "transportnode.h": "c"
+    }
+}

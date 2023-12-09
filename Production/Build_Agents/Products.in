@@ -1,0 +1,190 @@
+Iron Ore
+    State: Solid
+    Short: Fe-
+    Category: Raw
+
+Iron
+    State: Solid
+    Short: Fe
+    Category: Elemental
+
+Coal
+    State: Solid
+    Short: C-
+    Category: Raw
+
+Carbon
+    State: Solid
+    Short: C
+    Category: Elemental
+
+Carbon Monoxide
+    State: Gas
+    Short: CO
+    Category: Molecule
+    Greenhouse: +2
+
+Carbon Dioxide
+    State: Gas
+    Short: CO2
+    Category: Molecule
+    Greenhouse: +1
+
+Carbonic Acid
+    State: Liquid
+    Short: H2CO3
+    Category: Molecule
+    Acidity: 4.68
+
+Steel
+    State: Solid
+    Short: FeC
+    Category: Refined
+
+Copper Ore
+    State: Solid
+    Short: Cu-
+    Category: Raw
+
+Copper
+    State: Solid
+    Short: Cu
+    Category: Elemental
+
+Copper Wire
+    State: Solid
+    Short: Wire
+    Category: Refined
+
+Sand
+    State: Solid
+    Short: SiO2
+    Category: Raw
+
+Silicon
+    State: Solid
+    Short: Si
+    Category: Elemental
+
+Water
+    State: Liquid
+    Short: H2O
+    Category: Raw
+    Acidity: 7
+
+Heavy Water
+    State: Liquid
+    Short: D2O
+    Category: Raw
+    Acidity: 7.44
+
+Hydrogen
+    State: Gas
+    Short: H
+    Category: Elemental
+    Greenhouse: +11
+
+Deuterium
+    State: Gas
+    Short: D
+    Category: Elemental
+    Greenhouse: +11
+
+Oxygen
+    State: Gas
+    Short: O
+    Category: Elemental
+    Greenhouse: +0
+
+Sulfur
+    State: Solid
+    Short: S
+    Category: Elemental
+
+Sulfur Dioxide
+    State: Gas
+    Short: SO2
+    Category: Molecule
+    Greenhouse: +0
+
+Crude Oil
+    State: Liquid
+    Short: Crude
+    Category: Raw
+    Acidity: 10
+
+Petroleum Gas
+    State: Gas
+    Short: Petrol
+    Category: Refined
+
+Gasoline
+    State: Liquid
+    Short: Gas
+    Category: Refined
+
+Naptha
+    State: Solid
+    Short: Nap
+    Category: Refined
+
+Plastic
+    State: Solid
+    Short: Plas
+    Category: Intermediate
+
+Kerosene
+    State: Liquid
+    Short: Kero
+    Category: Refined
+
+Aviation Fuel
+    State: Liquid
+    Short: AvFu
+    Category: Fuel
+
+Diesel
+    State: Liquid
+    Short: Dsl
+    Category: Fuel
+
+Fuel Oil
+    State: Liquid
+    Short: Fuel
+    Category: Refined
+
+Lubricating Oil
+    State: Liquid
+    Short: Lube
+    Category: Refined
+
+Bitumen
+    State: Solid
+    Short: Bitu
+    Category: Refined
+
+Asphalt
+    State: Solid
+    Short: Asph
+    Category: Intermediate
+
+Rock
+    State: Solid
+    Short: Rock
+    Category: Raw
+
+Crushed Rock
+    State: Solid
+    Short: Crush
+    Category: Refined
+
+Lime
+    State: Solid
+    Short: Lime
+    Category: Raw
+
+Nitrogen Dioxide
+    State: Gas
+    Short: NO2
+    Category: Molecule
+    Greenhouse: +0
