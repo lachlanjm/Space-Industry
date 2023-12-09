@@ -2,11 +2,12 @@
 #define MAP_H
 
 #include "..\Enums\TransportNode.h"
+#include "..\Enums\TransportConnectionType.h"
 
 #include <stdint.h>
 
 typedef struct Map {
-    int i = 0;
+    int i;
 } Map;
 
 
