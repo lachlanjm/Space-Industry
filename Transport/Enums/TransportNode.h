@@ -23,4 +23,6 @@ typedef enum TransportNode {
 	Vastitas_Borealis = 18
 } TransportNode;
 
+inline char* getName(TransportNode node);
+
 #endif

@@ -7,6 +7,7 @@ typedef enum TransportNode {{
     {0}
 }} TransportNode;
 
+{1}
 #endif"""
 
 node_c_start = """#include "TransportNode.h"
@@ -26,7 +27,6 @@ typedef struct Map {{
 }} Map;
 
 {0}
-
 #endif"""
 
 map_c_start = """#include "Map.h"
@@ -185,7 +185,9 @@ for start in nodes:
                 start.next_type.append(conn.type.upper())
 
 with open(os.path.join(os.path.dirname(__file__), "..\Structures\Map.h"), "w") as f:
-    f.write(map_h_format.format("")) # Empty atm
+    f.write(map_h_format.format(
+        ";\n".join(map_funcs) + ";\n"
+    ))
 
 with open(os.path.join(os.path.dirname(__file__), "..\Structures\Map.c"), "w") as f:
     f.write(map_c_start)
