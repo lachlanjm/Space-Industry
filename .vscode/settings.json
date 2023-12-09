@@ -9,6 +9,8 @@
         "transportconnectiontype.h": "c",
         "currentlocationtype.h": "c",
         "vehicle.h": "c",
-        "transportnode.h": "c"
+        "transportnode.h": "c",
+        "productmarket.h": "c",
+        "order.h": "c"
     }
 }
