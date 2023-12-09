@@ -35,6 +35,7 @@ map_c_start = """#include "Map.h"
 class Node:
     def __init__(self, name) -> None:
         self.name = name
+        self.index = -1
         self.connections = []
         self.next_map = []
         self.tot_dist = []
@@ -54,7 +55,7 @@ class Connection:
         self.distance = dist
         self.dest = None
 
-function_format = """const static {1} {2}[][] =
+function_format = """const static {1} {2}[] =
 {{
 {3}
 }};
@@ -98,9 +99,12 @@ with open(os.path.join(os.path.dirname(__file__), "Map.in"), "r") as f:
 
 arr_groups[0] = arr_groups[0][:-2]
 
+for i in range(len(nodes)):
+    nodes[i].index = i
+
 ##### Node definition
 with open(os.path.join(os.path.dirname(__file__), "..\Enums\TransportNode.h"), "w") as f:
-    nodes_names = [nodes[i].name + f" = {i}" for i in range(len(nodes))]
+    nodes_names = [f"{n.name} = {n.index}" for n in nodes]
     f.write(node_h_format.format(
         ",\n\t".join(nodes_names),
         ";\n".join(node_funcs) + ";\n"
@@ -124,7 +128,7 @@ terr_weight = 1
 launch_weight = 100
 space_weight = 10000
 for start in nodes:
-    # Run BFS
+    # Run BFS TODO NOT WORKING
     found_nodes = {node : [None, -1] for node in nodes}
     queue = [(start, 0, [])]
 
@@ -132,7 +136,7 @@ for start in nodes:
         curr = queue.pop(0)
         if found_nodes[curr[0]][0] is None:
             found_nodes[curr[0]] = [curr[2], curr[1]]
-            new_path = curr[2] + [curr]
+            new_path = curr[2] + [curr[0]]
 
             for conn in curr[0].connections:
                 if found_nodes[conn.dest][0] is None:
@@ -143,10 +147,9 @@ for start in nodes:
                         i += 1
                     queue.insert(i, (conn.dest, new_dist, new_path))
     
-    for i in range(len(nodes)):
-        node = nodes[i]
-        if len(found_nodes[node][0]):
-            start.next_map.append(found_nodes[node][0][0])
+    for node in nodes:
+        if len(found_nodes[node][0]) > 1:
+            start.next_map.append(found_nodes[node][0][1])
         else:
             start.next_map.append(start)
         
@@ -164,8 +167,8 @@ with open(os.path.join(os.path.dirname(__file__), "..\Structures\Map.h"), "w") a
 with open(os.path.join(os.path.dirname(__file__), "..\Structures\Map.c"), "w") as f:
     f.write(map_c_start)
 
-    f.write(function_format.format(map_funcs[0], "TransportNode", "__transport_node_next_node_arr", 
-        [str(
-            [(n.name for n in node.next_map) for node in nodes]
-        ).replace("[", "{").replace("]", "}")]
+    f.write(function_format.format(map_funcs[0], "TransportNode*", "__transport_node_next_node_arr", 
+        str(
+            [f"\n\t(TransportNode<|>) {[n.name for n in node.next_map]}" for node in nodes]
+        ).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1]
     ))
