@@ -94,7 +94,7 @@ with open(os.path.join(os.path.dirname(__file__), "Products.in"), "r") as f:
                     case_groups[5] += case_format.format(products[-1], products[-1].acidity + '.0f')
 
         elif line[0] == "\t" or line[0] == " ":
-            key = line[1:line.index(":")].strip()
+            key = line[:line.index(":")].strip()
             value = line[line.index(":")+2:].strip()
 
             if key == "Short":

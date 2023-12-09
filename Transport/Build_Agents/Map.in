@@ -103,7 +103,7 @@ Mars Orbit
     Utopia Basin ===> Transit: 3
 
 Tharsis Rise
-    Mars orbit ===> Transit: 3
+    Mars Orbit ===> Transit: 3
     Hellas Basin ===> Terrestrial: 5
     Utopia Basin ===> Terrestrial: 5
     Vastitas Borealis ===> Terrestrial: 5
@@ -114,7 +114,7 @@ Hellas Basin
     Vastitas Borealis ===> Terrestrial: 5
 
 Utopia Basin
-    Mars orbit ===> Transit: 3
+    Mars Orbit ===> Transit: 3
     Tharsis Rise ===> Terrestrial: 5
     Hellas Basin ===> Terrestrial: 5
     Vastitas Borealis ===> Terrestrial: 5
@@ -123,3 +123,4 @@ Vastitas Borealis
     Tharsis Rise ===> Terrestrial: 5
     Hellas Basin ===> Terrestrial: 5
     Utopia Basin ===> Terrestrial: 5
+
