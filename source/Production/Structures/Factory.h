@@ -19,8 +19,8 @@ typedef struct Factory
 
 } Factory;
 
-Factory* newFactory(const ProductionRecipe productionRecipe);
-void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe);
+Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
+void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location);
 
 // TODO TBU
 inline void processTick(Factory* factory);

@@ -1,10 +1,11 @@
 #include "Factory.h"
 
-Factory* newFactory(const ProductionRecipe productionRecipe)
+Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
 {
     Factory* factory = (Factory*) malloc(1 * sizeof(Factory));
 
     factory->productionRecipe = productionRecipe;
+    factory->location = location;
     factory->processing_speed = 0;
 
     factory->stockpiles_in_num = getNumOfInputs(productionRecipe);
@@ -26,9 +27,10 @@ Factory* newFactory(const ProductionRecipe productionRecipe)
     return factory;
 }
 
-void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe)
+void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location)
 {
     factory->productionRecipe = productionRecipe;
+    factory->location = location;
     factory->processing_speed = 0;
 
     factory->stockpiles_in_num = getNumOfInputs(productionRecipe);

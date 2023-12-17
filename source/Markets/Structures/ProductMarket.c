@@ -1,6 +1,6 @@
 #include "ProductMarket.h"
 
-ProductMarket* newProductMarket (Product product_type)
+inline ProductMarket* newProductMarket(const Product product_type)
 {
     ProductMarket* productMarket = (ProductMarket*) malloc(1 * sizeof(ProductMarket));
 
@@ -11,8 +11,17 @@ ProductMarket* newProductMarket (Product product_type)
     return productMarket;
 }
 
-void changeOfferedSellPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price); // TODO Make pull funcs
-void changeOfferedBuyPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price); // TODO Make pull funcs
+inline void assignNewProductMarket(ProductMarket* productMarket, const Product product_type)
+{
+    productMarket->product_type = product_type;
+    productMarket->lowest_sell_order = NULL;
+    productMarket->highest_buy_order = NULL;
+}
+
+void changeOfferedSellPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price)
+{} // TODO Make pull funcs
+void changeOfferedBuyPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price)
+{} // TODO Make pull funcs
 
 inline void addSellOrder(ProductMarket* productMarket, Order* new_order)
 {

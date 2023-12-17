@@ -24,8 +24,6 @@ inline void assignPickup(Vehicle* vehicle, const Factory* factory, const Product
 inline void assignDelivery(Vehicle* vehicle, const Factory* factory);
 
 void stepToNextLocation(Vehicle* vehicle);
-inline uint_fast16_t getVehiclesNextDistance(const Vehicle* veh);
-inline void moveVehicleToNextLoc(Vehicle* vehicle);
 
 void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_type);
 void unloadCargo(Vehicle* vehicle, const Factory* factory);

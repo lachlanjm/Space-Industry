@@ -10,7 +10,8 @@ typedef struct ProductMarket {
     Order* highest_buy_order;
 } ProductMarket;
 
-ProductMarket* newProductMarket (Product product_type);
+inline ProductMarket* newProductMarket(const Product product_type);
+inline void assignNewProductMarket(ProductMarket* productMarket, const Product product_type);
 
 inline void addSellOrder(ProductMarket* productMarket, Order* new_order);
 inline Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price);
