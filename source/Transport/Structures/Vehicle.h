@@ -3,8 +3,8 @@
 
 #include "..\..\Production\Structures\Stockpile.h"
 #include "..\..\Production\Structures\Factory.h"
-#include "TransportNode.h"
-#include "TransportConnection.h"
+#include "..\Enums\TransportNode.h"
+#include "..\Enums\TransportConnectionType.h"
 
 typedef struct Vehicle {
     Stockpile stockpile;

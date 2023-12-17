@@ -2,7 +2,7 @@
 #define FACTORY_H
 
 #include "..\Enums\ProductionRecipe.h"
-#include "Stockpile.h"
+#include "..\Structures\Stockpile.h"
 
 typedef struct Factory
 {

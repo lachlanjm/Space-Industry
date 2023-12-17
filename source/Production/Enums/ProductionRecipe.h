@@ -1,7 +1,7 @@
 #ifndef PRODUCTION_RECIPE_H
 #define PRODUCTION_RECIPE_H
 
-#include "Stockpile.h"
+#include "..\Structures\Stockpile.h"
 
 #include <stdint.h>
 #include <stdlib.h>
