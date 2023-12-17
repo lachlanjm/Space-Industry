@@ -1,0 +1,8 @@
+# Local settings
+.vscode
+
+# Build files
+**/build
+
+# Compilation files
+**/__pychache__

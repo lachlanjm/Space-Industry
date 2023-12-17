@@ -11,8 +11,8 @@ ProductMarket* newProductMarket (Product product_type)
     return productMarket;
 }
 
-void changeOfferedSellPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price); // Make pull funcs
-void changeOfferedBuyPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price); // Make pull funcs
+void changeOfferedSellPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price); // TODO Make pull funcs
+void changeOfferedBuyPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price); // TODO Make pull funcs
 
 inline void addSellOrder(ProductMarket* productMarket, Order* new_order)
 {
