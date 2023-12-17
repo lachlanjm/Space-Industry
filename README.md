@@ -11,24 +11,27 @@ The tools needed for compilation, including modifying world settings:
 Nothing.
 
 ## World Settings
-### ./tools/Production/ProductionChains.in
+### Production Recipes settings
+Location: [./tools/Production/ProductionChains.in](./tools/Production/ProductionChains.in) <br>
 Defines all of the production recipes.
 
-### ./tools/Production/Products.in
+### Product settings
+Location: [./tools/Production/Products.in](./tools/Production/Products.in) <br>
 Defines all possible products and their properties.
 
-### ./tools/Transport/Map.in
+### Map settings
+Location: [./tools/Transport/Map.in](./tools/Transport/Map.in) <br>
 Defines the outlay of the map. Its nodes and connections between each node.
 
 ## Build process
 
 ### Pre-build Scripts
 These scripts define the environment and whenever the world settings are modified, need to be run before compiling in order for the changes to make effect:
-* ./tools/Production/productCreationScript.py
-* ./tools/Production/productionChainCreationScript.py
-* ./tools/Transport/mapCreationScript.py
+* [./tools/Production/productCreationScript.py](./tools/Production/productCreationScript.py)
+* [./tools/Production/productionChainCreationScript.py](./tools/Production/productionChainCreationScript.py)
+* [./tools/Transport/mapCreationScript.py](./tools/Transport/mapCreationScript.py)
 
-Either manually complete this task or execute this command from the main directory:
+Either manually complete this task or execute this [script](./tools/preBuildScript.py). Example of how to run it from the main directory:
 ```bash
 python3 ./tools/preBuildScript.py
 ```
