@@ -1,21 +1,48 @@
 #include "Vehicle.h"
 
-inline void moveToNextLocation(Vehicle* vehicle, const TransportNode* transportNode)
+inline void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product)
 {
-    vehicle->current_location = transportNode;
-    vehicle->current_location_type = TRANSPORT_NODE;
+    if (vehicle->stockpile.quantity == 0)
+    {
+        vehicle->end_factory = factory;
+        vehicle->end_location = factory->location;
+        vehicle->stockpile.product_type = product;
+    }
 }
 
-inline void moveToNextLocation(Vehicle* vehicle, const TransportConnection* transportConnection)
+inline void assignDelivery(Vehicle* vehicle, const Factory* factory)
 {
-    vehicle->current_location = transportConnection;
-    vehicle->current_location_type = TRANSPORT_CONNECTION;
+    if (vehicle->stockpile.quantity)
+    {
+        vehicle->end_factory = factory;
+        vehicle->end_location = factory->location;
+    }
 }
 
-inline void moveToNextLocation(Vehicle* vehicle, const Factory* factory)
+void stepToNextLocation(Vehicle* vehicle)
 {
-    vehicle->current_location = factory;
-    vehicle->current_location_type = FACTORY;
+    uint_fast32_t dist_to_travel = VEHICLE_SPEED;
+    while (
+        dist_to_travel > 0 
+        && vehicle->current_location != vehicle->end_location
+        && vehicle->distance_travelled + dist_to_travel >= getVehiclesNextDistance(vehicle) 
+    ) {
+        dist_to_travel -= getVehiclesNextDistance(vehicle) - vehicle->distance_travelled;
+        moveVehicleToNextLoc(vehicle);
+    }
+
+    vehicle->distance_travelled = dist_to_travel;
+}
+
+inline uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
+{
+    getNextDistance(vehicle->current_location, vehicle->end_location);
+}
+
+inline void moveVehicleToNextLoc(Vehicle* vehicle)
+{
+    vehicle->current_location = getNext(vehicle->current_location, vehicle->end_location);
+    vehicle->distance_travelled = 0;
 }
 
 void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_type)
@@ -70,5 +97,32 @@ void unloadCargo(Vehicle* vehicle, const Factory* factory)
         }
     }
     // Fail
+}
+
+inline void processTick(Vehicle* vehicle)
+{
+    if (vehicle->end_factory)
+    {
+        if (vehicle->current_location != vehicle->end_location)
+        {
+            stepToNextLocation(vehicle);
+        }
+        else if (vehicle->stockpile.quantity)
+        {
+            unloadCargo(vehicle, vehicle->end_factory);
+            vehicle->end_factory = NULL;
+        }
+        else
+        {
+            loadCargo(vehicle, vehicle->end_factory, vehicle->stockpile.product_type);
+            vehicle->end_factory = NULL;
+            // Wait to be told where to deliver goods
+        }
+    }
+}
+
+void clean(Vehicle* vehicle)
+{
+    // Nothing yet...
 }
 

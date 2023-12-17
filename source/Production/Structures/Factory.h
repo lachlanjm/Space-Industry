@@ -3,10 +3,12 @@
 
 #include "..\Enums\ProductionRecipe.h"
 #include "..\Structures\Stockpile.h"
+#include "..\..\Transport\Enums\TransportNode.h"
 
 typedef struct Factory
 {
     ProductionRecipe productionRecipe;
+    TransportNode location;
 
     uint_fast8_t stockpiles_in_num;
     uint_fast8_t stockpiles_out_num;

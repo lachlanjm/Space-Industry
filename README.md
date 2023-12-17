@@ -1,5 +1,15 @@
 # Space Industry
 
+## Dependencies
+
+### Compiling Builds
+The tools needed for compilation, including modifying world settings:
+* Python 3.x
+* C compiler, C99 compatible (only GCC is officially supported)
+
+### Running Builds
+Nothing.
+
 ## World Settings
 ### ./tools/Production/ProductionChains.in
 Defines all of the production recipes.

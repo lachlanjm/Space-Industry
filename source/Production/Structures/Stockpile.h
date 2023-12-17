@@ -11,7 +11,7 @@
 
 typedef struct Stockpile
 {
-    enum Product product_type;
+    Product product_type;
     QUANTITY_INT quantity;
 } Stockpile;
 
