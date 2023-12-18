@@ -2,6 +2,38 @@
 
 ## General
 
+### File structure
+For each file, they are sorted by what they each represent.
+Each group of files is sorted into differents categories; i.e. "Markets", "Production", "Transport", etc.
+From there, each category is split into "Enums" and "Structures" and the source code files are split accordingly.
+Some examples of filepaths from the project's root directory include:
+```console
+.\source\Production\Enums\Product.h
+.\source\Transport\Enums\TransportNode.h
+.\source\Transport\Structures\Vehicle.h
+.\source\Markets\Structures\Order.h
+```
+
+### Variables
+Be short, concise and descriptive. When selecting types of variables, try to be as explicit as possible. I.e. use `int8_t`, instead of `short int`. When naming variables, use camelCase for variables of same name as type:
+```c
+ProductionRecipe productionRecipe;
+```
+Avoid that if possible, try to use different more descriptive names where you otherwise use snake_case:
+```c
+Stockpile* stockpiles_in;
+```
+
+### Functions
+Use the following format for function definitions:
+```c
+void function_name(...)
+{
+    ...
+}
+```
+For naming conventions, use the Structures naming conventions.
+
 ### If Else statements
 Follow this convention:
 ```c
@@ -27,26 +59,6 @@ for (<initialisation>; <declaration>; <increment>)
     ...
 }
 ```
-
-### Variables
-Be short, concise and descriptive. When selecting types of variables, try to be as explicit as possible. I.e. use `int8_t`, instead of `short int`. When naming variables, use camelCase for variables of same name as type:
-```c
-ProductionRecipe productionRecipe;
-```
-Avoid that if possible, try to use different more descriptive names where you otherwise use snake_case:
-```c
-Stockpile* stockpiles_in;
-```
-
-### Functions
-Use the following format for function definitions:
-```c
-void function_name(...)
-{
-    ...
-}
-```
-For naming conventions, use the Structures naming conventions.
 
 ## Structures
 
