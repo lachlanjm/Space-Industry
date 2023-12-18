@@ -7,7 +7,7 @@ For each file, they are sorted by what they each represent.
 Each group of files is sorted into differents categories; i.e. "Markets", "Production", "Transport", etc.
 From there, each category is split into "Enums" and "Structures" and the source code files are split accordingly.
 Some examples of filepaths from the project's root directory include:
-```console
+```
 .\source\Production\Enums\Product.h
 .\source\Transport\Enums\TransportNode.h
 .\source\Transport\Structures\Vehicle.h
