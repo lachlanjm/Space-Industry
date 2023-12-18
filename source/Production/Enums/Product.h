@@ -41,7 +41,8 @@ typedef enum Product
 	Rock,
 	Crushed_Rock,
 	Lime,
-	Nitrogen_Dioxide
+	Nitrogen_Dioxide,
+    PRODUCT_COUNT
 } Product;
 
 char* getName(const Product product);

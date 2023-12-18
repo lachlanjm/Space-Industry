@@ -26,16 +26,7 @@ void assignOrderValues(Order* order, const Factory* offering_factory, const QUAN
 }
 
 // DONT CLEAN CONSTITUENT
-void clean(Order* order)
+void cleanOrder(Order* order)
 {
-    if (order->left_order != NULL) {
-        clean(order->left_order);
-        free(order->left_order);
-        order->left_order = NULL;
-    }
-    if (order->right_order != NULL) {
-        clean(order->right_order);
-        free(order->right_order);
-        order->right_order = NULL;
-    }
+    
 }

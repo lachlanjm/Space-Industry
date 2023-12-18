@@ -1,47 +1,5 @@
 #include "Product.h"
 
-const static char* __product_names_arr[] =
-{
-	"Iron Ore", 
-	"Iron", 
-	"Coal", 
-	"Carbon", 
-	"Carbon Monoxide", 
-	"Carbon Dioxide", 
-	"Carbonic Acid", 
-	"Steel", 
-	"Copper Ore", 
-	"Copper", 
-	"Copper Wire", 
-	"Sand", 
-	"Silicon", 
-	"Water", 
-	"Heavy Water", 
-	"Hydrogen", 
-	"Deuterium", 
-	"Oxygen", 
-	"Sulfur", 
-	"Sulfur Dioxide", 
-	"Crude Oil", 
-	"Petroleum Gas", 
-	"Gasoline", 
-	"Naptha", 
-	"Plastic", 
-	"Kerosene", 
-	"Aviation Fuel", 
-	"Diesel", 
-	"Fuel Oil", 
-	"Lubricating Oil", 
-	"Bitumen", 
-	"Asphalt", 
-	"Rock", 
-	"Crushed Rock", 
-	"Lime"
-};
-char* getName(const Product product) {
-    return __product_names_arr[product];
-}
-
 const static char* __product_states_arr[] =
 {
 	"Solid", 

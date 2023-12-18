@@ -25,6 +25,6 @@ inline uint_fast8_t removeQuantityCheck(Stockpile* stockpile, const QUANTITY_INT
 inline uint_fast8_t moveStockpile(Stockpile* stockpile_out, Stockpile* stockpile_in, const QUANTITY_INT quantity);
 
 // DO NOT CLEAN ITEM (ONLY CONSTITUENTS)
-void clean(Stockpile* stockpile);
+void cleanStockpile(Stockpile* stockpile);
 
 #endif

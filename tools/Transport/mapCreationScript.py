@@ -5,7 +5,8 @@ def main():
 #define TRASPORT_NODE_H
 
 typedef enum TransportNode {{
-    {0}
+    {0},
+    TRANSPORT_NODE_COUNT
 }} TransportNode;
 
 {1}

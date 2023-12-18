@@ -20,7 +20,8 @@ typedef enum TransportNode {
 	Tharsis_Rise = 15,
 	Hellas_Basin = 16,
 	Utopia_Basin = 17,
-	Vastitas_Borealis = 18
+	Vastitas_Borealis = 18,
+    TRANSPORT_NODE_COUNT
 } TransportNode;
 
 inline char* getName(TransportNode node);

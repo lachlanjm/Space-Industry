@@ -32,6 +32,6 @@ void unloadCargo(Vehicle* vehicle, const Factory* factory);
 inline void processTick(Vehicle* vehicle);
 
 // DON'T free item, only constituents
-void clean(Vehicle* vehicle);
+void cleanVehicle(Vehicle* vehicle);
 
 #endif

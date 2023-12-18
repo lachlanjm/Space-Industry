@@ -9,7 +9,8 @@ def main():
 
 typedef enum Product 
 {{
-    {0}
+    {0},
+    PRODUCT_COUNT
 }} Product;
 
 {1}
@@ -150,7 +151,7 @@ typedef enum Product
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\Product.c"), "w") as f:
         f.write(product_c_start)
 
-        for i in range(len(product_funcs)):
+        for i in range(1, len(product_funcs)):
             f.write(function_format_arr.format(product_funcs[i], data_types[i], arr_names[i], arr_groups[i]))
 
 

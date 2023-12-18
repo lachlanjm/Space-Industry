@@ -14,6 +14,9 @@ Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode
     factory->stockpiles_in = (Stockpile*) malloc(factory->stockpiles_in_num * sizeof(Stockpile));
     factory->stockpiles_out = (Stockpile*) malloc(factory->stockpiles_out_num * sizeof(Stockpile));
 
+    factory->orders_in = (Order*) malloc(factory->stockpiles_in_num * sizeof(Order));
+    factory->orders_out = (Order*) malloc(factory->stockpiles_out_num * sizeof(Order));
+
     Stockpile* tmp_arr = getInputs(productionRecipe);
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
         assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
@@ -36,8 +39,11 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
     factory->stockpiles_in_num = getNumOfInputs(productionRecipe);
     factory->stockpiles_out_num = getNumOfOutputs(productionRecipe);
 
-    factory->stockpiles_in = (Stockpile*) malloc(factory->stockpiles_in_num * sizeof(Stockpile));
-    factory->stockpiles_out = (Stockpile*) malloc(factory->stockpiles_out_num * sizeof(Stockpile));
+    factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
+    factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
+
+    factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
+    factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
 
     Stockpile* tmp_arr = getInputs(productionRecipe);
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -62,14 +68,18 @@ inline void processTick(Factory* factory)
     }
 }
 
-void clean(Factory* factory) {
+void cleanFactory(Factory* factory) {
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
-        clean(&factory->stockpiles_in[i]);
+        cleanStockpile(&(factory->stockpiles_in[i]));
+        cleanOrder(&(factory->orders_in[i]));
     }
     free(factory->stockpiles_in);
+    free(factory->orders_in);
 
     for (int i = 0; i < factory->stockpiles_out_num; i++) {
-        clean(&factory->stockpiles_out[i]);
+        cleanStockpile(&factory->stockpiles_out[i]);
+        cleanOrder(&(factory->orders_out[i]));
     }
     free(factory->stockpiles_out);
+    free(factory->orders_out);
 }

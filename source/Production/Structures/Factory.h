@@ -3,6 +3,7 @@
 
 #include "..\Enums\ProductionRecipe.h"
 #include "..\Structures\Stockpile.h"
+#include "..\..\Markets\Structures\Order.h"
 #include "..\..\Transport\Enums\TransportNode.h"
 
 typedef struct Factory
@@ -17,6 +18,9 @@ typedef struct Factory
     Stockpile* stockpiles_in;
     Stockpile* stockpiles_out;
 
+    Order* orders_in;
+    Order* orders_out;
+
 } Factory;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
@@ -26,6 +30,6 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 inline void processTick(Factory* factory);
 
 // DO NOT CLEAN ITEM (ONLY CONSTITUENTS)
-void clean(Factory* factory);
+void cleanFactory(Factory* factory);
 
 #endif

@@ -30,7 +30,8 @@ typedef enum ProductionRecipe
 	Combustion_Gasoline,
 	Combustion_Kerosene,
 	Combustion_Aviation_Fuel,
-	Combustion_Diesel
+	Combustion_Diesel,
+    PRODUCTION_RECIPE_COUNT
 } ProductionRecipe;
 
 char* getName(const ProductionRecipe productionRecipe);

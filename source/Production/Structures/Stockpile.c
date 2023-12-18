@@ -69,7 +69,7 @@ inline uint_fast8_t moveStockpile(Stockpile* stockpile_out, Stockpile* stockpile
     }
 }
 
-void clean(Stockpile* stockpile)
+void cleanStockpile(Stockpile* stockpile)
 {
     // Do nothing
 }

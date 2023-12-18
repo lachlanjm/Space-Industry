@@ -12,7 +12,8 @@ def main():
 
 typedef enum ProductionRecipe 
 {{
-    {0}
+    {0},
+    PRODUCTION_RECIPE_COUNT
 }} ProductionRecipe;
 
 {1}

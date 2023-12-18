@@ -22,6 +22,6 @@ void assignOrderValues(Order* order, const Factory* offering_factory, const QUAN
 
 
 // DONT CLEAN CONSTITUENT
-void clean(Order* order);
+void cleanOrder(Order* order);
 
 #endif

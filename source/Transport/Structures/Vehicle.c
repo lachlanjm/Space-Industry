@@ -121,7 +121,7 @@ inline void processTick(Vehicle* vehicle)
     }
 }
 
-void clean(Vehicle* vehicle)
+void cleanVehicle(Vehicle* vehicle)
 {
     // Nothing yet...
 }
