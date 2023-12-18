@@ -18,14 +18,9 @@ inline void assignNewProductMarket(ProductMarket* productMarket, const Product p
     productMarket->highest_buy_order = NULL;
 }
 
-void changeOfferedSellPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price)
-{} // TODO Make pull funcs
-void changeOfferedBuyPrice(ProductMarket* productMarket, Order* order, const uint_fast16_t new_price)
-{} // TODO Make pull funcs
-
 inline void addSellOrder(ProductMarket* productMarket, Order* new_order)
 {
-    pushUpOrder(productMarket->lowest_sell_order, new_order);
+    pullUpBuyOrder(productMarket->lowest_sell_order, new_order);
 }
 
 inline Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
@@ -37,7 +32,7 @@ inline Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offer
 
 inline void addBuyOrder(ProductMarket* productMarket, Order* new_order)
 {
-    pushDownOrder(productMarket->highest_buy_order, new_order);
+    pushDownBuyOrder(productMarket->highest_buy_order, new_order);
 }
 
 inline Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
@@ -47,31 +42,225 @@ inline Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offeri
     return order;
 }
 
-void takeSellOrderOffMarket(ProductMarket* productMarket, Order* order); // Make pull funcs
-void takeBuyOrderOffMarket(ProductMarket* productMarket, Order* order); // Make pull funcs
-
-void matchOrders(ProductMarket* productMarket)
+inline void resetBuyOrder(ProductMarket* productMarket, Order* new_order)
 {
-    while (productMarket->highest_buy_order->price >= productMarket->lowest_sell_order->price)
+    pullUpBuyOrder(productMarket, new_order);
+    pushDownBuyOrder(productMarket, new_order);
+}
+
+inline void resetSellOrder(ProductMarket* productMarket, Order* new_order)
+{
+    pushDownSellOrder(productMarket, new_order);
+    pullUpSellOrder(productMarket, new_order);
+}
+
+void pushDownBuyOrder(ProductMarket* productMarket, Order* new_order) 
+{
+    if (productMarket->highest_buy_order == NULL)
     {
-        if (productMarket->highest_buy_order->offer_num > productMarket->lowest_sell_order->offer_num)
+        new_order->prev_order = NULL;
+        productMarket->highest_buy_order = new_order;
+    }
+    else if (new_order->price > productMarket->highest_buy_order->price)
+    {
+        // new_order is highest
+        new_order->prev_order = NULL;
+        if (new_order->left_order == NULL)
         {
-            productMarket->highest_buy_order->offer_num -= productMarket->lowest_sell_order->offer_num;
-            productMarket->lowest_sell_order->offer_num = 0;
-            takeSellOrderOffMarket(productMarket, productMarket->lowest_sell_order);
+            new_order->left_order = productMarket->highest_buy_order;
+            productMarket->highest_buy_order->prev_order = new_order;
+        }
+        else if (new_order->right_order == NULL)
+        {
+            new_order->right_order = productMarket->highest_buy_order;
+            productMarket->highest_buy_order->prev_order = new_order;
         }
         else 
         {
-            productMarket->lowest_sell_order->offer_num -= productMarket->highest_buy_order->offer_num;
-            productMarket->highest_buy_order->offer_num = 0;
-            takeBuyOrderOffMarket(productMarket, productMarket->highest_buy_order);
-
-            if (productMarket->lowest_sell_order->offer_num == 0)
-            {
-                takeSellOrderOffMarket(productMarket, productMarket->highest_buy_order);
-            }
+            pushDownBuyOrderFurther(new_order, productMarket->highest_buy_order);
         }
-        
-        // Mark for transport... (Add to transport market??? buyer pays for???)
+        productMarket->highest_buy_order = new_order;
+    }
+    else
+    {
+        pushDownBuyOrderFurther(productMarket->highest_buy_order, new_order);
+    }
+}
+
+/*
+Never replace base_order, only children
+Could change to iterative
+*/
+void pushDownBuyOrderFurther(Order* base_order, Order* new_order)
+{
+    if (base_order->left_order == NULL) 
+    {
+        base_order->left_order = new_order;
+        new_order->prev_order = base_order;
+    }
+    else if (base_order->right_order == NULL)
+    {
+        base_order->right_order = new_order;
+        new_order->prev_order = base_order;
+    }
+    else if (new_order->price > base_order->left_order->price)
+    {
+        Order* old_left = base_order->left_order;
+        base_order->left_order = new_order;
+        new_order->prev_order = base_order;
+        pushDownBuyOrderFurther(new_order, old_left);
+    }
+    else if (new_order->price > base_order->right_order->price)
+    {
+        Order* old_right = base_order->right_order;
+        base_order->right_order = new_order;
+        new_order->prev_order = base_order;
+        pushDownBuyOrderFurther(new_order, old_right);
+    }
+    else 
+    {
+        // Right cause why not? and heavy emphasis elswhere to add to left
+        pushDownBuyOrderFurther(base_order->right_order, new_order);
+    }
+}
+
+/*
+Could change to iterative
+*/
+void pullUpBuyOrder(ProductMarket* productMarket, Order* new_order)
+{
+    if (new_order->prev_order == NULL)
+    {
+        // DO NOTHING (AT THE TOP)
+    }
+    else if (new_order->price > new_order->prev_order->price)
+    {
+        if (new_order->prev_order->prev_order == NULL)
+        {
+            productMarket->highest_buy_order = new_order;
+        }
+        Order* old_prev = new_order->prev_order;
+        new_order->prev_order = new_order->prev_order->prev_order;
+        if (old_prev->left_order == new_order)
+        {
+            old_prev->left_order = NULL;
+        }
+        else if (old_prev->right_order == new_order)
+        {
+            old_prev->right_order = NULL;
+        }
+        else 
+        {
+            // ERROR!!!!!!!
+        }
+        old_prev->prev_order = NULL;
+        pushDownBuyOrderFurther(new_order, old_prev);
+        pullUpBuyOrder(productMarket, new_order);
+    }
+}
+
+
+void pullUpSellOrder(ProductMarket* productMarket, Order* new_order)
+{
+    if (productMarket->lowest_sell_order == NULL)
+    {
+        new_order->prev_order = NULL;
+        productMarket->lowest_sell_order = new_order;
+    }
+    else if (new_order->price < productMarket->lowest_sell_order->price)
+    {
+        // new_order is highest
+        new_order->prev_order = NULL;
+        if (new_order->left_order == NULL)
+        {
+            new_order->left_order = productMarket->lowest_sell_order;
+            productMarket->lowest_sell_order->prev_order = new_order;
+        }
+        else if (new_order->right_order == NULL)
+        {
+            new_order->right_order = productMarket->lowest_sell_order;
+            productMarket->lowest_sell_order->prev_order = new_order;
+        }
+        else 
+        {
+            pullUpSellOrderFurther(new_order, productMarket->lowest_sell_order);
+        }
+        productMarket->lowest_sell_order = new_order;
+    }
+    else
+    {
+        pullUpSellOrderFurther(productMarket->lowest_sell_order, new_order);
+    }
+}
+
+/*
+Never replace base_order, only children
+Could change to iterative
+*/
+void pullUpSellOrderFurther(Order* base_order, Order* new_order)
+{
+    if (base_order->left_order == NULL) 
+    {
+        base_order->left_order = new_order;
+        new_order->prev_order = base_order;
+    }
+    else if (base_order->right_order == NULL)
+    {
+        base_order->right_order = new_order;
+        new_order->prev_order = base_order;
+    }
+    else if (new_order->price < base_order->left_order->price)
+    {
+        Order* old_left = base_order->left_order;
+        base_order->left_order = new_order;
+        new_order->prev_order = base_order;
+        pullUpSellOrderFurther(new_order, old_left);
+    }
+    else if (new_order->price < base_order->right_order->price)
+    {
+        Order* old_right = base_order->right_order;
+        base_order->right_order = new_order;
+        new_order->prev_order = base_order;
+        pullUpSellOrderFurther(new_order, old_right);
+    }
+    else 
+    {
+        // Right cause why not? and heavy emphasis elswhere to add to left
+        pullUpSellOrderFurther(base_order->right_order, new_order);
+    }
+}
+
+/*
+Could change to iterative
+*/
+void pushDownSellOrder(ProductMarket* productMarket, Order* new_order)
+{
+    if (new_order->prev_order == NULL)
+    {
+        // DO NOTHING (AT THE TOP)
+    }
+    else if (new_order->price < new_order->prev_order->price)
+    {
+        if (new_order->prev_order->prev_order == NULL)
+        {
+            productMarket->lowest_sell_order = new_order;
+        }
+        Order* old_prev = new_order->prev_order;
+        new_order->prev_order = new_order->prev_order->prev_order;
+        if (old_prev->left_order == new_order)
+        {
+            old_prev->left_order = NULL;
+        }
+        else if (old_prev->right_order == new_order)
+        {
+            old_prev->right_order = NULL;
+        }
+        else 
+        {
+            // ERROR!!!!!!!
+        }
+        old_prev->prev_order = NULL;
+        pullUpSellOrderFurther(new_order, old_prev);
+        pushDownSellOrder(productMarket, new_order);
     }
 }
