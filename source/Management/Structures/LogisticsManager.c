@@ -23,7 +23,8 @@ inline void addNewLogisticsContract(LogisticsManager* logisticsManager, const Ve
     assignNewLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, product, quantity);
 }
 
-void updateDistToPriceEff(LogisticsManager* logisticsManager)
+static float __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
+void update_dist_to_price_eff()
 {
     for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
     {
@@ -33,17 +34,40 @@ void updateDistToPriceEff(LogisticsManager* logisticsManager)
             {
                 if (getTotalDistance(from, to) == 0)
                 {
-                    logisticsManager->dist_to_price_eff[from][to][product] =
+                    __dist_to_price_eff__[from][to][product] =
                     (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
                     - getProductMarketAtLocation(from, product)->lowest_sell_order->price);
                 }
                 else 
                 {
-                    logisticsManager->dist_to_price_eff[from][to][product] =
+                    __dist_to_price_eff__[from][to][product] =
                     (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
                     - getProductMarketAtLocation(from, product)->lowest_sell_order->price)
                     / (float)getTotalDistance(from, to);
                 }
+            }
+        }
+    }
+}
+
+void update_dist_to_price_eff_product_filtered(int product)
+{
+    for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
+    {
+        for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
+        {
+            if (getTotalDistance(from, to) == 0)
+            {
+                __dist_to_price_eff__[from][to][product] =
+                (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
+                - getProductMarketAtLocation(from, product)->lowest_sell_order->price);
+            }
+            else 
+            {
+                __dist_to_price_eff__[from][to][product] =
+                (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
+                - getProductMarketAtLocation(from, product)->lowest_sell_order->price)
+                / (float)getTotalDistance(from, to);
             }
         }
     }
@@ -56,7 +80,7 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
         if (logisticsManager->vehicles[i].end_location == NULL)
         {
             assignNewLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
-            updateDistToPriceEff(logisticsManager);
+            update_dist_to_price_eff();
         }
     }
 }
@@ -74,12 +98,12 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
         {
             for (int product = 0; product < PRODUCT_COUNT; product++)
             {
-                if (logisticsManager->dist_to_price_eff[from][to][product] > eff_max)
+                if (__dist_to_price_eff__[from][to][product] > eff_max)
                 {
                     from_max = from;
                     to_max = to;
                     product_max = product;
-                    eff_max = logisticsManager->dist_to_price_eff[from][to][product];
+                    eff_max = __dist_to_price_eff__[from][to][product];
                 }
             }
         }
@@ -106,7 +130,7 @@ void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 {
     // Search and add contracts
     // TODO calc only when needed and save between LMs (static?) !!!!!!!!!!!
-    updateDistToPriceEff(logisticsManager);
+    update_dist_to_price_eff();
     assignFreeVehicles(logisticsManager);
 
     // Tick contracts

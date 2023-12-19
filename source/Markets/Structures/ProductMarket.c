@@ -42,6 +42,157 @@ inline Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offeri
     return order;
 }
 
+void removeBuyOrder(ProductMarket* buying_market, Order* buying_order)
+{
+    // Don't remove from factory, a quant of 0 === off the market
+    if (buying_order->prev_order == NULL)
+    {
+        if (buying_order->left_order == NULL)
+        {
+            if (buying_order->right_order == NULL)
+            {
+                buying_market->highest_buy_order = NULL;
+            }
+            else
+            {
+                buying_market->highest_buy_order = buying_order->right_order;
+                buying_order->right_order->prev_order = NULL;
+            }
+        }
+        else if (buying_order->right_order == NULL)
+        {
+            buying_market->highest_buy_order = buying_order->left_order;
+            buying_order->left_order->prev_order = NULL;
+        }
+        else if (buying_order->left_order->price >= buying_order->right_order->price)
+        {
+            buying_market->highest_buy_order = buying_order->left_order;
+            buying_order->left_order->prev_order = NULL;
+            push_down_buy_order_further(buying_order->left_order, buying_order->right_order);
+        }
+        else
+        {
+            buying_market->highest_buy_order = buying_order->right_order;
+            buying_order->right_order->prev_order = NULL;
+            push_down_buy_order_further(buying_order->right_order, buying_order->left_order);
+        }
+    }
+    else
+    {
+        if (buying_order->left_order == NULL)
+        {
+            if (buying_order->right_order == NULL)
+            {
+                jump_attach_orders(buying_order->prev_order, buying_order, NULL);
+            }
+            else
+            {
+                jump_attach_orders(buying_order->prev_order, buying_order, buying_order->right_order);
+            }
+        }
+        else if (buying_order->right_order == NULL)
+        {
+            jump_attach_orders(buying_order->prev_order, buying_order, buying_order->left_order);
+        }
+        else if (buying_order->left_order->price >= buying_order->right_order->price)
+        {
+            jump_attach_orders(buying_order->prev_order, buying_order, buying_order->left_order);
+            push_down_buy_order_further(buying_order->left_order, buying_order->right_order);
+        }
+        else
+        {
+            jump_attach_orders(buying_order->prev_order, buying_order, buying_order->right_order);
+            push_down_buy_order_further(buying_order->right_order, buying_order->left_order);
+        }
+    }
+}
+
+void removeSellOrder(ProductMarket* selling_market, Order* selling_order)
+{
+    // Don't remove from factory, a quant of 0 === off the market
+    if (selling_order->prev_order == NULL)
+    {
+        if (selling_order->left_order == NULL)
+        {
+            if (selling_order->right_order == NULL)
+            {
+                selling_market->lowest_sell_order = NULL;
+            }
+            else
+            {
+                selling_market->lowest_sell_order = selling_order->right_order;
+                selling_order->right_order->prev_order = NULL;
+            }
+        }
+        else if (selling_order->right_order == NULL)
+        {
+            selling_market->lowest_sell_order = selling_order->left_order;
+            selling_order->left_order->prev_order = NULL;
+        }
+        else if (selling_order->left_order->price <= selling_order->right_order->price)
+        {
+            selling_market->lowest_sell_order = selling_order->left_order;
+            selling_order->left_order->prev_order = NULL;
+            pull_up_sell_order_further(selling_order->left_order, selling_order->right_order);
+        }
+        else
+        {
+            selling_market->lowest_sell_order = selling_order->right_order;
+            selling_order->right_order->prev_order = NULL;
+            pull_up_sell_order_further(selling_order->right_order, selling_order->left_order);
+        }
+    }
+    else
+    {
+        if (selling_order->left_order == NULL)
+        {
+            if (selling_order->right_order == NULL)
+            {
+                jump_attach_orders(selling_order->prev_order, selling_order, NULL);
+            }
+            else
+            {
+                jump_attach_orders(selling_order->prev_order, selling_order, selling_order->right_order);
+            }
+        }
+        else if (selling_order->right_order == NULL)
+        {
+            jump_attach_orders(selling_order->prev_order, selling_order, selling_order->left_order);
+        }
+        else if (selling_order->left_order->price <= selling_order->right_order->price)
+        {
+            jump_attach_orders(selling_order->prev_order, selling_order, selling_order->left_order);
+            pull_up_sell_order_further(selling_order->left_order, selling_order->right_order);
+        }
+        else
+        {
+            jump_attach_orders(selling_order->prev_order, selling_order, selling_order->right_order);
+            pull_up_sell_order_further(selling_order->right_order, selling_order->left_order);
+        }
+    }
+}
+
+inline void jump_attach_orders(Order* parent_order, Order* order, Order* child_order)
+{
+    if (child_order != NULL)
+    {
+        child_order->prev_order = parent_order;
+    }
+
+    if (parent_order->left_order == order)
+    {
+        parent_order->left_order = child_order;
+    }
+    else if (parent_order->right_order == order)
+    {
+        parent_order->right_order = child_order;
+    }
+    else
+    {
+        /* error */
+    }
+}
+
 QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order)
 {
     QUANTITY_INT exchanged_num;
@@ -59,12 +210,12 @@ QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, P
 
     if (selling_order->offer_num == 0)
     {
-        // remove order from factory
+        removeSellOrder(selling_market, selling_order);
     }
 
     if (buying_order->offer_num == 0)
     {
-        // remove order from factory
+        removeBuyOrder(buying_market, buying_order);
     }
 
     return exchanged_num;

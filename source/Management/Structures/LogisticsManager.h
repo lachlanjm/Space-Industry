@@ -15,13 +15,12 @@ typedef struct LogisticsManager
     uint_fast16_t contracts_num;
     LogisticsContract* contracts;
 
-    float dist_to_price_eff[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT]; // TODO MAKE UNIVERSAL
 } LogisticsManager;
 
 inline LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num);
 inline void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);
 
-void updateDistToPriceEff(LogisticsManager* logisticsManager);
+void update_dist_to_price_eff();
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager);
 void processTickLogisticsManagerVehicles(LogisticsManager* logisticsManager);
