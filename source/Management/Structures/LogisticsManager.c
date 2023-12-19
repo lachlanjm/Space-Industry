@@ -80,7 +80,6 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
         if (logisticsManager->vehicles[i].end_location == NULL)
         {
             assignNewLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
-            update_dist_to_price_eff();
         }
     }
 }
@@ -124,6 +123,8 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
         product_max,
         quantity
     );
+
+    update_dist_to_price_eff_product_filtered(product_max);
 }
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
