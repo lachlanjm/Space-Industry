@@ -24,10 +24,6 @@ typedef enum TransportNode {{
 
 #include <stdint.h>
 
-typedef struct Map {{
-    int i;
-}} Map;
-
 {0}
 #endif"""
 

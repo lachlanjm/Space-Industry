@@ -20,7 +20,7 @@ Location: [./tools/Production/Products.in](./tools/Production/Products.in) <br>
 Defines all possible products and their properties.
 
 ### Map settings
-Location: [./tools/Transport/Map.in](./tools/Transport/Map.in) <br>
+Location: [./tools/Environment/Map.in](./tools/Environment/Map.in) <br>
 Defines the outlay of the map. Its nodes and connections between each node.
 
 ## Build process
@@ -29,7 +29,8 @@ Defines the outlay of the map. Its nodes and connections between each node.
 These scripts define the environment and whenever the world settings are modified, need to be run before compiling in order for the changes to make effect:
 * [./tools/Production/productCreationScript.py](./tools/Production/productCreationScript.py)
 * [./tools/Production/productionChainCreationScript.py](./tools/Production/productionChainCreationScript.py)
-* [./tools/Transport/mapCreationScript.py](./tools/Transport/mapCreationScript.py)
+* [./tools/Environment/mapCreationScript.py](./tools/Environment/mapCreationScript.py)
+* [./tools/Environment/marketMapCreationScript.py](./tools/Environment/marketMapCreationScript.py)
 
 Either manually complete this task or execute this [script](./tools/preBuildScript.py). Example of how to run it from the main directory:
 ```bash

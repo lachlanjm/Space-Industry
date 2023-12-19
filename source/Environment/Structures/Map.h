@@ -6,10 +6,6 @@
 
 #include <stdint.h>
 
-typedef struct Map {
-    int i;
-} Map;
-
 inline TransportNode getNext(const TransportNode from, const TransportNode to);
 inline uint_fast16_t getTotalDistance(const TransportNode from, const TransportNode to);
 inline uint_fast16_t getNextDistance(const TransportNode from, const TransportNode to);
