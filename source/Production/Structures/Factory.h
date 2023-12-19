@@ -27,7 +27,7 @@ Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode
 void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location);
 
 // TODO TBU
-inline void processTick(Factory* factory);
+inline void processTickFactory(Factory* factory);
 
 // DO NOT CLEAN ITEM (ONLY CONSTITUENTS)
 void cleanFactory(Factory* factory);

@@ -29,7 +29,7 @@ void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_t
 void unloadCargo(Vehicle* vehicle, const Factory* factory);
 
 // TODO TBU
-inline void processTick(Vehicle* vehicle);
+inline void processTickVehicle(Vehicle* vehicle);
 
 // DON'T free item, only constituents
 void cleanVehicle(Vehicle* vehicle);

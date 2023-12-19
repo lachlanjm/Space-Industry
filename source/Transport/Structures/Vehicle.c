@@ -1,22 +1,20 @@
 #include "Vehicle.h"
 
+/*
+TODO: MUST WORK AROUND LEFT-OVER QUANTITY
+*/
 inline void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product)
 {
-    if (vehicle->stockpile.quantity == 0)
-    {
-        vehicle->end_factory = factory;
-        vehicle->end_location = factory->location;
-        vehicle->stockpile.product_type = product;
-    }
+    vehicle->end_factory = factory;
+    vehicle->end_location = factory->location;
+    vehicle->stockpile.quantity = 0; // TODO
+    vehicle->stockpile.product_type = product;
 }
 
 inline void assignDelivery(Vehicle* vehicle, const Factory* factory)
 {
-    if (vehicle->stockpile.quantity)
-    {
-        vehicle->end_factory = factory;
-        vehicle->end_location = factory->location;
-    }
+    vehicle->end_factory = factory;
+    vehicle->end_location = factory->location;
 }
 
 void stepToNextLocation(Vehicle* vehicle)
@@ -99,7 +97,7 @@ void unloadCargo(Vehicle* vehicle, const Factory* factory)
     // Fail
 }
 
-inline void processTick(Vehicle* vehicle)
+inline void processTickVehicle(Vehicle* vehicle)
 {
     if (vehicle->end_factory)
     {

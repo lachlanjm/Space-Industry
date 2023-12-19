@@ -57,7 +57,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 }
 
 // TBU (CHECK FOR POSSIBLE, REVERT OTHERWISE)
-inline void processTick(Factory* factory)
+inline void processTickFactory(Factory* factory)
 {
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
         removeQuantity(&factory->stockpiles_in[i], factory->processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));

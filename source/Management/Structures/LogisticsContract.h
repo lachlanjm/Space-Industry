@@ -5,6 +5,13 @@
 #include "..\..\Production\Structures\Factory.h"
 #include "..\..\Production\Enums\Product.h"
 
+enum ContractPhase {
+    ASSIGNMENT,
+    PICK_UP,
+    DELIVERY,
+    COMPLETED
+};
+
 typedef struct LogisticsContract 
 {
     // uint_fast16_t vehicle_num;
@@ -13,6 +20,7 @@ typedef struct LogisticsContract
     Factory* selling_factory;
     Factory* buying_factory;
 
+    enum ContractPhase current_phase;
     Product product;
     QUANTITY_INT quantity;
 } LogisticsContract;
@@ -20,6 +28,7 @@ typedef struct LogisticsContract
 inline LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity);
 inline void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity);
 
+void processTickLogisticsContract(LogisticsContract* logisticsContract);
 void cleanContract(LogisticsContract* logisticsContract);
 
 #endif

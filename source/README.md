@@ -69,14 +69,14 @@ ProductMarket
 ```
 
 ### Source files
-For each struct, one header file (`.h`) and one source code file (`.c`)
+For each struct that is meant to be avaliable externally, make one header file (`.h`) and one source code file (`.c`) with the same name as the struct. If it is not meant to be avaliable externally, include it in the singular file that requires it.
 
 ### Definition
-Always use `typedef` to define the struct.
+Always use `typedef` to define the structs meant for external use. If meant for a singular file, do not use `typedef`.
 ```c
-typedef struct <struct_name> {
+[typedef] struct <struct_name> {
     ...
-} <struct_name>;
+} [<struct_name>];
 ```
 
 ### Member variables naming
