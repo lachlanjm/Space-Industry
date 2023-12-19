@@ -5,6 +5,6 @@
 #include "..\..\Production\Enums\Product.h"
 #include "..\Enums\TransportNode.h"
 
-inline ProductMarket getProductMarketAtLocation(const TransportNode location, const Product product);
+inline ProductMarket* getProductMarketAtLocation(const TransportNode location, const Product product);
 
 #endif

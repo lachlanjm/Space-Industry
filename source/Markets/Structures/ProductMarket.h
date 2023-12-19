@@ -18,6 +18,8 @@ inline Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offer
 inline void addBuyOrder(ProductMarket* productMarket, Order* new_order);
 inline Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price);
 
+QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order);
+
 inline void resetBuyOrder(ProductMarket* productMarket, Order* new_order);
 inline void resetSellOrder(ProductMarket* productMarket, Order* new_order);
 

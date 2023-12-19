@@ -29,7 +29,7 @@ void stepToNextLocation(Vehicle* vehicle)
         moveVehicleToNextLoc(vehicle);
     }
 
-    vehicle->distance_travelled = dist_to_travel;
+    vehicle->distance_travelled = VEHICLE_SPEED - dist_to_travel;
 }
 
 inline uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
@@ -101,21 +101,7 @@ inline void processTickVehicle(Vehicle* vehicle)
 {
     if (vehicle->end_factory)
     {
-        if (vehicle->current_location != vehicle->end_location)
-        {
-            stepToNextLocation(vehicle);
-        }
-        else if (vehicle->stockpile.quantity)
-        {
-            unloadCargo(vehicle, vehicle->end_factory);
-            vehicle->end_factory = NULL;
-        }
-        else
-        {
-            loadCargo(vehicle, vehicle->end_factory, vehicle->stockpile.product_type);
-            vehicle->end_factory = NULL;
-            // Wait to be told where to deliver goods
-        }
+        stepToNextLocation(vehicle);
     }
 }
 

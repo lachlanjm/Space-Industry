@@ -42,6 +42,34 @@ inline Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offeri
     return order;
 }
 
+QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order)
+{
+    QUANTITY_INT exchanged_num;
+    if (selling_order->offer_num > buying_order->offer_num)
+    {
+        exchanged_num = buying_order->offer_num;
+    }
+    else
+    {
+        exchanged_num = selling_order->offer_num;
+    }
+
+    selling_order->offer_num -= exchanged_num;
+    buying_order->offer_num -= exchanged_num;
+
+    if (selling_order->offer_num == 0)
+    {
+        // remove order from factory
+    }
+
+    if (buying_order->offer_num == 0)
+    {
+        // remove order from factory
+    }
+
+    return exchanged_num;
+}
+
 inline void resetBuyOrder(ProductMarket* productMarket, Order* new_order)
 {
     pullUpBuyOrder(productMarket, new_order);
@@ -77,13 +105,13 @@ void pushDownBuyOrder(ProductMarket* productMarket, Order* new_order)
         }
         else 
         {
-            pushDownBuyOrderFurther(new_order, productMarket->highest_buy_order);
+            push_down_buy_order_further(new_order, productMarket->highest_buy_order);
         }
         productMarket->highest_buy_order = new_order;
     }
     else
     {
-        pushDownBuyOrderFurther(productMarket->highest_buy_order, new_order);
+        push_down_buy_order_further(productMarket->highest_buy_order, new_order);
     }
 }
 
@@ -91,7 +119,7 @@ void pushDownBuyOrder(ProductMarket* productMarket, Order* new_order)
 Never replace base_order, only children
 Could change to iterative
 */
-void pushDownBuyOrderFurther(Order* base_order, Order* new_order)
+void push_down_buy_order_further(Order* base_order, Order* new_order)
 {
     if (base_order->left_order == NULL) 
     {
@@ -108,19 +136,19 @@ void pushDownBuyOrderFurther(Order* base_order, Order* new_order)
         Order* old_left = base_order->left_order;
         base_order->left_order = new_order;
         new_order->prev_order = base_order;
-        pushDownBuyOrderFurther(new_order, old_left);
+        push_down_buy_order_further(new_order, old_left);
     }
     else if (new_order->price > base_order->right_order->price)
     {
         Order* old_right = base_order->right_order;
         base_order->right_order = new_order;
         new_order->prev_order = base_order;
-        pushDownBuyOrderFurther(new_order, old_right);
+        push_down_buy_order_further(new_order, old_right);
     }
     else 
     {
         // Right cause why not? and heavy emphasis elswhere to add to left
-        pushDownBuyOrderFurther(base_order->right_order, new_order);
+        push_down_buy_order_further(base_order->right_order, new_order);
     }
 }
 
@@ -154,7 +182,7 @@ void pullUpBuyOrder(ProductMarket* productMarket, Order* new_order)
             // ERROR!!!!!!!
         }
         old_prev->prev_order = NULL;
-        pushDownBuyOrderFurther(new_order, old_prev);
+        push_down_buy_order_further(new_order, old_prev);
         pullUpBuyOrder(productMarket, new_order);
     }
 }
@@ -183,13 +211,13 @@ void pullUpSellOrder(ProductMarket* productMarket, Order* new_order)
         }
         else 
         {
-            pullUpSellOrderFurther(new_order, productMarket->lowest_sell_order);
+            pull_up_sell_order_further(new_order, productMarket->lowest_sell_order);
         }
         productMarket->lowest_sell_order = new_order;
     }
     else
     {
-        pullUpSellOrderFurther(productMarket->lowest_sell_order, new_order);
+        pull_up_sell_order_further(productMarket->lowest_sell_order, new_order);
     }
 }
 
@@ -197,7 +225,7 @@ void pullUpSellOrder(ProductMarket* productMarket, Order* new_order)
 Never replace base_order, only children
 Could change to iterative
 */
-void pullUpSellOrderFurther(Order* base_order, Order* new_order)
+void pull_up_sell_order_further(Order* base_order, Order* new_order)
 {
     if (base_order->left_order == NULL) 
     {
@@ -214,19 +242,19 @@ void pullUpSellOrderFurther(Order* base_order, Order* new_order)
         Order* old_left = base_order->left_order;
         base_order->left_order = new_order;
         new_order->prev_order = base_order;
-        pullUpSellOrderFurther(new_order, old_left);
+        pull_up_sell_order_further(new_order, old_left);
     }
     else if (new_order->price < base_order->right_order->price)
     {
         Order* old_right = base_order->right_order;
         base_order->right_order = new_order;
         new_order->prev_order = base_order;
-        pullUpSellOrderFurther(new_order, old_right);
+        pull_up_sell_order_further(new_order, old_right);
     }
     else 
     {
         // Right cause why not? and heavy emphasis elswhere to add to left
-        pullUpSellOrderFurther(base_order->right_order, new_order);
+        pull_up_sell_order_further(base_order->right_order, new_order);
     }
 }
 
@@ -260,7 +288,7 @@ void pushDownSellOrder(ProductMarket* productMarket, Order* new_order)
             // ERROR!!!!!!!
         }
         old_prev->prev_order = NULL;
-        pullUpSellOrderFurther(new_order, old_prev);
+        pull_up_sell_order_further(new_order, old_prev);
         pushDownSellOrder(productMarket, new_order);
     }
 }

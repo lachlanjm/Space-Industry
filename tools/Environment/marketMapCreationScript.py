@@ -21,7 +21,7 @@ def main():
 {3}
 }};
 {0} {{
-    return {2}[location][product];
+    return &{2}[location][product];
 }}
 
 """
@@ -51,7 +51,7 @@ def main():
     
     # GOT PRODUCTS AND LOCATIONS
 
-    functions = ["inline ProductMarket getProductMarketAtLocation(const TransportNode location, const Product product)"]
+    functions = ["inline ProductMarket* getProductMarketAtLocation(const TransportNode location, const Product product)"]
 
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\MarketMap.h"), "w") as f:
         f.write(market_map_h.format(
