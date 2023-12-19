@@ -3,6 +3,30 @@
 char* getName(const ProductionRecipe productionRecipe) {
     switch (productionRecipe)
     {
+    case Extraction_Iron_Ore:
+        return "Extraction Iron Ore";
+    case Extraction_Coal:
+        return "Extraction Coal";
+    case Extraction_Copper_Ore:
+        return "Extraction Copper Ore";
+    case Extraction_Oxygen:
+        return "Extraction Oxygen";
+    case Extraction_Hydrogen:
+        return "Extraction Hydrogen";
+    case Extraction_Water:
+        return "Extraction Water";
+    case Extraction_Heavy_Water:
+        return "Extraction Heavy Water";
+    case Extraction_Sand:
+        return "Extraction Sand";
+    case Extraction_Sulfur:
+        return "Extraction Sulfur";
+    case Extraction_Crude_Oil:
+        return "Extraction Crude Oil";
+    case Extraction_Rock:
+        return "Extraction Rock";
+    case Extraction_Lime:
+        return "Extraction Lime";
     case Refinement_Iron:
         return "Refinement Iron";
     case Refinement_Copper:
@@ -226,6 +250,30 @@ Stockpile* getInputs(const ProductionRecipe productionRecipe) {
 uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe) {
     switch (productionRecipe)
     {
+    case Extraction_Iron_Ore:
+        return 1;
+    case Extraction_Coal:
+        return 1;
+    case Extraction_Copper_Ore:
+        return 1;
+    case Extraction_Oxygen:
+        return 1;
+    case Extraction_Hydrogen:
+        return 1;
+    case Extraction_Water:
+        return 1;
+    case Extraction_Heavy_Water:
+        return 1;
+    case Extraction_Sand:
+        return 1;
+    case Extraction_Sulfur:
+        return 1;
+    case Extraction_Crude_Oil:
+        return 1;
+    case Extraction_Rock:
+        return 1;
+    case Extraction_Lime:
+        return 1;
     case Refinement_Iron:
         return 1;
     case Refinement_Copper:
@@ -281,6 +329,42 @@ uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe) {
 Stockpile* getOutputs(const ProductionRecipe productionRecipe) {
     switch (productionRecipe)
     {
+    case Extraction_Iron_Ore:
+        static const Stockpile ___Extraction_Iron_Ore___outputs_static[] = {{Iron_Ore, 1}};
+        return ___Extraction_Iron_Ore___outputs_static;
+    case Extraction_Coal:
+        static const Stockpile ___Extraction_Coal___outputs_static[] = {{Coal, 1}};
+        return ___Extraction_Coal___outputs_static;
+    case Extraction_Copper_Ore:
+        static const Stockpile ___Extraction_Copper_Ore___outputs_static[] = {{Copper_Ore, 1}};
+        return ___Extraction_Copper_Ore___outputs_static;
+    case Extraction_Oxygen:
+        static const Stockpile ___Extraction_Oxygen___outputs_static[] = {{Oxygen, 1}};
+        return ___Extraction_Oxygen___outputs_static;
+    case Extraction_Hydrogen:
+        static const Stockpile ___Extraction_Hydrogen___outputs_static[] = {{Hydrogen, 1}};
+        return ___Extraction_Hydrogen___outputs_static;
+    case Extraction_Water:
+        static const Stockpile ___Extraction_Water___outputs_static[] = {{Water, 1}};
+        return ___Extraction_Water___outputs_static;
+    case Extraction_Heavy_Water:
+        static const Stockpile ___Extraction_Heavy_Water___outputs_static[] = {{Heavy_Water, 1}};
+        return ___Extraction_Heavy_Water___outputs_static;
+    case Extraction_Sand:
+        static const Stockpile ___Extraction_Sand___outputs_static[] = {{Sand, 1}};
+        return ___Extraction_Sand___outputs_static;
+    case Extraction_Sulfur:
+        static const Stockpile ___Extraction_Sulfur___outputs_static[] = {{Sulfur, 1}};
+        return ___Extraction_Sulfur___outputs_static;
+    case Extraction_Crude_Oil:
+        static const Stockpile ___Extraction_Crude_Oil___outputs_static[] = {{Crude_Oil, 1}};
+        return ___Extraction_Crude_Oil___outputs_static;
+    case Extraction_Rock:
+        static const Stockpile ___Extraction_Rock___outputs_static[] = {{Rock, 1}};
+        return ___Extraction_Rock___outputs_static;
+    case Extraction_Lime:
+        static const Stockpile ___Extraction_Lime___outputs_static[] = {{Lime, 1}};
+        return ___Extraction_Lime___outputs_static;
     case Refinement_Iron:
         static const Stockpile ___Refinement_Iron___outputs_static[] = {{Iron, 1}};
         return ___Refinement_Iron___outputs_static;
@@ -586,6 +670,102 @@ QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product prod
 QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product) {
     switch (productionRecipe)
     {
+    case Extraction_Iron_Ore:
+        switch (product) {
+        case Iron_Ore:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Coal:
+        switch (product) {
+        case Coal:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Copper_Ore:
+        switch (product) {
+        case Copper_Ore:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Oxygen:
+        switch (product) {
+        case Oxygen:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Hydrogen:
+        switch (product) {
+        case Hydrogen:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Water:
+        switch (product) {
+        case Water:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Heavy_Water:
+        switch (product) {
+        case Heavy_Water:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Sand:
+        switch (product) {
+        case Sand:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Sulfur:
+        switch (product) {
+        case Sulfur:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Crude_Oil:
+        switch (product) {
+        case Crude_Oil:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Rock:
+        switch (product) {
+        case Rock:
+            return 1;
+        
+        default:
+            return 0;
+        }
+    case Extraction_Lime:
+        switch (product) {
+        case Lime:
+            return 1;
+        
+        default:
+            return 0;
+        }
     case Refinement_Iron:
         switch (product) {
         case Iron:

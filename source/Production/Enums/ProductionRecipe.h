@@ -8,7 +8,19 @@
 
 typedef enum ProductionRecipe 
 {
-    Refinement_Iron,
+    Extraction_Iron_Ore,
+	Extraction_Coal,
+	Extraction_Copper_Ore,
+	Extraction_Oxygen,
+	Extraction_Hydrogen,
+	Extraction_Water,
+	Extraction_Heavy_Water,
+	Extraction_Sand,
+	Extraction_Sulfur,
+	Extraction_Crude_Oil,
+	Extraction_Rock,
+	Extraction_Lime,
+	Refinement_Iron,
 	Refinement_Copper,
 	Refinement_Carbon,
 	Refinement_Silicon,

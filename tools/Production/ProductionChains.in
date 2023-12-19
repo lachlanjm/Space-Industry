@@ -1,3 +1,51 @@
+Extraction Iron Ore
+    Output:
+    1 x Iron Ore
+
+Extraction Coal
+    Output:
+    1 x Coal
+
+Extraction Copper Ore
+    Output:
+    1 x Copper Ore
+
+Extraction Oxygen
+    Output:
+    1 x Oxygen
+
+Extraction Hydrogen
+    Output:
+    1 x Hydrogen
+
+Extraction Water
+    Output:
+    1 x Water
+
+Extraction Heavy Water
+    Output:
+    1 x Heavy Water
+
+Extraction Sand
+    Output:
+    1 x Sand
+
+Extraction Sulfur
+    Output:
+    1 x Sulfur
+
+Extraction Crude Oil
+    Output:
+    1 x Crude Oil
+
+Extraction Rock
+    Output:
+    1 x Rock
+
+Extraction Lime
+    Output:
+    1 x Lime
+
 Refinement Iron
     Input:
     1 x Iron Ore
