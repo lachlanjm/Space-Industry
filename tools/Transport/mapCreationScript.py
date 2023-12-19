@@ -106,14 +106,14 @@ typedef struct Map {{
         nodes[i].index = i
 
     ##### Node definition
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Transport\Enums\TransportNode.h"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Enums\TransportNode.h"), "w") as f:
         nodes_names = [f"{n.name} = {n.index}" for n in nodes]
         f.write(node_h_format.format(
             ",\n\t".join(nodes_names),
             ";\n".join(node_funcs) + ";\n"
         ))
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Transport\Enums\TransportNode.c"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Enums\TransportNode.c"), "w") as f:
         f.write(node_c_start)
 
         f.write(function_format.format(node_funcs[0], "char*", "__transport_node_names_char_arr__", arr_groups[0]).replace("from][to", "node").replace("][", ""))
@@ -186,12 +186,12 @@ typedef struct Map {{
                 else:
                     start.next_type.append(conn.type.upper())
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Transport\Structures\Map.h"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\Map.h"), "w") as f:
         f.write(map_h_format.format(
             ";\n".join(map_funcs) + ";\n"
         ))
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Transport\Structures\Map.c"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\Map.c"), "w") as f:
         f.write(map_c_start)
 
         type_ = "TransportNode"

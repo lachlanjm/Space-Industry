@@ -17,6 +17,12 @@ inline void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, 
     logisticsManager->contracts = NULL;
 }
 
+inline void addNewLogisticsContract(LogisticsManager* logisticsManager, const Vehicle* vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
+{
+    logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
+    assignNewLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, product, quantity);
+}
+
 void cleanLogisticsManager(LogisticsManager* logisticsManager)
 {
     for (int i = 0; i < logisticsManager->vehicles_num; i++)
@@ -29,6 +35,6 @@ void cleanLogisticsManager(LogisticsManager* logisticsManager)
     {
         cleanContract(&logisticsManager->contracts[i]);
     }
-    // free(logisticsManager->contracts); TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    free(logisticsManager->contracts);
 }
 

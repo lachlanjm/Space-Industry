@@ -4,7 +4,7 @@
 #include "..\Enums\ProductionRecipe.h"
 #include "..\Structures\Stockpile.h"
 #include "..\..\Markets\Structures\Order.h"
-#include "..\..\Transport\Enums\TransportNode.h"
+#include "..\..\Environment\Enums\TransportNode.h"
 
 typedef struct Factory
 {

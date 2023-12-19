@@ -3,8 +3,8 @@
 
 #include "..\..\Production\Structures\Stockpile.h"
 #include "..\..\Production\Structures\Factory.h"
-#include "..\Enums\TransportNode.h"
-#include "Map.h"
+#include "..\..\Environment\Enums\TransportNode.h"
+#include "..\..\Environment\Structures\Map.h"
 
 #define VEHICLE_SPEED 1
 

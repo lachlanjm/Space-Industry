@@ -9,7 +9,7 @@ From there, each category is split into "Enums" and "Structures" and the source 
 Some examples of filepaths from the project's root directory include:
 ```
 .\source\Production\Enums\Product.h
-.\source\Transport\Enums\TransportNode.h
+.\source\Environment\Enums\TransportNode.h
 .\source\Transport\Structures\Vehicle.h
 .\source\Markets\Structures\Order.h
 ```
