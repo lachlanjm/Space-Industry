@@ -1,15 +1,15 @@
 #ifndef APP_STATE_H
 #define APP_STATE_H
 
-#include ".\LoadAppState.h"
-#include ".\SaveAppState.h"
+typedef struct AppState AppState;
 
 #include "..\Management\Logistics\LogisticsManager.h"
 #include "..\Management\Production\FactoryManager.h"
 
-#include <stdint.h>
+#include ".\LoadAppState.h"
+#include ".\SaveAppState.h"
 
-#define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
+#include <stdint.h>
 
 typedef struct AppState {
     uint_fast16_t logistics_managers_num;
@@ -20,6 +20,8 @@ typedef struct AppState {
     FactoryManager* factory_managers;
 
 } AppState;
+
+#define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
 
 int main(int argc, char* argv[]);
 

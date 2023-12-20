@@ -24,6 +24,6 @@ typedef enum TransportNode {
     TRANSPORT_NODE_COUNT
 } TransportNode;
 
-inline char* getName(TransportNode node);
+inline char* getNameTransportNode(TransportNode node);
 
 #endif

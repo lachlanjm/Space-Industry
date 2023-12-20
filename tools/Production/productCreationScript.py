@@ -76,7 +76,7 @@ typedef enum Product
     ### Start of program
     products = []
     product_funcs = [
-        "char* getName(const Product product)", 
+        "char* getNameProduct(const Product product)", 
         "char* getState(const Product product)", 
         "char* getShort(const Product product)", 
         "char* getCategory(const Product product)", 

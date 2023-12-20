@@ -46,7 +46,7 @@ typedef enum ProductionRecipe
     PRODUCTION_RECIPE_COUNT
 } ProductionRecipe;
 
-char* getName(const ProductionRecipe productionRecipe);
+char* getNameProductionRecipe(const ProductionRecipe productionRecipe);
 int_fast16_t getEnergy(const ProductionRecipe productionRecipe);
 uint_fast8_t getNumOfInputs(const ProductionRecipe productionRecipe);
 Stockpile* getInputs(const ProductionRecipe productionRecipe);

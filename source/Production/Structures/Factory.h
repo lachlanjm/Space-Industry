@@ -1,6 +1,8 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 
+typedef struct Factory Factory;
+
 #include "..\Enums\ProductionRecipe.h"
 #include "..\Structures\Stockpile.h"
 #include "..\..\Markets\Structures\Order.h"
@@ -18,8 +20,8 @@ typedef struct Factory
     Stockpile* stockpiles_in;
     Stockpile* stockpiles_out;
 
-    Order* orders_in;
-    Order* orders_out;
+    struct OrderDef* orders_in;
+    struct OrderDef* orders_out;
 
     QUANTITY_INT* ordered_in;
     QUANTITY_INT* ordered_out;

@@ -1,6 +1,6 @@
 #include "LoadAppState.h"
 
-AppState* loadAppState(const int file_path_len, const char* file_path[])
+AppState* loadAppState(const int file_path_len, const char* file_path)
 {
     AppState* appState = (AppState*) malloc(sizeof(AppState));
 

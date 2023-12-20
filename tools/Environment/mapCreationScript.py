@@ -67,7 +67,7 @@ typedef enum TransportNode {{
     ### Start of program
     nodes = []
     node_funcs = [
-        "inline char* getName(TransportNode node)"
+        "inline char* getNameTransportNode(TransportNode node)"
     ]
     norm_params = "(const TransportNode from, const TransportNode to)"
     map_funcs = [

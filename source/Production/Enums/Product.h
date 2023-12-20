@@ -45,7 +45,7 @@ typedef enum Product
     PRODUCT_COUNT
 } Product;
 
-char* getName(const Product product);
+char* getNameProduct(const Product product);
 char* getState(const Product product);
 char* getShort(const Product product);
 char* getCategory(const Product product);

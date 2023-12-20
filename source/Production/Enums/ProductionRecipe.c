@@ -1,6 +1,6 @@
 #include "ProductionRecipe.h"
 
-char* getName(const ProductionRecipe productionRecipe) {
+char* getNameProductionRecipe(const ProductionRecipe productionRecipe) {
     switch (productionRecipe)
     {
     case Extraction_Iron_Ore:
