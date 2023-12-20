@@ -130,7 +130,6 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 {
     // Search and add contracts
-    // TODO calc only when needed and save between LMs (static?) !!!!!!!!!!!
     update_dist_to_price_eff();
     assignFreeVehicles(logisticsManager);
 

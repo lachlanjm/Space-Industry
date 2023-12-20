@@ -2,6 +2,14 @@
 
 ## General
 
+### Core Principles
+* Be simple
+* Be concise
+* Be descriptive
+* Maintain modulairty and scope as best as possible
+* Reuse don't redefine, i.e. add functions not definitions
+* Adhere to a common standard, unless the above principes are compromised.
+
 ### File structure
 For each file, they are sorted by what they each represent.
 Each group of files is sorted into differents categories; i.e. "Markets", "Production", "Transport", etc.
@@ -13,6 +21,7 @@ Some examples of filepaths from the project's root directory include:
 .\source\Transport\Structures\Vehicle.h
 .\source\Markets\Structures\Order.h
 ```
+The only exception is the "Management" directory where the second directory is simply a subcategory with no added "Enums" or "Structures".
 
 ### Variables
 Be short, concise and descriptive. When selecting types of variables, try to be as explicit as possible. I.e. use `int8_t`, instead of `short int`. When naming variables, use camelCase for variables of same name as type:
