@@ -20,6 +20,8 @@ inline void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, 
 inline void addNewLogisticsContract(LogisticsManager* logisticsManager, const Vehicle* vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
     logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
+    addOrderedOutQuantity(selling_factory, product, quantity);
+    addOrderedInQuantity(buying_factory, product, quantity);
     assignNewLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, product, quantity);
 }
 

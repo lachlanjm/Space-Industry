@@ -14,10 +14,17 @@
 #define DESIRED_STOCKPILE_MIN 150
 #define ORDER_QUANTITY_MIN 100
 
+#define INCREASE_PRICE_FACTOR 1.25f
+#define DECREASE_PRICE_FACTOR 0.875f
+
 typedef struct FactoryManager {
     Factory controlled_factory;
 } FactoryManager;
 
 void updateOfferedPrices(FactoryManager* factoryManager);
+
+void processTickFactoryManager(FactoryManager* factoryManager);
+
+void cleanFactoryManager(FactoryManager* factoryManager);
 
 #endif

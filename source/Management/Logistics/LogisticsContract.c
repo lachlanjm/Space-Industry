@@ -32,6 +32,7 @@ void processTickLogisticsContract(LogisticsContract* logisticsContract)
         if (logisticsContract->assigned_vehicle->current_location == logisticsContract->assigned_vehicle->end_location)
         {
             loadCargo(logisticsContract->assigned_vehicle, logisticsContract->selling_factory, logisticsContract->product);
+            removeOrderedOutQuantity(logisticsContract->selling_factory, logisticsContract->product, logisticsContract->quantity);
             assignDelivery(logisticsContract->assigned_vehicle, logisticsContract->buying_factory);
             logisticsContract->current_phase = DELIVERY;
         }
@@ -42,7 +43,8 @@ void processTickLogisticsContract(LogisticsContract* logisticsContract)
     case DELIVERY:
         if (logisticsContract->assigned_vehicle->current_location == logisticsContract->assigned_vehicle->end_location)
         {
-            unloadCargo(logisticsContract->assigned_vehicle, logisticsContract->selling_factory);
+            unloadCargo(logisticsContract->assigned_vehicle, logisticsContract->buying_factory);
+            removeOrderedInQuantity(logisticsContract->buying_factory, logisticsContract->product, logisticsContract->quantity);
             logisticsContract->assigned_vehicle->end_factory = NULL;
             logisticsContract->assigned_vehicle->end_location = NULL;
             logisticsContract->current_phase = COMPLETED;

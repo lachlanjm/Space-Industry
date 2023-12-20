@@ -4,7 +4,14 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 {
     for (int i = 0; i < factoryManager->controlled_factory.stockpiles_in_num; i++)
     {
-        if (STOCKPILE_FULL - ORDER_QUANTITY_MIN > factoryManager->controlled_factory.stockpiles_in[i].quantity)
+        QUANTITY_INT stockpile_ordered_quantity = 
+            factoryManager->controlled_factory.stockpiles_in[i].quantity
+            + *getOrderedInQuantity(
+                &factoryManager->controlled_factory, 
+                &factoryManager->controlled_factory.stockpiles_in[i].product_type
+        );
+
+        if (STOCKPILE_FULL - ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
         {
             if (factoryManager->controlled_factory.orders_in[i].offer_num == 0)
             {
@@ -14,42 +21,78 @@ void updateOfferedPrices(FactoryManager* factoryManager)
                     &factoryManager->controlled_factory.orders_in[i]
                 );
             }
-            factoryManager->controlled_factory.orders_in[i].offer_num = STOCKPILE_FULL - factoryManager->controlled_factory.stockpiles_in[i].quantity;
+            factoryManager->controlled_factory.orders_in[i].offer_num = STOCKPILE_FULL - stockpile_ordered_quantity;
         }
 
-        if (DESIRED_STOCKPILE_MAX < factoryManager->controlled_factory.stockpiles_in[i].quantity)
+        if (DESIRED_STOCKPILE_MAX < stockpile_ordered_quantity)
         {
             // Lower offered price
+            factoryManager->controlled_factory.orders_in[i].price *= DECREASE_PRICE_FACTOR;
+            resetBuyOrder(
+                getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
+                &factoryManager->controlled_factory.orders_in[i]
+            );
         }
-        else if (DESIRED_STOCKPILE_MIN > factoryManager->controlled_factory.stockpiles_in[i].quantity)
+        else if (DESIRED_STOCKPILE_MIN > stockpile_ordered_quantity)
         {
             // Raise offered price
+            factoryManager->controlled_factory.orders_in[i].price *= INCREASE_PRICE_FACTOR;
+            resetBuyOrder(
+                getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
+                &factoryManager->controlled_factory.orders_in[i]
+            );
         }
     }
 
     for (int i = 0; i < factoryManager->controlled_factory.stockpiles_out_num; i++)
     {
-        if (ORDER_QUANTITY_MIN < factoryManager->controlled_factory.stockpiles_out[i].quantity)
+        QUANTITY_INT stockpile_free_quantity = 
+            factoryManager->controlled_factory.stockpiles_out[i].quantity
+            - *getOrderedOutQuantity(
+                &factoryManager->controlled_factory, 
+                &factoryManager->controlled_factory.stockpiles_out[i].product_type
+        );
+        if (ORDER_QUANTITY_MIN < stockpile_free_quantity)
         {
             if (factoryManager->controlled_factory.orders_out[i].offer_num == 0)
             {
                 // Add to market
                 addSellOrder(
                     getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-                    &factoryManager->controlled_factory.orders_in[i]
+                    &factoryManager->controlled_factory.orders_out[i]
                 );
             }
-            factoryManager->controlled_factory.orders_out[i].offer_num = factoryManager->controlled_factory.stockpiles_out[i].quantity;
+            factoryManager->controlled_factory.orders_out[i].offer_num = stockpile_free_quantity;
         }
 
-        if (DESIRED_STOCKPILE_MAX < factoryManager->controlled_factory.stockpiles_out[i].quantity)
+        if (DESIRED_STOCKPILE_MAX < stockpile_free_quantity)
         {
             // Lower selling price
+            factoryManager->controlled_factory.orders_out[i].price *= DECREASE_PRICE_FACTOR;
+            resetSellOrder(
+                getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
+                &factoryManager->controlled_factory.orders_out[i]
+            );
         }
-        else if (DESIRED_STOCKPILE_MIN > factoryManager->controlled_factory.stockpiles_out[i].quantity)
+        else if (DESIRED_STOCKPILE_MIN > stockpile_free_quantity)
         {
             // Raise selling price
+            factoryManager->controlled_factory.orders_out[i].price *= INCREASE_PRICE_FACTOR;
+            resetSellOrder(
+                getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
+                &factoryManager->controlled_factory.orders_out[i]
+            );
         }
     }
 }
 
+void processTickFactoryManager(FactoryManager* factoryManager)
+{
+    updateOfferedPrices(factoryManager);
+    processTickFactory(&factoryManager->controlled_factory);
+}
+
+void clean(FactoryManager* factoryManager)
+{
+    cleanFactory(&factoryManager->controlled_factory);
+}

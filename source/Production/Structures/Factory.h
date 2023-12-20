@@ -21,10 +21,21 @@ typedef struct Factory
     Order* orders_in;
     Order* orders_out;
 
+    QUANTITY_INT* ordered_in;
+    QUANTITY_INT* ordered_out;
+
 } Factory;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location);
+
+inline QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
+inline QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);
+
+inline void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+inline void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+inline void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+inline void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
 
 // TODO TBU
 inline void processTickFactory(Factory* factory);

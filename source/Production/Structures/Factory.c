@@ -17,6 +17,9 @@ Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode
     factory->orders_in = (Order*) malloc(factory->stockpiles_in_num * sizeof(Order));
     factory->orders_out = (Order*) malloc(factory->stockpiles_out_num * sizeof(Order));
 
+    factory->ordered_in = (QUANTITY_INT*) malloc(factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+    factory->ordered_out = (QUANTITY_INT*) malloc(factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+
     Stockpile* tmp_arr = getInputs(productionRecipe);
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
         assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
@@ -45,6 +48,9 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
     factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
     factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
 
+    factory->ordered_in = (QUANTITY_INT*) realloc(factory->ordered_in, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+    factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+
     Stockpile* tmp_arr = getInputs(productionRecipe);
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
         assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
@@ -53,6 +59,78 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
     tmp_arr = getOutputs(productionRecipe);
     for (int i = 0; i < factory->stockpiles_out_num; i++) {
         assignStockpileValues(&factory->stockpiles_out[i], tmp_arr[i].product_type, 0);
+    }
+}
+
+inline QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product)
+{
+    for (int i = 0; i < factory->stockpiles_in_num; i++)
+    {
+        if (factory->stockpiles_in[i].product_type == product)
+        {
+            return &factory->ordered_in[i];
+        }
+    }
+    return NULL;
+}
+
+inline QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product)
+{
+    for (int i = 0; i < factory->stockpiles_out_num; i++)
+    {
+        if (factory->stockpiles_out[i].product_type == product)
+        {
+            return &factory->ordered_out[i];
+        }
+    }
+    return NULL;
+}
+
+inline void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+{
+    QUANTITY_INT* result = getOrderedInQuantity(factory, product);
+    if (result != NULL)
+    {
+        if (QUANTITY_INT_MAX - quantity >= *result)
+        {
+            (*result) += quantity;
+        }
+    }
+}
+
+inline void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+{
+    QUANTITY_INT* result = getOrderedOutQuantity(factory, product);
+    if (result != NULL)
+    {
+        if (QUANTITY_INT_MAX - quantity >= *result)
+        {
+            (*result) += quantity;
+        }
+    }
+}
+
+inline void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+{
+    QUANTITY_INT* result = getOrderedInQuantity(factory, product);
+    if (result != NULL)
+    {
+        if (*result >= quantity)
+        {
+            (*result) -= quantity;
+        }
+    }
+}
+
+inline void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+{
+    QUANTITY_INT* result = getOrderedOutQuantity(factory, product);
+    if (result != NULL)
+    {
+        if (*result >= quantity)
+        {
+            (*result) -= quantity;
+        }
     }
 }
 
@@ -82,4 +160,7 @@ void cleanFactory(Factory* factory) {
     }
     free(factory->stockpiles_out);
     free(factory->orders_out);
+
+    free(factory->ordered_in);
+    free(factory->ordered_out);
 }
