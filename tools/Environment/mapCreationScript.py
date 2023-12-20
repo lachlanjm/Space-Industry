@@ -127,7 +127,7 @@ typedef enum TransportNode {{
     launch_weight = 100
     space_weight = 10000
     for start in nodes:
-        # Run BFS TODO NOT WORKING
+        # Run BFS
         found_nodes = {node : [None, -1] for node in nodes}
         queue = [(start, 0, [], 0)]
 

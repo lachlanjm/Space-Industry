@@ -9,7 +9,11 @@ AppState* loadAppState(const int file_path_len, const char* file_path[])
 
     for (int i = 0; i < appState->factory_managers_num; i++)
     {
-        // assign new FactoryManager values
+        assignFactoryManagerValues(
+            &appState->factory_managers[i],
+            0, // TODO: TBU
+            0
+        );
     }
 
     appState->logistics_managers_num = 0;
