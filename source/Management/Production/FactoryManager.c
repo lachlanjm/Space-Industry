@@ -1,5 +1,10 @@
 #include "FactoryManager.h"
 
+void assignFactoryManagerValues(FactoryManager* factoryManager, const ProductionRecipe productionRecipe, const TransportNode location)
+{
+    assignFactoryValues(&factoryManager->controlled_factory, productionRecipe, location);
+}
+
 void updateOfferedPrices(FactoryManager* factoryManager)
 {
     for (int i = 0; i < factoryManager->controlled_factory.stockpiles_in_num; i++)
