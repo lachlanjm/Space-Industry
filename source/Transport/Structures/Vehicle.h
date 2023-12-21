@@ -20,16 +20,18 @@ typedef struct Vehicle {
     // TODO VehicleType type; (or so...)
 } Vehicle;
 
-inline void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product);
-inline void assignDelivery(Vehicle* vehicle, const Factory* factory);
+void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product);
+void assignDelivery(Vehicle* vehicle, const Factory* factory);
 
 void stepToNextLocation(Vehicle* vehicle);
+void moveVehicleToNextLoc(Vehicle* vehicle);
+uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle);
 
 void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_type);
 void unloadCargo(Vehicle* vehicle, const Factory* factory);
 
 // TODO TBU
-inline void processTickVehicle(Vehicle* vehicle);
+void processTickVehicle(Vehicle* vehicle);
 
 // DON'T free item, only constituents
 void cleanVehicle(Vehicle* vehicle);

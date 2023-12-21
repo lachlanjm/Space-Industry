@@ -1,13 +1,13 @@
 #include "LogisticsContract.h"
 
-inline LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
+LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
     LogisticsContract* logisticsContract = (LogisticsContract*) malloc(1 * sizeof(LogisticsContract));
     assignNewLogisticsContractValues(logisticsContract, assigned_vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
     return logisticsContract;
 }
 
-inline void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity)
+void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity)
 {
     logisticsContract->assigned_vehicle = assigned_vehicle;
     logisticsContract->selling_factory = selling_factory;
@@ -46,7 +46,7 @@ void processTickLogisticsContract(LogisticsContract* logisticsContract)
             unloadCargo(logisticsContract->assigned_vehicle, logisticsContract->buying_factory);
             removeOrderedInQuantity(logisticsContract->buying_factory, logisticsContract->product, logisticsContract->quantity);
             logisticsContract->assigned_vehicle->end_factory = NULL;
-            logisticsContract->assigned_vehicle->end_location = NULL;
+            logisticsContract->assigned_vehicle->end_location = -1;
             logisticsContract->current_phase = COMPLETED;
         }
         else

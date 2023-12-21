@@ -48,21 +48,6 @@ typedef enum Product
         def addAcidity(self, acidity):
             self.acidity = acidity
 
-    function_format = """{0} {{
-    switch (product)
-    {{
-    {1}
-    default:
-        return {2};
-    }}
-}}
-
-"""
-
-    case_format = """case {0}:
-        return {1};
-    """
-
     function_format_arr = """const static {1} {2}[] =
 {{
 {3}
@@ -75,17 +60,16 @@ typedef enum Product
 
     ### Start of program
     products = []
-    product_funcs = [
-        "char* getNameProduct(const Product product)", 
-        "char* getState(const Product product)", 
-        "char* getShort(const Product product)", 
-        "char* getCategory(const Product product)", 
-        "uint_fast16_t getGreenhouse(const Product product)", 
-        "float getAcidity(const Product product)"
-    ]
     data_types = ["char*", "char*", "char*", "char*", "uint_fast16_t", "float"]
+    product_funcs = [
+        f"{data_types[0]} getNameProduct(const Product product)", 
+        f"{data_types[1]} getState(const Product product)", 
+        f"{data_types[2]} getShort(const Product product)", 
+        f"{data_types[3]} getCategory(const Product product)", 
+        f"{data_types[4]} getGreenhouse(const Product product)", 
+        f"{data_types[5]} getAcidity(const Product product)"
+    ]
     arr_names = ["__product_names_arr", "__product_states_arr", "__product_short_arr", "__product_category_arr", "__product_greenhouse_arr", "__product_acididty_arr"]
-    case_groups = ["", "", "", "", "", ""]
     arr_groups = ["", "", "", "", "", ""]
     def_vals = ["NULL", "NULL", "NULL", "NULL", "+0", "0.0f"]
 

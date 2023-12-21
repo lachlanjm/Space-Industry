@@ -1,6 +1,6 @@
 #include "ProductMarket.h"
 
-inline ProductMarket* newProductMarket(const Product product_type)
+ProductMarket* newProductMarket(const Product product_type)
 {
     ProductMarket* productMarket = (ProductMarket*) malloc(1 * sizeof(ProductMarket));
 
@@ -11,31 +11,31 @@ inline ProductMarket* newProductMarket(const Product product_type)
     return productMarket;
 }
 
-inline void assignNewProductMarket(ProductMarket* productMarket, const Product product_type)
+void assignNewProductMarket(ProductMarket* productMarket, const Product product_type)
 {
     productMarket->product_type = product_type;
     productMarket->lowest_sell_order = NULL;
     productMarket->highest_buy_order = NULL;
 }
 
-inline void addSellOrder(ProductMarket* productMarket, Order* new_order)
+void addSellOrder(ProductMarket* productMarket, Order* new_order)
 {
-    pullUpBuyOrder(productMarket->lowest_sell_order, new_order);
+    pullUpBuyOrder(productMarket, new_order);
 }
 
-inline Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
+Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
 {
     Order* order = newOrder(offering_factory, offer_num, price);
     addSellOrder(productMarket, order);
     return order;
 }
 
-inline void addBuyOrder(ProductMarket* productMarket, Order* new_order)
+void addBuyOrder(ProductMarket* productMarket, Order* new_order)
 {
-    pushDownBuyOrder(productMarket->highest_buy_order, new_order);
+    pushDownBuyOrder(productMarket, new_order);
 }
 
-inline Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
+Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
 {
     Order* order = newOrder(offering_factory, offer_num, price);
     addBuyOrder(productMarket, order);
@@ -172,7 +172,7 @@ void removeSellOrder(ProductMarket* selling_market, Order* selling_order)
     }
 }
 
-inline void jump_attach_orders(Order* parent_order, Order* order, Order* child_order)
+void jump_attach_orders(Order* parent_order, Order* order, Order* child_order)
 {
     if (child_order != NULL)
     {
@@ -221,13 +221,13 @@ QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, P
     return exchanged_num;
 }
 
-inline void resetBuyOrder(ProductMarket* productMarket, Order* new_order)
+void resetBuyOrder(ProductMarket* productMarket, Order* new_order)
 {
     pullUpBuyOrder(productMarket, new_order);
     pushDownBuyOrder(productMarket, new_order);
 }
 
-inline void resetSellOrder(ProductMarket* productMarket, Order* new_order)
+void resetSellOrder(ProductMarket* productMarket, Order* new_order)
 {
     pushDownSellOrder(productMarket, new_order);
     pullUpSellOrder(productMarket, new_order);

@@ -3,7 +3,7 @@
 /*
 TODO: MUST WORK AROUND LEFT-OVER QUANTITY
 */
-inline void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product)
+void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product)
 {
     vehicle->end_factory = factory;
     vehicle->end_location = factory->location;
@@ -11,7 +11,7 @@ inline void assignPickup(Vehicle* vehicle, const Factory* factory, const Product
     vehicle->stockpile.product_type = product;
 }
 
-inline void assignDelivery(Vehicle* vehicle, const Factory* factory)
+void assignDelivery(Vehicle* vehicle, const Factory* factory)
 {
     vehicle->end_factory = factory;
     vehicle->end_location = factory->location;
@@ -32,12 +32,12 @@ void stepToNextLocation(Vehicle* vehicle)
     vehicle->distance_travelled = VEHICLE_SPEED - dist_to_travel;
 }
 
-inline uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
+uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
 {
     getNextDistance(vehicle->current_location, vehicle->end_location);
 }
 
-inline void moveVehicleToNextLoc(Vehicle* vehicle)
+void moveVehicleToNextLoc(Vehicle* vehicle)
 {
     vehicle->current_location = getNext(vehicle->current_location, vehicle->end_location);
     vehicle->distance_travelled = 0;
@@ -97,7 +97,7 @@ void unloadCargo(Vehicle* vehicle, const Factory* factory)
     // Fail
 }
 
-inline void processTickVehicle(Vehicle* vehicle)
+void processTickVehicle(Vehicle* vehicle)
 {
     if (vehicle->end_factory)
     {

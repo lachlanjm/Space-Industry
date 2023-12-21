@@ -67,14 +67,14 @@ typedef enum TransportNode {{
     ### Start of program
     nodes = []
     node_funcs = [
-        "inline char* getNameTransportNode(TransportNode node)"
+        "char* getNameTransportNode(TransportNode node)"
     ]
     norm_params = "(const TransportNode from, const TransportNode to)"
     map_funcs = [
-        f"inline TransportNode getNext{norm_params}",
-        f"inline uint_fast16_t getTotalDistance{norm_params}",
-        f"inline uint_fast16_t getNextDistance{norm_params}",
-        f"inline TransportConnectionType getConnectionType{norm_params}"
+        f"TransportNode getNext{norm_params}",
+        f"uint_fast16_t getTotalDistance{norm_params}",
+        f"uint_fast16_t getNextDistance{norm_params}",
+        f"TransportConnectionType getConnectionType{norm_params}"
     ]
     arr_groups = [""]
 

@@ -31,16 +31,16 @@ typedef struct Factory
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location);
 
-inline QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
-inline QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);
+QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
+QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);
 
-inline void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
-inline void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
-inline void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
-inline void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
 
 // TODO TBU
-inline void processTickFactory(Factory* factory);
+void processTickFactory(Factory* factory);
 
 // DO NOT CLEAN ITEM (ONLY CONSTITUENTS)
 void cleanFactory(Factory* factory);

@@ -17,8 +17,10 @@ typedef struct LogisticsManager
 
 } LogisticsManager;
 
-inline LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num);
-inline void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);
+LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num);
+void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);
+void assignFreeVehicles(LogisticsManager* logisticsManager);
+void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle);
 
 void update_dist_to_price_eff();
 

@@ -22,7 +22,7 @@ const static TransportNode* __transport_node_next_node_arr[] =
 	(TransportNode[]) {Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Mars_Orbit, Tharsis_Rise, Hellas_Basin, Utopia_Basin, Vastitas_Borealis}, 
 	(TransportNode[]) {Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Hellas_Basin, Utopia_Basin, Vastitas_Borealis}
 };
-inline TransportNode getNext(const TransportNode from, const TransportNode to) {
+TransportNode getNext(const TransportNode from, const TransportNode to) {
     return __transport_node_next_node_arr[from][to];
 }
 
@@ -48,7 +48,7 @@ const static uint_fast16_t* __transport_node_total_dist_arr[] =
 	(uint_fast16_t[]) {14, 14, 19, 19, 14, 14, 19, 14, 14, 14, 14, 14, 19, 4, 3, 5, 5, 0, 5}, 
 	(uint_fast16_t[]) {19, 19, 24, 24, 19, 19, 24, 19, 19, 19, 19, 19, 24, 9, 8, 5, 5, 5, 0}
 };
-inline uint_fast16_t getTotalDistance(const TransportNode from, const TransportNode to) {
+uint_fast16_t getTotalDistance(const TransportNode from, const TransportNode to) {
     return __transport_node_total_dist_arr[from][to];
 }
 
@@ -74,7 +74,7 @@ const static uint_fast16_t* __transport_node_next_dist_arr[] =
 	(uint_fast16_t[]) {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 0, 5}, 
 	(uint_fast16_t[]) {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0}
 };
-inline uint_fast16_t getNextDistance(const TransportNode from, const TransportNode to) {
+uint_fast16_t getNextDistance(const TransportNode from, const TransportNode to) {
     return __transport_node_next_dist_arr[from][to];
 }
 
@@ -100,7 +100,7 @@ const static TransportConnectionType* __transport_node_conn_type_arr[] =
 	(TransportConnectionType[]) {NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, TRANSIT, TERRESTRIAL, TERRESTRIAL, NOTHING, TERRESTRIAL}, 
 	(TransportConnectionType[]) {NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, TERRESTRIAL, TERRESTRIAL, TERRESTRIAL, NOTHING}
 };
-inline TransportConnectionType getConnectionType(const TransportNode from, const TransportNode to) {
+TransportConnectionType getConnectionType(const TransportNode from, const TransportNode to) {
     return __transport_node_conn_type_arr[from][to];
 }
 

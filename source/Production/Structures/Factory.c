@@ -62,7 +62,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
     }
 }
 
-inline QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product)
+QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product)
 {
     for (int i = 0; i < factory->stockpiles_in_num; i++)
     {
@@ -74,7 +74,7 @@ inline QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product 
     return NULL;
 }
 
-inline QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product)
+QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product)
 {
     for (int i = 0; i < factory->stockpiles_out_num; i++)
     {
@@ -86,7 +86,7 @@ inline QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product
     return NULL;
 }
 
-inline void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
 {
     QUANTITY_INT* result = getOrderedInQuantity(factory, product);
     if (result != NULL)
@@ -98,7 +98,7 @@ inline void addOrderedInQuantity(Factory* factory, const Product product, const 
     }
 }
 
-inline void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
 {
     QUANTITY_INT* result = getOrderedOutQuantity(factory, product);
     if (result != NULL)
@@ -110,7 +110,7 @@ inline void addOrderedOutQuantity(Factory* factory, const Product product, const
     }
 }
 
-inline void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
 {
     QUANTITY_INT* result = getOrderedInQuantity(factory, product);
     if (result != NULL)
@@ -122,7 +122,7 @@ inline void removeOrderedInQuantity(Factory* factory, const Product product, con
     }
 }
 
-inline void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
+void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
 {
     QUANTITY_INT* result = getOrderedOutQuantity(factory, product);
     if (result != NULL)
@@ -135,7 +135,7 @@ inline void removeOrderedOutQuantity(Factory* factory, const Product product, co
 }
 
 // TBU (CHECK FOR POSSIBLE, REVERT OTHERWISE)
-inline void processTickFactory(Factory* factory)
+void processTickFactory(Factory* factory)
 {
     for (int i = 0; i < factory->stockpiles_in_num; i++) {
         removeQuantity(&factory->stockpiles_in[i], factory->processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));

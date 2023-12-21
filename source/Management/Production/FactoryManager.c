@@ -13,7 +13,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
             factoryManager->controlled_factory.stockpiles_in[i].quantity
             + *getOrderedInQuantity(
                 &factoryManager->controlled_factory, 
-                &factoryManager->controlled_factory.stockpiles_in[i].product_type
+                factoryManager->controlled_factory.stockpiles_in[i].product_type
         );
 
         if (STOCKPILE_FULL - ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
@@ -55,7 +55,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
             factoryManager->controlled_factory.stockpiles_out[i].quantity
             - *getOrderedOutQuantity(
                 &factoryManager->controlled_factory, 
-                &factoryManager->controlled_factory.stockpiles_out[i].product_type
+                factoryManager->controlled_factory.stockpiles_out[i].product_type
         );
         if (ORDER_QUANTITY_MIN < stockpile_free_quantity)
         {
