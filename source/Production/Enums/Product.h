@@ -45,12 +45,12 @@ typedef enum Product
     PRODUCT_COUNT
 } Product;
 
-char* getNameProduct(const Product product);
-char* getState(const Product product);
-char* getShort(const Product product);
-char* getCategory(const Product product);
-uint_fast16_t getGreenhouse(const Product product);
-float getAcidity(const Product product);
+const char* getNameProduct(const Product product);
+const char* getState(const Product product);
+const char* getShort(const Product product);
+const char* getCategory(const Product product);
+const uint_fast16_t getGreenhouse(const Product product);
+const float getAcidity(const Product product);
 
 
 #endif

@@ -58,7 +58,7 @@ typedef enum TransportNode {{
 {{
 {3}
 }};
-{0} {{
+const {0} {{
     return {2}[from][to];
 }}
 
@@ -106,7 +106,7 @@ typedef enum TransportNode {{
         nodes_names = [f"{n.name} = {n.index}" for n in nodes]
         f.write(node_h_format.format(
             ",\n\t".join(nodes_names),
-            ";\n".join(node_funcs) + ";\n"
+            "const " + ";\nconst ".join(node_funcs) + ";\n"
         ))
 
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Enums\TransportNode.c"), "w") as f:
@@ -184,7 +184,7 @@ typedef enum TransportNode {{
 
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\Map.h"), "w") as f:
         f.write(map_h_format.format(
-            ";\n".join(map_funcs) + ";\n"
+            "const " + ";\nconst ".join(map_funcs) + ";\n"
         ))
 
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\Map.c"), "w") as f:

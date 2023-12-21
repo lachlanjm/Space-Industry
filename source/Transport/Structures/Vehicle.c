@@ -34,7 +34,7 @@ void stepToNextLocation(Vehicle* vehicle)
 
 uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
 {
-    getNextDistance(vehicle->current_location, vehicle->end_location);
+    return getNextDistance(vehicle->current_location, vehicle->end_location);
 }
 
 void moveVehicleToNextLoc(Vehicle* vehicle)

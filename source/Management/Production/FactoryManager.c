@@ -97,7 +97,7 @@ void processTickFactoryManager(FactoryManager* factoryManager)
     processTickFactory(&factoryManager->controlled_factory);
 }
 
-void clean(FactoryManager* factoryManager)
+void cleanFactoryManager(FactoryManager* factoryManager)
 {
     cleanFactory(&factoryManager->controlled_factory);
 }

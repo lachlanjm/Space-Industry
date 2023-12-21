@@ -38,7 +38,7 @@ const static char* __production_recipe_name_arr[] =
 	"Combustion Aviation Fuel", 
 	"Combustion Diesel", 
 };
-char* getNameProductionRecipe(const ProductionRecipe productionRecipe) {
+const char* getNameProductionRecipe(const ProductionRecipe productionRecipe) {
     return __production_recipe_name_arr[productionRecipe];
 }
 
@@ -80,7 +80,7 @@ const static int_fast16_t __production_recipe_energy_arr[] =
 	+40, 
 	+40, 
 };
-int_fast16_t getEnergy(const ProductionRecipe productionRecipe) {
+const int_fast16_t getEnergy(const ProductionRecipe productionRecipe) {
     return __production_recipe_energy_arr[productionRecipe];
 }
 
@@ -122,7 +122,7 @@ const static uint_fast8_t __production_recipe_num_inputs_arr[] =
 	2, 
 	2, 
 };
-char* getNumOfInputs(const ProductionRecipe productionRecipe) {
+const uint_fast8_t getNumOfInputs(const ProductionRecipe productionRecipe) {
     return __production_recipe_num_inputs_arr[productionRecipe];
 }
 
@@ -164,7 +164,7 @@ const static Stockpile* __production_recipe_inputs_arr[] =
 	(Stockpile[]) {{Aviation_Fuel, 2}, {Oxygen, 50}}, 
 	(Stockpile[]) {{Diesel, 2}, {Oxygen, 72}}, 
 };
-Stockpile* getInputs(const ProductionRecipe productionRecipe) {
+const Stockpile* getInputs(const ProductionRecipe productionRecipe) {
     return __production_recipe_inputs_arr[productionRecipe];
 }
 
@@ -206,7 +206,7 @@ const static uint_fast8_t __production_recipe_num_outputs_arr[] =
 	2, 
 	2, 
 };
-uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe) {
+const uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe) {
     return __production_recipe_num_outputs_arr[productionRecipe];
 }
 
@@ -248,7 +248,7 @@ const static Stockpile* __production_recipe_outputs_arr[] =
 	(Stockpile[]) {{Carbon_Dioxide, 16}, {Water, 18}}, 
 	(Stockpile[]) {{Carbon_Dioxide, 24}, {Water, 24}}, 
 };
-Stockpile* getOutputs(const ProductionRecipe productionRecipe) {
+const Stockpile* getOutputs(const ProductionRecipe productionRecipe) {
     return __production_recipe_outputs_arr[productionRecipe];
 }
 
@@ -290,7 +290,7 @@ const static QUANTITY_INT* __production_recipe_costs_arr[] =
 	(QUANTITY_INT[]) {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
 	(QUANTITY_INT[]) {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0}, 
 };
-QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product product) {
+const QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product product) {
     return __production_recipe_costs_arr[productionRecipe][product];
 }
 
@@ -332,7 +332,7 @@ const static QUANTITY_INT* __production_recipe_results_arr[] =
 	(QUANTITY_INT[]) {0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
 	(QUANTITY_INT[]) {0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
 };
-QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product) {
+const QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product) {
     return __production_recipe_results_arr[productionRecipe][product];
 }
 

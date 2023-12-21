@@ -46,14 +46,14 @@ typedef enum ProductionRecipe
     PRODUCTION_RECIPE_COUNT
 } ProductionRecipe;
 
-char* getNameProductionRecipe(const ProductionRecipe productionRecipe);
-int_fast16_t getEnergy(const ProductionRecipe productionRecipe);
-char* getNumOfInputs(const ProductionRecipe productionRecipe);
-Stockpile* getInputs(const ProductionRecipe productionRecipe);
-uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe);
-Stockpile* getOutputs(const ProductionRecipe productionRecipe);
-QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product product);
-QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product);
+const char* getNameProductionRecipe(const ProductionRecipe productionRecipe);
+const int_fast16_t getEnergy(const ProductionRecipe productionRecipe);
+const uint_fast8_t getNumOfInputs(const ProductionRecipe productionRecipe);
+const Stockpile* getInputs(const ProductionRecipe productionRecipe);
+const uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe);
+const Stockpile* getOutputs(const ProductionRecipe productionRecipe);
+const QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product product);
+const QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product);
 
 
 #endif

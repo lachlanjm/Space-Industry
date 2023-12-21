@@ -17,7 +17,7 @@ void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const u
     logisticsManager->contracts = NULL;
 }
 
-void addNewLogisticsContract(LogisticsManager* logisticsManager, const Vehicle* vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
+void addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, Factory* selling_factory, Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
     logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
     addOrderedOutQuantity(selling_factory, product, quantity);
@@ -79,7 +79,7 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 {
     for (int i = 0; i < logisticsManager->vehicles_num; i++)
     {
-        if (logisticsManager->vehicles[i].end_location == NULL)
+        if (logisticsManager->vehicles[i].end_location == -1)
         {
             assignNewLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
         }

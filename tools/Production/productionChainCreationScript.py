@@ -59,7 +59,7 @@ typedef enum ProductionRecipe
     function_format_arr = """const static {1} {2}[] =
 {{{3}
 }};
-{0} {{
+const {0} {{
     return {2}[productionRecipe];
 }}
 
@@ -68,7 +68,7 @@ typedef enum ProductionRecipe
     function_format_arr_ext = """const static {1}* {2}[] =
 {{{3}
 }};
-{0} {{
+const {0} {{
     return {2}[productionRecipe][product];
 }}
 
@@ -81,7 +81,7 @@ typedef enum ProductionRecipe
     recipe_funcs = [
         f"{data_types[0]} getNameProductionRecipe(const ProductionRecipe productionRecipe)", 
         f"{data_types[1]} getEnergy(const ProductionRecipe productionRecipe)", 
-        f"{data_types[0]} getNumOfInputs(const ProductionRecipe productionRecipe)",
+        f"{data_types[2]} getNumOfInputs(const ProductionRecipe productionRecipe)",
         f"{data_types[3]} getInputs(const ProductionRecipe productionRecipe)",
         f"{data_types[4]} getNumOfOutputs(const ProductionRecipe productionRecipe)",
         f"{data_types[5]} getOutputs(const ProductionRecipe productionRecipe)",
@@ -183,7 +183,7 @@ typedef enum ProductionRecipe
         recipes_names = [p.name for p in recipes]
         f.write(product_h_format.format(
             ",\n\t".join(recipes_names),
-            ";\n".join(recipe_funcs) + ";\n"
+            "const " + ";\nconst ".join(recipe_funcs) + ";\n"
         ))
 
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\ProductionRecipe.c"), "w") as f:

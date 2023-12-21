@@ -52,7 +52,7 @@ typedef enum Product
 {{
 {3}
 }};
-{0} {{
+const {0} {{
     return {2}[product];
 }}
 
@@ -129,7 +129,7 @@ typedef enum Product
         products_names = [p.name for p in products]
         f.write(product_h_format.format(
             ",\n\t".join(products_names),
-            ";\n".join(product_funcs) + ";\n"
+            "const " + ";\nconst ".join(product_funcs) + ";\n"
         ))
 
     with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\Product.c"), "w") as f:
