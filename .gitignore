@@ -3,6 +3,7 @@
 
 # Build files
 **/build
+IndustryApp.exe
 
 # Compilation files
 **/__pycache__
