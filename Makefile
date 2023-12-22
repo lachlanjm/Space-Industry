@@ -40,7 +40,7 @@ MAR_DIR := Markets
 PRO_DIR := Production
 TRA_DIR := Transport
 
-CFLAGS := -Wall -O3 
+CFLAGS := -Wall -g
 
 
 .PHONY: all

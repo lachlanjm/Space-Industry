@@ -4,7 +4,7 @@ AppState* loadAppState(const int file_path_len, const char* file_path)
 {
     AppState* appState = (AppState*) malloc(sizeof(AppState));
 
-    appState->factory_managers_num = 0;
+    appState->factory_managers_num = 2;
     appState->factory_managers = (FactoryManager*) calloc(appState->factory_managers_num, sizeof(FactoryManager));
 
     for (int i = 0; i < appState->factory_managers_num; i++)
@@ -16,7 +16,7 @@ AppState* loadAppState(const int file_path_len, const char* file_path)
         );
     }
 
-    appState->logistics_managers_num = 0;
+    appState->logistics_managers_num = 1;
     appState->logistics_managers_next_process_tick_index = 0;
     appState->logistics_managers = (LogisticsManager*) calloc(appState->logistics_managers_num, sizeof(LogisticsManager));
 

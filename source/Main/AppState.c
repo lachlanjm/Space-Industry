@@ -6,8 +6,11 @@ int main(int argc, char* argv[])
 
     for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
     {
+        printf("%d\n", i);
         processTickAppState(current_app_state);
     }
+
+    printf("Complete\n");
 
     saveAppState(current_app_state);
     cleanAppState(current_app_state);
@@ -18,14 +21,17 @@ void processTickAppState(AppState* appState)
 {
     for (int i = 0; i < appState->factory_managers_num; i++)
     {
+        printf("\t%d\n", i);
         processTickFactoryManager(&appState->factory_managers[i]);
     }
 
-    processTickLogisticsManagerContracts(&appState->logistics_managers[appState->logistics_managers_next_process_tick_index++]);
-    appState->logistics_managers_next_process_tick_index %= appState->logistics_managers_num;
+    processTickLogisticsManagerContracts(&appState->logistics_managers[appState->logistics_managers_next_process_tick_index]);
+    appState->logistics_managers_next_process_tick_index = (++appState->logistics_managers_next_process_tick_index) % appState->logistics_managers_num;
+    printf("\tComplete Contract\n");
 
     for (int i = 0; i < appState->logistics_managers_num; i++)
     {
+        printf("\t%d\n", i);
         processTickLogisticsManagerVehicles(&appState->logistics_managers[i]);
     }
 }

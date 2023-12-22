@@ -10,6 +10,7 @@ typedef struct AppState AppState;
 #include ".\SaveAppState.h"
 
 #include <stdint.h>
+#include <stdio.h>
 
 typedef struct AppState {
     uint_fast16_t logistics_managers_num;

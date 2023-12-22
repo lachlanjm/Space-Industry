@@ -34,18 +34,22 @@ void update_dist_to_price_eff()
         {
             for (int product = 0; product < PRODUCT_COUNT; product++)
             {
-                if (getTotalDistance(from, to) == 0)
+                if (getProductMarketAtLocation(to, product)->highest_buy_order != NULL
+                    && getProductMarketAtLocation(from, product)->lowest_sell_order != NULL)
                 {
-                    __dist_to_price_eff__[from][to][product] =
-                    (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-                    - getProductMarketAtLocation(from, product)->lowest_sell_order->price);
-                }
-                else 
-                {
-                    __dist_to_price_eff__[from][to][product] =
-                    (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-                    - getProductMarketAtLocation(from, product)->lowest_sell_order->price)
-                    / (float)getTotalDistance(from, to);
+                    if (getTotalDistance(from, to) == 0)
+                    {
+                        __dist_to_price_eff__[from][to][product] =
+                        (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
+                        - getProductMarketAtLocation(from, product)->lowest_sell_order->price);
+                    }
+                    else 
+                    {
+                        __dist_to_price_eff__[from][to][product] =
+                        (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
+                        - getProductMarketAtLocation(from, product)->lowest_sell_order->price)
+                        / (float)getTotalDistance(from, to);
+                    }
                 }
             }
         }
