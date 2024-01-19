@@ -221,16 +221,139 @@ QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, P
     return exchanged_num;
 }
 
-void resetBuyOrder(ProductMarket* productMarket, Order* new_order)
+void swap_orders(Order* parent_order, Order* child_order)
 {
-    pullUpBuyOrder(productMarket, new_order);
-    pushDownBuyOrder(productMarket, new_order);
+    if (parent_order->prev_order != NULL)
+    {
+        if (parent_order == parent_order->prev_order->left_order)
+        {
+            parent_order->prev_order->left_order = child_order;
+        }
+        else
+        {
+            parent_order->prev_order->right_order = child_order;
+        }
+    }
+
+    child_order->prev_order = parent_order->prev_order;
+
+    if (child_order == parent_order->left_order)
+    {
+        parent_order->left_order = child_order->left_order;
+        child_order->left_order = child_order->right_order; // tmp var storage
+        child_order->right_order = parent_order->right_order;
+        parent_order->right_order = child_order->left_order;
+        child_order->left_order = parent_order;
+    }
+    else
+    {
+        parent_order->right_order = child_order->right_order;
+        child_order->right_order = child_order->left_order; // tmp var storage
+        child_order->left_order = parent_order->left_order;
+        parent_order->left_order = child_order->right_order;
+        child_order->right_order = parent_order;
+    }
+
+    if (parent_order->left_order != NULL)
+    {
+        parent_order->left_order->prev_order = parent_order;
+    }
+    if (parent_order->right_order != NULL)
+    {
+        parent_order->right_order->prev_order = parent_order;
+    }
 }
 
-void resetSellOrder(ProductMarket* productMarket, Order* new_order)
+void resetBuyOrder(ProductMarket* productMarket, Order* reset_order)
 {
-    pushDownSellOrder(productMarket, new_order);
-    pullUpSellOrder(productMarket, new_order);
+    while (1)
+    {
+        if (reset_order->prev_order == NULL)
+        {
+            productMarket->highest_buy_order = reset_order;
+            break;
+        }
+        if (reset_order->price > reset_order->prev_order->price)
+        {
+            swap_orders(reset_order->prev_order, reset_order);
+            continue;
+        }
+        break;
+    }
+    while (1)
+    {
+        if (reset_order->left_order != NULL)
+        {
+            if (reset_order->price <= reset_order->left_order->price)
+            {
+                swap_orders(reset_order, reset_order->left_order);
+                if (reset_order->prev_order->prev_order == NULL)
+                {
+                    productMarket->highest_buy_order = reset_order->prev_order;
+                }
+                continue;
+            }
+        }
+        if (reset_order->right_order != NULL)
+        {
+            if (reset_order->price <= reset_order->right_order->price)
+            {
+                swap_orders(reset_order, reset_order->right_order);
+                if (reset_order->prev_order->prev_order == NULL)
+                {
+                    productMarket->highest_buy_order = reset_order->prev_order;
+                }
+                continue;
+            }
+        }
+        break;
+    }
+}
+
+void resetSellOrder(ProductMarket* productMarket, Order* reset_order)
+{
+    while (1)
+    {
+        if (reset_order->prev_order == NULL)
+        {
+            productMarket->lowest_sell_order = reset_order;
+            break;
+        }
+        if (reset_order->price < reset_order->prev_order->price)
+        {
+            swap_orders(reset_order->prev_order, reset_order);
+            continue;
+        }
+        break;
+    }
+    while (1)
+    {
+        if (reset_order->left_order != NULL)
+        {
+            if (reset_order->price >= reset_order->left_order->price)
+            {
+                swap_orders(reset_order, reset_order->left_order);
+                if (reset_order->prev_order->prev_order == NULL)
+                {
+                    productMarket->lowest_sell_order = reset_order->prev_order;
+                }
+                continue;
+            }
+        }
+        if (reset_order->right_order != NULL)
+        {
+            if (reset_order->price >= reset_order->right_order->price)
+            {
+                swap_orders(reset_order, reset_order->right_order);
+                if (reset_order->prev_order->prev_order == NULL)
+                {
+                    productMarket->lowest_sell_order = reset_order->prev_order;
+                }
+                continue;
+            }
+        }
+        break;
+    }
 }
 
 void pushDownBuyOrder(ProductMarket* productMarket, Order* new_order) 

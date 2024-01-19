@@ -23,9 +23,10 @@ void removeSellOrder(ProductMarket* selling_market, Order* selling_order);
 
 void jump_attach_orders(Order* parent_order, Order* order, Order* child_order);
 QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order);
+void swap_orders(Order* parent_order, Order* child_order);
 
-void resetBuyOrder(ProductMarket* productMarket, Order* new_order);
-void resetSellOrder(ProductMarket* productMarket, Order* new_order);
+void resetBuyOrder(ProductMarket* productMarket, Order* reset_order);
+void resetSellOrder(ProductMarket* productMarket, Order* reset_order);
 
 void pushDownBuyOrder(ProductMarket* productMarket, Order* new_order);
 void pullUpBuyOrder(ProductMarket* productMarket, Order* new_order);
