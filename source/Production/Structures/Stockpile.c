@@ -23,13 +23,13 @@ void setDiffProduct(Stockpile* stockpile, const Product product)
 }
 
 void addQuantity(Stockpile* stockpile, const QUANTITY_INT quantity) {
-    if (QUANTITY_INT_MAX - stockpile->quantity <= quantity) {
+    if (QUANTITY_INT_MAX - stockpile->quantity >= quantity) {
         stockpile->quantity += quantity;
     }
 }
 
 uint_fast8_t addQuantityCheck(Stockpile* stockpile, const QUANTITY_INT quantity) {
-    if (QUANTITY_INT_MAX - stockpile->quantity <= quantity) {
+    if (QUANTITY_INT_MAX - stockpile->quantity >= quantity) {
         stockpile->quantity += quantity;
         return 0;
     }

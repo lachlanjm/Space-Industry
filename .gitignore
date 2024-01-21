@@ -7,3 +7,6 @@ IndustryApp.exe
 
 # Compilation files
 **/__pycache__
+
+# Logs
+log.out

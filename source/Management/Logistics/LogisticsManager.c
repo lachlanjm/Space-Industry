@@ -13,6 +13,11 @@ void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const u
 
     logisticsManager->vehicles = (Vehicle*) realloc(logisticsManager->vehicles, vehicles_num * sizeof(Vehicle));
 
+    for (int i = 0; i < logisticsManager->vehicles_num; i++)
+    {
+        assignNewVehicleValues(&logisticsManager->vehicles[i], 0);
+    }
+
     logisticsManager->contracts_num = 0;
     logisticsManager->contracts = NULL;
 }
@@ -51,6 +56,10 @@ void update_dist_to_price_eff()
                         / (float)getTotalDistance(from, to);
                     }
                 }
+                else
+                {
+                    __dist_to_price_eff__[from][to][product] = 0;
+                }
             }
         }
     }
@@ -62,18 +71,26 @@ void update_dist_to_price_eff_product_filtered(int product)
     {
         for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
         {
-            if (getTotalDistance(from, to) == 0)
+            if (getProductMarketAtLocation(to, product)->highest_buy_order != NULL
+                && getProductMarketAtLocation(from, product)->lowest_sell_order != NULL)
             {
-                __dist_to_price_eff__[from][to][product] =
-                (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-                - getProductMarketAtLocation(from, product)->lowest_sell_order->price);
+                if (getTotalDistance(from, to) == 0)
+                {
+                    __dist_to_price_eff__[from][to][product] =
+                    (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
+                    - getProductMarketAtLocation(from, product)->lowest_sell_order->price);
+                }
+                else 
+                {
+                    __dist_to_price_eff__[from][to][product] =
+                    (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
+                    - getProductMarketAtLocation(from, product)->lowest_sell_order->price)
+                    / (float)getTotalDistance(from, to);
+                }
             }
-            else 
+            else
             {
-                __dist_to_price_eff__[from][to][product] =
-                (float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-                - getProductMarketAtLocation(from, product)->lowest_sell_order->price)
-                / (float)getTotalDistance(from, to);
+                __dist_to_price_eff__[from][to][product] = 0;
             }
         }
     }
@@ -85,11 +102,13 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
     {
         if (logisticsManager->vehicles[i].end_location == -1)
         {
+            printf("\t\t\tAssiging new vehicle\n");
             assignNewLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
         }
     }
 }
 
+// TODO: return value to indicate no new state and stop iterating for current tick
 void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
 {
     int from_max = -1;
@@ -97,6 +116,7 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
     int product_max = -1;
     int eff_max = 0;
 
+    printf("\t\t\t\tChecking efficient route\n");
     for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
     {
         for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
@@ -114,6 +134,17 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
         }
     }
 
+    if (from_max == -1)
+    {
+        printf("\t\t\t\tNo new valid route\n");
+        return;
+    }
+
+    // TODO !!!! IMPROVE FLOW AND MEMORY ASSIGNMENT
+    Factory* selling_factory = getProductMarketAtLocation(from_max, product_max)->lowest_sell_order->offering_factory;
+    Factory* buying_factory = getProductMarketAtLocation(to_max, product_max)->highest_buy_order->offering_factory;
+
+    printf("\t\t\t\tChecking quantity\n");
     QUANTITY_INT quantity = match_orders(
         getProductMarketAtLocation(from_max, product_max), 
         getProductMarketAtLocation(from_max, product_max)->lowest_sell_order,
@@ -121,29 +152,35 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
         getProductMarketAtLocation(to_max, product_max)->highest_buy_order
     );
 
+    printf("\t\t\t\tCreating contract: %x:%x:%d:%u:%u:%u\n", logisticsManager, vehicle, product_max, quantity, from_max, to_max);
     addNewLogisticsContract(
         logisticsManager,
         vehicle,
-        getProductMarketAtLocation(from_max, product_max)->lowest_sell_order->offering_factory,
-        getProductMarketAtLocation(to_max, product_max)->highest_buy_order->offering_factory,
+        selling_factory,
+        buying_factory,
         product_max,
         quantity
     );
 
+    printf("\t\t\t\tUpdating Eff. Map\n");
     update_dist_to_price_eff_product_filtered(product_max);
 }
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 {
     // Search and add contracts
+    printf("\t\tUpdating Dist Price Eff.\n");
     update_dist_to_price_eff();
+    printf("\t\tAssigning free vehicles\n");
     assignFreeVehicles(logisticsManager);
 
+    printf("\t\tTicking Contracts\n");
     // Tick contracts
     for (int i = 0; i < logisticsManager->contracts_num; i++)
     {
         processTickLogisticsContract(&logisticsManager->contracts[i]);
     }
+    printf("\t\tCompleted Contracts\n");
 }
 
 void processTickLogisticsManagerVehicles(LogisticsManager* logisticsManager)

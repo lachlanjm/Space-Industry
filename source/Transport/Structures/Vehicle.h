@@ -7,6 +7,7 @@
 #include "..\..\Environment\Structures\Map.h"
 
 #define VEHICLE_SPEED 1
+#define VEHICLE_CAPACITY 100
 
 typedef struct Vehicle {
     TransportNode current_location;
@@ -19,6 +20,8 @@ typedef struct Vehicle {
     QUANTITY_INT max_capacity;
     // TODO VehicleType type; (or so...)
 } Vehicle;
+
+void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location);
 
 void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product);
 void assignDelivery(Vehicle* vehicle, const Factory* factory);

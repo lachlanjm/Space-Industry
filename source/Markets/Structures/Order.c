@@ -4,12 +4,7 @@ Order* newOrder(const Factory* offering_factory, const QUANTITY_INT offer_num, c
 {
     Order* order = (Order*) malloc(1 * sizeof(Order));
 
-    order->offering_factory = offering_factory;
-    order->offer_num = offer_num;
-    order->price = price;
-
-    order->left_order = NULL;
-    order->right_order = NULL;
+    assignOrderValues(order, offering_factory, offer_num, price, NULL, NULL, NULL);
 
     return order;
 }

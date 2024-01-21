@@ -1,5 +1,17 @@
 #include "Vehicle.h"
 
+void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location)
+{
+    vehicle->current_location = start_location;
+    vehicle->end_location = -1;
+    vehicle->distance_travelled = 0;
+
+    assignStockpileValues(&vehicle->stockpile, 0, 0);
+
+    vehicle->end_factory = NULL;
+    vehicle->max_capacity = VEHICLE_CAPACITY;
+}
+
 /*
 TODO: MUST WORK AROUND LEFT-OVER QUANTITY
 */
