@@ -98,7 +98,7 @@ Otherwise, use snake_case. E.g:
 Stockpile* stockpiles_in;
 ```
 
-### Related enum functions
+### Related struct functions
 I.e. instance methods. Functions that take a singular ptr to an instance of the struct as the first parameter (similar to Python's self parameter) use camelCase. E.g:
 ```c
 void assignNewFactoryValues(Factory* factory, [...]);
@@ -107,7 +107,7 @@ For parameters in these functions, use the same naming convention as for member 
 <br><br>
 For other functions, use snake_case. E.g:
 ```c
-int multiply_integers(int num_1, int num_2, [...]);
+void swap_orders(Order* parent_order, Order* child_order);
 ```
 
 ## Enums
@@ -124,5 +124,5 @@ Use the same conventions as Structures.
 ### Member variables naming
 Use the same conventions as Structures.
 
-### Related struct functions
+### Related enum functions
 Use the same conventions as Structures.

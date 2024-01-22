@@ -40,11 +40,11 @@ python3 ./tools/preBuildScript.py
 ### Build command
 Execute this build command:
 ```bash
-gcc -O3 some_script.c
+make
 ```
 
 ## Execute the application
 Run this command:
 ```bash
-a.exe
+.\IndustryApp.exe
 ```
