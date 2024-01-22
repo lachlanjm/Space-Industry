@@ -22,6 +22,7 @@ OBJ_FILES += .\$(BUILD_DIR)\MarketMap.c.o
 OBJ_FILES += .\$(BUILD_DIR)\AppState.c.o
 OBJ_FILES += .\$(BUILD_DIR)\SaveAppState.c.o
 OBJ_FILES += .\$(BUILD_DIR)\LoadAppState.c.o
+OBJ_FILES += .\$(BUILD_DIR)\Core.c.o
 OBJ_FILES += .\$(BUILD_DIR)\LogisticsContract.c.o
 OBJ_FILES += .\$(BUILD_DIR)\LogisticsManager.c.o
 OBJ_FILES += .\$(BUILD_DIR)\FactoryManager.c.o
@@ -34,14 +35,27 @@ OBJ_FILES += .\$(BUILD_DIR)\Stockpile.c.o
 OBJ_FILES += .\$(BUILD_DIR)\Vehicle.c.o
 
 ENV_DIR := Environment
+GUI_DIR := GUI
 MAIN_DIR := Main
 MAN_DIR := Management
 MAR_DIR := Markets
 PRO_DIR := Production
 TRA_DIR := Transport
 
-CFLAGS := -Wall -g
+CFLAGS := -Wall -g -DGLEW_STATIC 
 
+ifeq ($(OS),Windows_NT)
+	LIBS = -lglfw3 -lopengl32 -lm -lGLU32 -lGLEW32
+	LOCAL_LIBS = .\$(SRC_DIR)\$(GUI_DIR)\glfw3dll.lib .\$(SRC_DIR)\$(GUI_DIR)\OpenGL32.lib .\$(SRC_DIR)\$(GUI_DIR)\glew32.lib
+else
+	UNAME_S := $(shell uname -s)
+	GLFW3 := $(shell pkg-config --libs glfw3)
+	ifeq ($(UNAME_S),Darwin)
+		LIBS := $(GLFW3) -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lm -lGLEW -L/usr/local/lib
+	else
+		LIBS = $(GLFW3) -lGL -lm -lGLU -lGLEW
+	endif
+endif
 
 .PHONY: all
 all:
@@ -52,9 +66,11 @@ all:
 	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(ENV_DIR)\Structures\Map.h -o .\$(BUILD_DIR)\Map.h.gch 
 	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(ENV_DIR)\Structures\MarketMap.h -o .\$(BUILD_DIR)\MarketMap.h.gch 
 
-	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState.h -o .\$(BUILD_DIR)\AppState.h.gch 
-	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\SaveAppState.h -o .\$(BUILD_DIR)\SaveAppState.h.gch 
-	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\LoadAppState.h -o .\$(BUILD_DIR)\LoadAppState.h.gch 
+	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState\AppState.h -o .\$(BUILD_DIR)\AppState.h.gch 
+	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState\SaveAppState.h -o .\$(BUILD_DIR)\SaveAppState.h.gch 
+	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState\LoadAppState.h -o .\$(BUILD_DIR)\LoadAppState.h.gch 
+
+	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAIN_DIR)\Core\Core.h -o .\$(BUILD_DIR)\Core.h.gch 
 
 	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAN_DIR)\Logistics\LogisticsContract.h -o .\$(BUILD_DIR)\LogisticsContract.h.gch 
 	$(CC) $(CFLAGS) -c .\$(SRC_DIR)\$(MAN_DIR)\Logistics\LogisticsManager.h -o .\$(BUILD_DIR)\LogisticsManager.h.gch 
@@ -75,9 +91,11 @@ all:
 	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(ENV_DIR)\Structures\Map.c -o .\$(BUILD_DIR)\Map.c.o
 	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(ENV_DIR)\Structures\MarketMap.c -o .\$(BUILD_DIR)\MarketMap.c.o
 
-	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState.c -o .\$(BUILD_DIR)\AppState.c.o
-	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\SaveAppState.c -o .\$(BUILD_DIR)\SaveAppState.c.o
-	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\LoadAppState.c -o .\$(BUILD_DIR)\LoadAppState.c.o
+	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState\AppState.c -o .\$(BUILD_DIR)\AppState.c.o
+	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState\SaveAppState.c -o .\$(BUILD_DIR)\SaveAppState.c.o
+	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\AppState\LoadAppState.c -o .\$(BUILD_DIR)\LoadAppState.c.o
+
+	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAIN_DIR)\Core\Core.c -o .\$(BUILD_DIR)\Core.c.o
 
 	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAN_DIR)\Logistics\LogisticsContract.c -o .\$(BUILD_DIR)\LogisticsContract.c.o
 	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(MAN_DIR)\Logistics\LogisticsManager.c -o .\$(BUILD_DIR)\LogisticsManager.c.o
@@ -93,7 +111,7 @@ all:
 
 	$(CC) $(CFLAGS) -I .\$(BUILD_DIR)  -c .\$(SRC_DIR)\$(TRA_DIR)\Structures\Vehicle.c -o .\$(BUILD_DIR)\Vehicle.c.o
 
-	$(CC) $(CFLAGS) -I .\$(BUILD_DIR) $(OBJ_FILES) -o .\IndustryApp.exe
+	$(CC) $(CFLAGS) $(LIBS) -I .\$(BUILD_DIR) $(OBJ_FILES) $(LOCAL_LIBS) -o .\IndustryApp.exe
 
 .PHONY: clean
 clean:

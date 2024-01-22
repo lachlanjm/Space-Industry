@@ -3,8 +3,8 @@
 
 typedef struct AppState AppState;
 
-#include "..\Management\Logistics\LogisticsManager.h"
-#include "..\Management\Production\FactoryManager.h"
+#include "..\..\Management\Logistics\LogisticsManager.h"
+#include "..\..\Management\Production\FactoryManager.h"
 
 #include ".\LoadAppState.h"
 #include ".\SaveAppState.h"
@@ -21,10 +21,6 @@ typedef struct AppState {
     FactoryManager* factory_managers;
 
 } AppState;
-
-#define NUMBER_OF_ITERATIONS 1000 // TEMPORARY: TBU
-
-int main(int argc, char* argv[]);
 
 void processTickAppState(AppState* appState);
 

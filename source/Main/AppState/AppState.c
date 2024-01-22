@@ -1,24 +1,5 @@
 #include "AppState.h"
 
-int main(int argc, char* argv[])
-{
-    AppState* current_app_state = loadAppState(0, NULL);
-
-    for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-    {
-        printf("Iteration - %d\n", i);
-        processTickAppState(current_app_state);
-    }
-
-    printf("Completed Iterations\n");
-
-    saveAppState(current_app_state);
-    printf("Saved App State\n");
-    cleanAppState(current_app_state);
-    free(current_app_state);
-    printf("Cleaned App State\n");
-}
-
 void processTickAppState(AppState* appState)
 {
     for (int i = 0; i < appState->factory_managers_num; i++)
