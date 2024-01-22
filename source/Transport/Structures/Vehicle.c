@@ -72,6 +72,7 @@ void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_t
                 {
                     moveStockpile(&factory->stockpiles_out[i], &vehicle->stockpile, factory->stockpiles_out[i].quantity);
                 }
+                return;
             }
             else if (vehicle->stockpile.product_type == product_type)
             {
@@ -83,6 +84,7 @@ void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_t
                 {
                     moveStockpile(&factory->stockpiles_out[i], &vehicle->stockpile, factory->stockpiles_out[i].quantity);
                 }
+                return;
             }
             // Fail
         }
@@ -104,6 +106,7 @@ void unloadCargo(Vehicle* vehicle, const Factory* factory)
             {
                 moveStockpile(&factory->stockpiles_in[i], &vehicle->stockpile, QUANTITY_INT_MAX - factory->stockpiles_in[i].quantity);
             }
+            return;
         }
     }
     // Fail

@@ -174,11 +174,20 @@ void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
     printf("\t\tAssigning free vehicles\n");
     assignFreeVehicles(logisticsManager);
 
-    printf("\t\tTicking Contracts\n");
+    printf("\t\tTicking Contracts - %d\n", logisticsManager->contracts_num);
     // Tick contracts
     for (int i = 0; i < logisticsManager->contracts_num; i++)
     {
-        processTickLogisticsContract(&logisticsManager->contracts[i]);
+        if(processTickLogisticsContract(&logisticsManager->contracts[i]))
+        {
+            logisticsManager->contracts_num--;
+            for (int x = i; x < logisticsManager->contracts_num; x++)
+            {
+                logisticsManager->contracts[x] = logisticsManager->contracts[x + 1];
+            }
+            cleanContract(&logisticsManager->contracts[logisticsManager->contracts_num]);
+            logisticsManager->contracts = realloc(logisticsManager->contracts, logisticsManager->contracts_num * sizeof(LogisticsContract));
+        }
     }
     printf("\t\tCompleted Contracts\n");
 }

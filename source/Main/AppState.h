@@ -22,7 +22,7 @@ typedef struct AppState {
 
 } AppState;
 
-#define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
+#define NUMBER_OF_ITERATIONS 1000 // TEMPORARY: TBU
 
 int main(int argc, char* argv[]);
 

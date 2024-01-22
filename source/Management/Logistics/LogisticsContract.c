@@ -20,7 +20,7 @@ void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, cons
 /*
 TODO: ACCOUNT FOR END FACTORY diff END LOCATION
 */
-void processTickLogisticsContract(LogisticsContract* logisticsContract)
+int processTickLogisticsContract(LogisticsContract* logisticsContract)
 {
     switch (logisticsContract->current_phase)
     {
@@ -38,7 +38,7 @@ void processTickLogisticsContract(LogisticsContract* logisticsContract)
         }
         else
         {
-            break;
+            return 0;
         }
     case DELIVERY:
         if (logisticsContract->assigned_vehicle->current_location == logisticsContract->assigned_vehicle->end_location)
@@ -51,15 +51,15 @@ void processTickLogisticsContract(LogisticsContract* logisticsContract)
         }
         else
         {
-            break;
+            return 0;
         }
     case COMPLETED:
         /* do nothing until later */
-        break;
+        return 1;
     
     default:
         /* error */
-        break;
+        return 1;
     }
 }
 
