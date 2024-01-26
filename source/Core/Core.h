@@ -39,10 +39,18 @@
 #include "..\Simulation\Main\AppState\AppState.h"
 
 #define APP_WINDOW_STR "Space Industry"
-#define NUMBER_OF_ITERATIONS 1000 // TEMPORARY: TBU
+#define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
+
+typedef struct AppPlatform {
+    int width;
+    int height;
+    struct nk_context *ctx;
+    struct nk_colorf bg;
+} AppPlatform;
 
 int main(int argc, char* argv[]);
 
+void setupAppPlatform(AppPlatform* platform, GLFWwindow *win);
 int closeApp(AppState* appState);
 
 #endif
