@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
-    win = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Demo", NULL, NULL);
+    win = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, APP_WINDOW_STR, NULL, NULL);
     glfwMakeContextCurrent(win);
     glfwGetWindowSize(win, &width, &height);
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
         nk_glfw3_new_frame(&glfw);
 
         /* GUI */
-        if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
+        if (nk_begin(ctx, APP_WINDOW_STR, nk_rect(50, 50, 230, 250),
             NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
             NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
         {

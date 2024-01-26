@@ -38,6 +38,7 @@
 
 #include "..\Simulation\Main\AppState\AppState.h"
 
+#define APP_WINDOW_STR "Space Industry"
 #define NUMBER_OF_ITERATIONS 1000 // TEMPORARY: TBU
 
 int main(int argc, char* argv[]);
