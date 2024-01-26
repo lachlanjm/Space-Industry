@@ -46,5 +46,5 @@ make
 ## Execute the application
 Run this command:
 ```bash
-.\IndustryApp.exe
+start IndustryApp.exe
 ```
