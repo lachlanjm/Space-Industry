@@ -21,8 +21,6 @@
 #define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_FONT
-#define NK_IMPLEMENTATION
-#define NK_GLFW_GL3_IMPLEMENTATION
 #define NK_KEYSTATE_BASED_INPUT
 #include "../GUI/includes/nuklear.h"
 #include "../GUI/includes/nuklear_glfw_gl3.h"
@@ -36,17 +34,20 @@
 // SELF
 #define MAX_MEMORY 4294967295
 
+typedef struct AppPlatform AppPlatform;
+
 #include "..\Simulation\Main\AppState\AppState.h"
+#include "..\GUI\MainMenu.h"
 
 #define APP_WINDOW_STR "Space Industry"
 #define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
 
-typedef struct AppPlatform {
+struct AppPlatform {
     int width;
     int height;
     struct nk_context *ctx;
     struct nk_colorf bg;
-} AppPlatform;
+};
 
 int main(int argc, char* argv[]);
 

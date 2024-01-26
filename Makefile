@@ -48,6 +48,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\ProductionRecipe.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Factory.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Stockpile.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Vehicle.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\MainMenu.c.o
 
 GUI_LIBS_PATH := $(GUI_PATH)\libs
 
@@ -114,6 +115,8 @@ build_no_log:
 
 	$(CC) $(CFLAGS) -c $(TRA_PATH)\Structures\Vehicle.h -o $(BUILD_OBJ_PATH)\Vehicle.h.gch 
 
+	$(CC) $(CFLAGS) -c $(GUI_PATH)\MainMenu.h -o $(BUILD_OBJ_PATH)\MainMenu.h.gch 
+
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(_ENV_PATH)\Enums\TransportConnectionType.c -o $(BUILD_OBJ_PATH)\TransportConnectionType.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(_ENV_PATH)\Enums\TransportNode.c -o $(BUILD_OBJ_PATH)\TransportNode.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(_ENV_PATH)\Structures\Map.c -o $(BUILD_OBJ_PATH)\Map.c.o
@@ -138,6 +141,8 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(PRO_PATH)\Structures\Stockpile.c -o $(BUILD_OBJ_PATH)\Stockpile.c.o
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(TRA_PATH)\Structures\Vehicle.c -o $(BUILD_OBJ_PATH)\Vehicle.c.o
+
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(GUI_PATH)\MainMenu.c -o $(BUILD_OBJ_PATH)\MainMenu.c.o
 
 	$(CC) $(CFLAGS) $(LIBS) -I $(BUILD_OBJ_PATH) $(OBJ_FILES) $(LOCAL_LIBS) -o .\IndustryApp.exe
 
