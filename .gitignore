@@ -9,5 +9,4 @@ IndustryApp.exe
 **/__pycache__
 
 # Logs
-log.out
-make_log.out
+*.log

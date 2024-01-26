@@ -6,6 +6,7 @@
 The tools needed for compilation, including modifying world settings:
 * Python 3.x
 * C compiler, C99 compatible (only GCC is officially supported)
+* OpenGL 3+
 
 ### Running Builds
 Nothing.
@@ -34,7 +35,7 @@ These scripts define the environment and whenever the world settings are modifie
 
 Either manually complete this task or execute this [script](./tools/preBuildScript.py). Example of how to run it from the main directory:
 ```bash
-python3 ./tools/preBuildScript.py
+make prebuild
 ```
 
 ### Build command
@@ -43,8 +44,14 @@ Execute this build command:
 make
 ```
 
-## Execute the application
+### Execute the application
 Run this command:
 ```bash
-start IndustryApp.exe
+make run
+```
+
+### All-in-one execution
+To complete prebuilding, building and execution in one command, run this command:
+```bash
+make all
 ```
