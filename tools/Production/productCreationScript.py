@@ -125,14 +125,14 @@ const {0} {{
     arr_groups[4] = arr_groups[4][1:-2]
     arr_groups[5] = arr_groups[5][1:-2]
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\Product.h"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Production\Enums\Product.h"), "w") as f:
         products_names = [p.name for p in products]
         f.write(product_h_format.format(
             ",\n\t".join(products_names),
             "const " + ";\nconst ".join(product_funcs) + ";\n"
         ))
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\Product.c"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Production\Enums\Product.c"), "w") as f:
         f.write(product_c_start)
 
         for i in range(1, len(product_funcs)):

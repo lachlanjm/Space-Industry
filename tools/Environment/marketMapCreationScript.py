@@ -53,12 +53,12 @@ def main():
 
     functions = ["ProductMarket* getProductMarketAtLocation(const TransportNode location, const Product product)"]
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\MarketMap.h"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Environment\Structures\MarketMap.h"), "w") as f:
         f.write(market_map_h.format(
             ";\n".join(functions) + ";\n"
         ))
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Environment\Structures\MarketMap.c"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Environment\Structures\MarketMap.c"), "w") as f:
         f.write(market_map_c_start)
 
         type_ = "ProductMarket"

@@ -179,14 +179,14 @@ const {0} {{
             
             line = f.readline()
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\ProductionRecipe.h"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Production\Enums\ProductionRecipe.h"), "w") as f:
         recipes_names = [p.name for p in recipes]
         f.write(product_h_format.format(
             ",\n\t".join(recipes_names),
             "const " + ";\nconst ".join(recipe_funcs) + ";\n"
         ))
 
-    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Production\Enums\ProductionRecipe.c"), "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Production\Enums\ProductionRecipe.c"), "w") as f:
         f.write(product_c_start)
 
         for i in range(6):
