@@ -8,18 +8,25 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 	{
 		char buffer[BUF_SIZE] = "";
 
-		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_layout_row_static(platform->ctx, 30, 150, 2);
 		nk_label(platform->ctx, "Current Location: ", NK_TEXT_LEFT);
 		nk_label(platform->ctx, getNameTransportNode(vehicle->current_location), NK_TEXT_LEFT);
 
-		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_layout_row_static(platform->ctx, 30, 150, 2);
 		nk_label(platform->ctx, "Distance past current: ", NK_TEXT_LEFT);
 		snprintf(buffer, BUF_SIZE, "%u", vehicle->distance_travelled);
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 
-		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_layout_row_static(platform->ctx, 30, 150, 2);
 		nk_label(platform->ctx, "Target Location: ", NK_TEXT_LEFT);
-		nk_label(platform->ctx, getNameTransportNode(vehicle->end_location), NK_TEXT_LEFT);
+		if (vehicle->end_location == -1)
+		{
+			nk_label(platform->ctx, "No end location", NK_TEXT_LEFT);
+		}
+		else
+		{
+			nk_label(platform->ctx, getNameTransportNode(vehicle->end_location), NK_TEXT_LEFT);
+		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Max capacity: ", NK_TEXT_LEFT);
@@ -32,10 +39,17 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 			addNewPopupWindow(platform->first_window, STOCKPILE, &vehicle->stockpile);
 		}
 
-		nk_layout_row_static(platform->ctx, 30, 100, 1);
-		if (nk_button_label(platform->ctx, "End Factory"))
+		nk_layout_row_static(platform->ctx, 30, 150, 1);
+		if (vehicle->end_factory != NULL)
 		{
-			addNewPopupWindow(platform->first_window, FACTORY, vehicle->end_factory);
+			if (nk_button_label(platform->ctx, "End Factory"))
+			{
+				addNewPopupWindow(platform->first_window, FACTORY, vehicle->end_factory);
+			}
+		}
+		else
+		{
+			nk_label(platform->ctx, "No end factory", NK_TEXT_LEFT);
 		}
 	}
 	nk_end(platform->ctx);

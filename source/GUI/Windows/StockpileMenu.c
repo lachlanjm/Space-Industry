@@ -2,7 +2,7 @@
 
 void drawStockpileMenu(AppPlatform* platform, Stockpile* stockpile, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Stockpile", nk_rect(50, 50, 200, 100),
+	if (nk_begin_titled(platform->ctx, name, "Stockpile", nk_rect(50, 50, 250, 150),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{

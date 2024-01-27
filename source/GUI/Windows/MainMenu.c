@@ -20,7 +20,9 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 			
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Logistics"))
-			fprintf(stdout, "Logistics pressed!\n");
+		{
+			addNewPopupWindow(platform->first_window, LOGISTICS_MANAGER_LIST, current_app_state);
+		}
 	}
 	nk_end(platform->ctx);
 }

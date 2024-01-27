@@ -8,6 +8,7 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 	{
 	case FACTORY_LIST:
 	case LOCATION_GROUP:
+	case LOGISTICS_MANAGER_LIST:
 	case MAIN_MENU:
 		window->coreData.appState = coreData;
 		break;
@@ -19,6 +20,14 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 	case LOCATION:
 	case PRODUCT_MARKET_LIST:
 		window->coreData.location = *((TransportNode*) coreData);
+		break;
+
+	case LOGISTICS_CONTRACT_MENU:
+		window->coreData.logisticsContract = coreData;
+		break;
+	
+	case LOGISTICS_MANAGER_MENU:
+		window->coreData.logisticsManager = coreData;
 		break;
 
 	case ORDER:
@@ -71,6 +80,18 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 
 	case LOCATION:
 		drawLocationMenu(platform, window->coreData.location, window->name);
+		break;
+
+	case LOGISTICS_CONTRACT_MENU:
+		drawLogisticsContractMenu(platform, window->coreData.logisticsContract, window->name);
+		break;
+
+	case LOGISTICS_MANAGER_LIST:
+		drawLogisticsManagerList(platform, window->coreData.appState, window->name);
+		break;
+
+	case LOGISTICS_MANAGER_MENU:
+		drawLogisticsManagerMenu(platform, window->coreData.logisticsManager, window->name);
 		break;
 	
 	case MAIN_MENU:

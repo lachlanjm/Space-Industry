@@ -7,6 +7,9 @@ typedef struct PopupWindow PopupWindow;
 #include "..\Windows\FactoryMenu.h"
 #include "..\Windows\LocationGroup.h"
 #include "..\Windows\LocationMenu.h"
+#include "..\Windows\LogisticsContractMenu.h"
+#include "..\Windows\LogisticsManagerList.h"
+#include "..\Windows\LogisticsManagerMenu.h"
 #include "..\Windows\MainMenu.h"
 #include "..\Windows\OrderMenu.h"
 #include "..\Windows\ProductMarketList.h"
@@ -27,6 +30,8 @@ typedef struct PopupWindow {
 		AppState* appState;
 		Factory* factory;
 		TransportNode location;
+		LogisticsContract* logisticsContract;
+		LogisticsManager* logisticsManager;
 		Order* order;
 		ProductMarket* productMarket;
 		Stockpile* stockpile;

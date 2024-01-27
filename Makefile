@@ -55,6 +55,9 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocationGroup.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocationMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\LogisticsContractMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\LogisticsManagerList.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\LogisticsManagerMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\MainMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\OrderMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketList.c.o
@@ -134,6 +137,9 @@ build_no_log:
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\FactoryList.h -o $(BUILD_OBJ_PATH)\FactoryList.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\LocationGroup.h -o $(BUILD_OBJ_PATH)\LocationGroup.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\LocationMenu.h -o $(BUILD_OBJ_PATH)\LocationMenu.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\LogisticsContractMenu.h -o $(BUILD_OBJ_PATH)\LogisticsContractMenu.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\LogisticsManagerList.h -o $(BUILD_OBJ_PATH)\LogisticsManagerList.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\LogisticsManagerMenu.h -o $(BUILD_OBJ_PATH)\LogisticsManagerMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\MainMenu.h -o $(BUILD_OBJ_PATH)\MainMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\OrderMenu.h -o $(BUILD_OBJ_PATH)\OrderMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\ProductMarketList.h -o $(BUILD_OBJ_PATH)\ProductMarketList.h.gch 
@@ -174,6 +180,9 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\FactoryList.c -o $(BUILD_OBJ_PATH)\FactoryList.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LocationGroup.c -o $(BUILD_OBJ_PATH)\LocationGroup.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LocationMenu.c -o $(BUILD_OBJ_PATH)\LocationMenu.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LogisticsContractMenu.c -o $(BUILD_OBJ_PATH)\LogisticsContractMenu.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LogisticsManagerList.c -o $(BUILD_OBJ_PATH)\LogisticsManagerList.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LogisticsManagerMenu.c -o $(BUILD_OBJ_PATH)\LogisticsManagerMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\MainMenu.c -o $(BUILD_OBJ_PATH)\MainMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\OrderMenu.c -o $(BUILD_OBJ_PATH)\OrderMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\ProductMarketList.c -o $(BUILD_OBJ_PATH)\ProductMarketList.c.o
