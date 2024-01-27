@@ -9,8 +9,7 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
         if (nk_button_label(platform->ctx, "Factories"))
         {
-            fprintf(stdout, "Factory pressed!\n");
-            addNewPopupWindow(platform->first_window, FACTORY, &(current_app_state->factory_managers[0].controlled_factory));
+            addNewPopupWindow(platform->first_window, FACTORY_LIST, current_app_state);
         }
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);

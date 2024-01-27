@@ -53,6 +53,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\Vehicle.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\MainMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\PopupWindow.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryList.c.o
 
 GUI_LIBS_PATH := $(GUI_PATH)\libs
 
@@ -121,6 +122,7 @@ build_no_log:
 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\MainMenu.h -o $(BUILD_OBJ_PATH)\MainMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\FactoryMenu.h -o $(BUILD_OBJ_PATH)\FactoryMenu.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\FactoryList.h -o $(BUILD_OBJ_PATH)\FactoryList.h.gch 
 	$(CC) $(CFLAGS) -c $(GUI_PATH)\Structures\PopupWindow.h -o $(BUILD_OBJ_PATH)\PopupWindow.h.gch 
 	$(CC) $(CFLAGS) -c $(GUI_PATH)\Enums\WindowTypes.h -o $(BUILD_OBJ_PATH)\WindowTypes.h.gch 
 
@@ -151,6 +153,7 @@ build_no_log:
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\MainMenu.c -o $(BUILD_OBJ_PATH)\MainMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\FactoryMenu.c -o $(BUILD_OBJ_PATH)\FactoryMenu.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\FactoryList.c -o $(BUILD_OBJ_PATH)\FactoryList.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(GUI_PATH)\Structures\PopupWindow.c -o $(BUILD_OBJ_PATH)\PopupWindow.c.o
 
 	$(CC) $(CFLAGS) $(LIBS) -I $(BUILD_OBJ_PATH) $(OBJ_FILES) $(LOCAL_LIBS) -o .\IndustryApp.exe

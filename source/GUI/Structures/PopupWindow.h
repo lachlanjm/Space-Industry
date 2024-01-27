@@ -4,6 +4,7 @@
 typedef struct PopupWindow PopupWindow;
 
 #include "..\Windows\MainMenu.h"
+#include "..\Windows\FactoryList.h"
 #include "..\Windows\FactoryMenu.h"
 #include "..\Enums\WindowTypes.h"
 

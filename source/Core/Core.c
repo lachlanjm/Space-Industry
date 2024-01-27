@@ -86,6 +86,11 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
         while(window != NULL)
         {
             drawPopupWindow(window, platform);
+            if (nk_window_is_closed(platform->ctx, window->name))
+            {
+                window = window->prev;
+                removePopupWindow(window->next);
+            }
             window = window->next;
         }
 

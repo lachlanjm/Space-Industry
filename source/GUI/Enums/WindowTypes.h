@@ -3,6 +3,7 @@
 
 typedef enum WindowTypes {
 	MAIN_MENU,
+	FACTORY_LIST,
 	FACTORY,
 	VEHICLE,
 	ORDER,
