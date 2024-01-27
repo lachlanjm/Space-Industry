@@ -9,11 +9,11 @@
 
 typedef struct LogisticsManager 
 {
-    uint_fast16_t vehicles_num;
-    Vehicle* vehicles;
+	uint_fast16_t vehicles_num;
+	Vehicle* vehicles;
 
-    uint_fast16_t contracts_num;
-    LogisticsContract* contracts;
+	uint_fast16_t contracts_num;
+	LogisticsContract* contracts;
 
 } LogisticsManager;
 

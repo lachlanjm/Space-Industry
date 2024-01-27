@@ -2,5 +2,5 @@
 
 void saveAppState(AppState* appState)
 {
-    // Save app state
+	// Save app state
 }

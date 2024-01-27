@@ -43,11 +43,11 @@ typedef struct AppPlatform AppPlatform;
 #define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
 
 struct AppPlatform {
-    int width;
-    int height;
-    struct nk_context *ctx;
-    struct nk_colorf bg;
-    PopupWindow* first_window;
+	int width;
+	int height;
+	struct nk_context *ctx;
+	struct nk_colorf bg;
+	PopupWindow* first_window;
 };
 
 int main(int argc, char* argv[]);

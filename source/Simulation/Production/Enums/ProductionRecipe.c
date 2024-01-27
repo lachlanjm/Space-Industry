@@ -39,7 +39,7 @@ const static char* __production_recipe_name_arr[] =
 	"Combustion Diesel", 
 };
 const char* getNameProductionRecipe(const ProductionRecipe productionRecipe) {
-    return __production_recipe_name_arr[productionRecipe];
+	return __production_recipe_name_arr[productionRecipe];
 }
 
 const static int_fast16_t __production_recipe_energy_arr[] =
@@ -81,7 +81,7 @@ const static int_fast16_t __production_recipe_energy_arr[] =
 	+40, 
 };
 const int_fast16_t getEnergy(const ProductionRecipe productionRecipe) {
-    return __production_recipe_energy_arr[productionRecipe];
+	return __production_recipe_energy_arr[productionRecipe];
 }
 
 const static uint_fast8_t __production_recipe_num_inputs_arr[] =
@@ -123,7 +123,7 @@ const static uint_fast8_t __production_recipe_num_inputs_arr[] =
 	2, 
 };
 const uint_fast8_t getNumOfInputs(const ProductionRecipe productionRecipe) {
-    return __production_recipe_num_inputs_arr[productionRecipe];
+	return __production_recipe_num_inputs_arr[productionRecipe];
 }
 
 const static Stockpile* __production_recipe_inputs_arr[] =
@@ -165,7 +165,7 @@ const static Stockpile* __production_recipe_inputs_arr[] =
 	(Stockpile[]) {{Diesel, 2}, {Oxygen, 72}}, 
 };
 const Stockpile* getInputs(const ProductionRecipe productionRecipe) {
-    return __production_recipe_inputs_arr[productionRecipe];
+	return __production_recipe_inputs_arr[productionRecipe];
 }
 
 const static uint_fast8_t __production_recipe_num_outputs_arr[] =
@@ -207,7 +207,7 @@ const static uint_fast8_t __production_recipe_num_outputs_arr[] =
 	2, 
 };
 const uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe) {
-    return __production_recipe_num_outputs_arr[productionRecipe];
+	return __production_recipe_num_outputs_arr[productionRecipe];
 }
 
 const static Stockpile* __production_recipe_outputs_arr[] =
@@ -249,7 +249,7 @@ const static Stockpile* __production_recipe_outputs_arr[] =
 	(Stockpile[]) {{Carbon_Dioxide, 24}, {Water, 24}}, 
 };
 const Stockpile* getOutputs(const ProductionRecipe productionRecipe) {
-    return __production_recipe_outputs_arr[productionRecipe];
+	return __production_recipe_outputs_arr[productionRecipe];
 }
 
 const static QUANTITY_INT* __production_recipe_costs_arr[] =
@@ -291,7 +291,7 @@ const static QUANTITY_INT* __production_recipe_costs_arr[] =
 	(QUANTITY_INT[]) {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0}, 
 };
 const QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product product) {
-    return __production_recipe_costs_arr[productionRecipe][product];
+	return __production_recipe_costs_arr[productionRecipe][product];
 }
 
 const static QUANTITY_INT* __production_recipe_results_arr[] =
@@ -333,6 +333,6 @@ const static QUANTITY_INT* __production_recipe_results_arr[] =
 	(QUANTITY_INT[]) {0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
 };
 const QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product) {
-    return __production_recipe_results_arr[productionRecipe][product];
+	return __production_recipe_results_arr[productionRecipe][product];
 }
 

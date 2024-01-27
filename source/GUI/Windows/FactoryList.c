@@ -2,12 +2,12 @@
 
 void drawFactoryList(AppPlatform* platform, AppState* current_app_state, char* name)
 {
-    if (nk_begin_titled(platform->ctx, name, "Factory List", nk_rect(50, 50, 400, 250),
-        NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
-        |NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
-    {
+	if (nk_begin_titled(platform->ctx, name, "Factory List", nk_rect(50, 50, 400, 250),
+		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
+		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
+	{
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
-        nk_label(platform->ctx, "Factories:", NK_TEXT_LEFT);
+		nk_label(platform->ctx, "Factories:", NK_TEXT_LEFT);
 
 		for (int i = 0; i < current_app_state->factory_managers_num; i++)
 		{
@@ -19,6 +19,6 @@ void drawFactoryList(AppPlatform* platform, AppState* current_app_state, char* n
 			}
 		}
 		
-    }
-    nk_end(platform->ctx);
+	}
+	nk_end(platform->ctx);
 }

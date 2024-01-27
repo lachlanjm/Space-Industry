@@ -10,15 +10,15 @@
 #define VEHICLE_CAPACITY 100
 
 typedef struct Vehicle {
-    TransportNode current_location;
-    TransportNode end_location;
-    uint_fast16_t distance_travelled; // distance travelled from last node
+	TransportNode current_location;
+	TransportNode end_location;
+	uint_fast16_t distance_travelled; // distance travelled from last node
 
-    Stockpile stockpile;
-    
-    Factory* end_factory;
-    QUANTITY_INT max_capacity;
-    // TODO VehicleType type; (or so...)
+	Stockpile stockpile;
+	
+	Factory* end_factory;
+	QUANTITY_INT max_capacity;
+	// TODO VehicleType type; (or so...)
 } Vehicle;
 
 void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location);

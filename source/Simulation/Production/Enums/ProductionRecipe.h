@@ -8,7 +8,7 @@
 
 typedef enum ProductionRecipe 
 {
-    Extraction_Iron_Ore,
+	Extraction_Iron_Ore,
 	Extraction_Coal,
 	Extraction_Copper_Ore,
 	Extraction_Oxygen,
@@ -43,7 +43,7 @@ typedef enum ProductionRecipe
 	Combustion_Kerosene,
 	Combustion_Aviation_Fuel,
 	Combustion_Diesel,
-    PRODUCTION_RECIPE_COUNT
+	PRODUCTION_RECIPE_COUNT
 } ProductionRecipe;
 
 const char* getNameProductionRecipe(const ProductionRecipe productionRecipe);

@@ -39,7 +39,7 @@ const static char* __product_names_arr[] =
 	"Lime"
 };
 const char* getNameProduct(const Product product) {
-    return __product_names_arr[product];
+	return __product_names_arr[product];
 }
 
 const static char* __product_states_arr[] =
@@ -81,7 +81,7 @@ const static char* __product_states_arr[] =
 	"Solid"
 };
 const char* getState(const Product product) {
-    return __product_states_arr[product];
+	return __product_states_arr[product];
 }
 
 const static char* __product_short_arr[] =
@@ -123,7 +123,7 @@ const static char* __product_short_arr[] =
 	"Lime"
 };
 const char* getShort(const Product product) {
-    return __product_short_arr[product];
+	return __product_short_arr[product];
 }
 
 const static char* __product_category_arr[] =
@@ -165,7 +165,7 @@ const static char* __product_category_arr[] =
 	"Raw"
 };
 const char* getCategory(const Product product) {
-    return __product_category_arr[product];
+	return __product_category_arr[product];
 }
 
 const static uint_fast16_t __product_greenhouse_arr[] =
@@ -207,7 +207,7 @@ const static uint_fast16_t __product_greenhouse_arr[] =
 	+0
 };
 const uint_fast16_t getGreenhouse(const Product product) {
-    return __product_greenhouse_arr[product];
+	return __product_greenhouse_arr[product];
 }
 
 const static float __product_acididty_arr[] =
@@ -249,6 +249,6 @@ const static float __product_acididty_arr[] =
 	0.0f
 };
 const float getAcidity(const Product product) {
-    return __product_acididty_arr[product];
+	return __product_acididty_arr[product];
 }
 

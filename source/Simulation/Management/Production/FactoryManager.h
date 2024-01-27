@@ -18,7 +18,7 @@
 #define DECREASE_PRICE_FACTOR 0.875f
 
 typedef struct FactoryManager {
-    Factory controlled_factory;
+	Factory controlled_factory;
 } FactoryManager;
 
 void assignFactoryManagerValues(FactoryManager* factoryManager, const ProductionRecipe productionRecipe, const TransportNode location);

@@ -6,7 +6,7 @@
 
 typedef enum Product 
 {
-    Iron_Ore,
+	Iron_Ore,
 	Iron,
 	Coal,
 	Carbon,
@@ -42,7 +42,7 @@ typedef enum Product
 	Crushed_Rock,
 	Lime,
 	Nitrogen_Dioxide,
-    PRODUCT_COUNT
+	PRODUCT_COUNT
 } Product;
 
 const char* getNameProduct(const Product product);

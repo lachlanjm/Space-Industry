@@ -11,8 +11,8 @@
 
 typedef struct Stockpile
 {
-    Product product_type;
-    QUANTITY_INT quantity;
+	Product product_type;
+	QUANTITY_INT quantity;
 } Stockpile;
 
 Stockpile* newStockpile(const Product product, const QUANTITY_INT quantity);

@@ -5,9 +5,9 @@
 #include "..\..\Production\Enums\Product.h"
 
 typedef struct ProductMarket {
-    Product product_type;
-    Order* lowest_sell_order;
-    Order* highest_buy_order;
+	Product product_type;
+	Order* lowest_sell_order;
+	Order* highest_buy_order;
 } ProductMarket;
 
 ProductMarket* newProductMarket(const Product product_type);

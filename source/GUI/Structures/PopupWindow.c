@@ -6,7 +6,7 @@ void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void*
 {
 	static int id = 0;
 	window->window_type = window_type;
-    snprintf(window->name, BUF_SIZE, "%d", id++);
+	snprintf(window->name, BUF_SIZE, "%d", id++);
 	window->struct_ptr = struct_ptr;
 	window->next = NULL;
 	window->prev = NULL;

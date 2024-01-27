@@ -23,6 +23,6 @@ const static char* __transport_node_names_char_arr__[] =
 	"Vastitas Borealis"
 };
 const char* getNameTransportNode(TransportNode node) {
-    return __transport_node_names_char_arr__[node];
+	return __transport_node_names_char_arr__[node];
 }
 

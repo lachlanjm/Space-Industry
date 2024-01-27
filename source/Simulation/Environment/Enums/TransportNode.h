@@ -2,7 +2,7 @@
 #define TRASPORT_NODE_H
 
 typedef enum TransportNode {
-    North_America = 0,
+	North_America = 0,
 	South_America = 1,
 	Western_Europe = 2,
 	Eastern_Europe = 3,
@@ -21,7 +21,7 @@ typedef enum TransportNode {
 	Hellas_Basin = 16,
 	Utopia_Basin = 17,
 	Vastitas_Borealis = 18,
-    TRANSPORT_NODE_COUNT
+	TRANSPORT_NODE_COUNT
 } TransportNode;
 
 const char* getNameTransportNode(TransportNode node);

@@ -10,21 +10,21 @@ typedef struct Factory Factory;
 
 typedef struct Factory
 {
-    ProductionRecipe productionRecipe;
-    TransportNode location;
+	ProductionRecipe productionRecipe;
+	TransportNode location;
 
-    uint_fast8_t stockpiles_in_num;
-    uint_fast8_t stockpiles_out_num;
-    uint_fast16_t processing_speed; // TODO TBU
-    
-    Stockpile* stockpiles_in;
-    Stockpile* stockpiles_out;
+	uint_fast8_t stockpiles_in_num;
+	uint_fast8_t stockpiles_out_num;
+	uint_fast16_t processing_speed; // TODO TBU
+	
+	Stockpile* stockpiles_in;
+	Stockpile* stockpiles_out;
 
-    struct OrderDef* orders_in;
-    struct OrderDef* orders_out;
+	struct OrderDef* orders_in;
+	struct OrderDef* orders_out;
 
-    QUANTITY_INT* ordered_in;
-    QUANTITY_INT* ordered_out;
+	QUANTITY_INT* ordered_in;
+	QUANTITY_INT* ordered_out;
 
 } Factory;
 

@@ -38,7 +38,7 @@ Use the following format for function definitions:
 ```c
 void function_name(...)
 {
-    ...
+	...
 }
 ```
 For naming conventions, use the Structures naming conventions.
@@ -48,15 +48,15 @@ Follow this convention:
 ```c
 if (<conditions>)
 {
-    ...
+	...
 }
 else if (<conditions>)
 {
-    ...
+	...
 }
 else 
 {
-    ...
+	...
 }
 ```
 
@@ -65,7 +65,7 @@ Follow this convention:
 ```c
 for (<initialisation>; <declaration>; <increment>)
 {
-    ...
+	...
 }
 ```
 
@@ -84,7 +84,7 @@ For each struct that is meant to be avaliable externally, make one header file (
 Always use `typedef` to define the structs meant for external use. If meant for a singular file, do not use `typedef`.
 ```c
 [typedef] struct <struct_name> {
-    ...
+	...
 } [<struct_name>];
 ```
 

@@ -6,23 +6,23 @@
 #include "..\..\Production\Enums\Product.h"
 
 enum ContractPhase {
-    ASSIGNMENT,
-    PICK_UP,
-    DELIVERY,
-    COMPLETED
+	ASSIGNMENT,
+	PICK_UP,
+	DELIVERY,
+	COMPLETED
 };
 
 typedef struct LogisticsContract 
 {
-    // uint_fast16_t vehicle_num;
-    Vehicle* assigned_vehicle; // TODO make array
+	// uint_fast16_t vehicle_num;
+	Vehicle* assigned_vehicle; // TODO make array
 
-    Factory* selling_factory;
-    Factory* buying_factory;
+	Factory* selling_factory;
+	Factory* buying_factory;
 
-    enum ContractPhase current_phase;
-    Product product;
-    QUANTITY_INT quantity;
+	enum ContractPhase current_phase;
+	Product product;
+	QUANTITY_INT quantity;
 } LogisticsContract;
 
 LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity);

@@ -23,7 +23,7 @@ const static TransportNode* __transport_node_next_node_arr[] =
 	(TransportNode[]) {Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Tharsis_Rise, Hellas_Basin, Utopia_Basin, Vastitas_Borealis}
 };
 const TransportNode getNext(const TransportNode from, const TransportNode to) {
-    return __transport_node_next_node_arr[from][to];
+	return __transport_node_next_node_arr[from][to];
 }
 
 const static uint_fast16_t* __transport_node_total_dist_arr[] =
@@ -49,7 +49,7 @@ const static uint_fast16_t* __transport_node_total_dist_arr[] =
 	(uint_fast16_t[]) {19, 19, 24, 24, 19, 19, 24, 19, 19, 19, 19, 19, 24, 9, 8, 5, 5, 5, 0}
 };
 const uint_fast16_t getTotalDistance(const TransportNode from, const TransportNode to) {
-    return __transport_node_total_dist_arr[from][to];
+	return __transport_node_total_dist_arr[from][to];
 }
 
 const static uint_fast16_t* __transport_node_next_dist_arr[] =
@@ -75,7 +75,7 @@ const static uint_fast16_t* __transport_node_next_dist_arr[] =
 	(uint_fast16_t[]) {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0}
 };
 const uint_fast16_t getNextDistance(const TransportNode from, const TransportNode to) {
-    return __transport_node_next_dist_arr[from][to];
+	return __transport_node_next_dist_arr[from][to];
 }
 
 const static TransportConnectionType* __transport_node_conn_type_arr[] =
@@ -101,6 +101,6 @@ const static TransportConnectionType* __transport_node_conn_type_arr[] =
 	(TransportConnectionType[]) {NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, TERRESTRIAL, TERRESTRIAL, TERRESTRIAL, NOTHING}
 };
 const TransportConnectionType getConnectionType(const TransportNode from, const TransportNode to) {
-    return __transport_node_conn_type_arr[from][to];
+	return __transport_node_conn_type_arr[from][to];
 }
 
