@@ -82,7 +82,7 @@ void disp_order(Order* order, int depth)
     {
         printf("--");
     }
-    printf("Price: %u\t Quantity %u\t Addr:%x\n", order->price, order->offer_num, order);
+    printf("Price: %u\t Quantity %u\t Addr:%p\n", order->price, order->offer_num, order);
     
     if (order->left_order != NULL)
     {

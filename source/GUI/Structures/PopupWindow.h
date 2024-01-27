@@ -4,6 +4,7 @@
 typedef struct PopupWindow PopupWindow;
 
 #include "..\Windows\MainMenu.h"
+#include "..\Windows\FactoryMenu.h"
 #include "..\Enums\WindowTypes.h"
 
 #define BUF_SIZE 64
@@ -21,7 +22,6 @@ typedef struct PopupWindow {
 void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* struct_ptr);
 void drawPopupWindow(PopupWindow* window, AppPlatform* platform);
 PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* struct_ptr);
-static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window);
 void removePopupWindow(PopupWindow* old_window);
 
 

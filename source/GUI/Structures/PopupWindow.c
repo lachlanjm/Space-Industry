@@ -1,9 +1,11 @@
 #include "PopupWindow.h"
 
+static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window);
+
 void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* struct_ptr)
 {
 	window->window_type = window_type;
-    snprintf(window->name, BUF_SIZE, "%x", struct_ptr);
+    snprintf(window->name, BUF_SIZE, "%p", struct_ptr);
 	window->struct_ptr = struct_ptr;
 	window->next = NULL;
 	window->prev = NULL;
@@ -11,10 +13,14 @@ void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void*
 
 void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 {
+	//if (nk_window_is_closed(platform->ctx, window->name)) removePopupWindow(window);
 	switch (window->window_type)
 	{
 	case MAIN_MENU:
 		drawMainMenu(platform, (AppState*)window->struct_ptr, window->name);
+		break;
+	case FACTORY:
+		drawFactoryMenu(platform, (Factory*)window->struct_ptr, window->name);
 		break;
 	
 	default:

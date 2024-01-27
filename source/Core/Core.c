@@ -35,7 +35,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
     platform->width = 0;
     platform->height = 0;
     platform->first_window = calloc(1, sizeof(PopupWindow));
-    assignPopupWindowValues(&platform->first_window, MAIN_MENU, current_app_state);
+    assignPopupWindowValues(platform->first_window, MAIN_MENU, current_app_state);
 
     /* GLFW */
     glfwSetErrorCallback(error_callback);
@@ -82,7 +82,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
 
         /* GUI */
         overview(platform->ctx);
-        PopupWindow* window = &platform->first_window;
+        PopupWindow* window = platform->first_window;
         while(window != NULL)
         {
             drawPopupWindow(window, platform);
@@ -119,7 +119,7 @@ int closeApp(AppState* appState)
 
 void cleanPlatform(AppPlatform* platform)
 {
-    PopupWindow* iter = &platform->first_window;
+    PopupWindow* iter = platform->first_window;
     while (iter->next != NULL)
     {
         iter = iter->next;

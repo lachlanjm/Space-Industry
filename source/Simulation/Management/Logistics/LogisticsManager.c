@@ -152,7 +152,7 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
         getProductMarketAtLocation(to_max, product_max)->highest_buy_order
     );
 
-    printf("\t\t\t\tCreating contract: %x:%x:%d:%u:%u:%u\n", logisticsManager, vehicle, product_max, quantity, from_max, to_max);
+    printf("\t\t\t\tCreating contract: %p:%p:%d:%u:%u:%u\n", logisticsManager, vehicle, product_max, quantity, from_max, to_max);
     addNewLogisticsContract(
         logisticsManager,
         vehicle,

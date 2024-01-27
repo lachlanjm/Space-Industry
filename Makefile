@@ -51,6 +51,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\Factory.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Stockpile.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Vehicle.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\MainMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\PopupWindow.c.o
 
 GUI_LIBS_PATH := $(GUI_PATH)\libs
@@ -79,7 +80,7 @@ all:
 
 .PHONY: prebuild
 prebuild:
-	python3 ./tools/preBuildScript.py
+	python ./tools/preBuildScript.py
 
 .PHONY: run
 run:
@@ -119,6 +120,7 @@ build_no_log:
 	$(CC) $(CFLAGS) -c $(TRA_PATH)\Structures\Vehicle.h -o $(BUILD_OBJ_PATH)\Vehicle.h.gch 
 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\MainMenu.h -o $(BUILD_OBJ_PATH)\MainMenu.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\FactoryMenu.h -o $(BUILD_OBJ_PATH)\FactoryMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(GUI_PATH)\Structures\PopupWindow.h -o $(BUILD_OBJ_PATH)\PopupWindow.h.gch 
 	$(CC) $(CFLAGS) -c $(GUI_PATH)\Enums\WindowTypes.h -o $(BUILD_OBJ_PATH)\WindowTypes.h.gch 
 
@@ -148,6 +150,7 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(TRA_PATH)\Structures\Vehicle.c -o $(BUILD_OBJ_PATH)\Vehicle.c.o
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\MainMenu.c -o $(BUILD_OBJ_PATH)\MainMenu.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\FactoryMenu.c -o $(BUILD_OBJ_PATH)\FactoryMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(GUI_PATH)\Structures\PopupWindow.c -o $(BUILD_OBJ_PATH)\PopupWindow.c.o
 
 	$(CC) $(CFLAGS) $(LIBS) -I $(BUILD_OBJ_PATH) $(OBJ_FILES) $(LOCAL_LIBS) -o .\IndustryApp.exe
