@@ -37,7 +37,7 @@
 typedef struct AppPlatform AppPlatform;
 
 #include "..\Simulation\Main\AppState\AppState.h"
-#include "..\GUI\MainMenu.h"
+#include "..\GUI\Structures\PopupWindow.h"
 
 #define APP_WINDOW_STR "Space Industry"
 #define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
@@ -47,11 +47,13 @@ struct AppPlatform {
     int height;
     struct nk_context *ctx;
     struct nk_colorf bg;
+    PopupWindow* first_window;
 };
 
 int main(int argc, char* argv[]);
 
-void setupAppPlatform(AppPlatform* platform, GLFWwindow *win);
+void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_app_state);
 int closeApp(AppState* appState);
+void cleanPlatform(AppPlatform* platform);
 
 #endif

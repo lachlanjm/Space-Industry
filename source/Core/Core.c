@@ -3,7 +3,7 @@
 #define NK_GLFW_GL3_IMPLEMENTATION
 #include "Core.h"
 
-#include "../GUI/overview.c"
+#include "../GUI/Windows/overview.c"
 
 static void error_callback(int e, const char *d)
 {printf("Error %d: %s\n", e, d);}
@@ -12,10 +12,9 @@ int main(int argc, char* argv[])
 {
     static GLFWwindow *win;
     AppPlatform* platform = calloc(1, sizeof(AppPlatform));
-
-    runAppPlatform(platform, win);
-    
     AppState* current_app_state = loadAppState(0, NULL);
+
+    runAppPlatform(platform, win, current_app_state);
 
     for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
     {
@@ -26,16 +25,17 @@ int main(int argc, char* argv[])
     printf("Completed Iterations\n");
 
     closeApp(current_app_state);
-
-    free(platform);
+    cleanPlatform(platform);
     return 0;
 }
 
-void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
+void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_app_state)
 {
     struct nk_glfw glfw = {0};
     platform->width = 0;
     platform->height = 0;
+    platform->first_window = calloc(1, sizeof(PopupWindow));
+    assignPopupWindowValues(&platform->first_window, MAIN_MENU, current_app_state);
 
     /* GLFW */
     glfwSetErrorCallback(error_callback);
@@ -82,7 +82,12 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 
         /* GUI */
         overview(platform->ctx);
-        drawBaseMenu(platform);
+        PopupWindow* window = &platform->first_window;
+        while(window != NULL)
+        {
+            drawPopupWindow(window, platform);
+            window = window->next;
+        }
 
         /* Draw */
         glfwGetWindowSize(win, &platform->width, &platform->height);
@@ -110,4 +115,19 @@ int closeApp(AppState* appState)
     free(appState);
     printf("Cleaned App State\n");
 	return 0;
+}
+
+void cleanPlatform(AppPlatform* platform)
+{
+    PopupWindow* iter = &platform->first_window;
+    while (iter->next != NULL)
+    {
+        iter = iter->next;
+        free(iter->prev);
+    }
+    if (iter != NULL)
+    {
+        free(iter);
+    }
+    free(platform);
 }
