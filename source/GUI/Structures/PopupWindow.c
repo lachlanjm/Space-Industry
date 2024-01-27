@@ -56,7 +56,7 @@ static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window)
 void removePopupWindow(PopupWindow* old_window)
 {
 	old_window->prev->next = old_window->next;
-	while (old_window->next != NULL)
+	if (old_window->next != NULL)
 	{
 		old_window->next->prev = old_window->prev;
 	}

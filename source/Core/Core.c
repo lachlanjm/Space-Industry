@@ -74,6 +74,10 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
     platform->bg.b = 0.24f;
     platform->bg.a = 1.0f;
 
+    // Window not closed at start
+    drawPopupWindow(platform->first_window, platform);
+    nk_clear(platform->ctx);
+
     while (!glfwWindowShouldClose(win))
     {
         /* Input */
@@ -85,12 +89,17 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
         PopupWindow* window = platform->first_window;
         while(window != NULL)
         {
-            drawPopupWindow(window, platform);
-            if (nk_window_is_closed(platform->ctx, window->name))
+            if (!nk_window_is_hidden(platform->ctx, window->name) || !nk_window_find(platform->ctx, window->name))
             {
+                drawPopupWindow(window, platform);
+            }
+            else
+            {
+                printf("closed window %s\n", window->name);
                 window = window->prev;
                 removePopupWindow(window->next);
             }
+            
             window = window->next;
         }
 
