@@ -16,16 +16,36 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 {
 	switch (window->window_type)
 	{
-	case MAIN_MENU:
-		drawMainMenu(platform, (AppState*)window->struct_ptr, window->name);
-		break;
-	
 	case FACTORY_LIST:
 		drawFactoryList(platform, (AppState*)window->struct_ptr, window->name);
 		break;
 	
 	case FACTORY:
 		drawFactoryMenu(platform, (Factory*)window->struct_ptr, window->name);
+		break;
+
+	case LOCATION_GROUP:
+		drawLocationGroup(platform, (AppState*)window->struct_ptr, window->name);
+		break;
+
+	case LOCATION:
+		drawLocationMenu(platform, (TransportNode*)window->struct_ptr, window->name);
+		break;
+	
+	case MAIN_MENU:
+		drawMainMenu(platform, (AppState*)window->struct_ptr, window->name);
+		break;
+
+	case ORDER:
+		drawOrderMenu(platform, (Order*)window->struct_ptr, window->name);
+		break;
+
+	case STOCKPILE:
+		drawStockpileMenu(platform, (Stockpile*)window->struct_ptr, window->name);
+		break;
+
+	case VEHICLE:
+		drawVehicleMenu(platform, (Vehicle*)window->struct_ptr, window->name);
 		break;
 	
 	default:

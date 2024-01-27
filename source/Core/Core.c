@@ -3,7 +3,7 @@
 #define NK_GLFW_GL3_IMPLEMENTATION
 #include "Core.h"
 
-#include "../GUI/Windows/overview.c"
+#include "../GUI/includes/overview.c" // FOR DEMO ONLY!!!
 
 static void error_callback(int e, const char *d)
 {printf("Error %d: %s\n", e, d);}
@@ -85,7 +85,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
         nk_glfw3_new_frame(&glfw);
 
         /* GUI */
-        overview(platform->ctx);
+        // overview(platform->ctx); !!!!!!!!!!!!!!!!!!!!!!! FOR DEMO ONLY
         PopupWindow* window = platform->first_window;
         while(window != NULL)
         {
@@ -95,7 +95,6 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
             }
             else
             {
-                printf("closed window %s\n", window->name);
                 window = window->prev;
                 removePopupWindow(window->next);
             }

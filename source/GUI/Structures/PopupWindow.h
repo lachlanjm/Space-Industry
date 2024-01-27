@@ -3,9 +3,14 @@
 
 typedef struct PopupWindow PopupWindow;
 
-#include "..\Windows\MainMenu.h"
 #include "..\Windows\FactoryList.h"
 #include "..\Windows\FactoryMenu.h"
+#include "..\Windows\LocationGroup.h"
+#include "..\Windows\LocationMenu.h"
+#include "..\Windows\MainMenu.h"
+#include "..\Windows\OrderMenu.h"
+#include "..\Windows\StockpileMenu.h"
+#include "..\Windows\VehicleMenu.h"
 #include "..\Enums\WindowTypes.h"
 
 #define BUF_SIZE 64

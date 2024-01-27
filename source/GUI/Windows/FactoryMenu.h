@@ -5,6 +5,7 @@
 #include "..\..\Simulation\Production\Structures\Factory.h"
 #include "..\..\Simulation\Production\Enums\ProductionRecipe.h"
 #include "..\..\Simulation\Production\Enums\Product.h"
+#include "..\..\Simulation\Environment\Enums\TransportNode.h"
 
 #define BUF_SIZE 64
 

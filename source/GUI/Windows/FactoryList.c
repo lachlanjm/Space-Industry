@@ -11,7 +11,7 @@ void drawFactoryList(AppPlatform* platform, AppState* current_app_state, char* n
 
 		for (int i = 0; i < current_app_state->factory_managers_num; i++)
 		{
-			nk_layout_row_static(platform->ctx, 30, 100, 2);
+			nk_layout_row_static(platform->ctx, 30, 200, 2);
 			nk_label(platform->ctx, getNameProductionRecipe(current_app_state->factory_managers[i].controlled_factory.productionRecipe), NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
