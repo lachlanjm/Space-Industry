@@ -57,6 +57,8 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\LocationGroup.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocationMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\MainMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\OrderMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketList.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\VehicleMenu.c.o
 
@@ -134,8 +136,12 @@ build_no_log:
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\LocationMenu.h -o $(BUILD_OBJ_PATH)\LocationMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\MainMenu.h -o $(BUILD_OBJ_PATH)\MainMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\OrderMenu.h -o $(BUILD_OBJ_PATH)\OrderMenu.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\ProductMarketList.h -o $(BUILD_OBJ_PATH)\ProductMarketList.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\ProductMarketMenu.h -o $(BUILD_OBJ_PATH)\ProductMarketMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\StockpileMenu.h -o $(BUILD_OBJ_PATH)\StockpileMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\VehicleMenu.h -o $(BUILD_OBJ_PATH)\VehicleMenu.h.gch 
+
+
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(_ENV_PATH)\Enums\TransportConnectionType.c -o $(BUILD_OBJ_PATH)\TransportConnectionType.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(_ENV_PATH)\Enums\TransportNode.c -o $(BUILD_OBJ_PATH)\TransportNode.c.o
@@ -170,6 +176,8 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LocationMenu.c -o $(BUILD_OBJ_PATH)\LocationMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\MainMenu.c -o $(BUILD_OBJ_PATH)\MainMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\OrderMenu.c -o $(BUILD_OBJ_PATH)\OrderMenu.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\ProductMarketList.c -o $(BUILD_OBJ_PATH)\ProductMarketList.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\ProductMarketMenu.c -o $(BUILD_OBJ_PATH)\ProductMarketMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\StockpileMenu.c -o $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\VehicleMenu.c -o $(BUILD_OBJ_PATH)\VehicleMenu.c.o
 

@@ -3,10 +3,12 @@
 
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Environment\Enums\TransportNode.h"
+#include "..\..\Simulation\Environment\Enums\TransportConnectionType.h"
+#include "..\..\Simulation\Environment\Structures\MarketMap.h"
+#include "..\..\Simulation\Environment\Structures\Map.h"
 
 #define BUF_SIZE 64
 
-// TBU FOR MORE LISTS
-void drawLocationMenu(AppPlatform* platform, TransportNode* location, char* name);
+void drawLocationMenu(AppPlatform* platform, TransportNode location, char* name);
 
 #endif

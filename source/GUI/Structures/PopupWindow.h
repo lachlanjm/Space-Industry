@@ -9,6 +9,8 @@ typedef struct PopupWindow PopupWindow;
 #include "..\Windows\LocationMenu.h"
 #include "..\Windows\MainMenu.h"
 #include "..\Windows\OrderMenu.h"
+#include "..\Windows\ProductMarketList.h"
+#include "..\Windows\ProductMarketMenu.h"
 #include "..\Windows\StockpileMenu.h"
 #include "..\Windows\VehicleMenu.h"
 #include "..\Enums\WindowTypes.h"
@@ -20,14 +22,24 @@ typedef struct PopupWindow {
 	char name[BUF_SIZE];
 
 	void* struct_ptr;
+	union CoreData
+	{
+		AppState* appState;
+		Factory* factory;
+		TransportNode location;
+		Order* order;
+		ProductMarket* productMarket;
+		Stockpile* stockpile;
+		Vehicle* vehicle;
+	} coreData;
 
 	PopupWindow* next;
 	PopupWindow* prev;
 } PopupWindow;
 
-void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* struct_ptr);
+void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* coreData);
 void drawPopupWindow(PopupWindow* window, AppPlatform* platform);
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* struct_ptr);
+PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* coreData);
 void removePopupWindow(PopupWindow* old_window);
 
 

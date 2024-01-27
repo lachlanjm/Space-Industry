@@ -2,12 +2,53 @@
 
 static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window);
 
-void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* struct_ptr)
+static void castCoreData(PopupWindow* window, WindowTypes window_type, void* coreData)
+{
+	switch (window->window_type)
+	{
+	case FACTORY_LIST:
+	case LOCATION_GROUP:
+	case MAIN_MENU:
+		window->coreData.appState = coreData;
+		break;
+	
+	case FACTORY:
+		window->coreData.factory = coreData;
+		break;
+
+	case LOCATION:
+	case PRODUCT_MARKET_LIST:
+		window->coreData.location = *((TransportNode*) coreData);
+		break;
+
+	case ORDER:
+		window->coreData.order = coreData;
+		break;
+
+	case PRODUCT_MARKET:
+		window->coreData.productMarket = coreData;
+		break;
+
+	case STOCKPILE:
+		window->coreData.stockpile = coreData;
+		break;
+
+	case VEHICLE:
+		window->coreData.vehicle = coreData;
+		break;
+	
+	default:
+		window->coreData.appState = NULL;
+		break;
+	}
+}
+
+void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* coreData)
 {
 	static int id = 0;
 	window->window_type = window_type;
 	snprintf(window->name, BUF_SIZE, "%d", id++);
-	window->struct_ptr = struct_ptr;
+	castCoreData(window, window_type, coreData);
 	window->next = NULL;
 	window->prev = NULL;
 }
@@ -17,35 +58,43 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 	switch (window->window_type)
 	{
 	case FACTORY_LIST:
-		drawFactoryList(platform, (AppState*)window->struct_ptr, window->name);
+		drawFactoryList(platform, window->coreData.appState, window->name);
 		break;
 	
 	case FACTORY:
-		drawFactoryMenu(platform, (Factory*)window->struct_ptr, window->name);
+		drawFactoryMenu(platform, window->coreData.factory, window->name);
 		break;
 
 	case LOCATION_GROUP:
-		drawLocationGroup(platform, (AppState*)window->struct_ptr, window->name);
+		drawLocationGroup(platform, window->coreData.appState, window->name);
 		break;
 
 	case LOCATION:
-		drawLocationMenu(platform, (TransportNode*)window->struct_ptr, window->name);
+		drawLocationMenu(platform, window->coreData.location, window->name);
 		break;
 	
 	case MAIN_MENU:
-		drawMainMenu(platform, (AppState*)window->struct_ptr, window->name);
+		drawMainMenu(platform, window->coreData.appState, window->name);
 		break;
 
 	case ORDER:
-		drawOrderMenu(platform, (Order*)window->struct_ptr, window->name);
+		drawOrderMenu(platform, window->coreData.order, window->name);
+		break;
+	
+	case PRODUCT_MARKET_LIST:
+		drawProductMarketList(platform, window->coreData.location, window->name);
+		break;
+
+	case PRODUCT_MARKET:
+		drawProductMarketMenu(platform, window->coreData.productMarket, window->name);
 		break;
 
 	case STOCKPILE:
-		drawStockpileMenu(platform, (Stockpile*)window->struct_ptr, window->name);
+		drawStockpileMenu(platform, window->coreData.stockpile, window->name);
 		break;
 
 	case VEHICLE:
-		drawVehicleMenu(platform, (Vehicle*)window->struct_ptr, window->name);
+		drawVehicleMenu(platform, window->coreData.vehicle, window->name);
 		break;
 	
 	default:
@@ -53,11 +102,11 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 	}
 }
 
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* struct_ptr)
+PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* coreData)
 {
 	PopupWindow* new_window = calloc(1, sizeof(PopupWindow));
 
-	assignPopupWindowValues(new_window, window_type, struct_ptr);
+	assignPopupWindowValues(new_window, window_type, coreData);
 	appendPopupWindow(first_window, new_window);
 
 	return new_window;

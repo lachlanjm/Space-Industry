@@ -37,7 +37,6 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 		{
 			addNewPopupWindow(platform->first_window, FACTORY, vehicle->end_factory);
 		}
-
 	}
 	nk_end(platform->ctx);
 }

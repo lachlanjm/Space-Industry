@@ -3,8 +3,7 @@
 
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Main\AppState\AppState.h"
-
-#define BUF_SIZE 64
+#include "..\..\Simulation\Environment\Enums\TransportNode.h"
 
 // TBU FOR MORE LISTS
 void drawLocationGroup(AppPlatform* platform, AppState* current_app_state, char* name);

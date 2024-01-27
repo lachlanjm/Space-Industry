@@ -2,7 +2,7 @@
 
 void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Factory", nk_rect(50, 50, 400, 250),
+	if (nk_begin_titled(platform->ctx, name, "Factory", nk_rect(50, 50, 450, 300),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -10,7 +10,10 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 
 		nk_layout_row_static(platform->ctx, 30, 200, 2);
 		nk_label(platform->ctx, "Location:", NK_TEXT_LEFT);
-		nk_label(platform->ctx, getNameTransportNode(factory->location), NK_TEXT_LEFT);
+		if (nk_button_label(platform->ctx, getNameTransportNode(factory->location)))
+		{
+			addNewPopupWindow(platform->first_window, LOCATION, &factory->location);
+		}
 
 		nk_layout_row_static(platform->ctx, 30, 200, 2);
 		nk_label(platform->ctx, "Production Recipe:", NK_TEXT_LEFT);
