@@ -12,7 +12,7 @@ AppState* loadAppState(const int file_path_len, const char* file_path)
         assignFactoryManagerValues(
             &appState->factory_managers[i],
             i, // TODO: TBU
-            i
+            i % TRANSPORT_NODE_COUNT
         );
     }
 

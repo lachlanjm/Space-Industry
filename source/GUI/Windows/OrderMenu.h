@@ -6,7 +6,6 @@
 
 #define BUF_SIZE 64
 
-// TBU FOR MORE LISTS
 void drawOrderMenu(AppPlatform* platform, Order* order, char* name);
 
 #endif

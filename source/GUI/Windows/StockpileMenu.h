@@ -3,10 +3,10 @@
 
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Production\Structures\Stockpile.h"
+#include "..\..\Simulation\Production\Enums\Product.h"
 
 #define BUF_SIZE 64
 
-// TBU FOR MORE LISTS
 void drawStockpileMenu(AppPlatform* platform, Stockpile* stockpile, char* name);
 
 #endif
