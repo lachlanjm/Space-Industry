@@ -12,21 +12,21 @@ void drawLogisticsContractMenu(AppPlatform* platform, LogisticsContract* logisti
 		nk_label(platform->ctx, "Vehicle: ", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, "Show"))
 		{
-			addNewPopupWindow(platform->first_window, VEHICLE, logisticsContract->assigned_vehicle);
+			addNewPopupWindow(platform->first_window, VEHICLE_MENU, logisticsContract->assigned_vehicle);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Selling factory: ", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, "Show"))
 		{
-			addNewPopupWindow(platform->first_window, FACTORY, logisticsContract->selling_factory);
+			addNewPopupWindow(platform->first_window, FACTORY_MENU, logisticsContract->selling_factory);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Buying Factory: ", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, "Show"))
 		{
-			addNewPopupWindow(platform->first_window, FACTORY, logisticsContract->buying_factory);
+			addNewPopupWindow(platform->first_window, FACTORY_MENU, logisticsContract->buying_factory);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);

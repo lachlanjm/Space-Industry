@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 		printf("Iteration - %d\n", i);
 		processTickAppState(current_app_state);
 	}
-
+	
 	printf("Completed Iterations\n");
 
 	closeApp(current_app_state);

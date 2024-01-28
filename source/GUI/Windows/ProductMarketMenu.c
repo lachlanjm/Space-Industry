@@ -17,7 +17,7 @@ void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, 
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, "Highest Buy Order"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER, productMarket->highest_buy_order);
+				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->highest_buy_order);
 			}
 		}
 		if (productMarket->lowest_sell_order)
@@ -25,7 +25,7 @@ void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, 
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, "Lowest Sell Order"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER, productMarket->lowest_sell_order);
+				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->lowest_sell_order);
 			}
 		}
 	}

@@ -12,7 +12,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 		nk_label(platform->ctx, "Location:", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, getNameTransportNode(factory->location)))
 		{
-			addNewPopupWindow(platform->first_window, LOCATION, &factory->location);
+			addNewPopupWindow(platform->first_window, LOCATION_MENU, &factory->location);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 200, 2);
@@ -35,7 +35,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 			nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
-				addNewPopupWindow(platform->first_window, STOCKPILE, &factory->stockpiles_in[i]);
+				addNewPopupWindow(platform->first_window, STOCKPILE_MENU, &factory->stockpiles_in[i]);
 			}
 		}
 
@@ -50,7 +50,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 			nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
-				addNewPopupWindow(platform->first_window, STOCKPILE, &factory->stockpiles_out[i]);
+				addNewPopupWindow(platform->first_window, STOCKPILE_MENU, &factory->stockpiles_out[i]);
 			}
 		}
 		
@@ -67,7 +67,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 			nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER, &factory->orders_in[i]);
+				addNewPopupWindow(platform->first_window, ORDER_MENU, &factory->orders_in[i]);
 			}
 		}
 
@@ -84,7 +84,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 			nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER, &factory->orders_out[i]);
+				addNewPopupWindow(platform->first_window, ORDER_MENU, &factory->orders_out[i]);
 			}
 		}
 	}

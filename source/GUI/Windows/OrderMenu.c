@@ -2,7 +2,7 @@
 
 void drawOrderMenu(AppPlatform* platform, Order* order, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Order", nk_rect(50, 50, 200, 120),
+	if (nk_begin_titled(platform->ctx, name, "Order", nk_rect(50, 50, 250, 250),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -21,7 +21,7 @@ void drawOrderMenu(AppPlatform* platform, Order* order, char* name)
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Offering factory"))
 		{
-			addNewPopupWindow(platform->first_window, FACTORY, order->offering_factory);
+			addNewPopupWindow(platform->first_window, FACTORY_MENU, order->offering_factory);
 		}
 	}
 	nk_end(platform->ctx);

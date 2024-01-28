@@ -36,7 +36,7 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Stockpile"))
 		{
-			addNewPopupWindow(platform->first_window, STOCKPILE, &vehicle->stockpile);
+			addNewPopupWindow(platform->first_window, STOCKPILE_MENU, &vehicle->stockpile);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 150, 1);
@@ -44,7 +44,7 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 		{
 			if (nk_button_label(platform->ctx, "End Factory"))
 			{
-				addNewPopupWindow(platform->first_window, FACTORY, vehicle->end_factory);
+				addNewPopupWindow(platform->first_window, FACTORY_MENU, vehicle->end_factory);
 			}
 		}
 		else

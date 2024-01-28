@@ -28,7 +28,7 @@ void drawLogisticsManagerMenu(AppPlatform* platform, LogisticsManager* logistics
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, "Show vehicle"))
 			{
-				addNewPopupWindow(platform->first_window, VEHICLE, &logisticsManager->vehicles[i]);
+				addNewPopupWindow(platform->first_window, VEHICLE_MENU, &logisticsManager->vehicles[i]);
 			}
 		}
 	}

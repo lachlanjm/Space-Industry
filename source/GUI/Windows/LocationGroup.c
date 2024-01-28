@@ -11,7 +11,7 @@ void drawLocationGroup(AppPlatform* platform, AppState* current_app_state, char*
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, getNameTransportNode((TransportNode) i)))
 			{
-				addNewPopupWindow(platform->first_window, LOCATION, (TransportNode*) &i);
+				addNewPopupWindow(platform->first_window, LOCATION_MENU, (TransportNode*) &i);
 			}
 		}
 	}

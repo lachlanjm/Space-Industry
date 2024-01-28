@@ -15,7 +15,7 @@ void drawFactoryList(AppPlatform* platform, AppState* current_app_state, char* n
 			nk_label(platform->ctx, getNameProductionRecipe(current_app_state->factory_managers[i].controlled_factory.productionRecipe), NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
-				addNewPopupWindow(platform->first_window, FACTORY, &(current_app_state->factory_managers[i].controlled_factory));
+				addNewPopupWindow(platform->first_window, FACTORY_MENU, &(current_app_state->factory_managers[i].controlled_factory));
 			}
 		}
 		

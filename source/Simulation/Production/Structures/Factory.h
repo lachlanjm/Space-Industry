@@ -15,9 +15,9 @@ typedef struct Factory
 	ProductionRecipe productionRecipe;
 	TransportNode location;
 
+	uint_fast16_t processing_speed; // TODO TBU
 	uint_fast8_t stockpiles_in_num;
 	uint_fast8_t stockpiles_out_num;
-	uint_fast16_t processing_speed; // TODO TBU
 	
 	Stockpile* stockpiles_in;
 	Stockpile* stockpiles_out;

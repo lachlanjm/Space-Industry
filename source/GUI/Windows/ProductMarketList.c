@@ -21,7 +21,7 @@ void drawProductMarketList(AppPlatform* platform, TransportNode location, char* 
 			snprintf(buffer, BUF_SIZE, "%s", getNameProduct((Product) i)); // Work around hardware issue TODO
 			if (nk_button_label(platform->ctx, buffer))
 			{
-				addNewPopupWindow(platform->first_window, PRODUCT_MARKET, getProductMarketAtLocation(location, (Product) i));
+				addNewPopupWindow(platform->first_window, PRODUCT_MARKET_MENU, getProductMarketAtLocation(location, (Product) i));
 			}
 		}
 	}

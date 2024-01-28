@@ -13,11 +13,11 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 		window->coreData.appState = coreData;
 		break;
 	
-	case FACTORY:
+	case FACTORY_MENU:
 		window->coreData.factory = coreData;
 		break;
 
-	case LOCATION:
+	case LOCATION_MENU:
 	case PRODUCT_MARKET_LIST:
 		window->coreData.location = *((TransportNode*) coreData);
 		break;
@@ -30,19 +30,19 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 		window->coreData.logisticsManager = coreData;
 		break;
 
-	case ORDER:
+	case ORDER_MENU:
 		window->coreData.order = coreData;
 		break;
 
-	case PRODUCT_MARKET:
+	case PRODUCT_MARKET_MENU:
 		window->coreData.productMarket = coreData;
 		break;
 
-	case STOCKPILE:
+	case STOCKPILE_MENU:
 		window->coreData.stockpile = coreData;
 		break;
 
-	case VEHICLE:
+	case VEHICLE_MENU:
 		window->coreData.vehicle = coreData;
 		break;
 	
@@ -70,7 +70,7 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 		drawFactoryList(platform, window->coreData.appState, window->name);
 		break;
 	
-	case FACTORY:
+	case FACTORY_MENU:
 		drawFactoryMenu(platform, window->coreData.factory, window->name);
 		break;
 
@@ -78,7 +78,7 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 		drawLocationGroup(platform, window->coreData.appState, window->name);
 		break;
 
-	case LOCATION:
+	case LOCATION_MENU:
 		drawLocationMenu(platform, window->coreData.location, window->name);
 		break;
 
@@ -98,7 +98,7 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 		drawMainMenu(platform, window->coreData.appState, window->name);
 		break;
 
-	case ORDER:
+	case ORDER_MENU:
 		drawOrderMenu(platform, window->coreData.order, window->name);
 		break;
 	
@@ -106,15 +106,15 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 		drawProductMarketList(platform, window->coreData.location, window->name);
 		break;
 
-	case PRODUCT_MARKET:
+	case PRODUCT_MARKET_MENU:
 		drawProductMarketMenu(platform, window->coreData.productMarket, window->name);
 		break;
 
-	case STOCKPILE:
+	case STOCKPILE_MENU:
 		drawStockpileMenu(platform, window->coreData.stockpile, window->name);
 		break;
 
-	case VEHICLE:
+	case VEHICLE_MENU:
 		drawVehicleMenu(platform, window->coreData.vehicle, window->name);
 		break;
 	
