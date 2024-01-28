@@ -1,5 +1,7 @@
 #include "LogisticsManager.h"
 
+static LOGISTICS_MANAGER_ID_INT id_next = 0;
+
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num)
 {
 	LogisticsManager* logisticsManager = (LogisticsManager*) malloc(1 * sizeof(LogisticsManager));
@@ -20,6 +22,7 @@ void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const u
 
 	logisticsManager->contracts_num = 0;
 	logisticsManager->contracts = NULL;
+	logisticsManager->id = id_next++;
 }
 
 void addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, Factory* selling_factory, Factory* buying_factory, const Product product, const QUANTITY_INT quantity)

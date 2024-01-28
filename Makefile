@@ -1,9 +1,12 @@
 .DEFAULT_GOAL = build
 
 CC := gcc
+APP_DIR := app
 BUILD_DIR := build
 SRC_DIR := source
 
+SAVE_DIR := saves
+START_DIR := starts
 BUILD_OBJ_DIR := Objects
 CORE_DIR := Core
 SIM_DIR := Simulation
@@ -15,6 +18,10 @@ MAR_DIR := Markets
 PRO_DIR := Production
 TRA_DIR := Transport
 WIN_DIR := Windows
+
+APP_PATH := .\$(APP_DIR)
+SAVE_PATH := $(APP_PATH)\$(SAVE_DIR)
+START_PATH := $(APP_PATH)\$(START_DIR)
 
 BUILD_PATH := .\$(BUILD_DIR)
 BUILD_OBJ_PATH := $(BUILD_PATH)\$(BUILD_OBJ_DIR)
@@ -95,7 +102,7 @@ prebuild:
 
 .PHONY: run
 run:
-	.\IndustryApp.exe > $(BUILD_PATH)\run_time.log
+	$(APP_PATH)\IndustryApp.exe $(APP_PATH) > $(APP_PATH)\run_time.log
 
 .PHONY: build
 build:
@@ -190,7 +197,7 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\StockpileMenu.c -o $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\VehicleMenu.c -o $(BUILD_OBJ_PATH)\VehicleMenu.c.o
 
-	$(CC) $(CFLAGS) $(LIBS) -I $(BUILD_OBJ_PATH) $(OBJ_FILES) $(LOCAL_LIBS) -o .\IndustryApp.exe
+	$(CC) $(CFLAGS) $(LIBS) -I $(BUILD_OBJ_PATH) $(OBJ_FILES) $(LOCAL_LIBS) -o $(APP_PATH)\IndustryApp.exe
 
 .PHONY: clean
 clean:

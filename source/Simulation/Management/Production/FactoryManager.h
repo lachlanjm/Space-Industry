@@ -8,6 +8,8 @@
 
 #include <stdint.h>
 
+#define FACTORY_MANAGER_ID_INT uint_least16_t
+
 // TODO: TBU finetune AI
 #define STOCKPILE_FULL 500
 #define DESIRED_STOCKPILE_MAX 350 // !!MUST BE!! < STOCKPILE_FULL - ORDER_QUANTITY_MIN
@@ -19,6 +21,8 @@
 
 typedef struct FactoryManager {
 	Factory controlled_factory;
+
+	FACTORY_MANAGER_ID_INT id;
 } FactoryManager;
 
 void assignFactoryManagerValues(FactoryManager* factoryManager, const ProductionRecipe productionRecipe, const TransportNode location);

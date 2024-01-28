@@ -1,5 +1,6 @@
 #include "Order.h"
 
+static ORDER_ID_INT id_next = 0;
 Order* newOrder(const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price)
 {
 	Order* order = (Order*) malloc(1 * sizeof(Order));
@@ -18,6 +19,8 @@ void assignOrderValues(Order* order, const Factory* offering_factory, const QUAN
 	order->prev_order = prev_order;
 	order->left_order = left_order;
 	order->right_order = right_order;
+
+	order->id = id_next++;
 }
 
 // DONT CLEAN CONSTITUENT

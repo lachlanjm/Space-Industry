@@ -2,7 +2,8 @@
 .vscode
 
 # Build files
-**/build
+*.o
+*.gch
 IndustryApp.exe
 
 # Compilation files
@@ -10,3 +11,6 @@ IndustryApp.exe
 
 # Logs
 *.log
+
+# Game Saves
+**/**/saves

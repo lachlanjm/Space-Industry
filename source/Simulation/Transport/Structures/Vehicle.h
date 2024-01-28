@@ -6,6 +6,8 @@
 #include "..\..\Environment\Enums\TransportNode.h"
 #include "..\..\Environment\Structures\Map.h"
 
+#define VEHICLE_ID_INT uint_least16_t
+
 #define VEHICLE_SPEED 1
 #define VEHICLE_CAPACITY 100
 
@@ -19,6 +21,8 @@ typedef struct Vehicle {
 	Factory* end_factory;
 	QUANTITY_INT max_capacity;
 	// TODO VehicleType type; (or so...)
+
+	VEHICLE_ID_INT id;
 } Vehicle;
 
 void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location);

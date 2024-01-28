@@ -5,6 +5,8 @@
 #include "..\..\Production\Structures\Factory.h"
 #include "..\..\Production\Enums\Product.h"
 
+#define LOGISTICS_CONTRACT_ID_INT uint_least16_t
+
 enum ContractPhase {
 	ASSIGNMENT,
 	PICK_UP,
@@ -23,6 +25,7 @@ typedef struct LogisticsContract
 	enum ContractPhase current_phase;
 	Product product;
 	QUANTITY_INT quantity;
+	LOGISTICS_CONTRACT_ID_INT id;
 } LogisticsContract;
 
 LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity);

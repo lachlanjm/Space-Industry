@@ -8,6 +8,8 @@ typedef struct Factory Factory;
 #include "..\..\Markets\Structures\Order.h"
 #include "..\..\Environment\Enums\TransportNode.h"
 
+#define FACTORY_ID_INT uint_least16_t
+
 typedef struct Factory
 {
 	ProductionRecipe productionRecipe;
@@ -26,6 +28,7 @@ typedef struct Factory
 	QUANTITY_INT* ordered_in;
 	QUANTITY_INT* ordered_out;
 
+	FACTORY_ID_INT id;
 } Factory;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);

@@ -1,8 +1,10 @@
 #include "LoadAppState.h"
 
-AppState* loadAppState(const int file_path_len, const char* file_path)
+AppState* loadAppState(const char* app_dir_path, const char* save_file_path)
 {
 	AppState* appState = (AppState*) malloc(sizeof(AppState));
+
+	appState->app_dir_path = app_dir_path; // DIR TO POINT TO FOR SAVING
 
 	appState->factory_managers_num = PRODUCTION_RECIPE_COUNT;
 	appState->factory_managers = (FactoryManager*) calloc(appState->factory_managers_num, sizeof(FactoryManager));

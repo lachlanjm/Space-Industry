@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#define STOCKPILE_ID_INT uint_least16_t
+
 #define QUANTITY_INT uint_fast32_t
 #define QUANTITY_INT_MAX UINT_FAST32_MAX
 
@@ -13,6 +15,8 @@ typedef struct Stockpile
 {
 	Product product_type;
 	QUANTITY_INT quantity;
+
+	STOCKPILE_ID_INT id;
 } Stockpile;
 
 Stockpile* newStockpile(const Product product, const QUANTITY_INT quantity);

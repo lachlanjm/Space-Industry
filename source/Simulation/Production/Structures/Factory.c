@@ -1,34 +1,12 @@
 #include "Factory.h"
 
+static FACTORY_ID_INT id_next = 0;
+
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
 {
 	Factory* factory = (Factory*) malloc(1 * sizeof(Factory));
 
-	factory->productionRecipe = productionRecipe;
-	factory->location = location;
-	factory->processing_speed = 0;
-
-	factory->stockpiles_in_num = getNumOfInputs(productionRecipe);
-	factory->stockpiles_out_num = getNumOfOutputs(productionRecipe);
-
-	factory->stockpiles_in = (Stockpile*) malloc(factory->stockpiles_in_num * sizeof(Stockpile));
-	factory->stockpiles_out = (Stockpile*) malloc(factory->stockpiles_out_num * sizeof(Stockpile));
-
-	factory->orders_in = (Order*) malloc(factory->stockpiles_in_num * sizeof(Order));
-	factory->orders_out = (Order*) malloc(factory->stockpiles_out_num * sizeof(Order));
-
-	factory->ordered_in = (QUANTITY_INT*) malloc(factory->stockpiles_in_num * sizeof(QUANTITY_INT));
-	factory->ordered_out = (QUANTITY_INT*) malloc(factory->stockpiles_out_num * sizeof(QUANTITY_INT));
-
-	Stockpile* tmp_arr = getInputs(productionRecipe);
-	for (int i = 0; i < factory->stockpiles_in_num; i++) {
-		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
-	}
-
-	tmp_arr = getOutputs(productionRecipe);
-	for (int i = 0; i < factory->stockpiles_out_num; i++) {
-		assignStockpileValues(&factory->stockpiles_out[i], tmp_arr[i].product_type, 0);
-	}
+	assignFactoryValues(factory, productionRecipe, location);
 
 	return factory;
 }
@@ -64,6 +42,8 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 		assignOrderValues(&factory->orders_out[i], factory, 0, 100, NULL, NULL, NULL); // TODO: DEF. PRICE
 		factory->ordered_out[i] = 0;
 	}
+
+	factory->id = id_next++;
 }
 
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product)

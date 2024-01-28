@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+#define LOGISTICS_MANAGER_ID_INT uint_least16_t
+
 typedef struct LogisticsManager 
 {
 	uint_fast16_t vehicles_num;
@@ -15,6 +17,7 @@ typedef struct LogisticsManager
 	uint_fast16_t contracts_num;
 	LogisticsContract* contracts;
 
+	LOGISTICS_MANAGER_ID_INT id;
 } LogisticsManager;
 
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num);

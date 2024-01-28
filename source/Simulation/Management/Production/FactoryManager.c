@@ -1,8 +1,11 @@
 #include "FactoryManager.h"
 
+static FACTORY_MANAGER_ID_INT id_next = 0;
+
 void assignFactoryManagerValues(FactoryManager* factoryManager, const ProductionRecipe productionRecipe, const TransportNode location)
 {
 	assignFactoryValues(&factoryManager->controlled_factory, productionRecipe, location);
+	factoryManager->id = id_next++;
 }
 
 void updateOfferedPrices(FactoryManager* factoryManager)

@@ -8,6 +8,8 @@ typedef struct OrderDef Order;
 
 #include <stdint.h>
 
+#define ORDER_ID_INT uint_least16_t
+
 typedef struct OrderDef {
 	Factory* offering_factory;
 	QUANTITY_INT offer_num;
@@ -16,6 +18,8 @@ typedef struct OrderDef {
 	struct OrderDef* prev_order;
 	struct OrderDef* left_order;
 	struct OrderDef* right_order;
+
+	ORDER_ID_INT id;
 } Order;
 
 Order* newOrder(const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price);

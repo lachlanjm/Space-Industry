@@ -3,6 +3,6 @@
 
 #include ".\AppState.h"
 
-AppState* loadAppState(const int file_path_len, const char* file_path);
+AppState* loadAppState(const char* app_dir_path, const char* save_file_path);
 
 #endif

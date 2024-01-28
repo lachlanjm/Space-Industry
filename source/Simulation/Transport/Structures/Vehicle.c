@@ -1,5 +1,7 @@
 #include "Vehicle.h"
 
+static VEHICLE_ID_INT id_next = 0;
+
 void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location)
 {
 	vehicle->current_location = start_location;
@@ -10,6 +12,8 @@ void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location
 
 	vehicle->end_factory = NULL;
 	vehicle->max_capacity = VEHICLE_CAPACITY;
+
+	vehicle->id = id_next++;
 }
 
 /*

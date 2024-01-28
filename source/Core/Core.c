@@ -3,16 +3,22 @@
 #define NK_GLFW_GL3_IMPLEMENTATION
 #include "Core.h"
 
-#include "../GUI/includes/overview.c" // FOR DEMO ONLY!!!
+// #include "../GUI/includes/overview.c" // FOR DEMO ONLY!!!
 
 static void error_callback(int e, const char *d)
 {printf("Error %d: %s\n", e, d);}
 
 int main(int argc, char* argv[])
 {
+	if (argc < 2)
+	{
+		printf("Not enough arguments supplied");
+		exit(1);
+	}
+
 	static GLFWwindow *win;
 	AppPlatform* platform = calloc(1, sizeof(AppPlatform));
-	AppState* current_app_state = loadAppState(0, NULL);
+	AppState* current_app_state = loadAppState(argv[1], NULL);
 
 	runAppPlatform(platform, win, current_app_state);
 
@@ -26,6 +32,7 @@ int main(int argc, char* argv[])
 
 	closeApp(current_app_state);
 	cleanPlatform(platform);
+	printf("Cleaned platform\n\n");
 	return 0;
 }
 
@@ -122,7 +129,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
 
 int closeApp(AppState* appState)
 {
-	saveAppState(appState);
+	saveAppState(appState, "my_first_save");
 	printf("Saved App State\n");
 	cleanAppState(appState);
 	free(appState);

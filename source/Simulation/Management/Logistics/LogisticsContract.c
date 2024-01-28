@@ -1,5 +1,6 @@
 #include "LogisticsContract.h"
 
+static LOGISTICS_CONTRACT_ID_INT id_next = 0;
 LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
 	LogisticsContract* logisticsContract = (LogisticsContract*) malloc(1 * sizeof(LogisticsContract));
@@ -15,6 +16,7 @@ void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, cons
 	logisticsContract->current_phase = current_phase;
 	logisticsContract->product = product;
 	logisticsContract->quantity = quantity;
+	logisticsContract->id = id_next++;
 }
 
 /*

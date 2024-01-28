@@ -1,5 +1,7 @@
 #include "Stockpile.h"
 
+static STOCKPILE_ID_INT id_next = 0;
+
 /* Avoid use, batch allocating is better */
 Stockpile* newStockpile(const Product product, const QUANTITY_INT quantity) {
 	Stockpile* stockpile = (Stockpile*) malloc(1 * sizeof(Stockpile));
@@ -13,6 +15,8 @@ Stockpile* newStockpile(const Product product, const QUANTITY_INT quantity) {
 void assignStockpileValues(Stockpile* stockpile, const Product product, const QUANTITY_INT quantity) {
 	stockpile->product_type = product;
 	stockpile->quantity = quantity;
+
+	stockpile->id = id_next++;
 }
 
 void setDiffProduct(Stockpile* stockpile, const Product product)
