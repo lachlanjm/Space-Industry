@@ -2,21 +2,11 @@
 #define SAVE_APP_STATE_H
 
 #include ".\AppState.h"
+#include "..\..\..\Helpers\SaveFileStandards.h"
 
 #include <stdio.h>
 
 #define BUF_SIZE 64
-
-enum AttributeTypes {
-	APP_STATE_SAVE,
-	FACTORY_MANAGER_SAVE,
-	FACTORY_SAVE,
-	LOGISTICS_CONTRACT_SAVE,
-	LOGISTICS_MANAGER_SAVE,
-	ORDER_SAVE,
-	STOCKPILE_SAVE,
-	VEHICLE_SAVE
-};
 
 enum WriteType {
 	NEW_STRUCT_WRITE,

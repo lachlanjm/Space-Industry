@@ -12,6 +12,7 @@ CORE_DIR := Core
 SIM_DIR := Simulation
 _ENV_DIR := Environment
 GUI_DIR := GUI
+HELP_DIR := Helpers
 MAIN_DIR := Main
 MAN_DIR := Management
 MAR_DIR := Markets
@@ -29,6 +30,7 @@ BUILD_OBJ_PATH := $(BUILD_PATH)\$(BUILD_OBJ_DIR)
 SRC_PATH := .\$(SRC_DIR)
 CORE_PATH := $(SRC_PATH)\$(CORE_DIR)
 GUI_PATH := $(SRC_PATH)\$(GUI_DIR)
+HELP_PATH := $(SRC_PATH)\$(HELP_DIR)
 SIM_PATH := $(SRC_PATH)\$(SIM_DIR)
 
 _ENV_PATH := $(SIM_PATH)\$(_ENV_DIR)
@@ -71,12 +73,14 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\VehicleMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\DirectoryReading.c.o
 
 GUI_LIBS_PATH := $(GUI_PATH)\libs
 
-CFLAGS := -Wall -g -DGLEW_STATIC -D_WIN64
+CFLAGS := -Wall -g -DGLEW_STATIC
 
 ifeq ($(OS),Windows_NT)
+	CFLAGS += -D_WIN64
 	LIBS = -lglfw3 -lopengl32 -lm -lGLU32 -lGLEW32
 	WINDOWS_GUI_LIBS := $(GUI_LIBS_PATH)\Windows
 	LOCAL_LIBS = $(WINDOWS_GUI_LIBS)\glfw3dll.lib $(WINDOWS_GUI_LIBS)\OpenGL32.lib $(WINDOWS_GUI_LIBS)\glew32.lib
@@ -84,8 +88,10 @@ else
 	UNAME_S := $(shell uname -s)
 	GLFW3 := $(shell pkg-config --libs glfw3)
 	ifeq ($(UNAME_S),Darwin)
+		CFLAGS += -D__APPLE__
 		LIBS := $(GLFW3) -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lm -lGLEW -L/usr/local/lib
 	else
+		CFLAGS += -DLINUX
 		LIBS = $(GLFW3) -lGL -lm -lGLU -lGLEW
 	endif
 endif
@@ -122,6 +128,9 @@ build_no_log:
 	$(CC) $(CFLAGS) -c $(MAIN_PATH)\AppState\LoadAppState.h -o $(BUILD_OBJ_PATH)\LoadAppState.h.gch 
 
 	$(CC) $(CFLAGS) -c $(CORE_PATH)\Core.h -o $(BUILD_OBJ_PATH)\Core.h.gch 
+
+	$(CC) $(CFLAGS) -c $(HELP_PATH)\SaveFileStandards.h -o $(BUILD_OBJ_PATH)\SaveFileStandards.h.gch 
+	$(CC) $(CFLAGS) -c $(HELP_PATH)\DirectoryReading.h -o $(BUILD_OBJ_PATH)\DirectoryReading.h.gch 
 
 	$(CC) $(CFLAGS) -c $(MAN_PATH)\Logistics\LogisticsContract.h -o $(BUILD_OBJ_PATH)\LogisticsContract.h.gch 
 	$(CC) $(CFLAGS) -c $(MAN_PATH)\Logistics\LogisticsManager.h -o $(BUILD_OBJ_PATH)\LogisticsManager.h.gch 
@@ -166,6 +175,8 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(MAIN_PATH)\AppState\LoadAppState.c -o $(BUILD_OBJ_PATH)\LoadAppState.c.o
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(CORE_PATH)\Core.c -o $(BUILD_OBJ_PATH)\Core.c.o
+
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(HELP_PATH)\DirectoryReading.c -o $(BUILD_OBJ_PATH)\DirectoryReading.c.o
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(MAN_PATH)\Logistics\LogisticsContract.c -o $(BUILD_OBJ_PATH)\LogisticsContract.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(MAN_PATH)\Logistics\LogisticsManager.c -o $(BUILD_OBJ_PATH)\LogisticsManager.c.o

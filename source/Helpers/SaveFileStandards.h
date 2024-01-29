@@ -1,0 +1,30 @@
+#ifndef SAVE_FILE_STANDARDS_H
+#define SAVE_FILE_STANDARDS_H
+
+#define SAVE_FILE_SEP "="
+#define SAVE_FILE_PTR_PREFIX ">"
+#define SAVE_FILE_ID_SEP "_"
+#define SAVE_FILE_ATTR_ID "\t"
+#define SAVE_FILE_NEXT_ATTR_SEP "\n"
+
+#define SAVE_FILE_APP_STATE_ID "AppState"
+#define SAVE_FILE_FACTORY_MANAGER_ID "FactoryManager"
+#define SAVE_FILE_FACTORY_ID "Factory"
+#define SAVE_FILE_LOGISTICS_CONTRACT_ID "LogisticsContract"
+#define SAVE_FILE_LOGISTICS_MANAGER_ID "LogisticsManager"
+#define SAVE_FILE_ORDER_ID "Order"
+#define SAVE_FILE_STOCKPILE_ID "Stockpile"
+#define SAVE_FILE_VEHICLE_ID "Vehicle"
+
+enum AttributeTypes {
+	APP_STATE_SAVE,
+	FACTORY_MANAGER_SAVE,
+	FACTORY_SAVE,
+	LOGISTICS_CONTRACT_SAVE,
+	LOGISTICS_MANAGER_SAVE,
+	ORDER_SAVE,
+	STOCKPILE_SAVE,
+	VEHICLE_SAVE
+};
+
+#endif

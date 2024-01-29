@@ -6,9 +6,6 @@ typedef struct AppState AppState;
 #include "..\..\Management\Logistics\LogisticsManager.h"
 #include "..\..\Management\Production\FactoryManager.h"
 
-#define SAVE_FILE_SEP "="
-#define SAVE_FILE_PTR_PREFIX ">"
-#define SAVE_FILE_ID_SEP "_"
 
 #include ".\LoadAppState.h"
 #include ".\SaveAppState.h"

@@ -1,0 +1,118 @@
+#include "DirectoryReading.h"
+
+DirPtr* newDirPtr()
+{
+	DirPtr* ptr = calloc(1, sizeof(DirPtr));
+	ptr->dir_path = NULL;
+	ptr->status = DIR_PTR_UNINITIALISED;
+	return ptr;
+}
+
+char* currentPath(DirPtr* ptr)
+{
+	return ptr->dir_path;
+}
+
+#ifdef _WIN64 // windows platform
+
+int openDir(DirPtr* ptr, char* dir_path)
+{
+	if (ptr->status != DIR_PTR_UNINITIALISED)
+	{
+		return 1;
+	}
+	ptr->dir_path = dir_path;
+	ptr->status = DIR_PTR_INITIALISED;
+	return 0;
+}
+
+int getNextFile(DirPtr* ptr, char* file_name_buffer)
+{
+	if (ptr->status == DIR_PTR_INITIALISED)
+	{
+		ptr->handle = FindFirstFile(ptr->dir_path, &ptr->FindFileData);
+		if (ptr->handle == INVALID_HANDLE_VALUE)
+		{
+			return 2;
+		}
+		ptr->status = DIR_PTR_OPEN;
+	}
+	else if (ptr->status == DIR_PTR_OPEN)
+	{
+		if (FindNextFile(ptr->handle, &ptr->FindFileData) == NULL)
+		{
+			return 3;
+		}
+	}
+	else
+	{
+		return 1;
+	}
+
+	sprintf(file_name_buffer, "%s", ptr->FindFileData.cFileName);
+	return 0;
+}
+
+int closeDir(DirPtr* ptr)
+{
+	if (ptr->status != DIR_PTR_OPEN)
+	{
+		return 1;
+	}
+	if (FindClose(ptr->handle))
+	{
+		free(ptr);
+		return 0;
+	}
+	return 2;
+}
+
+#else // BELOW IS NOT YET TESTED!!!!!!
+
+int openDir(DirPtr* ptr, char* dir_path)
+{
+	if (ptr->status != DIR_PTR_UNINITIALISED && ptr->status != DIR_PTR_INITIALISED)
+	{
+		return 1;
+	}
+	ptr->dir_ptr_backend = opendir(dir_path);
+	if (ptr->dir_ptr_backend == NULL)
+	{
+		return 2;
+	}
+	ptr->dir_path = dir_path;
+	ptr->status = DIR_PTR_OPEN;
+	return 0;
+}
+
+int getNextFile(DirPtr* ptr, char* file_name_buffer)
+{
+	if (ptr->status != DIR_PTR_OPEN)
+	{
+		return 1;
+	}
+	ptr->de = readdir(ptr->dir_ptr_backend);
+	if (ptr->de == NULL)
+	{
+		return 2;
+	}
+	sprintf(file_name_buffer, "%s", ptr->de->d_name);
+	return 0;
+}
+
+int closeDir(DirPtr* ptr)
+{
+	if (ptr->status != DIR_PTR_OPEN)
+	{
+		return 1;
+	}
+	if (closedir(ptr->dir_ptr_backend))
+	{
+		return 2;
+	}
+	ptr->status = DIR_PTR_CLOSED;
+	free(ptr);
+	return 0;
+}
+
+#endif

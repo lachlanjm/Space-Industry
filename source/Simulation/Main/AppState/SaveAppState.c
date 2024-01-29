@@ -7,28 +7,28 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 	switch(attributeType)
 	{
 		case APP_STATE_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "AppState");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_APP_STATE_ID);
 			break;
 		case FACTORY_MANAGER_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "FactoryManager");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_MANAGER_ID);
 			break;
 		case FACTORY_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "Factory");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_ID);
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "LogisticsContract");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_LOGISTICS_CONTRACT_ID);
 			break;
 		case LOGISTICS_MANAGER_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "LogisticsManager");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_LOGISTICS_MANAGER_ID);
 			break;
 		case ORDER_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "Order");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_ORDER_ID);
 			break;
 		case STOCKPILE_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "Stockpile");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_STOCKPILE_ID);
 			break;
 		case VEHICLE_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", "Vehicle");
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_VEHICLE_ID);
 			break;
 		default:
 			snprintf(buffer, BUF_SIZE, "%s", "Default");
@@ -75,13 +75,13 @@ static inline int writeToFile(FILE* fptr, const enum WriteType write_func, const
 	switch (write_func)
 	{
 		case NEW_STRUCT_WRITE:
-			return fprintf(fptr, "%s\n", str);
+			return fprintf(fptr, "%s%s", str, SAVE_FILE_NEXT_ATTR_SEP);
 		case ADD_ATTRIBUTE_WRITE:
-			return fprintf(fptr, "\t%s\n", str);
+			return fprintf(fptr, "%s%s%s", SAVE_FILE_ATTR_ID, str, SAVE_FILE_NEXT_ATTR_SEP);
 		case BLANK_LINE:
-			return fprintf(fptr, "\n");
+			return fprintf(fptr, "%s", SAVE_FILE_NEXT_ATTR_SEP);
 		default:
-			return fprintf(fptr, "%s\n", str);
+			return fprintf(fptr, "%s%s", str, SAVE_FILE_NEXT_ATTR_SEP);
 	}
 }
 
