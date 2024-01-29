@@ -28,7 +28,7 @@ struct SaveStateQueue {
 	struct SaveStateQueue* next;
 	enum AttributeTypes type;
 	void* data;
-}
+};
 
 int saveAppState(AppState* appState, const char* save_file_name);
 

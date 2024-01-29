@@ -2,9 +2,8 @@
 
 static struct SaveStateQueue* first_item;
 
-static inline char* getSaveFormatName(const enum AttributeTypes attributeType, const int id)
+static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum AttributeTypes attributeType, const int id)
 {
-	char buffer[BUF_SIZE];
 	switch(attributeType)
 	{
 		case APP_STATE_SAVE:
@@ -39,38 +38,35 @@ static inline char* getSaveFormatName(const enum AttributeTypes attributeType, c
 	return buffer;
 }
 
-static inline char* getSaveFormatPtrString(const enum AttributeTypes attributeType, const int id)
+static inline char* getSaveFormatPtrString(char buffer[BUF_SIZE], const enum AttributeTypes attributeType, const int id)
 {
-	char buffer[BUF_SIZE];
-	snprintf(buffer, BUF_SIZE, "%s%.*s", SAVE_FILE_PTR_PREFIX, BUF_SIZE - 2, getSaveFormatName(attributeType, id));
+	char buffer_2[BUF_SIZE];
+	snprintf(buffer, BUF_SIZE, "%s%.*s", SAVE_FILE_PTR_PREFIX, BUF_SIZE - 2, getSaveFormatName(buffer_2, attributeType, id));
 	return buffer;
 }
 
-static inline char* getSaveFormatStringAttribute(const char* attribute_name, const char* str)
+static inline char* getSaveFormatStringAttribute(char buffer[BUF_SIZE], const char* attribute_name, const char* str)
 {
-	char buffer[BUF_SIZE];
 	snprintf(buffer, BUF_SIZE, "%s%s%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, str);
 	return buffer;
 }
 
-static inline char* getSaveFormatIntegerAttribute(const char* attribute_name, const int integer)
+static inline char* getSaveFormatIntegerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const int integer)
 {
-	char buffer[BUF_SIZE];
-	snprintf(buffer, BUF_SIZE, "%s%s%.*d", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, integer);
+	snprintf(buffer, BUF_SIZE, "%s%s%d", attribute_name, SAVE_FILE_SEP, integer);
 	return buffer;
 }
 
-static inline char* getSaveFormatUnsignedIntegerAttribute(const char* attribute_name, const uint u_integer)
+static inline char* getSaveFormatUnsignedIntegerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const uint_least64_t u_integer)
 {
-	char buffer[BUF_SIZE];
-	snprintf(buffer, BUF_SIZE, "%s%s%.*u", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, u_integer);
+	snprintf(buffer, BUF_SIZE, "%s%s%i", attribute_name, SAVE_FILE_SEP, u_integer);
 	return buffer;
 }
 
-static inline char* getSaveFormatPointerAttribute(const char* attribute_name, const enum AttributeTypes attributeType, const int id)
+static inline char* getSaveFormatPointerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const enum AttributeTypes attributeType, const int id)
 {
-	char buffer[BUF_SIZE];
-	snprintf(buffer, BUF_SIZE, "%s%s%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, getSaveFormatPtrString(attributeType, id));
+	char buffer_2[BUF_SIZE];
+	snprintf(buffer, BUF_SIZE, "%s%s%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, getSaveFormatPtrString(buffer_2, attributeType, id));
 	return buffer;
 }
 
@@ -127,192 +123,203 @@ static inline void cleanUpQueue()
 	free(first_item);
 }
 
-static inline void saveAppState(FILE* fptr, AppState* appState)
+static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(APP_STATE_SAVE, 0));
+	char* buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, APP_STATE_SAVE, 0));
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("logistics_managers_num", appState->logistics_managers_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "logistics_managers_num", appState->logistics_managers_num)
 	);
 	for (int i = 0; i < appState->logistics_managers_num; i++)
 	{
-		appendToQueue(LOGISTICS_MANAGER_SAVE, appState->logistics_managers[i]);
+		appendToQueue(LOGISTICS_MANAGER_SAVE, &appState->logistics_managers[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute("logistics_managers", LOGISTICS_MANAGER_SAVE, appState->logistics_managers[i].id)
+			getSaveFormatPointerAttribute(buffer, "logistics_managers", LOGISTICS_MANAGER_SAVE, appState->logistics_managers[i].id)
 		);
 	}
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("factory_managers_num", appState->logistics_managers_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "factory_managers_num", appState->factory_managers_num)
 	);
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
-		appendToQueue(FACTORY_MANAGER_SAVE, appState->factory_managers[i]);
+		appendToQueue(FACTORY_MANAGER_SAVE, &appState->factory_managers[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute("factory_managers", FACTORY_MANAGER_SAVE, appState->factory_managers[i].id)
+			getSaveFormatPointerAttribute(buffer, "factory_managers", FACTORY_MANAGER_SAVE, appState->factory_managers[i].id)
 		);
 	}
 }
 
 static inline void saveFactoryManager(FILE* fptr, FactoryManager* factoryManager)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(FACTORY_MANAGER_SAVE, factoryManager->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, FACTORY_MANAGER_SAVE, factoryManager->id));
 	appendToQueue(FACTORY_SAVE, &factoryManager->controlled_factory);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute("controlled_factory", FACTORY_SAVE, factoryManager->controlled_factory.id)
+		getSaveFormatPointerAttribute(buffer, "controlled_factory", FACTORY_SAVE, factoryManager->controlled_factory.id)
 	);
 }
 
 static inline void saveFactory(FILE* fptr, Factory* factory)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(FACTORY_SAVE, factory->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, FACTORY_SAVE, factory->id));
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute("productionRecipe", factory->productionRecipe)
+		getSaveFormatIntegerAttribute(buffer, "productionRecipe", factory->productionRecipe)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute("location", factory->location)
+		getSaveFormatIntegerAttribute(buffer, "location", factory->location)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("processing_speed", factory->processing_speed)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "processing_speed", factory->processing_speed)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("stockpiles_in_num", factory->stockpiles_in_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "stockpiles_in_num", factory->stockpiles_in_num)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("stockpiles_out_num", factory->stockpiles_out_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "stockpiles_out_num", factory->stockpiles_out_num)
 	);
 
 	for (int i = 0; i < factory->stockpiles_in_num; i++)
 	{
-		appendToQueue(STOCKPILE_SAVE, factory->stockpiles_in[i]);
+		appendToQueue(STOCKPILE_SAVE, &factory->stockpiles_in[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute("stockpiles_in", STOCKPILE_SAVE, factory->stockpiles_in[i].id)
+			getSaveFormatPointerAttribute(buffer, "stockpiles_in", STOCKPILE_SAVE, factory->stockpiles_in[i].id)
 		);
-		appendToQueue(ORDER_SAVE, factory->orders_in[i]);
+		appendToQueue(ORDER_SAVE, &factory->orders_in[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute("orders_in", ORDER_SAVE, factory->orders_in[i].id)
+			getSaveFormatPointerAttribute(buffer, "orders_in", ORDER_SAVE, factory->orders_in[i].id)
 		);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatUnsignedIntegerAttribute("ordered_in", factory->ordered_in[i])
+			getSaveFormatUnsignedIntegerAttribute(buffer, "ordered_in", factory->ordered_in[i])
 		);
 	}
 
 	for (int i = 0; i < factory->stockpiles_out_num; i++)
 	{
-		appendToQueue(STOCKPILE_SAVE, factory->stockpiles_out[i]);
+		appendToQueue(STOCKPILE_SAVE, &factory->stockpiles_out[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute("stockpiles_out", STOCKPILE_SAVE, factory->stockpiles_out[i].id)
+			getSaveFormatPointerAttribute(buffer, "stockpiles_out", STOCKPILE_SAVE, factory->stockpiles_out[i].id)
 		);
-		appendToQueue(ORDER_SAVE, factory->orders_out[i]);
+		appendToQueue(ORDER_SAVE, &factory->orders_out[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute("orders_out", ORDER_SAVE, factory->orders_out[i].id)
+			getSaveFormatPointerAttribute(buffer, "orders_out", ORDER_SAVE, factory->orders_out[i].id)
 		);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatUnsignedIntegerAttribute("ordered_out", factory->ordered_out[i])
+			getSaveFormatUnsignedIntegerAttribute(buffer, "ordered_out", factory->ordered_out[i])
 		);
 	}
 }
 
 static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logisticsContract)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(LOGISTICS_CONTRACT_SAVE, logisticsContract->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, LOGISTICS_CONTRACT_SAVE, logisticsContract->id));
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute("assigned_vehicle", VEHICLE_SAVE, logisticsContract->assigned_vehicle->id)
+		getSaveFormatPointerAttribute(buffer, "assigned_vehicle", VEHICLE_SAVE, logisticsContract->assigned_vehicle->id)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute("selling_factory", FACTORY_SAVE, logisticsContract->selling_factory->id)
+		getSaveFormatPointerAttribute(buffer, "selling_factory", FACTORY_SAVE, logisticsContract->selling_factory->id)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute("buying_factory", FACTORY_SAVE, logisticsContract->buying_factory->id)
+		getSaveFormatPointerAttribute(buffer, "buying_factory", FACTORY_SAVE, logisticsContract->buying_factory->id)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute("current_phase", logisticsContract->current_phase)
+		getSaveFormatIntegerAttribute(buffer, "current_phase", logisticsContract->current_phase)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute("product", logisticsContract->product)
+		getSaveFormatIntegerAttribute(buffer, "product", logisticsContract->product)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("quantity", logisticsContract->quantity)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "quantity", logisticsContract->quantity)
 	);
 }
 
 static inline void saveLogisticsManager(FILE* fptr, LogisticsManager* logisticsManager)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(LOGISTICS_MANAGER_SAVE, logisticsManager->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, LOGISTICS_MANAGER_SAVE, logisticsManager->id));
 	
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("vehicles_num", logisticsManager->vehicles_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "vehicles_num", logisticsManager->vehicles_num)
 	);
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		appendToQueue(VEHICLE_SAVE, logisticsManager->vehicles[i]);
+		appendToQueue(VEHICLE_SAVE, &logisticsManager->vehicles[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatPointerAttribute("vehicles", VEHICLE_SAVE, logisticsManager->vehicles[i].id)
+			getSaveFormatPointerAttribute(buffer, "vehicles", VEHICLE_SAVE, logisticsManager->vehicles[i].id)
 		);
 	}
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("contracts_num", logisticsManager->contracts_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "contracts_num", logisticsManager->contracts_num)
 	);
 	for (int i = 0; i < logisticsManager->contracts_num; i++)
 	{
-		appendToQueue(LOGISTICS_CONTRACT_SAVE, logisticsManager->contracts[i]);
+		appendToQueue(LOGISTICS_CONTRACT_SAVE, &logisticsManager->contracts[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatPointerAttribute("contracts", LOGISTICS_CONTRACT_SAVE logisticsManager->contracts[i].id)
+			getSaveFormatPointerAttribute(buffer, "contracts", LOGISTICS_CONTRACT_SAVE, logisticsManager->contracts[i].id)
 		);
 	}
 }
 
 static inline void saveOrder(FILE* fptr, Order* order)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(ORDER_SAVE, order->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, ORDER_SAVE, order->id));
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute("offering_factory", FACTORY_SAVE, order->offering_factory->id)
+		getSaveFormatPointerAttribute(buffer, "offering_factory", FACTORY_SAVE, order->offering_factory->id)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("offer_num", order->offer_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "offer_num", order->offer_num)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("price", order->price)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "price", order->price)
 	);
 }
 
 static inline void saveStockpile(FILE* fptr, Stockpile* stockpile)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(STOCKPILE_SAVE, stockpile->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, STOCKPILE_SAVE, stockpile->id));
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("product_type", stockpile->product_type)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "product_type", stockpile->product_type)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("quantity", stockpile->quantity)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "quantity", stockpile->quantity)
 	);
 }
 
 static inline void saveVehicle(FILE* fptr, Vehicle* vehicle)
 {
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(VEHICLE_SAVE, vehicle->id));
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, VEHICLE_SAVE, vehicle->id));
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute("current_location", vehicle->current_location)
+		getSaveFormatIntegerAttribute(buffer, "current_location", vehicle->current_location)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute("end_location", vehicle->end_location)
+		getSaveFormatIntegerAttribute(buffer, "end_location", vehicle->end_location)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("distance_travelled", vehicle->distance_travelled)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "distance_travelled", vehicle->distance_travelled)
 	);
 
 	appendToQueue(STOCKPILE_SAVE, &vehicle->stockpile);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPtrString("stockpile", STOCKPILE_SAVE, vehicle->stockpile.id)
+		getSaveFormatPointerAttribute(buffer, "stockpile", STOCKPILE_SAVE, vehicle->stockpile.id)
 	);
 
+	if (vehicle->end_factory != NULL)
+	{
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatPointerAttribute(buffer, "end_factory", FACTORY_SAVE, vehicle->end_factory->id)
+		);
+	}
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPtrString("end_factory", FACTORY_SAVE, vehicle->end_factory.id)
-	);
-	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute("max_capacity", vehicle->max_capacity)
+		getSaveFormatUnsignedIntegerAttribute(buffer, "max_capacity", vehicle->max_capacity)
 	);
 }
 
@@ -321,7 +328,7 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 	switch (item->type)
 	{
 		case APP_STATE_SAVE:
-			saveAppState(fptr, (AppState*) item->data);
+			saveAppStateFormat(fptr, (AppState*) item->data);
 			break;
 		case FACTORY_MANAGER_SAVE:
 			saveFactoryManager(fptr, (FactoryManager*) item->data);
@@ -353,7 +360,7 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 int saveAppState(AppState* appState, const char* save_file_name)
 {
 	// Save app state
-	const char save_file_path[2*BUF_SIZE];
+	char save_file_path[2*BUF_SIZE];
 	snprintf(save_file_path, 2*BUF_SIZE, "%s\\saves\\%s.txt", appState->app_dir_path, save_file_name);
 	// TODO !!!!!!!!!!!!!!! ADD SAVE FILE COLLISION HANDLING!!!
 
@@ -372,7 +379,6 @@ int saveAppState(AppState* appState, const char* save_file_name)
 	}
 
 	fclose(fptr);
-
 	cleanUpQueue();
 	return 0;
 }

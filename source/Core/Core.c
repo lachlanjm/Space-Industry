@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 	AppPlatform* platform = calloc(1, sizeof(AppPlatform));
 	AppState* current_app_state = loadAppState(argv[1], NULL);
 
+	/*
 	runAppPlatform(platform, win, current_app_state);
 
 	for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
@@ -27,11 +28,12 @@ int main(int argc, char* argv[])
 		printf("Iteration - %d\n", i);
 		processTickAppState(current_app_state);
 	}
-	
 	printf("Completed Iterations\n");
+	// */
 
 	closeApp(current_app_state);
-	cleanPlatform(platform);
+	//cleanPlatform(platform);
+	free(platform);
 	printf("Cleaned platform\n\n");
 	return 0;
 }
