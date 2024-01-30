@@ -34,39 +34,39 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 			snprintf(buffer, BUF_SIZE, "%s", "Default");
 			break;
 	}
-	snprintf(buffer, BUF_SIZE, "%.*s%s%d", BUF_SIZE - 5, buffer, SAVE_FILE_ID_SEP, id);
+	snprintf(buffer, BUF_SIZE, "%.*s%c%d", BUF_SIZE - 5, buffer, SAVE_FILE_ID_SEP, id);
 	return buffer;
 }
 
 static inline char* getSaveFormatPtrString(char buffer[BUF_SIZE], const enum AttributeTypes attributeType, const int id)
 {
 	char buffer_2[BUF_SIZE];
-	snprintf(buffer, BUF_SIZE, "%s%.*s", SAVE_FILE_PTR_PREFIX, BUF_SIZE - 2, getSaveFormatName(buffer_2, attributeType, id));
+	snprintf(buffer, BUF_SIZE, "%c%.*s", SAVE_FILE_PTR_PREFIX, BUF_SIZE - 2, getSaveFormatName(buffer_2, attributeType, id));
 	return buffer;
 }
 
 static inline char* getSaveFormatStringAttribute(char buffer[BUF_SIZE], const char* attribute_name, const char* str)
 {
-	snprintf(buffer, BUF_SIZE, "%s%s%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, str);
+	snprintf(buffer, BUF_SIZE, "%s%c%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, str);
 	return buffer;
 }
 
 static inline char* getSaveFormatIntegerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const int integer)
 {
-	snprintf(buffer, BUF_SIZE, "%s%s%d", attribute_name, SAVE_FILE_SEP, integer);
+	snprintf(buffer, BUF_SIZE, "%s%c%d", attribute_name, SAVE_FILE_SEP, integer);
 	return buffer;
 }
 
 static inline char* getSaveFormatUnsignedIntegerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const uint_least64_t u_integer)
 {
-	snprintf(buffer, BUF_SIZE, "%s%s%i", attribute_name, SAVE_FILE_SEP, u_integer);
+	snprintf(buffer, BUF_SIZE, "%s%c%i", attribute_name, SAVE_FILE_SEP, u_integer);
 	return buffer;
 }
 
 static inline char* getSaveFormatPointerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const enum AttributeTypes attributeType, const int id)
 {
 	char buffer_2[BUF_SIZE];
-	snprintf(buffer, BUF_SIZE, "%s%s%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, getSaveFormatPtrString(buffer_2, attributeType, id));
+	snprintf(buffer, BUF_SIZE, "%s%c%.*s", attribute_name, SAVE_FILE_SEP, BUF_SIZE - 20, getSaveFormatPtrString(buffer_2, attributeType, id));
 	return buffer;
 }
 
@@ -75,13 +75,13 @@ static inline int writeToFile(FILE* fptr, const enum WriteType write_func, const
 	switch (write_func)
 	{
 		case NEW_STRUCT_WRITE:
-			return fprintf(fptr, "%s%s", str, SAVE_FILE_NEXT_ATTR_SEP);
+			return fprintf(fptr, "%s%c", str, SAVE_FILE_NEXT_ATTR_SEP);
 		case ADD_ATTRIBUTE_WRITE:
-			return fprintf(fptr, "%s%s%s", SAVE_FILE_ATTR_ID, str, SAVE_FILE_NEXT_ATTR_SEP);
+			return fprintf(fptr, "%c%s%c", SAVE_FILE_ATTR_ID, str, SAVE_FILE_NEXT_ATTR_SEP);
 		case BLANK_LINE:
-			return fprintf(fptr, "%s", SAVE_FILE_NEXT_ATTR_SEP);
+			return fprintf(fptr, "%c", SAVE_FILE_NEXT_ATTR_SEP);
 		default:
-			return fprintf(fptr, "%s%s", str, SAVE_FILE_NEXT_ATTR_SEP);
+			return fprintf(fptr, "%s%c", str, SAVE_FILE_NEXT_ATTR_SEP);
 	}
 }
 
@@ -360,8 +360,8 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 int saveAppState(AppState* appState, const char* save_file_name)
 {
 	// Save app state
-	char save_file_path[2*BUF_SIZE];
-	snprintf(save_file_path, 2*BUF_SIZE, "%s\\saves\\%s.txt", appState->app_dir_path, save_file_name);
+	char save_file_path[BUF_SIZE];
+	snprintf(save_file_path, BUF_SIZE, "%s\\saves\\%s.txt", appState->app_dir_path, save_file_name);
 	// TODO !!!!!!!!!!!!!!! ADD SAVE FILE COLLISION HANDLING!!!
 
 	// Queue creation

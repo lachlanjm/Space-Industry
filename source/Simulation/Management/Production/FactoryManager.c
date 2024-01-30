@@ -113,6 +113,54 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 	}
 }
 
+void loadFactoryManagerAssignOrders(FactoryManager* factoryManager)
+{
+	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_in_num; i++)
+	{
+		QUANTITY_INT stockpile_ordered_quantity = 
+			factoryManager->controlled_factory.stockpiles_in[i].quantity
+			+ *getOrderedInQuantity(
+				&factoryManager->controlled_factory, 
+				factoryManager->controlled_factory.stockpiles_in[i].product_type
+		);
+
+		if (STOCKPILE_FULL - ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
+		{
+			if (factoryManager->controlled_factory.orders_in[i].offer_num == 0)
+			{
+				// Add to market
+				addBuyOrder(
+					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
+					&factoryManager->controlled_factory.orders_in[i]
+				);
+			}
+			factoryManager->controlled_factory.orders_in[i].offer_num = STOCKPILE_FULL - stockpile_ordered_quantity;
+		}
+	}
+
+	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_out_num; i++)
+	{
+		QUANTITY_INT stockpile_free_quantity = 
+			factoryManager->controlled_factory.stockpiles_out[i].quantity
+			- *getOrderedOutQuantity(
+				&factoryManager->controlled_factory, 
+				factoryManager->controlled_factory.stockpiles_out[i].product_type
+		);
+		if (ORDER_QUANTITY_MIN < stockpile_free_quantity)
+		{
+			if (factoryManager->controlled_factory.orders_out[i].offer_num == 0)
+			{
+				// Add to market
+				addSellOrder(
+					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
+					&factoryManager->controlled_factory.orders_out[i]
+				);
+			}
+			factoryManager->controlled_factory.orders_out[i].offer_num = stockpile_free_quantity;
+		}
+	}
+}
+
 void processTickFactoryManager(FactoryManager* factoryManager)
 {
 	updateOfferedPrices(factoryManager);

@@ -33,6 +33,7 @@ typedef struct Factory
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location);
+void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe);
 
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
 QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);

@@ -1,11 +1,11 @@
 #ifndef SAVE_FILE_STANDARDS_H
 #define SAVE_FILE_STANDARDS_H
 
-#define SAVE_FILE_SEP "="
-#define SAVE_FILE_PTR_PREFIX ">"
-#define SAVE_FILE_ID_SEP "_"
-#define SAVE_FILE_ATTR_ID "\t"
-#define SAVE_FILE_NEXT_ATTR_SEP "\n"
+#define SAVE_FILE_SEP '='
+#define SAVE_FILE_PTR_PREFIX '>'
+#define SAVE_FILE_ID_SEP '_'
+#define SAVE_FILE_ATTR_ID '\t'
+#define SAVE_FILE_NEXT_ATTR_SEP '\n'
 
 #define SAVE_FILE_APP_STATE_ID "AppState"
 #define SAVE_FILE_FACTORY_MANAGER_ID "FactoryManager"
@@ -15,6 +15,8 @@
 #define SAVE_FILE_ORDER_ID "Order"
 #define SAVE_FILE_STOCKPILE_ID "Stockpile"
 #define SAVE_FILE_VEHICLE_ID "Vehicle"
+
+#define BUF_SIZE 128
 
 enum AttributeTypes {
 	APP_STATE_SAVE,

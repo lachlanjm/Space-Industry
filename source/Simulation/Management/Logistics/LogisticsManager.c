@@ -33,6 +33,18 @@ void addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicl
 	assignNewLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
 }
 
+void loadLogisticsManagerConstructorVehicles(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
+{
+	logisticsManager->vehicles_num = vehicles_num;
+	logisticsManager->vehicles = (Vehicle*) realloc(logisticsManager->vehicles, vehicles_num * sizeof(Vehicle));
+}
+
+void loadLogisticsManagerConstructorLogisticsContract(LogisticsManager* logisticsManager, const uint_fast16_t contracts_num)
+{
+	logisticsManager->contracts_num = contracts_num;
+	logisticsManager->contracts = (LogisticsContract*) realloc(logisticsManager->contracts, contracts_num * sizeof(LogisticsContract));
+}
+
 static float __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
 void update_dist_to_price_eff()
 {

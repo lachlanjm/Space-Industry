@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
 	static GLFWwindow *win;
 	AppPlatform* platform = calloc(1, sizeof(AppPlatform));
-	AppState* current_app_state = loadAppState(argv[1], NULL);
+	AppState* current_app_state = loadAppState(argv[1], "my_first_save");
 
 	/*
 	runAppPlatform(platform, win, current_app_state);
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	printf("Completed Iterations\n");
 	// */
 
-	closeApp(current_app_state);
+	//closeApp(current_app_state);
 	//cleanPlatform(platform);
 	free(platform);
 	printf("Cleaned platform\n\n");

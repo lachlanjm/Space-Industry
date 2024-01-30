@@ -28,6 +28,7 @@ typedef struct FactoryManager {
 void assignFactoryManagerValues(FactoryManager* factoryManager, const ProductionRecipe productionRecipe, const TransportNode location);
 
 void updateOfferedPrices(FactoryManager* factoryManager);
+void loadFactoryManagerAssignOrders(FactoryManager* factoryManager);
 
 void processTickFactoryManager(FactoryManager* factoryManager);
 

@@ -13,21 +13,10 @@ Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode
 
 void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location)
 {
-	factory->productionRecipe = productionRecipe;
+	loadFactoryConstructor(factory, productionRecipe);
+
 	factory->location = location;
 	factory->processing_speed = 1;
-
-	factory->stockpiles_in_num = getNumOfInputs(productionRecipe);
-	factory->stockpiles_out_num = getNumOfOutputs(productionRecipe);
-
-	factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
-	factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
-
-	factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
-	factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
-
-	factory->ordered_in = (QUANTITY_INT*) realloc(factory->ordered_in, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
-	factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -44,6 +33,23 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 	}
 
 	factory->id = id_next++;
+}
+
+void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe)
+{
+	factory->productionRecipe = productionRecipe;
+	
+	factory->stockpiles_in_num = getNumOfInputs(productionRecipe);
+	factory->stockpiles_out_num = getNumOfOutputs(productionRecipe);
+
+	factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
+	factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
+
+	factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
+	factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
+
+	factory->ordered_in = (QUANTITY_INT*) realloc(factory->ordered_in, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+	factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
 }
 
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product)

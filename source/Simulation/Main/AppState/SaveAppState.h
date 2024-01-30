@@ -6,8 +6,6 @@
 
 #include <stdio.h>
 
-#define BUF_SIZE 64
-
 enum WriteType {
 	NEW_STRUCT_WRITE,
 	ADD_ATTRIBUTE_WRITE,
