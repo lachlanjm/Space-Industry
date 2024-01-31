@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
 	AppPlatform* platform = calloc(1, sizeof(AppPlatform));
 	AppState* current_app_state = loadAppState(argv[1], "my_first_save");
 
-	/*
 	runAppPlatform(platform, win, current_app_state);
 
+	/*
 	for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
 	{
 		printf("Iteration - %d\n", i);
@@ -31,9 +31,8 @@ int main(int argc, char* argv[])
 	printf("Completed Iterations\n");
 	// */
 
-	//closeApp(current_app_state);
-	//cleanPlatform(platform);
-	free(platform);
+	closeApp(current_app_state);
+	cleanPlatform(platform);
 	printf("Cleaned platform\n\n");
 	return 0;
 }
@@ -82,12 +81,13 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
 	platform->bg.g = 0.18f;
 	platform->bg.b = 0.24f;
 	platform->bg.a = 1.0f;
+	platform->continue_running = 1;
 
 	// Window not closed at start
 	drawPopupWindow(platform->first_window, platform);
 	nk_clear(platform->ctx);
 
-	while (!glfwWindowShouldClose(win))
+	while (!glfwWindowShouldClose(win) && platform->continue_running)
 	{
 		/* Input */
 		glfwPollEvents();

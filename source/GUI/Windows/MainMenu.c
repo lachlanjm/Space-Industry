@@ -2,7 +2,7 @@
 
 void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Main Menu", nk_rect(50, 50, 120, 200),
+	if (nk_begin_titled(platform->ctx, name, "Main Menu", nk_rect(50, 50, 130, 250),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
 		NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -22,6 +22,12 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		if (nk_button_label(platform->ctx, "Logistics"))
 		{
 			addNewPopupWindow(platform->first_window, LOGISTICS_MANAGER_LIST, current_app_state);
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Quit & Save"))
+		{
+			platform->continue_running = 0;
 		}
 	}
 	nk_end(platform->ctx);

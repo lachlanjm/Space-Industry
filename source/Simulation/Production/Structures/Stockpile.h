@@ -21,6 +21,8 @@ typedef struct Stockpile
 
 Stockpile* newStockpile(const Product product, const QUANTITY_INT quantity);
 void assignStockpileValues(Stockpile* stockpile, const Product product, const QUANTITY_INT quantity);
+void assignLoadIdStockpile(Stockpile* obj, const int id);
+
 void setDiffProduct(Stockpile* stockpile, const Product product);
 void addQuantity(Stockpile* stockpile, const QUANTITY_INT quantity);
 uint_fast8_t addQuantityCheck(Stockpile* stockpile, const QUANTITY_INT quantity);

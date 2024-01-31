@@ -16,6 +16,15 @@ void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location
 	vehicle->id = id_next++;
 }
 
+void assignLoadIdVehicle(Vehicle* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 /*
 TODO: MUST WORK AROUND LEFT-OVER QUANTITY
 */

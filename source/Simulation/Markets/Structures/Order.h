@@ -25,7 +25,7 @@ typedef struct OrderDef {
 Order* newOrder(const Factory* offering_factory, const QUANTITY_INT offer_num, const uint_fast16_t price);
 void assignOrderValues(Order* order, const Factory* offering_factory, const QUANTITY_INT offer_num, 
 	const uint_fast16_t price, const Order* prev_order, const Order* left_order, const Order* right_order);
-
+void assignLoadIdOrder(Order* obj, const int id);
 
 // DONT CLEAN CONSTITUENT
 void cleanOrder(Order* order);

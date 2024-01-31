@@ -36,7 +36,8 @@ const static char* __product_names_arr[] =
 	"Asphalt", 
 	"Rock", 
 	"Crushed Rock", 
-	"Lime"
+	"Lime", 
+	"Nitrogen Dioxide"
 };
 const char* getNameProduct(const Product product) {
 	return __product_names_arr[product];
@@ -78,7 +79,8 @@ const static char* __product_states_arr[] =
 	"Solid", 
 	"Solid", 
 	"Solid", 
-	"Solid"
+	"Solid", 
+	"Gas"
 };
 const char* getState(const Product product) {
 	return __product_states_arr[product];
@@ -120,7 +122,8 @@ const static char* __product_short_arr[] =
 	"Asph", 
 	"Rock", 
 	"Crush", 
-	"Lime"
+	"Lime", 
+	"NO2"
 };
 const char* getShort(const Product product) {
 	return __product_short_arr[product];
@@ -162,7 +165,8 @@ const static char* __product_category_arr[] =
 	"Intermediate", 
 	"Raw", 
 	"Refined", 
-	"Raw"
+	"Raw", 
+	"Molecule"
 };
 const char* getCategory(const Product product) {
 	return __product_category_arr[product];
@@ -187,6 +191,7 @@ const static uint_fast16_t __product_greenhouse_arr[] =
 	+0, 
 	+11, 
 	+11, 
+	+0, 
 	+0, 
 	+0, 
 	+0, 
@@ -233,6 +238,7 @@ const static float __product_acididty_arr[] =
 	0.0f, 
 	0.0f, 
 	10.0f, 
+	0.0f, 
 	0.0f, 
 	0.0f, 
 	0.0f, 

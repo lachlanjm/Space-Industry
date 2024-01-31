@@ -52,6 +52,15 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
 }
 
+void assignLoadIdFactory(Factory* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product)
 {
 	for (int i = 0; i < factory->stockpiles_in_num; i++)

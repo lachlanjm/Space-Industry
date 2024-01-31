@@ -30,6 +30,7 @@ typedef struct LogisticsContract
 
 LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity);
 void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity);
+void assignLoadIdLogisticsContract(LogisticsContract* obj, const int id);
 
 int processTickLogisticsContract(LogisticsContract* logisticsContract);
 void cleanContract(LogisticsContract* logisticsContract);

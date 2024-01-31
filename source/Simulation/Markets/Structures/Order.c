@@ -23,6 +23,15 @@ void assignOrderValues(Order* order, const Factory* offering_factory, const QUAN
 	order->id = id_next++;
 }
 
+void assignLoadIdOrder(Order* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 // DONT CLEAN CONSTITUENT
 void cleanOrder(Order* order)
 {

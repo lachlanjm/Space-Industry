@@ -19,6 +19,16 @@ void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, cons
 	logisticsContract->id = id_next++;
 }
 
+void assignLoadIdLogisticsContract(LogisticsContract* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
+
 /*
 TODO: ACCOUNT FOR END FACTORY diff END LOCATION
 */

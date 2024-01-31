@@ -45,6 +45,7 @@ typedef struct AppPlatform AppPlatform;
 struct AppPlatform {
 	int width;
 	int height;
+	uint8_t continue_running;
 	struct nk_context *ctx;
 	struct nk_colorf bg;
 	PopupWindow* first_window;

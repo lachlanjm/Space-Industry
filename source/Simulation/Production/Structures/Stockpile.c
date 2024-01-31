@@ -19,6 +19,15 @@ void assignStockpileValues(Stockpile* stockpile, const Product product, const QU
 	stockpile->id = id_next++;
 }
 
+void assignLoadIdStockpile(Stockpile* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 void setDiffProduct(Stockpile* stockpile, const Product product)
 {
 	if (stockpile->quantity == 0) {

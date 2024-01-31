@@ -161,6 +161,15 @@ void loadFactoryManagerAssignOrders(FactoryManager* factoryManager)
 	}
 }
 
+void assignLoadIdFactoryManager(FactoryManager* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 void processTickFactoryManager(FactoryManager* factoryManager)
 {
 	updateOfferedPrices(factoryManager);

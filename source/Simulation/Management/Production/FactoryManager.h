@@ -29,6 +29,7 @@ void assignFactoryManagerValues(FactoryManager* factoryManager, const Production
 
 void updateOfferedPrices(FactoryManager* factoryManager);
 void loadFactoryManagerAssignOrders(FactoryManager* factoryManager);
+void assignLoadIdFactoryManager(FactoryManager* obj, const int id);
 
 void processTickFactoryManager(FactoryManager* factoryManager);
 
