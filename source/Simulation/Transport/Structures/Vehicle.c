@@ -54,7 +54,10 @@ void stepToNextLocation(Vehicle* vehicle)
 		moveVehicleToNextLoc(vehicle);
 	}
 
-	vehicle->distance_travelled = VEHICLE_SPEED - dist_to_travel;
+	if (vehicle->current_location != vehicle->end_location && dist_to_travel > 0)
+	{
+		vehicle->distance_travelled += dist_to_travel;
+	}
 }
 
 uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)

@@ -128,7 +128,6 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 	{
 		if (logisticsManager->vehicles[i].end_location == -1)
 		{
-			printf("\t\t\tAssiging new vehicle\n");
 			assignNewLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
 		}
 	}
@@ -142,7 +141,6 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 	int product_max = -1;
 	int eff_max = 0;
 
-	printf("\t\t\t\tChecking efficient route\n");
 	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
 	{
 		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
@@ -162,7 +160,6 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 
 	if (from_max == -1)
 	{
-		printf("\t\t\t\tNo new valid route\n");
 		return;
 	}
 
@@ -170,7 +167,6 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 	Factory* selling_factory = getProductMarketAtLocation(from_max, product_max)->lowest_sell_order->offering_factory;
 	Factory* buying_factory = getProductMarketAtLocation(to_max, product_max)->highest_buy_order->offering_factory;
 
-	printf("\t\t\t\tChecking quantity\n");
 	QUANTITY_INT quantity = match_orders(
 		getProductMarketAtLocation(from_max, product_max), 
 		getProductMarketAtLocation(from_max, product_max)->lowest_sell_order,
@@ -178,7 +174,6 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 		getProductMarketAtLocation(to_max, product_max)->highest_buy_order
 	);
 
-	printf("\t\t\t\tCreating contract: %p:%p:%d:%u:%u:%u\n", logisticsManager, vehicle, product_max, quantity, from_max, to_max);
 	addNewLogisticsContract(
 		logisticsManager,
 		vehicle,
@@ -188,19 +183,15 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 		quantity
 	);
 
-	printf("\t\t\t\tUpdating Eff. Map\n");
 	update_dist_to_price_eff_product_filtered(product_max);
 }
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 {
 	// Search and add contracts
-	printf("\t\tUpdating Dist Price Eff.\n");
 	update_dist_to_price_eff();
-	printf("\t\tAssigning free vehicles\n");
 	assignFreeVehicles(logisticsManager);
 
-	printf("\t\tTicking Contracts - %d\n", logisticsManager->contracts_num);
 	// Tick contracts
 	for (int i = 0; i < logisticsManager->contracts_num; i++)
 	{

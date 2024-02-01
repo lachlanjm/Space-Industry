@@ -97,7 +97,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 			if (curr_seconds - prev_seconds >= secs_btw_proc)
 			{
 				processTickAppState(platform->current_app_state);
-				curr_seconds = prev_seconds;
+				time(&prev_seconds);
 			}
 		}
 

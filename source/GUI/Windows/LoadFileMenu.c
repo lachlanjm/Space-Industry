@@ -5,7 +5,7 @@ static char file_names[BUF_SIZE][BUF_SIZE];
 static int active = -1;
 void drawLoadFileMenu(AppPlatform* platform, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Load File", nk_rect(50, 50, 200, 300),
+	if (nk_begin_titled(platform->ctx, name, "Load File", nk_rect(50, 50, 300, 500),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
 		NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
