@@ -85,8 +85,22 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 
 	platform->flags = AP_FLAG_LOAD_FILE;
 
+	int secs_btw_proc = 2;
+	time_t prev_seconds = NULL; 
+	time_t curr_seconds = NULL;
+	time(&prev_seconds); 
 	while (!glfwWindowShouldClose(win) && !(platform->flags & AP_FLAG_CLOSE))
 	{
+		if (platform->flags & AP_FLAG_RUN_SIMULATION)
+		{
+			time(&curr_seconds);
+			if (curr_seconds - prev_seconds >= secs_btw_proc)
+			{
+				processTickAppState(platform->current_app_state);
+				curr_seconds = prev_seconds;
+			}
+		}
+
 		/* Input */
 		glfwPollEvents();
 		nk_glfw3_new_frame(&glfw);
@@ -140,6 +154,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 
 void clearPopupWindows(AppPlatform* platform)
 {
+	if (platform == NULL) return;
 	PopupWindow* iter = platform->first_window;
 	if (iter != NULL)
 	{
@@ -157,6 +172,7 @@ void resetPlatform(AppPlatform* platform)
 	clearPopupWindows(platform);
 	platform->first_window = calloc(1, sizeof(PopupWindow));
 	assignPopupWindowValues(platform->first_window, MAIN_MENU, platform->current_app_state);
+	addNewPopupWindow(platform->first_window, SIMULATION_CONTROL_MENU, NULL);
 }
 
 int closeApp(AppState* appState)

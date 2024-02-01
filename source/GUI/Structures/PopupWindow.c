@@ -110,6 +110,10 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 		drawProductMarketMenu(platform, window->coreData.productMarket, window->name);
 		break;
 
+	case SIMULATION_CONTROL_MENU:
+		drawSimulationControlMenu(platform, window->name);
+		break;
+
 	case STOCKPILE_MENU:
 		drawStockpileMenu(platform, window->coreData.stockpile, window->name);
 		break;

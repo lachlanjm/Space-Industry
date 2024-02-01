@@ -282,19 +282,19 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 	switch (current_obj_type)
 	{
 		case APP_STATE_SAVE:
-			if (strcmp(new_data_point, "logistics_managers_num") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_NUM) == 0)
 			{
 				int num = atoi(attr_value);
 				((AppState*)current_obj_ptr->data)->logistics_managers_num = num;
 				((AppState*)current_obj_ptr->data)->logistics_managers_next_process_tick_index = 0;
 				((AppState*)current_obj_ptr->data)->logistics_managers = (LogisticsManager*) calloc(num, sizeof(LogisticsManager));
 			}
-			else if (strcmp(new_data_point, "factory_managers_num") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_AS_FAC_MAN_NUM) == 0)
 			{
 				((AppState*)current_obj_ptr->data)->factory_managers_num = atoi(attr_value);
 				((AppState*)current_obj_ptr->data)->factory_managers = (FactoryManager*) calloc(((AppState*)current_obj_ptr->data)->factory_managers_num, sizeof(FactoryManager));
 			}
-			else if (strcmp(new_data_point, "logistics_managers") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "logistics_managers"))
 				{
@@ -306,7 +306,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 
 				current_index++;
 			}
-			else if (strcmp(new_data_point, "factory_managers") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_AS_FAC_MAN_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "factory_managers"))
 				{
@@ -320,7 +320,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			break;
 		case FACTORY_MANAGER_SAVE:
-			if (strcmp(new_data_point, "controlled_factory") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_FM_CON_FAC_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "controlled_factory"))
 				{
@@ -334,11 +334,11 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			break;
 		case FACTORY_SAVE:
-			if (strcmp(new_data_point, "productionRecipe") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_FAC_PRO_REC_ID) == 0)
 			{
 				loadFactoryConstructor(((Factory*)current_obj_ptr->data), atoi(attr_value));
 			}
-			else if (strcmp(new_data_point, "stockpiles_in") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_IN_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "stockpiles_in"))
 				{
@@ -353,7 +353,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				addNewStructIdPtr(STOCKPILE_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->stockpiles_in[current_index]);
 
 			}
-			else if (strcmp(new_data_point, "stockpiles_out") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_OUT_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "stockpiles_out"))
 				{
@@ -367,19 +367,19 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 
 				addNewStructIdPtr(STOCKPILE_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->stockpiles_out[current_index]);
 			}
-			else if (strcmp(new_data_point, "orders_in") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_ORD_IN_ID) == 0)
 			{
 				addNewStructIdPtr(ORDER_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->orders_in[current_index]);
 			}
-			else if (strcmp(new_data_point, "orders_out") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_ORD_OUT_ID) == 0)
 			{
 				addNewStructIdPtr(ORDER_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->orders_out[current_index]);
 			}
-			else if (strcmp(new_data_point, "ordered_in") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_ORD_NUM_IN_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->ordered_in[current_index] = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "ordered_out") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_ORD_NUM_OUT_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->ordered_out[current_index] = atoi(attr_value);
 			}
@@ -387,15 +387,15 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case LOGISTICS_CONTRACT_SAVE:
 			break;
 		case LOGISTICS_MANAGER_SAVE:
-			if (strcmp(new_data_point, "vehicles_num") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_VEH_NUM) == 0)
 			{
 				loadLogisticsManagerConstructorVehicles(((LogisticsManager*)current_obj_ptr->data), atoi(attr_value));
 			}
-			else if (strcmp(new_data_point, "contracts_num") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_CON_NUM) == 0)
 			{
 				loadLogisticsManagerConstructorLogisticsContract(((LogisticsManager*)current_obj_ptr->data), atoi(attr_value));
 			}
-			else if (strcmp(new_data_point, "vehicles") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_VEH_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "vehicles"))
 				{
@@ -407,7 +407,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 
 				current_index++;
 			}
-			else if (strcmp(new_data_point, "contracts") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_CON_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "contracts"))
 				{
@@ -425,7 +425,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case STOCKPILE_SAVE:
 			break;
 		case VEHICLE_SAVE:
-			if (strcmp(new_data_point, "stockpile") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_VEH_STO_ID) == 0)
 			{
 				if (strcmp(current_arr_name, "stockpile"))
 				{
@@ -508,37 +508,37 @@ static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1
 		case FACTORY_MANAGER_SAVE:
 			break;
 		case FACTORY_SAVE:
-			if (strcmp(new_data_point, "location") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_FAC_LOC_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->location = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "processing_speed") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_PRO_SPE_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
 			}
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
-			if (strcmp(new_data_point, "assigned_vehicle") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_LOG_CON_VEH_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->assigned_vehicle = (Vehicle*) getObject(VEHICLE_SAVE, extractObjectId(attr_value))->data;
 			}
-			else if (strcmp(new_data_point, "selling_factory") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_SEL_FAC_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->selling_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
 			}
-			else if (strcmp(new_data_point, "buying_factory") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_BUY_FAC_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->buying_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
 			}
-			else if (strcmp(new_data_point, "current_phase") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_CUR_PHA_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->current_phase = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "product") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_PRO_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->product = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "quantity") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_QUA_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->quantity = atoi(attr_value);
 			}
@@ -546,47 +546,47 @@ static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1
 		case LOGISTICS_MANAGER_SAVE:
 			break;
 		case ORDER_SAVE:
-			if (strcmp(new_data_point, "offering_factory") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_ORD_OFF_FAC_ID) == 0)
 			{
 				((Order*)current_obj_ptr->data)->offering_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
 			}
-			else if (strcmp(new_data_point, "offer_num") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_ORD_OFF_NUM_ID) == 0)
 			{
 				((Order*)current_obj_ptr->data)->offer_num = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "price") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_ORD_PRI_ID) == 0)
 			{
 				((Order*)current_obj_ptr->data)->price = atoi(attr_value);
 			}
 			break;
 		case STOCKPILE_SAVE:
-			if (strcmp(new_data_point, "product_type") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_STO_PRO_ID) == 0)
 			{
 				((Stockpile*)current_obj_ptr->data)->product_type = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "quantity") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_STO_QUA_ID) == 0)
 			{
 				((Stockpile*)current_obj_ptr->data)->quantity = atoi(attr_value);
 			}
 			break;
 		case VEHICLE_SAVE:
-			if (strcmp(new_data_point, "current_location") == 0)
+			if (strcmp(new_data_point, SAVE_FILE_VEH_CUR_LOC_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->current_location = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "end_location") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_VEH_END_LOC_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->end_location = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "distance_travelled") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_VEH_DIS_TRA_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->distance_travelled = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, "end_factory") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_VEH_END_FAC_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->end_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
 			}
-			else if (strcmp(new_data_point, "max_capacity") == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_VEH_MAX_CAP_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->max_capacity = atoi(attr_value);
 			}
