@@ -25,9 +25,21 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
-		if (nk_button_label(platform->ctx, "Quit & Save"))
+		if (nk_button_label(platform->ctx, "Load"))
 		{
-			platform->continue_running = 0;
+			platform->flags |= AP_FLAG_LOAD_FILE;
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Save"))
+		{
+			platform->flags |= AP_FLAG_SAVE_STATE;
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Quit"))
+		{
+			platform->flags |= AP_FLAG_CLOSE;
 		}
 	}
 	nk_end(platform->ctx);

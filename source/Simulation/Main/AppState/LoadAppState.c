@@ -632,7 +632,7 @@ static inline void processDataPointForValueAssignment(char new_data_point[BUF_SI
 	}
 }
 
-static inline void assignAllNeedeIds()
+static inline void assignAllNeededIds()
 {
 	struct LoadStateIdList* current_obj_ptr;
 	int id;
@@ -729,6 +729,12 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	// File Writing
 	FILE *fptr;
 	fptr = fopen(save_file_path, "r");
+
+	if (!fptr)
+	{
+		printf("\nLoad file did not open\n");
+		return NULL;
+	}
 	
 	// Create and index structs and arrays
 	while (getNextDataPoint(fptr, new_data_point))
@@ -737,7 +743,7 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 		if (current_obj_ptr == NULL)
 		{
 			printf("\n\nError during loading: NULL obect during creation and index phase\n");
-			exit(1);
+			return NULL;
 		}
 	}
 	rewind(fptr);
@@ -749,9 +755,10 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 		if (current_obj_ptr == NULL)
 		{
 			printf("\n\nError during loading: NULL obect during value assignment phase\n");
-			exit(1);
+			return NULL;
 		}
 	}
+	fclose(fptr);
 
 	// Assign orders to PMs
 	for (int i = 0; i < ((AppState*) __app_state_arr->data)->factory_managers_num; i++)
@@ -759,10 +766,10 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 		loadFactoryManagerAssignOrders(&((AppState*) __app_state_arr->data)->factory_managers[i]);
 	}
 
-	assignAllNeedeIds();
+	assignAllNeededIds();
+	AppState* result = (AppState*) __app_state_arr->data;// First element (Should be only)
 	cleanAllLoadStateIdLists();
 
-	fclose(fptr);
-	return (AppState*) __app_state_arr->data; // First element (Should be only)
+	return result; // First element (Should be only)
 }
 

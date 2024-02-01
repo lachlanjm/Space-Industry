@@ -18,6 +18,6 @@ struct SaveStateQueue {
 	void* data;
 };
 
-int saveAppState(AppState* appState, const char* save_file_name);
+int saveAppState(AppState* appState, const char* app_dir_path, const char* save_file_name);
 
 #endif

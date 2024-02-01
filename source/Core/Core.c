@@ -18,9 +18,9 @@ int main(int argc, char* argv[])
 
 	static GLFWwindow *win;
 	AppPlatform* platform = calloc(1, sizeof(AppPlatform));
-	AppState* current_app_state = loadAppState(argv[1], "my_first_save");
+	platform->app_dir_path = argv[1];
 
-	runAppPlatform(platform, win, current_app_state);
+	runAppPlatform(platform, win);
 
 	/*
 	for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
@@ -31,19 +31,20 @@ int main(int argc, char* argv[])
 	printf("Completed Iterations\n");
 	// */
 
-	closeApp(current_app_state);
+	saveAppState(platform->current_app_state, platform->app_dir_path, "auto_close_save");
+	closeApp(platform->current_app_state);
 	cleanPlatform(platform);
 	printf("Cleaned platform\n\n");
 	return 0;
 }
 
-void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_app_state)
+void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 {
 	struct nk_glfw glfw = {0};
 	platform->width = 0;
 	platform->height = 0;
-	platform->first_window = calloc(1, sizeof(PopupWindow));
-	assignPopupWindowValues(platform->first_window, MAIN_MENU, current_app_state);
+	platform->first_window = NULL;
+	platform->current_app_state = NULL;
 
 	/* GLFW */
 	glfwSetErrorCallback(error_callback);
@@ -81,13 +82,10 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
 	platform->bg.g = 0.18f;
 	platform->bg.b = 0.24f;
 	platform->bg.a = 1.0f;
-	platform->continue_running = 1;
 
-	// Window not closed at start
-	drawPopupWindow(platform->first_window, platform);
-	nk_clear(platform->ctx);
+	platform->flags = AP_FLAG_LOAD_FILE;
 
-	while (!glfwWindowShouldClose(win) && platform->continue_running)
+	while (!glfwWindowShouldClose(win) && !(platform->flags & AP_FLAG_CLOSE))
 	{
 		/* Input */
 		glfwPollEvents();
@@ -95,20 +93,31 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
 
 		/* GUI */
 		// overview(platform->ctx); !!!!!!!!!!!!!!!!!!!!!!! FOR DEMO ONLY
-		PopupWindow* window = platform->first_window;
-		while(window != NULL)
+		if (platform->flags & AP_FLAG_SAVE_STATE)
 		{
-			if (!nk_window_is_hidden(platform->ctx, window->name) || !nk_window_find(platform->ctx, window->name))
+			drawSaveFileMenu(platform, "Save File Window");
+		}
+		else if (platform->flags & AP_FLAG_LOAD_FILE)
+		{
+			drawLoadFileMenu(platform, "Load File Window");
+		}
+		else
+		{
+			PopupWindow* window = platform->first_window;
+			while(window != NULL)
 			{
-				drawPopupWindow(window, platform);
+				if (!nk_window_is_hidden(platform->ctx, window->name) || !nk_window_find(platform->ctx, window->name))
+				{
+					drawPopupWindow(window, platform);
+				}
+				else
+				{
+					window = window->prev;
+					removePopupWindow(window->next);
+				}
+				
+				window = window->next;
 			}
-			else
-			{
-				window = window->prev;
-				removePopupWindow(window->next);
-			}
-			
-			window = window->next;
 		}
 
 		/* Draw */
@@ -129,9 +138,29 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_ap
 	glfwTerminate();
 }
 
+void clearPopupWindows(AppPlatform* platform)
+{
+	PopupWindow* iter = platform->first_window;
+	if (iter != NULL)
+	{
+		while (iter->next != NULL)
+		{
+			iter = iter->next;
+			free(iter->prev);
+		}
+		free(iter);
+	}
+}
+
+void resetPlatform(AppPlatform* platform)
+{
+	clearPopupWindows(platform);
+	platform->first_window = calloc(1, sizeof(PopupWindow));
+	assignPopupWindowValues(platform->first_window, MAIN_MENU, platform->current_app_state);
+}
+
 int closeApp(AppState* appState)
 {
-	saveAppState(appState, "my_first_save");
 	printf("Saved App State\n");
 	cleanAppState(appState);
 	free(appState);
@@ -141,15 +170,6 @@ int closeApp(AppState* appState)
 
 void cleanPlatform(AppPlatform* platform)
 {
-	PopupWindow* iter = platform->first_window;
-	while (iter->next != NULL)
-	{
-		iter = iter->next;
-		free(iter->prev);
-	}
-	if (iter != NULL)
-	{
-		free(iter);
-	}
+	clearPopupWindows(platform);
 	free(platform);
 }

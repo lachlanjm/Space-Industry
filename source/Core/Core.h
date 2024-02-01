@@ -38,6 +38,8 @@ typedef struct AppPlatform AppPlatform;
 
 #include "..\Simulation\Main\AppState\AppState.h"
 #include "..\GUI\Structures\PopupWindow.h"
+#include "..\GUI\Windows\LoadFileMenu.h"
+#include "..\GUI\Windows\SaveFileMenu.h"
 
 #define APP_WINDOW_STR "Space Industry"
 #define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
@@ -45,15 +47,26 @@ typedef struct AppPlatform AppPlatform;
 struct AppPlatform {
 	int width;
 	int height;
-	uint8_t continue_running;
-	struct nk_context *ctx;
+	uint8_t flags;
 	struct nk_colorf bg;
+	struct nk_context *ctx;
+	char* app_dir_path;
 	PopupWindow* first_window;
+	AppState* current_app_state;
+};
+
+enum AppPlatformFlags {
+	AP_FLAG_LOAD_FILE = 1,
+	AP_FLAG_SAVE_STATE = 2,
+	AP_FLAG_RUN_SIMULATION = 4,
+	AP_FLAG_CLOSE = 8
 };
 
 int main(int argc, char* argv[]);
 
-void runAppPlatform(AppPlatform* platform, GLFWwindow *win, AppState* current_app_state);
+void runAppPlatform(AppPlatform* platform, GLFWwindow *win);
+void clearPopupWindows(AppPlatform* platform);
+void resetPlatform(AppPlatform* platform);
 int closeApp(AppState* appState);
 void cleanPlatform(AppPlatform* platform);
 

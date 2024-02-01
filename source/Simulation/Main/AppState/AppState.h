@@ -20,8 +20,6 @@ typedef struct AppState {
 
 	uint_fast16_t factory_managers_num;
 	FactoryManager* factory_managers;
-
-	char* app_dir_path;
 } AppState;
 
 void processTickAppState(AppState* appState);

@@ -357,11 +357,11 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 	}
 }
 
-int saveAppState(AppState* appState, const char* save_file_name)
+int saveAppState(AppState* appState, const char* app_dir_path, const char* save_file_name)
 {
 	// Save app state
 	char save_file_path[BUF_SIZE];
-	snprintf(save_file_path, BUF_SIZE, "%s\\saves\\%s.txt", appState->app_dir_path, save_file_name);
+	snprintf(save_file_path, BUF_SIZE, "%s\\saves\\%s.txt", app_dir_path, save_file_name);
 	// TODO !!!!!!!!!!!!!!! ADD SAVE FILE COLLISION HANDLING!!!
 
 	// Queue creation
@@ -371,6 +371,12 @@ int saveAppState(AppState* appState, const char* save_file_name)
 	// File Writing
 	FILE *fptr;
 	fptr = fopen(save_file_path, "w");
+
+	if (!fptr)
+	{
+		printf("Save file did not load");
+		return 1;
+	}
 	
 	while (current_item != NULL)
 	{

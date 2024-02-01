@@ -62,6 +62,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\Vehicle.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\PopupWindow.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryList.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\LoadFileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocationGroup.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocationMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LogisticsContractMenu.c.o
@@ -71,6 +72,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\MainMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\OrderMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarketMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\SaveFileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\VehicleMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\DirectoryReading.c.o
@@ -151,6 +153,7 @@ build_no_log:
 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\FactoryMenu.h -o $(BUILD_OBJ_PATH)\FactoryMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\FactoryList.h -o $(BUILD_OBJ_PATH)\FactoryList.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\LoadFileMenu.h -o $(BUILD_OBJ_PATH)\LoadFileMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\LocationGroup.h -o $(BUILD_OBJ_PATH)\LocationGroup.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\LocationMenu.h -o $(BUILD_OBJ_PATH)\LocationMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\LogisticsContractMenu.h -o $(BUILD_OBJ_PATH)\LogisticsContractMenu.h.gch 
@@ -160,6 +163,7 @@ build_no_log:
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\OrderMenu.h -o $(BUILD_OBJ_PATH)\OrderMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\ProductMarketList.h -o $(BUILD_OBJ_PATH)\ProductMarketList.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\ProductMarketMenu.h -o $(BUILD_OBJ_PATH)\ProductMarketMenu.h.gch 
+	$(CC) $(CFLAGS) -c $(WIN_PATH)\SaveFileMenu.h -o $(BUILD_OBJ_PATH)\SaveFileMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\StockpileMenu.h -o $(BUILD_OBJ_PATH)\StockpileMenu.h.gch 
 	$(CC) $(CFLAGS) -c $(WIN_PATH)\VehicleMenu.h -o $(BUILD_OBJ_PATH)\VehicleMenu.h.gch 
 
@@ -196,6 +200,7 @@ build_no_log:
 
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\FactoryMenu.c -o $(BUILD_OBJ_PATH)\FactoryMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\FactoryList.c -o $(BUILD_OBJ_PATH)\FactoryList.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LoadFileMenu.c -o $(BUILD_OBJ_PATH)\LoadFileMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LocationGroup.c -o $(BUILD_OBJ_PATH)\LocationGroup.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LocationMenu.c -o $(BUILD_OBJ_PATH)\LocationMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\LogisticsContractMenu.c -o $(BUILD_OBJ_PATH)\LogisticsContractMenu.c.o
@@ -205,6 +210,7 @@ build_no_log:
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\OrderMenu.c -o $(BUILD_OBJ_PATH)\OrderMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\ProductMarketList.c -o $(BUILD_OBJ_PATH)\ProductMarketList.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\ProductMarketMenu.c -o $(BUILD_OBJ_PATH)\ProductMarketMenu.c.o
+	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\SaveFileMenu.c -o $(BUILD_OBJ_PATH)\SaveFileMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\StockpileMenu.c -o $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 	$(CC) $(CFLAGS) -I $(BUILD_OBJ_PATH) -c $(WIN_PATH)\VehicleMenu.c -o $(BUILD_OBJ_PATH)\VehicleMenu.c.o
 
