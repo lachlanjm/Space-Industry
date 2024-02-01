@@ -4,6 +4,8 @@
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Main\AppState\AppState.h"
 
+#include <string.h>
+
 void drawSaveFileMenu(AppPlatform* platform, char* name);
 
 #endif

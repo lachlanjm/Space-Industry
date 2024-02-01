@@ -720,7 +720,7 @@ static inline void cleanAllLoadStateIdLists()
 AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 {
 	char save_file_path[BUF_SIZE];
-	snprintf(save_file_path, BUF_SIZE, "%s\\saves\\%s.txt", app_dir_path, save_file_name);
+	snprintf(save_file_path, BUF_SIZE, "%s\\saves\\%s", app_dir_path, save_file_name);
 
 	char new_data_point[BUF_SIZE + 1];
 	enum AttributeTypes current_obj_type;

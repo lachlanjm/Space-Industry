@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#define BUF_SIZE 64
+
 #ifdef _WIN64  // windows platform
 	#include <windows.h>
 #else
@@ -21,7 +23,7 @@ typedef enum DirPtrStatus
 	typedef struct DirPtr
 	{
 		DirPtrStatus status;
-		char* dir_path;
+		char dir_path[BUF_SIZE];
 		HANDLE handle;
 		WIN32_FIND_DATA FindFileData;
 	} DirPtr;
@@ -29,7 +31,7 @@ typedef enum DirPtrStatus
 	typedef struct DirPtr
 	{
 		DirPtrStatus status;
-		char* dir_path;
+		char dir_path[BUF_SIZE];
 		DIR* dir_ptr_backend;
 		struct dirent *de;
 	} DirPtr;

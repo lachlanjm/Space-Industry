@@ -3,7 +3,6 @@
 DirPtr* newDirPtr()
 {
 	DirPtr* ptr = calloc(1, sizeof(DirPtr));
-	ptr->dir_path = NULL;
 	ptr->status = DIR_PTR_UNINITIALISED;
 	return ptr;
 }
@@ -21,28 +20,30 @@ int openDir(DirPtr* ptr, char* dir_path)
 	{
 		return 1;
 	}
-	ptr->dir_path = dir_path;
+	snprintf(ptr->dir_path, BUF_SIZE, "%s\\*", dir_path);
 	ptr->status = DIR_PTR_INITIALISED;
+
+	ptr->handle = FindFirstFile(ptr->dir_path, &ptr->FindFileData);
+	if (ptr->handle == INVALID_HANDLE_VALUE)
+	{
+		return 2;
+	}
+	ptr->status = DIR_PTR_OPEN;
+
 	return 0;
 }
 
 int getNextFile(DirPtr* ptr, char* file_name_buffer)
 {
-	if (ptr->status == DIR_PTR_INITIALISED)
+	if (ptr->status == DIR_PTR_OPEN)
 	{
-		ptr->handle = FindFirstFile(ptr->dir_path, &ptr->FindFileData);
-		if (ptr->handle == INVALID_HANDLE_VALUE)
-		{
-			return 2;
+		do {
+			if (FindNextFile(ptr->handle, &ptr->FindFileData) == NULL)
+			{
+				return 3;
+			}
 		}
-		ptr->status = DIR_PTR_OPEN;
-	}
-	else if (ptr->status == DIR_PTR_OPEN)
-	{
-		if (FindNextFile(ptr->handle, &ptr->FindFileData) == NULL)
-		{
-			return 3;
-		}
+		while (ptr->FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 	}
 	else
 	{
@@ -80,7 +81,7 @@ int openDir(DirPtr* ptr, char* dir_path)
 	{
 		return 2;
 	}
-	ptr->dir_path = dir_path;
+	snprintf(ptr->dir_path, BUF_SIZE, "%s", dir_path);
 	ptr->status = DIR_PTR_OPEN;
 	return 0;
 }

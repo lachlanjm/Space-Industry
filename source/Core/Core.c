@@ -92,7 +92,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 		nk_glfw3_new_frame(&glfw);
 
 		/* GUI */
-		// overview(platform->ctx); !!!!!!!!!!!!!!!!!!!!!!! FOR DEMO ONLY
+		// overview(platform->ctx); // !!!!!!!!!!!!!!!!!!!!!!! FOR DEMO ONLY
 		if (platform->flags & AP_FLAG_SAVE_STATE)
 		{
 			drawSaveFileMenu(platform, "Save File Window");
