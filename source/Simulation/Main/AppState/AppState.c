@@ -47,6 +47,7 @@ void cleanAppState(AppState* appState)
 	free(appState->local_population);
 }
 
+/*
 static void display_product_heaps()
 {
 	printf("\nPMs:\n");
@@ -117,3 +118,4 @@ static void disp_order(Order* order, int depth)
 		printf("No right order\n");
 	}
 }
+// */

@@ -88,12 +88,18 @@ def main():
 	for (file_name, file_path) in h_files:
 		line = f"{COMPILER_FLAGS} -c {file_path} -o {BUILD_OBJ_PATH}\\{file_name}.gch 2>> {BUILD_LOG_PATH}" 
 		print(line)
-		os.system(line)
+		result = os.system(line)
+		if result != 0:
+			print(f"Error [{result}] on cmd:'{line}'")
+			exit(1)
 
 	for (file_name, file_path) in c_files:
 		line = f"{COMPILER_FLAGS} -I {BUILD_OBJ_PATH} -c {file_path} -o {BUILD_OBJ_PATH}\\{file_name}.o 2>> {BUILD_LOG_PATH}"
 		print(line)
-		os.system(line)
+		result = os.system(line)
+		if result != 0:
+			print(f"Error [{result}] on cmd:'{line}'")
+			exit(1)
 
 	os.system(f"make final_compile 2>> {BUILD_LOG_PATH}")
 

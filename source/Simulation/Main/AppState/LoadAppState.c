@@ -99,14 +99,13 @@ static inline void extractAttribute(char* new_data_point, char* attribute_value_
 
 static inline void addNewStructIdPtr(const enum AttributeTypes obj_type, const int id, const void* data)
 {
-	struct LoadStateIdList* base_item = __order_arr[obj_type];
+	struct LoadStateIdList* base_item = &__object_arr[obj_type];
 
-	if (base_item == NULL)
+	if (base_item->data == NULL)
 	{
-		__order_arr[obj_type] = calloc(1, sizeof(struct LoadStateIdList));
-		__order_arr[obj_type]->data = data;
-		__order_arr[obj_type]->id = id;
-		__order_arr[obj_type]->next = NULL;
+		__object_arr[obj_type].data = data;
+		__object_arr[obj_type].id = id;
+		__object_arr[obj_type].next = NULL;
 	}
 	else
 	{
@@ -139,7 +138,7 @@ static inline struct LoadStateIdList* getItemWithId(const struct LoadStateIdList
 static inline struct LoadStateIdList* getObject(const enum AttributeTypes obj_type, const int id)
 {
 	if (obj_type < 0 || STRUCT_SAVE_NUM <= obj_type) return NULL;
-	return getItemWithId(&__order_arr[obj_type], id);
+	return getItemWithId(&__object_arr[obj_type], id);
 }
 
 static inline void getNextObject(char new_data_point[BUF_SIZE + 1], enum AttributeTypes* current_obj_type, struct LoadStateIdList** current_obj_item)
@@ -358,6 +357,9 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 			((Factory*)current_obj->data)->location = 0;
 			((Factory*)current_obj->data)->processing_speed = 0;
 			break;
+		case LOCAL_POPULATION_SAVE:
+			((LocalPopulation*)current_obj->data)->population_number = 0;
+			break;
 		case LOGISTICS_CONTRACT_SAVE:
 			((LogisticsContract*)current_obj->data)->assigned_vehicle = NULL;
 			((LogisticsContract*)current_obj->data)->selling_factory = NULL;
@@ -549,6 +551,7 @@ static inline void assignAllNeededIds()
 	for (int i = 0; i < STRUCT_SAVE_NUM; i++)
 	{
 		current_obj_ptr = &__object_arr[i];
+		if (current_obj_ptr->data == NULL) continue; // NOTHING LOADED OF THIS CATEGORY
 		id = 0;
 		switch (i)
 		{
@@ -628,11 +631,14 @@ static inline void cleanLoadStateIdList(struct LoadStateIdList* base_ptr)
 
 static inline void cleanAllLoadStateIdLists()
 {
+	struct LoadStateIdList* ptr;
 	for (int i = 0; i < STRUCT_SAVE_NUM; i++)
 	{
-		cleanLoadStateIdList(&__order_arr[i]);
+		ptr = &__object_arr[i];
+		if (ptr->next == NULL) continue;
+		cleanLoadStateIdList(ptr->next);
 	}
-	free(__order_arr);
+	free(__object_arr);
 }
 
 AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
@@ -644,7 +650,7 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	enum AttributeTypes current_obj_type;
 	struct LoadStateIdList* current_obj_ptr = NULL;
 
-	__object_arr = calloc(STRUCT_SAVE_NUM, sizeof(LoadStateIdList*));
+	__object_arr = calloc(STRUCT_SAVE_NUM, sizeof(struct LoadStateIdList));
 
 	// File Writing
 	FILE *fptr;

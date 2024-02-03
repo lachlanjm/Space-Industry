@@ -12,7 +12,7 @@ LocalPopulation* newLocalPopulation(const TransportNode location, const uint32_t
 void assignLocalPopulationValues(LocalPopulation* population, const TransportNode location, const uint32_t population_number)
 {
 	population->population_number = population_number;
-	assignFactoryValues(population->population_centre, Population_Consumption, location);
+	assignFactoryValues(&population->population_centre, Population_Consumption, location);
 
 	population->id = id_next++;
 }
