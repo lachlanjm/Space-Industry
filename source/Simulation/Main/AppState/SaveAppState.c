@@ -15,6 +15,9 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 		case FACTORY_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_ID);
 			break;
+		case LOCAL_POPULATION_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_LOCAL_POPULATION_ID);
+			break;
 		case LOGISTICS_CONTRACT_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_LOGISTICS_CONTRACT_ID);
 			break;
@@ -147,6 +150,16 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_FAC_MAN_ID, FACTORY_MANAGER_SAVE, appState->factory_managers[i].id)
 		);
 	}
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_AS_LOC_POP_NUM, appState->local_population_num)
+	);
+	for (int i = 0; i < appState->local_population_num; i++)
+	{
+		appendToQueue(LOCAL_POPULATION_SAVE, &appState->local_population[i]);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_LOC_POP_ID, LOCAL_POPULATION_SAVE, appState->local_population[i].id)
+		);
+	}
 }
 
 static inline void saveFactoryManager(FILE* fptr, FactoryManager* factoryManager)
@@ -203,6 +216,21 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_ORD_NUM_OUT_ID, factory->ordered_out[i])
 		);
 	}
+}
+
+static inline void saveLocalPopulation(FILE* fptr, LocalPopulation* population)
+{
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, LOCAL_POPULATION_SAVE, population->id));
+
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOC_POP_POP_NUM_ID, population->population_number)
+	);
+
+	appendToQueue(FACTORY_SAVE, &population->population_centre);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOC_POP_POP_CEN_ID, FACTORY_SAVE, population->population_centre.id)
+	);
 }
 
 static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logisticsContract)
@@ -329,6 +357,9 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 			break;
 		case FACTORY_SAVE:
 			saveFactory(fptr, (Factory*) item->data);
+			break;
+		case LOCAL_POPULATION_SAVE:
+			saveLocalPopulation(fptr, (LocalPopulation*) item->data);
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
 			saveLogisticsContract(fptr, (LogisticsContract*) item->data);

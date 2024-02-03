@@ -1,14 +1,7 @@
 #include "LoadAppState.h"
 
 // LOADING OBJECT REPOSITORY
-static struct LoadStateIdList* __app_state_arr = NULL;
-static struct LoadStateIdList* __factory_manager_arr = NULL;
-static struct LoadStateIdList* __factory_arr = NULL;
-static struct LoadStateIdList* __logistics_contract_arr = NULL;
-static struct LoadStateIdList* __logistics_manager_arr = NULL;
-static struct LoadStateIdList* __order_arr = NULL;
-static struct LoadStateIdList* __stockpile_arr = NULL;
-static struct LoadStateIdList* __vehicle_arr = NULL;
+static struct LoadStateIdList* __object_arr = NULL;
 
 static inline int getNextDataPoint(FILE *fptr, char new_data_point[BUF_SIZE + 1])
 {
@@ -106,110 +99,27 @@ static inline void extractAttribute(char* new_data_point, char* attribute_value_
 
 static inline void addNewStructIdPtr(const enum AttributeTypes obj_type, const int id, const void* data)
 {
-	struct LoadStateIdList* base_item;
-	switch (obj_type)
-	{
-		case APP_STATE_SAVE:
-			if (__app_state_arr)
-			{
-				base_item = __app_state_arr;
-				break;
-			}
-			__app_state_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__app_state_arr->data = data;
-			__app_state_arr->id = id;
-			__app_state_arr->next = NULL;
-			return;
-		case FACTORY_MANAGER_SAVE:
-			if (__factory_manager_arr)
-			{
-				base_item = __factory_manager_arr;
-				break;
-			}
-			__factory_manager_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__factory_manager_arr->data = data;
-			__factory_manager_arr->id = id;
-			__factory_manager_arr->next = NULL;
-			return;
-		case FACTORY_SAVE:
-			if (__factory_arr)
-			{
-				base_item = __factory_arr;
-				break;
-			}
-			__factory_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__factory_arr->data = data;
-			__factory_arr->id = id;
-			__factory_arr->next = NULL;
-			return;
-		case LOGISTICS_CONTRACT_SAVE:
-			if (__logistics_contract_arr)
-			{
-				base_item = __logistics_contract_arr;
-				break;
-			}
-			__logistics_contract_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__logistics_contract_arr->data = data;
-			__logistics_contract_arr->id = id;
-			__logistics_contract_arr->next = NULL;
-			return;
-		case LOGISTICS_MANAGER_SAVE:
-			if (__logistics_manager_arr)
-			{
-				base_item = __logistics_manager_arr;
-				break;
-			}
-			__logistics_manager_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__logistics_manager_arr->data = data;
-			__logistics_manager_arr->id = id;
-			__logistics_manager_arr->next = NULL;
-			return;
-		case ORDER_SAVE:
-			if (__order_arr)
-			{
-				base_item = __order_arr;
-				break;
-			}
-			__order_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__order_arr->data = data;
-			__order_arr->id = id;
-			__order_arr->next = NULL;
-			return;
-		case STOCKPILE_SAVE:
-			if (__stockpile_arr)
-			{
-				base_item = __stockpile_arr;
-				break;
-			}
-			__stockpile_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__stockpile_arr->data = data;
-			__stockpile_arr->id = id;
-			__stockpile_arr->next = NULL;
-			return;
-		case VEHICLE_SAVE:
-			if (__vehicle_arr)
-			{
-				base_item = __vehicle_arr;
-				break;
-			}
-			__vehicle_arr = calloc(1, sizeof(struct LoadStateIdList));
-			__vehicle_arr->data = data;
-			__vehicle_arr->id = id;
-			__vehicle_arr->next = NULL;
-			return;
-		default:
-			return; // Error
-	}
+	struct LoadStateIdList* base_item = __order_arr[obj_type];
 
-	while (base_item->next)
+	if (base_item == NULL)
 	{
-		base_item = base_item->next;
+		__order_arr[obj_type] = calloc(1, sizeof(struct LoadStateIdList));
+		__order_arr[obj_type]->data = data;
+		__order_arr[obj_type]->id = id;
+		__order_arr[obj_type]->next = NULL;
 	}
+	else
+	{
+		while (base_item->next)
+		{
+			base_item = base_item->next;
+		}
 
-	base_item->next = calloc(1, sizeof(struct LoadStateIdList));
-	base_item->next->data = data;
-	base_item->next->id = id;
-	base_item->next->next = NULL;
+		base_item->next = calloc(1, sizeof(struct LoadStateIdList));
+		base_item->next->data = data;
+		base_item->next->id = id;
+		base_item->next->next = NULL;
+	}
 }
 
 static inline struct LoadStateIdList* getItemWithId(const struct LoadStateIdList* item, const int id)
@@ -228,27 +138,8 @@ static inline struct LoadStateIdList* getItemWithId(const struct LoadStateIdList
 
 static inline struct LoadStateIdList* getObject(const enum AttributeTypes obj_type, const int id)
 {
-	switch (obj_type)
-	{
-		case APP_STATE_SAVE:
-			return getItemWithId(__app_state_arr, id);
-		case FACTORY_MANAGER_SAVE:
-			return getItemWithId(__factory_manager_arr, id);
-		case FACTORY_SAVE:
-			return getItemWithId(__factory_arr, id);
-		case LOGISTICS_CONTRACT_SAVE:
-			return getItemWithId(__logistics_contract_arr, id);
-		case LOGISTICS_MANAGER_SAVE:
-			return getItemWithId(__logistics_manager_arr, id);
-		case ORDER_SAVE:
-			return getItemWithId(__order_arr, id);
-		case STOCKPILE_SAVE:
-			return getItemWithId(__stockpile_arr, id);
-		case VEHICLE_SAVE:
-			return getItemWithId(__vehicle_arr, id);
-		default:
-			return NULL;
-	}
+	if (obj_type < 0 || STRUCT_SAVE_NUM <= obj_type) return NULL;
+	return getItemWithId(&__order_arr[obj_type], id);
 }
 
 static inline void getNextObject(char new_data_point[BUF_SIZE + 1], enum AttributeTypes* current_obj_type, struct LoadStateIdList** current_obj_item)
@@ -296,9 +187,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "logistics_managers"))
+				if (strcmp(current_arr_name, SAVE_FILE_AS_LOG_MAN_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "logistics_managers");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_LOG_MAN_ID);
 					current_index = 0;
 				}
 				int id = extractObjectId(attr_value);
@@ -308,9 +199,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_FAC_MAN_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "factory_managers"))
+				if (strcmp(current_arr_name, SAVE_FILE_AS_FAC_MAN_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "factory_managers");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_FAC_MAN_ID);
 					current_index = 0;
 				}
 
@@ -322,9 +213,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case FACTORY_MANAGER_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_FM_CON_FAC_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "controlled_factory"))
+				if (strcmp(current_arr_name, SAVE_FILE_FM_CON_FAC_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "controlled_factory");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_FM_CON_FAC_ID);
 					current_index = 0;
 				}
 
@@ -340,9 +231,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_IN_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "stockpiles_in"))
+				if (strcmp(current_arr_name, SAVE_FILE_FAC_STO_IN_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "stockpiles_in");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_FAC_STO_IN_ID);
 					current_index = 0;
 				}
 				else
@@ -355,9 +246,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_OUT_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "stockpiles_out"))
+				if (strcmp(current_arr_name, SAVE_FILE_FAC_STO_OUT_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "stockpiles_out");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_FAC_STO_OUT_ID);
 					current_index = 0;
 				}
 				else
@@ -384,6 +275,18 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				((Factory*)current_obj_ptr->data)->ordered_out[current_index] = atoi(attr_value);
 			}
 			break;
+		case LOCAL_POPULATION_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_CEN_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_LOC_POP_POP_CEN_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_LOC_POP_POP_CEN_ID);
+					current_index = 0;
+				}
+				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((LocalPopulation*)current_obj_ptr->data)->population_centre);
+				current_index++;
+			}
+			break;
 		case LOGISTICS_CONTRACT_SAVE:
 			break;
 		case LOGISTICS_MANAGER_SAVE:
@@ -397,9 +300,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_VEH_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "vehicles"))
+				if (strcmp(current_arr_name, SAVE_FILE_LOG_MAN_VEH_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "vehicles");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_LOG_MAN_VEH_ID);
 					current_index = 0;
 				}
 
@@ -409,9 +312,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_CON_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "contracts"))
+				if (strcmp(current_arr_name, SAVE_FILE_LOG_MAN_CON_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "contracts");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_LOG_MAN_CON_ID);
 					current_index = 0;
 				}
 
@@ -427,9 +330,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case VEHICLE_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_VEH_STO_ID) == 0)
 			{
-				if (strcmp(current_arr_name, "stockpile"))
+				if (strcmp(current_arr_name, SAVE_FILE_VEH_STO_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", "stockpile");
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_VEH_STO_ID);
 					current_index = 0;
 				}
 
@@ -515,6 +418,12 @@ static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_PRO_SPE_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
+			}
+			break;
+		case LOCAL_POPULATION_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_NUM_ID) == 0)
+			{
+				((LocalPopulation*)current_obj_ptr->data)->population_number = atoi(attr_value);
 			}
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
@@ -637,60 +546,72 @@ static inline void assignAllNeededIds()
 	struct LoadStateIdList* current_obj_ptr;
 	int id;
 
-	current_obj_ptr = __factory_manager_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
+	for (int i = 0; i < STRUCT_SAVE_NUM; i++)
 	{
-		assignLoadIdFactoryManager(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
-	}
-
-	current_obj_ptr = __factory_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
-	{
-		assignLoadIdFactory(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
-	}
-
-	current_obj_ptr = __logistics_contract_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
-	{
-		assignLoadIdLogisticsContract(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
-	}
-
-	current_obj_ptr = __logistics_manager_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
-	{
-		assignLoadIdLogisticsManager(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
-	}
-
-	current_obj_ptr = __order_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
-	{
-		assignLoadIdOrder(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
-	}
-
-	current_obj_ptr = __stockpile_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
-	{
-		assignLoadIdStockpile(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
-	}
-
-	current_obj_ptr = __vehicle_arr;
-	id = 0;
-	while (current_obj_ptr != NULL)
-	{
-		assignLoadIdVehicle(current_obj_ptr->data, id++);
-		current_obj_ptr = current_obj_ptr->next;
+		current_obj_ptr = &__object_arr[i];
+		id = 0;
+		switch (i)
+		{
+			case APP_STATE_SAVE:
+				break;
+			case FACTORY_MANAGER_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdFactoryManager(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case FACTORY_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdFactory(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case LOCAL_POPULATION_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdLocalPopulation(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+			case LOGISTICS_CONTRACT_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdLogisticsContract(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case LOGISTICS_MANAGER_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdLogisticsManager(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case ORDER_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdOrder(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case STOCKPILE_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdStockpile(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case VEHICLE_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdVehicle(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			default:
+				break;
+		}
 	}
 }
 
@@ -707,14 +628,11 @@ static inline void cleanLoadStateIdList(struct LoadStateIdList* base_ptr)
 
 static inline void cleanAllLoadStateIdLists()
 {
-	cleanLoadStateIdList(__app_state_arr);
-	cleanLoadStateIdList(__factory_manager_arr);
-	cleanLoadStateIdList(__factory_arr);
-	cleanLoadStateIdList(__logistics_contract_arr);
-	cleanLoadStateIdList(__logistics_manager_arr);
-	cleanLoadStateIdList(__order_arr);
-	cleanLoadStateIdList(__stockpile_arr);
-	cleanLoadStateIdList(__vehicle_arr);
+	for (int i = 0; i < STRUCT_SAVE_NUM; i++)
+	{
+		cleanLoadStateIdList(&__order_arr[i]);
+	}
+	free(__order_arr);
 }
 
 AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
@@ -725,6 +643,8 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	char new_data_point[BUF_SIZE + 1];
 	enum AttributeTypes current_obj_type;
 	struct LoadStateIdList* current_obj_ptr = NULL;
+
+	__object_arr = calloc(STRUCT_SAVE_NUM, sizeof(LoadStateIdList*));
 
 	// File Writing
 	FILE *fptr;
@@ -761,13 +681,13 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	fclose(fptr);
 
 	// Assign orders to PMs
-	for (int i = 0; i < ((AppState*) __app_state_arr->data)->factory_managers_num; i++)
+	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers_num; i++)
 	{
-		loadFactoryManagerAssignOrders(&((AppState*) __app_state_arr->data)->factory_managers[i]);
+		loadFactoryManagerAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers[i]);
 	}
 
 	assignAllNeededIds();
-	AppState* result = (AppState*) __app_state_arr->data;// First element (Should be only)
+	AppState* result = (AppState*) __object_arr[APP_STATE_SAVE].data;// First element (Should be only)
 	cleanAllLoadStateIdLists();
 
 	return result; // First element (Should be only)

@@ -1,45 +1,45 @@
-.DEFAULT_GOAL = auto_build
+.DEFAULT_GOAL = build
 
 CC := gcc
 APP_DIR := app
 BUILD_DIR := build
 SRC_DIR := source
 
-SAVE_DIR := saves
-START_DIR := starts
+# SAVE_DIR := saves
+# START_DIR := starts
 BUILD_OBJ_DIR := Objects
-CORE_DIR := Core
-SIM_DIR := Simulation
-_ENV_DIR := Environment
+# CORE_DIR := Core
+# SIM_DIR := Simulation
+# _ENV_DIR := Environment
 GUI_DIR := GUI
-HELP_DIR := Helpers
-MAIN_DIR := Main
-MAN_DIR := Management
-MAR_DIR := Markets
-PRO_DIR := Production
-TRA_DIR := Transport
-WIN_DIR := Windows
+# HELP_DIR := Helpers
+# MAIN_DIR := Main
+# MAN_DIR := Management
+# MAR_DIR := Markets
+# PRO_DIR := Production
+# TRA_DIR := Transport
+# WIN_DIR := Windows
 
 APP_PATH := .\$(APP_DIR)
-SAVE_PATH := $(APP_PATH)\$(SAVE_DIR)
-START_PATH := $(APP_PATH)\$(START_DIR)
+# SAVE_PATH := $(APP_PATH)\$(SAVE_DIR)
+# START_PATH := $(APP_PATH)\$(START_DIR)
 
 BUILD_PATH := .\$(BUILD_DIR)
 BUILD_OBJ_PATH := $(BUILD_PATH)\$(BUILD_OBJ_DIR)
 
 SRC_PATH := .\$(SRC_DIR)
-CORE_PATH := $(SRC_PATH)\$(CORE_DIR)
+# CORE_PATH := $(SRC_PATH)\$(CORE_DIR)
 GUI_PATH := $(SRC_PATH)\$(GUI_DIR)
-HELP_PATH := $(SRC_PATH)\$(HELP_DIR)
-SIM_PATH := $(SRC_PATH)\$(SIM_DIR)
-
-_ENV_PATH := $(SIM_PATH)\$(_ENV_DIR)
-MAIN_PATH := $(SIM_PATH)\$(MAIN_DIR)
-MAN_PATH := $(SIM_PATH)\$(MAN_DIR)
-MAR_PATH := $(SIM_PATH)\$(MAR_DIR)
-PRO_PATH := $(SIM_PATH)\$(PRO_DIR)
-TRA_PATH := $(SIM_PATH)\$(TRA_DIR)
-WIN_PATH := $(GUI_PATH)\$(WIN_DIR)
+# HELP_PATH := $(SRC_PATH)\$(HELP_DIR)
+# SIM_PATH := $(SRC_PATH)\$(SIM_DIR)
+# 
+# _ENV_PATH := $(SIM_PATH)\$(_ENV_DIR)
+# MAIN_PATH := $(SIM_PATH)\$(MAIN_DIR)
+# MAN_PATH := $(SIM_PATH)\$(MAN_DIR)
+# MAR_PATH := $(SIM_PATH)\$(MAR_DIR)
+# PRO_PATH := $(SIM_PATH)\$(PRO_DIR)
+# TRA_PATH := $(SIM_PATH)\$(TRA_DIR)
+# WIN_PATH := $(GUI_PATH)\$(WIN_DIR)
 
 OBJ_FILES := $(BUILD_OBJ_PATH)\TransportConnectionType.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\TransportNode.c.o
@@ -54,6 +54,8 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\LogisticsManager.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryManager.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Order.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\ProductMarket.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\Government.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\LocalPopulation.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Product.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\ProductionRecipe.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Factory.c.o

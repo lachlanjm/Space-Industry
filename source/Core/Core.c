@@ -85,7 +85,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 
 	platform->flags = AP_FLAG_LOAD_FILE;
 
-	int secs_btw_proc = 2;
+	int secs_btw_proc = 1;
 	time_t prev_seconds = NULL; 
 	time_t curr_seconds = NULL;
 	time(&prev_seconds); 

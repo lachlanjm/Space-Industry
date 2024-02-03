@@ -4,7 +4,6 @@ void processTickAppState(AppState* appState)
 {
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
-		printf("\tFM - %d\n", i);
 		processTickFactoryManager(&appState->factory_managers[i]);
 	}
 	printf("\tCompleted FMs\n");
@@ -16,12 +15,15 @@ void processTickAppState(AppState* appState)
 
 	for (int i = 0; i < appState->logistics_managers_num; i++)
 	{
-		printf("\tLM - %d\n", i);
 		processTickLogisticsManagerVehicles(&appState->logistics_managers[i]);
 	}
 	printf("\tCompleted LMs\n");
 
-	//display_product_heaps();
+	for (int i = 0; i < appState->local_population_num; i++)
+	{
+		processTickLocalPopulation(&appState->local_population[i]);
+	}
+	printf("\tCompleted LPs\n");
 }
 
 void cleanAppState(AppState* appState)
@@ -37,9 +39,15 @@ void cleanAppState(AppState* appState)
 		cleanLogisticsManager(&appState->logistics_managers[i]);
 	}
 	free(appState->logistics_managers);
+
+	for (int i = 0; i < appState->local_population_num; i++)
+	{
+		cleanLocalPopulation(&appState->local_population[i]);
+	}
+	free(appState->local_population);
 }
 
-void display_product_heaps()
+static void display_product_heaps()
 {
 	printf("\nPMs:\n");
 	//for (int loc = 0; loc < TRANSPORT_NODE_COUNT; loc++)
@@ -53,7 +61,7 @@ void display_product_heaps()
 	}
 }
 
-void disp_heap(ProductMarket* market)
+static void disp_heap(ProductMarket* market)
 {
 	printf("Highest Buy Order:\n");
 	if (market->highest_buy_order != NULL)
@@ -76,7 +84,7 @@ void disp_heap(ProductMarket* market)
 	}
 }
 
-void disp_order(Order* order, int depth)
+static void disp_order(Order* order, int depth)
 {
 	for (int i = 0; i < depth; i++)
 	{

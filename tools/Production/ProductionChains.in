@@ -234,3 +234,10 @@ Combustion Diesel
     24 x Carbon Dioxide
     24 x Water
 
+Population Consumption
+	Energy: -10
+	Input:
+	2 x Water
+	4 x Oxygen
+	1 x Gasoline
+

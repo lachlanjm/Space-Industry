@@ -160,9 +160,7 @@ void assignLoadIdFactoryManager(FactoryManager* obj, const int id)
 void processTickFactoryManager(FactoryManager* factoryManager)
 {
 	updateOfferedPrices(factoryManager);
-	printf("\t\tUpdated Offers\n");
 	processTickFactory(&factoryManager->controlled_factory);
-	printf("\t\tProcessed Ticks\n");
 }
 
 void cleanFactoryManager(FactoryManager* factoryManager)

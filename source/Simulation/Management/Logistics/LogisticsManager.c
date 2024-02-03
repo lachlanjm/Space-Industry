@@ -206,7 +206,6 @@ void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 			logisticsManager->contracts = realloc(logisticsManager->contracts, logisticsManager->contracts_num * sizeof(LogisticsContract));
 		}
 	}
-	printf("\t\tCompleted Contracts\n");
 }
 
 void processTickLogisticsManagerVehicles(LogisticsManager* logisticsManager)

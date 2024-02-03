@@ -43,6 +43,7 @@ typedef enum ProductionRecipe
 	Combustion_Kerosene,
 	Combustion_Aviation_Fuel,
 	Combustion_Diesel,
+	Population_Consumption,
 	PRODUCTION_RECIPE_COUNT
 } ProductionRecipe;
 

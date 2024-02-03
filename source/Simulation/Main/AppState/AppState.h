@@ -5,6 +5,7 @@ typedef struct AppState AppState;
 
 #include "..\..\Management\Logistics\LogisticsManager.h"
 #include "..\..\Management\Production\FactoryManager.h"
+#include "..\..\Population\Structures\LocalPopulation.h"
 
 
 #include ".\LoadAppState.h"
@@ -20,6 +21,9 @@ typedef struct AppState {
 
 	uint_fast16_t factory_managers_num;
 	FactoryManager* factory_managers;
+
+	uint_fast16_t local_population_num;
+	LocalPopulation* local_population;
 } AppState;
 
 void processTickAppState(AppState* appState);
