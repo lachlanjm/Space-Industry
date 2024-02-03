@@ -32,6 +32,10 @@ static inline enum AttributeTypes matchIdentifierWithType(char* id)
 	{
 		return FACTORY_SAVE;
 	}
+	else if (strcmp(id, SAVE_FILE_LOCAL_POPULATION_ID) == 0)
+	{
+		return LOCAL_POPULATION_SAVE;
+	}
 	else if (strcmp(id, SAVE_FILE_LOGISTICS_CONTRACT_ID) == 0)
 	{
 		return LOGISTICS_CONTRACT_SAVE;
@@ -184,6 +188,11 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				((AppState*)current_obj_ptr->data)->factory_managers_num = atoi(attr_value);
 				((AppState*)current_obj_ptr->data)->factory_managers = (FactoryManager*) calloc(((AppState*)current_obj_ptr->data)->factory_managers_num, sizeof(FactoryManager));
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_NUM) == 0)
+			{
+				((AppState*)current_obj_ptr->data)->local_population_num = atoi(attr_value);
+				((AppState*)current_obj_ptr->data)->local_population = (LocalPopulation*) calloc(((AppState*)current_obj_ptr->data)->local_population_num, sizeof(LocalPopulation));
+			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
 				if (strcmp(current_arr_name, SAVE_FILE_AS_LOG_MAN_ID))
@@ -205,6 +214,18 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				}
 
 				addNewStructIdPtr(FACTORY_MANAGER_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->factory_managers[current_index]);
+
+				current_index++;
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_AS_LOC_POP_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_LOC_POP_ID);
+					current_index = 0;
+				}
+
+				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->local_population[current_index]);
 
 				current_index++;
 			}

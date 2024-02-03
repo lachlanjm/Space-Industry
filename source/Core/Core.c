@@ -52,19 +52,20 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 		fprintf(stdout, "[GFLW] failed to init!\n");
 		exit(1);
 	}
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		#ifdef __APPLE__
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-		#endif
-		win = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, APP_WINDOW_STR, NULL, NULL);
-		glfwMakeContextCurrent(win);
-		glfwGetWindowSize(win, &platform->width, &platform->height);
 
-		/* OpenGL */
-		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-		glewExperimental = 1;
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	#endif
+	win = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, APP_WINDOW_STR, NULL, NULL);
+	glfwMakeContextCurrent(win);
+	glfwGetWindowSize(win, &platform->width, &platform->height);
+
+	/* OpenGL */
+	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+	glewExperimental = 1;
 	if (glewInit() != GLEW_OK) {
 		fprintf(stderr, "Failed to setup GLEW\n");
 		exit(1);
@@ -146,6 +147,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 		 * rendering the UI. */
 		nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 		glfwSwapBuffers(win);
+		fflush(stdout);
 	}
 
 	nk_glfw3_shutdown(&glfw);

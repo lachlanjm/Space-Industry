@@ -25,6 +25,12 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Populations"))
+		{
+			addNewPopupWindow(platform->first_window, LOCAL_POPULATION_LIST, current_app_state);
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Load"))
 		{
 			platform->flags |= AP_FLAG_LOAD_FILE;

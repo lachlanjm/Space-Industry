@@ -101,7 +101,10 @@ def main():
 			print(f"Error [{result}] on cmd:'{line}'")
 			exit(1)
 
-	os.system(f"make final_compile 2>> {BUILD_LOG_PATH}")
+	result = os.system(f"make final_compile 2>> {BUILD_LOG_PATH}")
+	if result != 0:
+		print(f"Error [{result}] on cmd:'{line}'")
+		exit(1)
 
 	with open(MOD_TIME_INFO_FILE, "w") as f:
 		f.write("\n".join(curr_mod_times))

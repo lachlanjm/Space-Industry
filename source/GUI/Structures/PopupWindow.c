@@ -7,6 +7,7 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 	switch (window->window_type)
 	{
 	case FACTORY_LIST:
+	case LOCAL_POPULATION_LIST:
 	case LOCATION_GROUP:
 	case LOGISTICS_MANAGER_LIST:
 	case MAIN_MENU:
@@ -15,6 +16,10 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 	
 	case FACTORY_MENU:
 		window->coreData.factory = coreData;
+		break;
+
+	case LOCAL_POPULATION_MENU:
+		window->coreData.population = coreData;
 		break;
 
 	case LOCATION_MENU:
@@ -52,7 +57,7 @@ static void castCoreData(PopupWindow* window, WindowTypes window_type, void* cor
 	}
 }
 
-void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* coreData)
+void assignPopupWindowValues(PopupWindow* window, const WindowTypes window_type, void* coreData)
 {
 	static int id = 0;
 	window->window_type = window_type;
@@ -72,6 +77,14 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 	
 	case FACTORY_MENU:
 		drawFactoryMenu(platform, window->coreData.factory, window->name);
+		break;
+	
+	case LOCAL_POPULATION_LIST:
+		drawLocalPopulationList(platform, window->coreData.appState, window->name);
+		break;
+
+	case LOCAL_POPULATION_MENU:
+		drawLocalPopulationMenu(platform, window->coreData.population, window->name);
 		break;
 
 	case LOCATION_GROUP:
@@ -127,7 +140,7 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 	}
 }
 
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* coreData)
+PopupWindow* addNewPopupWindow(PopupWindow* first_window, const WindowTypes window_type, void* coreData)
 {
 	PopupWindow* new_window = calloc(1, sizeof(PopupWindow));
 

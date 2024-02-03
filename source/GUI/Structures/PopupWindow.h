@@ -5,6 +5,8 @@ typedef struct PopupWindow PopupWindow;
 
 #include "..\Windows\FactoryList.h"
 #include "..\Windows\FactoryMenu.h"
+#include "..\Windows\LocalPopulationList.h"
+#include "..\Windows\LocalPopulationMenu.h"
 #include "..\Windows\LocationGroup.h"
 #include "..\Windows\LocationMenu.h"
 #include "..\Windows\LogisticsContractMenu.h"
@@ -30,6 +32,7 @@ typedef struct PopupWindow {
 	{
 		AppState* appState;
 		Factory* factory;
+		LocalPopulation* population;
 		TransportNode location;
 		LogisticsContract* logisticsContract;
 		LogisticsManager* logisticsManager;
@@ -43,9 +46,9 @@ typedef struct PopupWindow {
 	PopupWindow* prev;
 } PopupWindow;
 
-void assignPopupWindowValues(PopupWindow* window, WindowTypes window_type, void* coreData);
+void assignPopupWindowValues(PopupWindow* window, const WindowTypes window_type, void* coreData);
 void drawPopupWindow(PopupWindow* window, AppPlatform* platform);
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, WindowTypes window_type, void* coreData);
+PopupWindow* addNewPopupWindow(PopupWindow* first_window, const WindowTypes window_type, void* coreData);
 void removePopupWindow(PopupWindow* old_window);
 
 

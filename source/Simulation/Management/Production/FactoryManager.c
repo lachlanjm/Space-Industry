@@ -54,7 +54,6 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			}
 		}
 	}
-
 	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_out_num; i++)
 	{
 		QUANTITY_INT stockpile_free_quantity = 
@@ -113,15 +112,16 @@ void loadFactoryManagerAssignOrders(FactoryManager* factoryManager)
 
 		if (STOCKPILE_FULL - ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
 		{
-			if (factoryManager->controlled_factory.orders_in[i].offer_num == 0)
-			{
-				// Add to market
-				addBuyOrder(
-					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-					&factoryManager->controlled_factory.orders_in[i]
-				);
-			}
+			// Add to market
+			addBuyOrder(
+				getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
+				&factoryManager->controlled_factory.orders_in[i]
+			);
 			factoryManager->controlled_factory.orders_in[i].offer_num = STOCKPILE_FULL - stockpile_ordered_quantity;
+		}
+		else 
+		{
+			factoryManager->controlled_factory.orders_in[i].offer_num = 0;
 		}
 	}
 
@@ -135,15 +135,16 @@ void loadFactoryManagerAssignOrders(FactoryManager* factoryManager)
 		);
 		if (ORDER_QUANTITY_MIN < stockpile_free_quantity)
 		{
-			if (factoryManager->controlled_factory.orders_out[i].offer_num == 0)
-			{
-				// Add to market
-				addSellOrder(
-					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-					&factoryManager->controlled_factory.orders_out[i]
-				);
-			}
+			// Add to market
+			addSellOrder(
+				getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
+				&factoryManager->controlled_factory.orders_out[i]
+			);
 			factoryManager->controlled_factory.orders_out[i].offer_num = stockpile_free_quantity;
+		}
+		else 
+		{
+			factoryManager->controlled_factory.orders_out[i].offer_num = 0;
 		}
 	}
 }

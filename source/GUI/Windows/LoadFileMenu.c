@@ -58,11 +58,14 @@ void drawLoadFileMenu(AppPlatform* platform, char* name)
 			}
 		}
 		
-		if (nk_button_label(platform->ctx, "Back"))
+		if (platform->current_app_state) // NOT FIRST LOAD SCREEN
 		{
-			platform->flags &= ~AP_FLAG_LOAD_FILE;
-			file_num = 0;
-			active = -1;
+			if (nk_button_label(platform->ctx, "Back"))
+			{
+				platform->flags &= ~AP_FLAG_LOAD_FILE;
+				file_num = 0;
+				active = -1;
+			}
 		}
 	}
 	nk_end(platform->ctx);
