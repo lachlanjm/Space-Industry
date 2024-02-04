@@ -67,7 +67,7 @@ uint_fast8_t moveStockpile(Stockpile* stockpile_out, Stockpile* stockpile_in, co
 	if (stockpile_out->product_type != stockpile_in->product_type) {
 		return 1;
 	}
-	switch (removeQuantityCheck(stockpile_out, quantity) + (addQuantityCheck(stockpile_in, quantity)<<1))
+	switch (removeQuantityCheck(stockpile_out, quantity) + addQuantityCheck(stockpile_in, quantity)*2)
 	{
 	case 0:
 		return 0;

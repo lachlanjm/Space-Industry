@@ -55,7 +55,7 @@ int processTickLogisticsContract(LogisticsContract* logisticsContract)
 	case DELIVERY:
 		if (logisticsContract->assigned_vehicle->current_location == logisticsContract->assigned_vehicle->end_location)
 		{
-			unloadCargo(logisticsContract->assigned_vehicle, logisticsContract->buying_factory);
+			if (unloadCargo(logisticsContract->assigned_vehicle, logisticsContract->buying_factory)) return 0;
 			removeOrderedInQuantity(logisticsContract->buying_factory, logisticsContract->product, logisticsContract->quantity);
 			logisticsContract->assigned_vehicle->end_factory = NULL;
 			logisticsContract->assigned_vehicle->end_location = -1;

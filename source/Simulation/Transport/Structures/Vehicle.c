@@ -108,7 +108,7 @@ void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_t
 	// Fail
 }
 
-void unloadCargo(Vehicle* vehicle, const Factory* factory)
+int unloadCargo(Vehicle* vehicle, const Factory* factory)
 {
 	for (int i = 0; i < factory->stockpiles_in_num; i++) 
 	{
@@ -116,16 +116,16 @@ void unloadCargo(Vehicle* vehicle, const Factory* factory)
 		{
 			if (QUANTITY_INT_MAX - factory->stockpiles_in[i].quantity >= vehicle->stockpile.quantity)
 			{
-				moveStockpile(&factory->stockpiles_in[i], &vehicle->stockpile, vehicle->stockpile.quantity);
+				if (moveStockpile(&vehicle->stockpile, &factory->stockpiles_in[i], vehicle->stockpile.quantity)) return 1;
 			}
 			else 
 			{
-				moveStockpile(&factory->stockpiles_in[i], &vehicle->stockpile, QUANTITY_INT_MAX - factory->stockpiles_in[i].quantity);
+				if (moveStockpile(&vehicle->stockpile, &factory->stockpiles_in[i], QUANTITY_INT_MAX - factory->stockpiles_in[i].quantity)) return 1;
 			}
-			return;
+			return 0;
 		}
 	}
-	// Fail
+	return 1;
 }
 
 void processTickVehicle(Vehicle* vehicle)

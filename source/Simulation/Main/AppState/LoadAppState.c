@@ -712,6 +712,10 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	{
 		loadFactoryManagerAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers[i]);
 	}
+	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->local_population_num; i++)
+	{
+		loadLocalPopulationAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->local_population[i]);
+	}
 
 	assignAllNeededIds();
 	AppState* result = (AppState*) __object_arr[APP_STATE_SAVE].data;// First element (Should be only)

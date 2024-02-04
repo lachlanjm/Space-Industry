@@ -13,7 +13,7 @@ typedef struct OrderDef Order;
 typedef struct OrderDef {
 	Factory* offering_factory;
 	QUANTITY_INT offer_num;
-	uint_fast16_t price;
+	uint_fast32_t price;
 
 	struct OrderDef* prev_order;
 	struct OrderDef* left_order;
