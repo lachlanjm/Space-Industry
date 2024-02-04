@@ -7,6 +7,7 @@
 #include "..\..\Production\Structures\Factory.h"
 
 #include <stdint.h>
+#include <stdio.h>
 
 #define FACTORY_MANAGER_ID_INT uint_least16_t
 

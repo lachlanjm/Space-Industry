@@ -20,8 +20,8 @@
 #define LP_DESIRED_STOCKPILE_MIN 200
 #define LP_ORDER_QUANTITY_MIN 50
 
-#define LP_INCREASE_PRICE_FACTOR 1.05f
-#define LP_DECREASE_PRICE_FACTOR 0.96f
+#define LP_INCREASE_PRICE_FACTOR 1.03f
+#define LP_DECREASE_PRICE_FACTOR 0.97f
 
 typedef struct LocalPopulation {
 	uint32_t population_number;

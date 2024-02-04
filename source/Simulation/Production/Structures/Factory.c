@@ -21,14 +21,14 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
 		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
-		assignOrderValues(&factory->orders_in[i], factory, 0, 100, NULL, NULL, NULL); // TODO: DEF. PRICE
+		assignOrderValues(&factory->orders_in[i], factory, 0, 100); // TODO: DEF. PRICE
 		factory->ordered_in[i] = 0;
 	}
 
 	tmp_arr = getOutputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_out_num; i++) {
 		assignStockpileValues(&factory->stockpiles_out[i], tmp_arr[i].product_type, 0);
-		assignOrderValues(&factory->orders_out[i], factory, 0, 100, NULL, NULL, NULL); // TODO: DEF. PRICE
+		assignOrderValues(&factory->orders_out[i], factory, 0, 100); // TODO: DEF. PRICE
 		factory->ordered_out[i] = 0;
 	}
 

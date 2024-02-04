@@ -42,10 +42,12 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			if (population->population_centre.orders_in[i].offer_num == 0)
 			{
 				// Add to market
-				addBuyOrder(
+				if (addBuyOrder(
 					getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type),
-					&population->population_centre.orders_in[i]
-				);
+					&population->population_centre.orders_in[i])
+				) {
+					printf("Failed to add buy order\n");
+				}
 			}
 			population->population_centre.orders_in[i].offer_num = LP_STOCKPILE_FULL - stockpile_ordered_quantity;
 		}
@@ -56,19 +58,23 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			{
 				// Lower offered price
 				population->population_centre.orders_in[i].price *= LP_DECREASE_PRICE_FACTOR;
-				resetBuyOrder(
+				if (resetBuyOrder(
 					getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type),
-					&population->population_centre.orders_in[i]
-				);
+					&population->population_centre.orders_in[i])
+				) {
+					printf("Failed to reset buy order\n");
+				}
 			}
 			else if (LP_DESIRED_STOCKPILE_MIN > stockpile_ordered_quantity)
 			{
 				// Raise offered price
 				population->population_centre.orders_in[i].price *= LP_INCREASE_PRICE_FACTOR;
-				resetBuyOrder(
+				if (resetBuyOrder(
 					getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type),
-					&population->population_centre.orders_in[i]
-				);
+					&population->population_centre.orders_in[i])
+				) {
+					printf("Failed to reset buy order\n");
+				}
 			}
 		}
 	}
@@ -85,10 +91,12 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			if (population->population_centre.orders_out[i].offer_num == 0)
 			{
 				// Add to market
-				addSellOrder(
+				if (addSellOrder(
 					getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_out[i].product_type),
-					&population->population_centre.orders_out[i]
-				);
+					&population->population_centre.orders_out[i])
+				) {
+					printf("Failed to add sell order\n");
+				}
 			}
 			population->population_centre.orders_out[i].offer_num = stockpile_free_quantity;
 		}
@@ -99,19 +107,23 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			{
 				// Lower selling price
 				population->population_centre.orders_out[i].price *= LP_DECREASE_PRICE_FACTOR;
-				resetSellOrder(
+				if (resetSellOrder(
 					getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_out[i].product_type),
-					&population->population_centre.orders_out[i]
-				);
+					&population->population_centre.orders_out[i])
+				) {
+					printf("Failed to reset sell order\n");
+				}
 			}
 			else if (LP_DESIRED_STOCKPILE_MIN > stockpile_free_quantity)
 			{
 				// Raise selling price
 				population->population_centre.orders_out[i].price *= LP_INCREASE_PRICE_FACTOR;
-				resetSellOrder(
+				if (resetSellOrder(
 					getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_out[i].product_type),
-					&population->population_centre.orders_out[i]
-				);
+					&population->population_centre.orders_out[i])
+				) {
+					printf("Failed to reset sell order\n");
+				}
 			}
 		}
 	}
@@ -131,10 +143,12 @@ void loadLocalPopulationAssignOrders(LocalPopulation* population)
 		if (LP_STOCKPILE_FULL - LP_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
 		{
 			// Add to market
-			addBuyOrder(
+			if (addBuyOrder(
 				getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type),
-				&population->population_centre.orders_in[i]
-			);
+				&population->population_centre.orders_in[i])
+			) {
+				printf("Failed to add buy order\n");
+			}
 			population->population_centre.orders_in[i].offer_num = LP_STOCKPILE_FULL - stockpile_ordered_quantity;
 		}
 		else
@@ -153,10 +167,12 @@ void loadLocalPopulationAssignOrders(LocalPopulation* population)
 		if (LP_ORDER_QUANTITY_MIN < stockpile_free_quantity)
 		{
 			// Add to market
-			addSellOrder(
+			if (addSellOrder(
 				getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_out[i].product_type),
-				&population->population_centre.orders_out[i]
-			);
+				&population->population_centre.orders_out[i])
+			) {
+				printf("Failed to add sell order\n");
+			}
 			population->population_centre.orders_out[i].offer_num = stockpile_free_quantity;
 		}
 		else

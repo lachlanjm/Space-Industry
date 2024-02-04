@@ -12,20 +12,20 @@ void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, 
 		nk_label(platform->ctx, "Product: ", NK_TEXT_LEFT);
 		nk_label(platform->ctx, getNameProduct(productMarket->product_type), NK_TEXT_LEFT);
 
-		if (productMarket->highest_buy_order)
+		if (productMarket->buy_order_arr_size > 0)
 		{
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, "Highest Buy Order"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->highest_buy_order);
+				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->buy_order_arr[0]);
 			}
 		}
-		if (productMarket->lowest_sell_order)
+		if (productMarket->sell_order_arr_size > 0)
 		{
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, "Lowest Sell Order"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->lowest_sell_order);
+				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->sell_order_arr[0]);
 			}
 		}
 	}

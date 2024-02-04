@@ -7,12 +7,13 @@ typedef struct AppState AppState;
 #include "..\..\Management\Production\FactoryManager.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
 
-
 #include ".\LoadAppState.h"
 #include ".\SaveAppState.h"
 
 #include <stdint.h>
 #include <stdio.h>
+
+#define AS_LOG_MAN_GROUPS 4
 
 typedef struct AppState {
 	uint_fast16_t logistics_managers_num;

@@ -22,19 +22,10 @@ int main(int argc, char* argv[])
 
 	runAppPlatform(platform, win);
 
-	/*
-	for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-	{
-		printf("Iteration - %d\n", i);
-		processTickAppState(current_app_state);
-	}
-	printf("Completed Iterations\n");
-	// */
-
 	saveAppState(platform->current_app_state, platform->app_dir_path, "auto_close_save");
 	closeApp(platform->current_app_state);
 	cleanPlatform(platform);
-	printf("Cleaned platform\n\n");
+	printf("\nClosed clean\n\n");
 	return 0;
 }
 
@@ -86,22 +77,12 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 
 	platform->flags = AP_FLAG_LOAD_FILE;
 
-	int secs_btw_proc = 1;
-	time_t prev_seconds = NULL; 
-	time_t curr_seconds = NULL;
-	time(&prev_seconds); 
+	int ms_btw_tick = 500;
+	struct _timeb prev_tstruct;
+	struct _timeb curr_tstruct;
+	_ftime(&prev_tstruct);
 	while (!glfwWindowShouldClose(win) && !(platform->flags & AP_FLAG_CLOSE))
 	{
-		if (platform->flags & AP_FLAG_RUN_SIMULATION)
-		{
-			time(&curr_seconds);
-			if (curr_seconds - prev_seconds >= secs_btw_proc)
-			{
-				processTickAppState(platform->current_app_state);
-				time(&prev_seconds);
-			}
-		}
-
 		/* Input */
 		glfwPollEvents();
 		nk_glfw3_new_frame(&glfw);
@@ -118,6 +99,17 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 		}
 		else
 		{
+			if (platform->flags & AP_FLAG_RUN_SIMULATION)
+			{
+				_ftime(&curr_tstruct);
+				if ((curr_tstruct.time - prev_tstruct.time) * 1000 
+					+ curr_tstruct.millitm - prev_tstruct.millitm >= ms_btw_tick)
+				{
+					processTickAppState(platform->current_app_state);
+					_ftime(&prev_tstruct);
+				}
+			}
+			
 			PopupWindow* window = platform->first_window;
 			while(window != NULL)
 			{
@@ -179,10 +171,8 @@ void resetPlatform(AppPlatform* platform)
 
 int closeApp(AppState* appState)
 {
-	printf("Saved App State\n");
 	cleanAppState(appState);
 	free(appState);
-	printf("Cleaned App State\n");
 	return 0;
 }
 

@@ -402,7 +402,7 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 			break;
 		case VEHICLE_SAVE:
 			((Vehicle*)current_obj->data)->current_location = 0;
-			((Vehicle*)current_obj->data)->end_location = 0;
+			((Vehicle*)current_obj->data)->end_location = -1;
 			((Vehicle*)current_obj->data)->distance_travelled = 0;
 			((Vehicle*)current_obj->data)->end_factory = NULL;
 			((Vehicle*)current_obj->data)->max_capacity = 0;

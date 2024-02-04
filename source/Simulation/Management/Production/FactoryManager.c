@@ -6,7 +6,7 @@ void assignFactoryManagerValues(FactoryManager* factoryManager, const Production
 {
 	assignFactoryValues(&factoryManager->controlled_factory, productionRecipe, location);
 	factoryManager->id = id_next++;
-}
+} 
 
 void updateOfferedPrices(FactoryManager* factoryManager)
 {
@@ -24,10 +24,12 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			if (factoryManager->controlled_factory.orders_in[i].offer_num == 0)
 			{
 				// Add to market
-				addBuyOrder(
+				if (addBuyOrder(
 					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-					&factoryManager->controlled_factory.orders_in[i]
-				);
+					&factoryManager->controlled_factory.orders_in[i])
+				) {
+					printf("Failed to add buy order\n");
+				}
 			}
 			factoryManager->controlled_factory.orders_in[i].offer_num = FM_STOCKPILE_FULL - stockpile_ordered_quantity;
 		}
@@ -38,19 +40,23 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				// Lower offered price
 				factoryManager->controlled_factory.orders_in[i].price *= FM_DECREASE_PRICE_FACTOR;
-				resetBuyOrder(
+				if (resetBuyOrder(
 					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-					&factoryManager->controlled_factory.orders_in[i]
-				);
+					&factoryManager->controlled_factory.orders_in[i])
+				) {
+					printf("Failed to reset buy order\n");
+				}
 			}
 			else if (FM_DESIRED_STOCKPILE_MIN > stockpile_ordered_quantity)
 			{
 				// Raise offered price
 				factoryManager->controlled_factory.orders_in[i].price *= FM_INCREASE_PRICE_FACTOR;
-				resetBuyOrder(
+				if (resetBuyOrder(
 					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-					&factoryManager->controlled_factory.orders_in[i]
-				);
+					&factoryManager->controlled_factory.orders_in[i])
+				) {
+					printf("Failed to reset buy order\n");
+				}
 			}
 		}
 	}
@@ -67,10 +73,12 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			if (factoryManager->controlled_factory.orders_out[i].offer_num == 0)
 			{
 				// Add to market
-				addSellOrder(
+				if (addSellOrder(
 					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-					&factoryManager->controlled_factory.orders_out[i]
-				);
+					&factoryManager->controlled_factory.orders_out[i])
+				) {
+					printf("Failed to add sell order\n");
+				}
 			}
 			factoryManager->controlled_factory.orders_out[i].offer_num = stockpile_free_quantity;
 		}
@@ -81,19 +89,23 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				// Lower selling price
 				factoryManager->controlled_factory.orders_out[i].price *= FM_DECREASE_PRICE_FACTOR;
-				resetSellOrder(
+				if (resetSellOrder(
 					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-					&factoryManager->controlled_factory.orders_out[i]
-				);
+					&factoryManager->controlled_factory.orders_out[i])
+				) {
+					printf("Failed to reset sell order\n");
+				}
 			}
 			else if (FM_DESIRED_STOCKPILE_MIN > stockpile_free_quantity)
 			{
 				// Raise selling price
 				factoryManager->controlled_factory.orders_out[i].price *= FM_INCREASE_PRICE_FACTOR;
-				resetSellOrder(
+				if (resetSellOrder(
 					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-					&factoryManager->controlled_factory.orders_out[i]
-				);
+					&factoryManager->controlled_factory.orders_out[i])
+				) {
+					printf("Failed to reset sell order\n");
+				}
 			}
 		}
 	}
@@ -113,10 +125,12 @@ void loadFactoryManagerAssignOrders(FactoryManager* factoryManager)
 		if (FM_STOCKPILE_FULL - FM_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
 		{
 			// Add to market
-			addBuyOrder(
+			 if (addBuyOrder(
 				getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-				&factoryManager->controlled_factory.orders_in[i]
-			);
+				&factoryManager->controlled_factory.orders_in[i])
+			) {
+				printf("Failed to add buy order\n");
+			}
 			factoryManager->controlled_factory.orders_in[i].offer_num = FM_STOCKPILE_FULL - stockpile_ordered_quantity;
 		}
 		else 
@@ -136,10 +150,12 @@ void loadFactoryManagerAssignOrders(FactoryManager* factoryManager)
 		if (FM_ORDER_QUANTITY_MIN < stockpile_free_quantity)
 		{
 			// Add to market
-			addSellOrder(
+			if (addSellOrder(
 				getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-				&factoryManager->controlled_factory.orders_out[i]
-			);
+				&factoryManager->controlled_factory.orders_out[i])
+			) {
+				printf("Failed to add sell order\n");
+			}
 			factoryManager->controlled_factory.orders_out[i].offer_num = stockpile_free_quantity;
 		}
 		else 

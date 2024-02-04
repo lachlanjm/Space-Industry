@@ -6,24 +6,23 @@ void processTickAppState(AppState* appState)
 	{
 		processTickFactoryManager(&appState->factory_managers[i]);
 	}
-	printf("\tCompleted FMs\n");
 
-	printf("\tContract phase for LM - %d\n", appState->logistics_managers_next_process_tick_index);
-	processTickLogisticsManagerContracts(&appState->logistics_managers[appState->logistics_managers_next_process_tick_index]);
-	appState->logistics_managers_next_process_tick_index = (++appState->logistics_managers_next_process_tick_index) % appState->logistics_managers_num;
-	printf("\tCompleted Contract Phase\n");
-
+	update_dist_to_price_eff();
 	for (int i = 0; i < appState->logistics_managers_num; i++)
 	{
+		if (i % AS_LOG_MAN_GROUPS == appState->logistics_managers_next_process_tick_index)
+		{
+			processTickLogisticsManagerContracts(&appState->logistics_managers[i]);
+		}
 		processTickLogisticsManagerVehicles(&appState->logistics_managers[i]);
 	}
-	printf("\tCompleted LMs\n");
+	appState->logistics_managers_next_process_tick_index++;
+	appState->logistics_managers_next_process_tick_index %= AS_LOG_MAN_GROUPS;
 
 	for (int i = 0; i < appState->local_population_num; i++)
 	{
 		processTickLocalPopulation(&appState->local_population[i]);
 	}
-	printf("\tCompleted LPs\n");
 }
 
 void cleanAppState(AppState* appState)
@@ -65,9 +64,9 @@ static void display_product_heaps()
 static void disp_heap(ProductMarket* market)
 {
 	printf("Highest Buy Order:\n");
-	if (market->highest_buy_order != NULL)
+	if (market->buy_order_arr[0] != NULL)
 	{
-		disp_order(market->highest_buy_order, 0);
+		disp_order(market->buy_order_arr[0], 0);
 	}
 	else
 	{
@@ -75,9 +74,9 @@ static void disp_heap(ProductMarket* market)
 	}
 
 	printf("Lowest Sell Order:\n");
-	if (market->lowest_sell_order != NULL)
+	if (market->sell_order_arr[0] != NULL)
 	{
-		disp_order(market->lowest_sell_order, 0);
+		disp_order(market->sell_order_arr[0], 0);
 	}
 	else
 	{

@@ -65,20 +65,20 @@ void update_dist_to_price_eff()
 		{
 			for (int product = 0; product < PRODUCT_COUNT; product++)
 			{
-				if (getProductMarketAtLocation(to, product)->highest_buy_order != NULL
-					&& getProductMarketAtLocation(from, product)->lowest_sell_order != NULL)
+				if (getProductMarketAtLocation(to, product)->buy_order_num > 0
+					&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 				{
 					if (getTotalDistance(from, to) == 0)
 					{
 						__dist_to_price_eff__[from][to][product] =
-						(float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-						- getProductMarketAtLocation(from, product)->lowest_sell_order->price);
+						(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+						- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price);
 					}
 					else 
 					{
 						__dist_to_price_eff__[from][to][product] =
-						(float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-						- getProductMarketAtLocation(from, product)->lowest_sell_order->price)
+						(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+						- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price)
 						/ (float)getTotalDistance(from, to);
 					}
 				}
@@ -97,20 +97,20 @@ void update_dist_to_price_eff_product_filtered(int product)
 	{
 		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
 		{
-			if (getProductMarketAtLocation(to, product)->highest_buy_order != NULL
-				&& getProductMarketAtLocation(from, product)->lowest_sell_order != NULL)
+			if (getProductMarketAtLocation(to, product)->buy_order_num > 0
+				&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 			{
 				if (getTotalDistance(from, to) == 0)
 				{
 					__dist_to_price_eff__[from][to][product] =
-					(float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-					- getProductMarketAtLocation(from, product)->lowest_sell_order->price);
+					(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+					- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price);
 				}
 				else 
 				{
 					__dist_to_price_eff__[from][to][product] =
-					(float) (getProductMarketAtLocation(to, product)->highest_buy_order->price 
-					- getProductMarketAtLocation(from, product)->lowest_sell_order->price)
+					(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+					- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price)
 					/ (float)getTotalDistance(from, to);
 				}
 			}
@@ -164,14 +164,14 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 	}
 
 	// TODO !!!! IMPROVE FLOW AND MEMORY ASSIGNMENT
-	Factory* selling_factory = getProductMarketAtLocation(from_max, product_max)->lowest_sell_order->offering_factory;
-	Factory* buying_factory = getProductMarketAtLocation(to_max, product_max)->highest_buy_order->offering_factory;
+	Factory* selling_factory = getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0]->offering_factory;
+	Factory* buying_factory = getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]->offering_factory;
 
 	QUANTITY_INT quantity = match_orders(
 		getProductMarketAtLocation(from_max, product_max), 
-		getProductMarketAtLocation(from_max, product_max)->lowest_sell_order,
+		getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0],
 		getProductMarketAtLocation(to_max, product_max),
-		getProductMarketAtLocation(to_max, product_max)->highest_buy_order
+		getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]
 	);
 
 	addNewLogisticsContract(
@@ -189,7 +189,6 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 {
 	// Search and add contracts
-	update_dist_to_price_eff();
 	assignFreeVehicles(logisticsManager);
 
 	// Tick contracts

@@ -64,7 +64,7 @@ def main():
 		type_ = "ProductMarket"
 		f.write(function_format.format(functions[0], f"{type_}*", "__product_market_at_location_arr__", 
 			str(
-				[f"\n\t({type_}<|>) {[f'{{{product}, NULL, NULL}}' for product in products]}" for location in locations]
+				[f"\n\t({type_}<|>) {[f'{{{product}, 0, 0, 0, 0, NULL, NULL}}' for product in products]}" for location in locations]
 			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1]
 		))
 
