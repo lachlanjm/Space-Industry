@@ -28,6 +28,7 @@ typedef struct AppState {
 } AppState;
 
 void processTickAppState(AppState* appState);
+AppState* newGameAppState();
 
 void cleanAppState(AppState* appState);
 

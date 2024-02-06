@@ -86,7 +86,7 @@ Hydrogen
 
 Deuterium
     State: Gas
-    Short: D
+    Short: Deu
     Category: Elemental
     Greenhouse: +11
 
@@ -183,9 +183,274 @@ Lime
     Short: Lime
     Category: Raw
 
+Nitrogen
+	State: Gas
+    Short: N
+    Category: Elemental
+    Greenhouse: +0
+
+Nitric Oxide
+	State: Gas
+    Short: NO
+    Category: Molecule
+    Greenhouse: +0
+
+Nitrous Oxide
+	State: Gas
+    Short: N2O
+    Category: Molecule
+    Greenhouse: +265
+
 Nitrogen Dioxide
     State: Gas
     Short: NO2
     Category: Molecule
     Greenhouse: +0
+
+Ammonia
+	State: Gas
+	Short: NH3
+	Category: Intermediate
+    Greenhouse: +0
+
+Nitric Acid
+	State: Liquid
+	Short: HNO3
+	Category: Intermediate
+	Acidity: 3
+
+Ammonium Nitrate
+	State: Solid
+	Short: AmNi
+	Category: Intermediate
+
+Urea
+	State: Solid
+	Short: Urea
+	Category: Intermediate
+
+Fertiliser
+	State: Solid
+	Short: Fert
+	Category: Final
+
+Wheat
+	State: Solid
+	Short: Wheat
+	Category: Intermediate
+
+Flour
+	State: Solid
+	Short: Flour
+	Category: Intermediate
+
+Bread
+	State: Solid
+	Short: Bread
+	Category: Final
+
+Timber
+	State: Solid
+	Short: Timbe
+	Category: Raw
+
+Lumber
+	State: Solid
+	Short: Lumbe
+	Category: Refined
+
+Furniture
+	State: Solid
+	Short: Frntr
+	Category: Final
+
+Paper
+	State: Solid
+	Short: Paper
+	Category: Final
+
+Tissue
+	State: Solid
+	Short: Tissu
+	Category: Final
+
+Cotton
+	State: Solid
+	Short: Cottn
+	Category: Raw
+
+Cotton Fabric
+	State: Solid
+	Short: CtnFb
+	Category: Intermediate
+
+Apparel
+	State: Solid
+	Short: Apprl
+	Category: Final
+
+Tool
+	State: Solid
+	Short: Tool
+	Category: Final
+
+Beef
+	State: Solid
+	Short: Beef
+	Category: Final
+
+Milk
+	State: Solid
+	Short: Milk
+	Category: Final
+
+Manure
+	State: Solid
+	Short: Manure
+	Category: Final
+
+Graphite
+	State: Solid
+	Short: Graph
+	Category: Refined
+
+Lithium Carbonate
+	State: Solid
+	Short: Li2CO3
+	Category: Raw
+
+Lithium Hydroxide
+	State: Solid
+	Short: LiOH
+	Category: Molecule
+
+Calcium Hydroxide
+	State: Solid
+	Short: CaOH2
+	Category: Molecule
+
+Lime Mineral
+	State: Solid
+	Short: CaO
+	Category: Raw
+
+Lithium Peroxide
+	State: Solid
+	Short: Li2O2
+	Category: Refined
+
+Lithium Oxide
+	State: Solid
+	Short: Li2O
+	Category: Molecule
+
+Calcium Carbonate
+	State: Solid
+	Short: CaCO3
+	Category: Intermediate
+
+Hydrogen Peroxide
+	State: Liquid
+	Short: H2O2
+	Category: Raw
+
+Lithium Hexafluorophosphate
+	State: Solid
+	Short: LiPF6
+	Category: Intermediate
+
+Lithium Battery
+	State: Solid
+	Short: LiBatt
+	Category: Refined
+
+Sulfuric Acid
+	State: Liquid
+	Short: H2SO4
+	Category: Intermediate
+
+Fluorite
+	State: Solid
+	Short: CaF2
+	Category: Raw
+
+Hydrogen Fluoride
+	State: Liquid
+	Short: HF
+	Category: Molecule
+
+Lithium Fluoride
+	State: Liquid
+	Short: LiF
+	Category: Molecule
+
+Phosphorus Pentachloride
+	State: Solid
+	Short: PCl5
+	Category: Molecule
+
+Hydrogen Chloride
+	State: Gas
+	Short: HCl
+	Category: Molecule
+
+Calcium Sulfate
+	State: Solid
+	Short: CaSO4
+	Category: Molecule
+
+Phosphorus Trichloride
+	State: Solid
+	Short: PCl3
+	Category: Molecule
+
+Chlorine
+	State: Gas
+	Short: Cl
+	Category: Elemental
+
+Phosphorus
+	State: Solid
+	Short: P
+	Category: Elemental
+
+Table Salt
+	State: Solid
+	Short: NaCl
+	Category: Raw
+
+Sodium Hydroxide
+	State: Solid
+	Short: NaOH
+	Category: Molecule
+
+Phosphorite
+	State: Solid
+	Short: Phsprt
+	Category: Raw
+
+Wollastonite
+	State: Solid
+	Short: CaSiO3
+	Category: Raw
+
+Calcium
+	State: Solid
+	Short: Ca
+	Category: Elemental
+
+Bauxite
+	State: Solid
+	Short: AlO3H3
+	Category: Raw
+
+Alumina
+	State: Solid
+	Short: Al2O3
+	Category: Refined
+
+Aluminum
+	State: Solid
+	Short: Al
+	Category: Elemental
 

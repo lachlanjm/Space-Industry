@@ -35,7 +35,7 @@ void drawLoadFileMenu(AppPlatform* platform, char* name)
 			active = nk_option_label_align(platform->ctx, file_names[i], active == i, NK_WIDGET_LEFT, NK_TEXT_LEFT) ? i : active;
 		}
 
-		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		if (nk_button_label(platform->ctx, "Load") && active >= 0)
 		{
 			if (platform->current_app_state) 
@@ -65,6 +65,30 @@ void drawLoadFileMenu(AppPlatform* platform, char* name)
 				platform->flags &= ~AP_FLAG_LOAD_FILE;
 				file_num = 0;
 				active = -1;
+			}
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "New Game"))
+		{
+			if (platform->current_app_state) 
+			{
+				cleanAppState(platform->current_app_state);
+				free(platform->current_app_state);
+				platform->current_app_state = NULL;
+			}
+			platform->current_app_state = newGameAppState();
+			if (platform->current_app_state)
+			{
+				resetPlatform(platform);
+				platform->flags &= ~AP_FLAG_LOAD_FILE;
+				file_num = 0;
+				active = -1;
+			}
+			else
+			{
+				printf("\nFailed to load new game state\n");
 			}
 		}
 	}

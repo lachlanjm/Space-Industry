@@ -25,6 +25,49 @@ void processTickAppState(AppState* appState)
 	}
 }
 
+AppState* newGameAppState()
+{
+	AppState* appState = calloc(1, sizeof(AppState));
+	if (appState == NULL) return NULL;
+
+	appState->factory_managers_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
+    appState->factory_managers = (FactoryManager*) calloc(appState->factory_managers_num, sizeof(FactoryManager));
+
+    for (int i = 0; i < appState->factory_managers_num; i++) // LEAVE POP CONSUMPTION
+    {
+        assignFactoryManagerValues(
+            &appState->factory_managers[i],
+            i % (PRODUCTION_RECIPE_COUNT - 1),
+            i % (TRANSPORT_NODE_COUNT)
+        );
+    }
+
+    appState->logistics_managers_num = PRODUCTION_RECIPE_COUNT;
+    appState->logistics_managers_next_process_tick_index = 0;
+    appState->logistics_managers = (LogisticsManager*) calloc(appState->logistics_managers_num, sizeof(LogisticsManager));
+
+    for (int i = 0; i < appState->logistics_managers_num; i++)
+    {
+        assignNewLogisticsManagerValues(
+            &appState->logistics_managers[i],
+            10
+        );
+    }
+
+	appState->local_population_num = TRANSPORT_NODE_COUNT;
+    appState->local_population = (LocalPopulation*) calloc(appState->local_population_num, sizeof(LocalPopulation));
+	for (int i = 0; i < appState->local_population_num; i++)
+	{
+		assignLocalPopulationValues(
+            &appState->local_population[i],
+			i,
+			1000 // TODO TBU
+		);
+	}
+
+	return appState;
+}
+
 void cleanAppState(AppState* appState)
 {
 	for (int i = 0; i < appState->factory_managers_num; i++)
@@ -45,76 +88,3 @@ void cleanAppState(AppState* appState)
 	}
 	free(appState->local_population);
 }
-
-/*
-static void display_product_heaps()
-{
-	printf("\nPMs:\n");
-	//for (int loc = 0; loc < TRANSPORT_NODE_COUNT; loc++)
-	for (int loc = 0; loc < 1; loc++)
-	{
-		for (int product = 0; product < PRODUCT_COUNT; product++)
-		{
-			printf("Loc: %d\tProd:%d\n", loc, product);
-			disp_heap(getProductMarketAtLocation(loc, product));
-		}
-	}
-}
-
-static void disp_heap(ProductMarket* market)
-{
-	printf("Highest Buy Order:\n");
-	if (market->buy_order_arr[0] != NULL)
-	{
-		disp_order(market->buy_order_arr[0], 0);
-	}
-	else
-	{
-		printf("\tNo orders\n");
-	}
-
-	printf("Lowest Sell Order:\n");
-	if (market->sell_order_arr[0] != NULL)
-	{
-		disp_order(market->sell_order_arr[0], 0);
-	}
-	else
-	{
-		printf("\tNo orders\n");
-	}
-}
-
-static void disp_order(Order* order, int depth)
-{
-	for (int i = 0; i < depth; i++)
-	{
-		printf("--");
-	}
-	printf("Price: %u\t Quantity %u\t Addr:%p\n", order->price, order->offer_num, order);
-	
-	if (order->left_order != NULL)
-	{
-		disp_order(order->left_order, depth + 1);
-	}
-	else 
-	{
-		for (int i = 0; i < depth + 1; i++)
-		{
-			printf("--");
-		}
-		printf("No left order\n");
-	}
-	if (order->right_order != NULL)
-	{
-		disp_order(order->right_order, depth + 1);
-	}
-	else 
-	{
-		for (int i = 0; i < depth + 1; i++)
-		{
-			printf("--");
-		}
-		printf("No right order\n");
-	}
-}
-// */

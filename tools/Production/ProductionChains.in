@@ -46,6 +46,47 @@ Extraction Lime
     Output:
     1 x Lime
 
+Extraction Nitrogen
+	Output:
+	1 x Nitrogen
+
+Extraction Timber
+	Output:
+	1 x Timber
+
+Extraction Lithium Carbonate
+	Energy: -10
+	Output:
+	1 x Lithium Carbonate
+
+Extraction Lime Mineral
+	Output:
+	1 x Lime Mineral
+
+Extraction Hydrogen Peroxide
+	Output:
+	1 x Hydrogen Peroxide
+
+Extraction Fluorite
+	Output:
+	1 x Fluorite
+
+Extraction Table Salt
+	Output:
+	1 x Table Salt
+
+Extraction Phosphorite
+	Output:
+	1 x Phosphorite
+
+Extraction Wollastonite
+	Output:
+	1 x Wollastonite
+
+Extraction Bauxite
+	Output:
+	1 x Bauxite
+
 Refinement Iron
     Input:
     1 x Iron Ore
@@ -234,10 +275,331 @@ Combustion Diesel
     24 x Carbon Dioxide
     24 x Water
 
+Ammonia Production
+	Energy: -10
+	Input:
+	1 x Nitrogen
+	3 x Hydrogen
+	Output:
+	1 x Ammonia
+
+Nitric Oxide Production
+	Energy: -30
+	Input:
+	4 x Ammonia
+	5 x Oxygen
+	Output:
+	4 x Nitric Oxide
+	6 x Water
+
+Nitrogen Dioxide Production
+	Energy: -10
+	Input:
+	2 x Ammonia
+	1 x Oxygen
+	Output:
+	2 x Nitrogen Dioxide
+
+Nitric Acid Production
+	Energy: -15
+	Input:
+	4 x Nitrogen Dioxide
+	2 x Water
+	1 x Oxygen
+	Output:
+	4 x Nitric Acid
+
+Urea Production
+	Energy: -10
+	Input:
+	1 x Carbon Dioxide
+	2 x Ammonia
+	Output:
+	1 x Urea
+	1 x Water
+
+Fertiliser Production Synthetic
+	Input:
+	3 x Urea
+	4 x Ammonium Nitrate
+	3 x Water
+	Output:
+	10 x Fertiliser
+
+Wheat Production
+	Input:
+	1 x Fertiliser
+	10 x Water
+	Output:
+	20 x Wheat
+
+Flour Production
+	Input:
+	1 x Wheat
+	Output:
+	1 x Flour
+
+Bread Production
+	Input:
+	1 x Flour
+	1 x Water
+	Output:
+	1 x Bread
+
+Lumber Production
+	Input:
+	1 x Timber
+	Output:
+	2 x Lumber
+
+Furniture Production
+	Input:
+	1 x Lumber
+	Output:
+	1 x Furniture
+
+Paper Production
+	Input:
+	1 x Timber
+	Output:
+	10 x Paper
+
+Tissue Production
+	Input:
+	1 x Timber
+	Output:
+	20 x Tissue
+
+Cotton Production
+	Input:
+	1 x Fertiliser
+	Output:
+	10 x Cotton
+
+Cotton Fabric Production
+	Input:
+	2 x Cotton
+	Output:
+	1 x Cotton Fabric
+
+Apparel Production
+	Input:
+	1 x Cotton Fabric
+	Output:
+	1 x Apparel
+
+Tool Production
+	Input:
+	1 x Steel
+	Output:
+	1 x Tool
+
+Beef Production
+	Input:
+	25 x Wheat
+	Output:
+	1 x Beef
+	5 x Milk
+	5 x Manure
+
+Fertiliser Production Manure
+	Input:
+	10 x Manure
+	Output:
+	1 x Fertiliser
+
+Graphite Production
+	Energy: -10
+	Input:
+	5 x Carbon
+	Output:
+	1 x Graphite
+
+Calcium Hydroxide Production
+	Energy: -5
+	Input:
+	1 x Lime Mineral
+	1 x Water
+	Output:
+	1 x Calcium Hydroxide
+
+Lithium Hydroxide Production
+	Energy: -5
+	Input:
+	1 x Lithium Carbonate
+	1 x Calcium Hydroxide
+	Output:
+	2 x Lithium Hydroxide
+	1 x Calcium Carbonate
+
+Lithium Peroxide Production
+	Input:
+	2 x Lithium Hydroxide
+	1 x Hydrogen Peroxide
+	Output:
+	2 x Water
+	1 x Lithium Peroxide
+
+Lithium Oxide Production
+	Input:
+	2 x Lithium Peroxide
+	Output:
+	2 x Lithium Oxide
+	2 x Oxygen
+
+Air Purification Lithium
+	Input:
+	1 x Lithium Peroxide
+	1 x Carbon Dioxide
+	Output:
+	1 x Lithium Carbonate
+	1 x Oxygen
+
+Lithium Battery Production
+	Input:
+	1 x Graphite
+	1 x Lithium Oxide
+	1 x Lithium Hexafluorophosphate
+	1 x Copper
+	1 x Aluminum
+	1 x Plastic
+	Output:
+	1 x Lithium Battery
+
+Lithium Hexafluorophosphate Production
+	Input:
+	1 x Phosphorus Pentachloride
+	5 x Hydrogen Fluoride
+	1 x Lithium Fluoride
+	Output:
+	1 x Lithium Hexafluorophosphate
+	5 x Hydrogen Chloride
+
+Hydrogen Fluoride Production
+	Input:
+	1 x Fluorite
+	1 x Sulfuric Acid
+	Output:
+	2 x Hydrogen Fluoride
+	1 x Calcium Sulfate
+
+Lithium Fluoride Production
+	Input:
+	2 x Hydrogen Fluoride
+	1 x Lithium Carbonate
+	Output:
+	2 x Lithium Fluoride
+	1 x Carbonic Acid
+
+Carbonic Acid Decomposition
+	Input:
+	1 x Carbonic Acid
+	Output:
+	1 x Water
+	1 x Carbon Dioxide
+
+Phosphorus Pentachloride Production
+	Input:
+	1 x Phosphorus Trichloride
+	2 x Chlorine
+	Output:
+	1 x Phosphorus Pentachloride
+
+Phosphorus Trichloride Production
+	Input:
+	1 x Phosphorus
+	3 x Chlorine
+	Output:
+	1 x Phosphorus Trichloride
+
+Sulfuric Acid Production
+	Energy: -10
+	Input:
+	1 x Sulfur Dioxide
+	1 x Oxygen
+	1 x Water
+	Output:
+	1 x Sulfuric Acid
+
+Chlorine Production
+	Energy: -20
+	Input:
+	1 x Table Salt
+	1 x Water
+	Output:
+	1 x Chlorine
+	1 x Hydrogen
+	1 x Sodium Hydroxide
+
+Phosphorus Production
+	Input:
+	1 x Phosphorite
+	3 x Sand
+	5 x Carbon
+	Output:
+	3 x Wollastonite
+	5 x Carbon Monoxide
+	2 x Phosphorus
+
+Sand Refinement
+	Input:
+	1 x Wollastonite
+	1 x Carbon Dioxide
+	Output:
+	1 x Calcium Carbonate
+	1 x Sand
+
+Calcium Production
+	Input:
+	1 x Calcium Carbonate
+	2 x Hydrogen
+	Output:
+	2 x Calcium
+	1 x Carbon Dioxide
+	1 x Water
+
+Carbon Monoxide Shifting
+	Input:
+	1 x Carbon Monoxide
+	1 x Water
+	Output:
+	2 x Hydrogen
+	1 x Carbon Dioxide
+
+Alumina Refinement
+	Energy: -10
+	Input:
+	2 x Bauxite
+	2 x Hydrogen Peroxide
+	Output:
+	1 x Alumina
+	4 x Water
+	1 x Oxygen
+
+Aluminum Production
+	Energy: -20
+	Input:
+	1 x Alumina
+	Output:
+	2 x Aluminum
+	3 x Oxygen
+
 Population Consumption
 	Energy: -10
 	Input:
 	2 x Water
 	4 x Oxygen
 	1 x Gasoline
+	1 x Bread
+	1 x Paper
+	1 x Tissue
+	1 x Furniture
+	1 x Apparel
+	1 x Tool
+	1 x Beef
+	1 x Milk
+	1 x Table Salt
+	1 x Lithium Battery
+	Output:
+	2 x Carbon Dioxide
 
