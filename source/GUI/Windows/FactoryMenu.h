@@ -1,6 +1,7 @@
 #ifndef FACTORY_MENU_H
 #define FACTORY_MENU_H
 
+#include "..\..\History\HistoryIterator.h"
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Production\Structures\Factory.h"
 #include "..\..\Simulation\Production\Enums\ProductionRecipe.h"

@@ -2,6 +2,8 @@
 
 void processTickAppState(AppState* appState)
 {
+	tickHistoryArrayIndexStatic();
+	// MUST DO FACTORY BEFORE LOGISTICS (HISTORY SAVING FLOW)
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
 		processTickFactoryManager(&appState->factory_managers[i]);

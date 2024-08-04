@@ -1,6 +1,7 @@
 #ifndef STOCKPILE_MENU_H
 #define STOCKPILE_MENU_H
 
+#include "..\..\History\HistoryIterator.h"
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Production\Structures\Stockpile.h"
 #include "..\..\Simulation\Production\Enums\Product.h"

@@ -3,6 +3,8 @@
 
 typedef struct AppState AppState;
 
+#include "..\..\..\History\HistoryArray.h"
+
 #include "..\..\Management\Logistics\LogisticsManager.h"
 #include "..\..\Management\Production\FactoryManager.h"
 #include "..\..\Population\Structures\LocalPopulation.h"

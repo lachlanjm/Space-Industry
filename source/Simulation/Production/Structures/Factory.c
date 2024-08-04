@@ -32,6 +32,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 		factory->ordered_out[i] = 0;
 	}
 
+	assignNewHistoryArrayValues(&factory->profit_history);
 	factory->id = id_next++;
 }
 
@@ -133,14 +134,28 @@ void removeOrderedOutQuantity(Factory* factory, const Product product, const QUA
 	}
 }
 
+void insertFundsFactory(Factory* factory, const int funds)
+{
+	addToHistoryArray(&factory->profit_history, funds);
+}
+
+void withdrawFundsFactory(Factory* factory, const int funds)
+{
+	subFromHistoryArray(&factory->profit_history, funds);
+}
+
 // TBU (CHECK FOR POSSIBLE, REVERT OTHERWISE)
 void processTickFactory(Factory* factory)
 {
+	tickHistoryArrayIndexClean(&factory->profit_history);
+
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
+		processTickStockpile(&factory->stockpiles_in[i]);
 		removeQuantity(&factory->stockpiles_in[i], factory->processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));
 	}
 
 	for (int i = 0; i < factory->stockpiles_out_num; i++) {
+		processTickStockpile(&factory->stockpiles_out[i]);
 		addQuantity(&factory->stockpiles_out[i], factory->processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
 	}
 }
@@ -162,4 +177,6 @@ void cleanFactory(Factory* factory) {
 
 	free(factory->ordered_in);
 	free(factory->ordered_out);
+
+	cleanHistoryArray(&factory->profit_history);
 }

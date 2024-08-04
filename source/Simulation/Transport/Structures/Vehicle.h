@@ -16,6 +16,7 @@ typedef struct Vehicle {
 	TransportNode end_location;
 	uint_fast16_t distance_travelled; // distance travelled from last node
 
+	// TODO TBU remove stockpile def (use custom)
 	Stockpile stockpile;
 	
 	Factory* end_factory;

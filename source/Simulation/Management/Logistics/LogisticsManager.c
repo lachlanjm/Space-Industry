@@ -141,18 +141,25 @@ void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* veh
 	int product_max = -1;
 	int eff_max = 0;
 
+	float eff = 0;
+	int dist_to = 0;
+
 	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
 	{
 		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
 		{
 			for (int product = 0; product < PRODUCT_COUNT; product++)
 			{
-				if (__dist_to_price_eff__[from][to][product] > eff_max)
+				eff = __dist_to_price_eff__[from][to][product];
+				dist_to = getTotalDistance(vehicle->current_location, from);
+				if (dist_to != 0) eff /= (float) dist_to;
+
+				if (eff > eff_max)
 				{
 					from_max = from;
 					to_max = to;
 					product_max = product;
-					eff_max = __dist_to_price_eff__[from][to][product];
+					eff_max = eff;
 				}
 			}
 		}

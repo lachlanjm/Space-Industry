@@ -38,7 +38,9 @@ void drawSaveFileMenu(AppPlatform* platform, char* name)
 		nk_layout_row_static(platform->ctx, 30, 200, 1);
 		active = nk_option_label_align(platform->ctx, "New save file:", active == file_num, NK_WIDGET_LEFT, NK_TEXT_LEFT) ? file_num : active;
 		nk_layout_row_static(platform->ctx, 30, 200, 1);
-		nk_edit_string_zero_terminated(platform->ctx, NK_EDIT_SIMPLE, file_names[file_num], BUF_SIZE, nk_filter_default);
+
+		if (nk_edit_string_zero_terminated(platform->ctx, NK_EDIT_SIMPLE, file_names[file_num], BUF_SIZE, nk_filter_default)
+			& NK_EDIT_ACTIVATED) active = file_num;
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		if (nk_button_label(platform->ctx, "Save File") && active >= 0)

@@ -137,6 +137,9 @@ QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, P
 	selling_order->offer_num -= exchanged_num;
 	buying_order->offer_num -= exchanged_num;
 
+	insertFundsFactory(selling_order->offering_factory, exchanged_num * selling_order->price);
+	withdrawFundsFactory(buying_order->offering_factory, exchanged_num * buying_order->price);
+
 	if (selling_order->offer_num == 0)
 	{
 		if (removeSellOrder(selling_market, selling_order)) printf("Failed to remove sell order\n");

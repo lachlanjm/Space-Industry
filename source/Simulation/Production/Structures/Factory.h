@@ -3,6 +3,7 @@
 
 typedef struct Factory Factory;
 
+#include "..\..\..\History\HistoryArray.h"
 #include "..\Enums\ProductionRecipe.h"
 #include "..\Structures\Stockpile.h"
 #include "..\..\Markets\Structures\Order.h"
@@ -29,6 +30,7 @@ typedef struct Factory
 	QUANTITY_INT* ordered_out;
 
 	FACTORY_ID_INT id;
+	HistoryArray profit_history;
 } Factory;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
@@ -43,6 +45,9 @@ void addOrderedInQuantity(Factory* factory, const Product product, const QUANTIT
 void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
 void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
 void removeOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
+
+void insertFundsFactory(Factory* factory, const int funds);
+void withdrawFundsFactory(Factory* factory, const int funds);
 
 // TODO TBU
 void processTickFactory(Factory* factory);
