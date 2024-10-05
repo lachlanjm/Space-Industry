@@ -29,8 +29,10 @@ typedef struct Factory
 	QUANTITY_INT* ordered_in;
 	QUANTITY_INT* ordered_out;
 
-	FACTORY_ID_INT id;
 	HistoryArray profit_history;
+	int wealth;
+
+	FACTORY_ID_INT id;
 } Factory;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);

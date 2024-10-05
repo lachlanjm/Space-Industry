@@ -6,10 +6,12 @@
 #define SAVE_FILE_ID_SEP '_'
 #define SAVE_FILE_ATTR_ID '\t'
 #define SAVE_FILE_NEXT_ATTR_SEP '\n'
+#define SAVE_FILE_ARR_ITEM_SEP ';'
 
 #define SAVE_FILE_APP_STATE_ID "AppState"
 #define SAVE_FILE_FACTORY_MANAGER_ID "FactoryManager"
 #define SAVE_FILE_FACTORY_ID "Factory"
+#define SAVE_FILE_HISTORY_ARRAY_ID "HistoryArray"
 #define SAVE_FILE_LOCAL_POPULATION_ID "LocalPopulation"
 #define SAVE_FILE_LOGISTICS_CONTRACT_ID "LogisticsContract"
 #define SAVE_FILE_LOGISTICS_MANAGER_ID "LogisticsManager"
@@ -36,6 +38,9 @@
 
 #define SAVE_FILE_FAC_LOC_ID "location"
 #define SAVE_FILE_FAC_PRO_SPE_ID "processing_speed"
+#define SAVE_FILE_FAC_PFT_HIS_ID "profit_history"
+
+#define SAVE_FILE_HIS_ARR_ITEM_ID "value"
 
 #define SAVE_FILE_LOC_POP_POP_NUM_ID "population_number"
 
@@ -59,6 +64,7 @@
 
 #define SAVE_FILE_STO_PRO_ID "product_type"
 #define SAVE_FILE_STO_QUA_ID "quantity"
+#define SAVE_FILE_STO_QUA_HIS_ID "quantity_history"
 
 #define SAVE_FILE_VEH_STO_ID "stockpile"
 
@@ -74,6 +80,7 @@ enum AttributeTypes {
 	APP_STATE_SAVE,
 	FACTORY_MANAGER_SAVE,
 	FACTORY_SAVE,
+	HISTORY_ARRAY_SAVE,
 	LOCAL_POPULATION_SAVE,
 	LOGISTICS_CONTRACT_SAVE,
 	LOGISTICS_MANAGER_SAVE,

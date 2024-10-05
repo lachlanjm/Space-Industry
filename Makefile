@@ -82,6 +82,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\StockpileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\VehicleMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\DirectoryReading.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\HistoryArray.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\HistoryArrayHeap.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\HistoryIterator.c.o
 
 GUI_LIBS_PATH := $(GUI_PATH)\libs

@@ -15,6 +15,9 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 		case FACTORY_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_ID);
 			break;
+		case HISTORY_ARRAY_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_HISTORY_ARRAY_ID);
+			break;
 		case LOCAL_POPULATION_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_LOCAL_POPULATION_ID);
 			break;
@@ -187,6 +190,11 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_PRO_SPE_ID, factory->processing_speed)
 	);
 
+	appendToQueue(HISTORY_ARRAY_SAVE, &factory->profit_history);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_PFT_HIS_ID, HISTORY_ARRAY_SAVE, factory->profit_history.id)
+	);
+
 	for (int i = 0; i < factory->stockpiles_in_num; i++)
 	{
 		appendToQueue(STOCKPILE_SAVE, &factory->stockpiles_in[i]);
@@ -312,6 +320,11 @@ static inline void saveStockpile(FILE* fptr, Stockpile* stockpile)
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_STO_QUA_ID, stockpile->quantity)
 	);
+
+	appendToQueue(HISTORY_ARRAY_SAVE, &stockpile->quantity_history);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_STO_QUA_HIS_ID, HISTORY_ARRAY_SAVE, stockpile->quantity_history.id)
+	);
 }
 
 static inline void saveVehicle(FILE* fptr, Vehicle* vehicle)
@@ -345,6 +358,28 @@ static inline void saveVehicle(FILE* fptr, Vehicle* vehicle)
 	);
 }
 
+static inline void saveHistoryArray(FILE* fptr, HistoryArray* historyArray)
+{
+	static HistoryIterator* hist_iter;
+	static HISTORY_INT history_value;
+
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, HISTORY_ARRAY_SAVE, historyArray->id));
+
+	hist_iter = newHistoryIterator(historyArray, HISTORY_ARRAY_TYPE);
+	if (hist_iter)
+	{
+		while (getNextHistoryIterItem(hist_iter, &history_value)) 
+		{
+			writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+				getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_ARR_ITEM_ID, history_value)
+			);
+		}
+
+		closeHistoryIterator(hist_iter);
+	}
+}
+
 static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 {
 	switch (item->type)
@@ -357,6 +392,9 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 			break;
 		case FACTORY_SAVE:
 			saveFactory(fptr, (Factory*) item->data);
+			break;
+		case HISTORY_ARRAY_SAVE:
+			saveHistoryArray(fptr, (HistoryArray*) item->data);
 			break;
 		case LOCAL_POPULATION_SAVE:
 			saveLocalPopulation(fptr, (LocalPopulation*) item->data);

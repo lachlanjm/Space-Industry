@@ -2,7 +2,7 @@
 
 static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window);
 
-static void castCoreData(PopupWindow* window, WindowTypes window_type, void* coreData)
+static void castCoreData(PopupWindow* window, const WindowTypes window_type, void* coreData)
 {
 	switch (window->window_type)
 	{

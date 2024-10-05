@@ -136,11 +136,14 @@ void removeOrderedOutQuantity(Factory* factory, const Product product, const QUA
 
 void insertFundsFactory(Factory* factory, const int funds)
 {
+	factory->wealth += funds;
 	addToHistoryArray(&factory->profit_history, funds);
 }
 
+// TODO check funds are avaliable
 void withdrawFundsFactory(Factory* factory, const int funds)
 {
+	factory->wealth -= funds;
 	subFromHistoryArray(&factory->profit_history, funds);
 }
 

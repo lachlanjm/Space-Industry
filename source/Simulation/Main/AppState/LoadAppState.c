@@ -18,7 +18,7 @@ static inline int getNextDataPoint(FILE *fptr, char new_data_point[BUF_SIZE + 1]
 	return 1;
 }
 
-static inline enum AttributeTypes matchIdentifierWithType(char* id)
+static inline enum AttributeTypes matchIdentifierWithType(const char* id)
 {
 	if (strcmp(id, SAVE_FILE_APP_STATE_ID) == 0)
 	{
@@ -31,6 +31,10 @@ static inline enum AttributeTypes matchIdentifierWithType(char* id)
 	else if (strcmp(id, SAVE_FILE_FACTORY_ID) == 0)
 	{
 		return FACTORY_SAVE;
+	}
+	else if (strcmp(id, SAVE_FILE_HISTORY_ARRAY_ID) == 0)
+	{
+		return HISTORY_ARRAY_SAVE;
 	}
 	else if (strcmp(id, SAVE_FILE_LOCAL_POPULATION_ID) == 0)
 	{
@@ -294,6 +298,28 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			{
 				((Factory*)current_obj_ptr->data)->ordered_out[current_index] = atoi(attr_value);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_PFT_HIS_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_FAC_PFT_HIS_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_FAC_PFT_HIS_ID);
+					current_index = 0;
+				}
+
+				addNewStructIdPtr(HISTORY_ARRAY_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->profit_history);
+
+				current_index++;
+			}
+			break;
+		case HISTORY_ARRAY_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_ITEM_ID) == 0)
+			{
+				setValueAtIndex(((HistoryArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
+			else
+			{
+				current_index = 0;
+			}
 			break;
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_CEN_ID) == 0)
@@ -346,6 +372,18 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case ORDER_SAVE:
 			break;
 		case STOCKPILE_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_STO_QUA_HIS_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_STO_QUA_HIS_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_STO_QUA_HIS_ID);
+					current_index = 0;
+				}
+
+				addNewStructIdPtr(HISTORY_ARRAY_SAVE, extractObjectId(attr_value), &((Stockpile*)current_obj_ptr->data)->quantity_history);
+
+				current_index++;
+			}
 			break;
 		case VEHICLE_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_VEH_STO_ID) == 0)
@@ -442,6 +480,8 @@ static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
 			}
+			break;
+		case HISTORY_ARRAY_SAVE:
 			break;
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_NUM_ID) == 0)

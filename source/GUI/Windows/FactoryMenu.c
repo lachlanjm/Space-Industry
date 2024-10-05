@@ -91,6 +91,10 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		snprintf(buffer, BUF_SIZE, "Wealth: $%u", factory->wealth);
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		nk_label(platform->ctx, "Profit:", NK_TEXT_LEFT);
 		
 		nk_layout_row_static(platform->ctx, 100, 300, 1);

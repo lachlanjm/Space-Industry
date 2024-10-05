@@ -1,5 +1,7 @@
 #include "HistoryArray.h"
 
+static HISTORY_ARRAY_ID_INT id_next = 0;
+
 static int tick = 0;
 static int index_base = 0;
 HistoryArray* newHistoryArray()
@@ -11,7 +13,7 @@ HistoryArray* newHistoryArray()
 
 void assignNewHistoryArrayValues(HistoryArray* hist_array)
 {
-	// NOTHING -> TBU
+	hist_array->id = id_next++;
 }
 
 void addToHistoryArray(HistoryArray* hist_array, const HISTORY_INT value)
@@ -27,6 +29,11 @@ void subFromHistoryArray(HistoryArray* hist_array, const HISTORY_INT value)
 HISTORY_INT getValueAtIndex(const HistoryArray* hist_array, const int index)
 {
 	return hist_array->array[(index_base + index) % MAX_HISTORY];
+}
+
+void setValueAtIndex(HistoryArray* hist_array, const int index, const HISTORY_INT value)
+{
+	hist_array->array[(index_base + index) % MAX_HISTORY] = value;
 }
 
 void tickHistoryArrayIndexStatic()

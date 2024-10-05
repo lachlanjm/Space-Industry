@@ -3,6 +3,7 @@
 
 #include ".\AppState.h"
 #include "..\..\..\Helpers\SaveFileStandards.h"
+#include "..\..\..\History\HistoryIterator.h"
 
 #include <stdio.h>
 

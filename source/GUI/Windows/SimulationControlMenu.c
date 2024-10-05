@@ -2,8 +2,8 @@
 
 void drawSimulationControlMenu(AppPlatform* platform, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Controls", nk_rect(50, 50, 100, 70),
-		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|NK_WINDOW_TITLE))
+	if (nk_begin_titled(platform->ctx, name, "Controls", nk_rect(WINDOW_WIDTH - 120, 0, 120, 85),
+		NK_WINDOW_BORDER|NK_WINDOW_TITLE))
 	{
 		nk_layout_row_static(platform->ctx, 30, 30, 2);
 		if (nk_button_symbol(platform->ctx, NK_SYMBOL_CIRCLE_SOLID))
