@@ -209,6 +209,9 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_PRO_SPE_ID, factory->processing_speed)
 	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_WTH_ID, factory->wealth)
+	);
 
 	appendToQueue(HISTORY_ARRAY_SAVE, &factory->profit_history);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,

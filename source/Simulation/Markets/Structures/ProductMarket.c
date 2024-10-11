@@ -4,7 +4,7 @@ static FACTORY_ID_INT id_next = 0;
 
 ProductMarket* newProductMarket(const TransportNode location, const Product product_type)
 {
-	ProductMarket* productMarket = (ProductMarket*) malloc(1 * sizeof(ProductMarket));
+	ProductMarket* productMarket = (ProductMarket*) calloc(1, sizeof(ProductMarket));
 
 	assignProductMarketValues(productMarket, location, product_type);
 

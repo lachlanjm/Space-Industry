@@ -4,7 +4,7 @@ static FACTORY_ID_INT id_next = 0;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
 {
-	Factory* factory = (Factory*) malloc(1 * sizeof(Factory));
+	Factory* factory = (Factory*) calloc(1, sizeof(Factory));
 
 	assignFactoryValues(factory, productionRecipe, location);
 
@@ -17,6 +17,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 
 	factory->location = location;
 	factory->processing_speed = 1;
+	factory->wealth = 0;
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -143,6 +144,7 @@ void insertFundsFactory(Factory* factory, const int funds)
 // TODO check funds are avaliable
 void withdrawFundsFactory(Factory* factory, const int funds)
 {
+	if (factory->wealth < funds) return; // reject payment
 	factory->wealth -= funds;
 	subFromHistoryArray(&factory->profit_history, funds);
 }

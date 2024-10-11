@@ -4,7 +4,7 @@ static LOGISTICS_MANAGER_ID_INT id_next = 0;
 
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num)
 {
-	LogisticsManager* logisticsManager = (LogisticsManager*) malloc(1 * sizeof(LogisticsManager));
+	LogisticsManager* logisticsManager = (LogisticsManager*) calloc(1, sizeof(LogisticsManager));
 	assignLogisticsManagerValues(logisticsManager, vehicles_num);
 	return logisticsManager;
 }

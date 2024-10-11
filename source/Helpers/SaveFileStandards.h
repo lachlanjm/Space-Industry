@@ -42,6 +42,7 @@
 #define SAVE_FILE_FAC_LOC_ID "location"
 #define SAVE_FILE_FAC_PRO_SPE_ID "processing_speed"
 #define SAVE_FILE_FAC_PFT_HIS_ID "profit_history"
+#define SAVE_FILE_FAC_WTH_ID "wealth"
 
 #define SAVE_FILE_HIS_ARR_ITEM_ID "value"
 

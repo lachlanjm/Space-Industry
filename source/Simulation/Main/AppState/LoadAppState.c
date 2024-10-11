@@ -338,38 +338,10 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			break;
 		case HISTORY_ARRAY_SAVE:
-			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_ITEM_ID) == 0)
-			{
-				setValueAtIndexHistoryArray(((HistoryArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
-			}
-			else
-			{
-				current_index = 0;
-			}
 			break;
 		case HISTORY_ARRAY_AVG_SAVE:
-			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_AVG_ITEM_ID) == 0)
-			{
-				setValueAtIndexHistoryArrayAvg(((HistoryArrayAvg*)current_obj_ptr->data), current_index++, atoi(attr_value));
-			}
-			else
-			{
-				current_index = 0;
-			}
 			break;
 		case HISTORY_WTD_AVG_ARRAY_SAVE:
-			if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID) == 0)
-			{
-				setValueAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
-			}
-			else if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID) == 0)
-			{
-				setWeightAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index, atoi(attr_value));
-			}
-			else
-			{
-				current_index = 0;
-			}
 			break;
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_CEN_ID) == 0)
@@ -556,12 +528,32 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_WTH_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->wealth = atoi(attr_value);
+			}
 			break;
 		case HISTORY_ARRAY_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_ITEM_ID) == 0)
+			{
+				setValueAtIndexHistoryArray(((HistoryArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
 			break;
 		case HISTORY_ARRAY_AVG_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_AVG_ITEM_ID) == 0)
+			{
+				setValueAtIndexHistoryArrayAvg(((HistoryArrayAvg*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
 			break;
 		case HISTORY_WTD_AVG_ARRAY_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID) == 0)
+			{
+				setValueAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID) == 0)
+			{
+				setWeightAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index, atoi(attr_value));
+			}
 			break;
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_NUM_ID) == 0)
