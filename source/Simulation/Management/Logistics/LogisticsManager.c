@@ -139,7 +139,7 @@ void assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicl
 	int from_max = -1;
 	int to_max = -1;
 	int product_max = -1;
-	int eff_max = 0;
+	float eff_max = 0;
 
 	float eff = 0;
 	int dist_to = 0;
