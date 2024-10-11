@@ -8,17 +8,17 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <math.h>
 
 #define FACTORY_MANAGER_ID_INT uint_least16_t
 
 // TODO: TBU finetune AI
 #define FM_STOCKPILE_FULL 500
-#define FM_DESIRED_STOCKPILE_MAX 350 // !!MUST BE!! < STOCKPILE_FULL - ORDER_QUANTITY_MIN
-#define FM_DESIRED_STOCKPILE_MIN 150
+#define FM_DESIRED_SELL_STOCKPILE_ROOT 18.6 // !!MUST BE!! < STOCKPILE_FULL - ORDER_QUANTITY_MIN
+#define FM_DESIRED_BUY_STOCKPILE_ROOT 12.3
 #define FM_ORDER_QUANTITY_MIN 100
 
-#define FM_INCREASE_PRICE_FACTOR 1.02f
-#define FM_DECREASE_PRICE_FACTOR 0.98f
+#define FM_DEFAULT_PRICE 30
 
 typedef struct FactoryManager {
 	Factory controlled_factory;

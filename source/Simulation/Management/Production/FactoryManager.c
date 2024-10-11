@@ -8,6 +8,7 @@ void assignFactoryManagerValues(FactoryManager* factoryManager, const Production
 	factoryManager->id = id_next++;
 } 
 
+// TODO update to include market price (not just local)
 void updateOfferedPrices(FactoryManager* factoryManager)
 {
 	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_in_num; i++)
@@ -19,7 +20,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 				factoryManager->controlled_factory.stockpiles_in[i].product_type
 		);
 
-		if (FM_STOCKPILE_FULL - FM_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
+		if (stockpile_ordered_quantity < FM_STOCKPILE_FULL - FM_ORDER_QUANTITY_MIN)
 		{		
 			if (factoryManager->controlled_factory.orders_in[i].offer_num == 0)
 			{
@@ -36,30 +37,31 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 
 		if (factoryManager->controlled_factory.orders_in[i].offer_num > 0)
 		{
-			if (FM_DESIRED_STOCKPILE_MAX < stockpile_ordered_quantity)
+			ProductMarket* productMarket = getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type);
+
+			// TODO TBU
+			if (getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) == 0)
 			{
-				// Lower offered price
-				factoryManager->controlled_factory.orders_in[i].price *= FM_DECREASE_PRICE_FACTOR;
-				if (resetBuyOrder(
-					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-					&factoryManager->controlled_factory.orders_in[i])
-				) {
-					printf("Failed to reset buy order\n");
-				}
+				factoryManager->controlled_factory.orders_in[i].price = (
+					FM_DEFAULT_PRICE
+					* (sqrt((double)stockpile_ordered_quantity) / FM_DESIRED_BUY_STOCKPILE_ROOT)
+				);
 			}
-			else if (FM_DESIRED_STOCKPILE_MIN > stockpile_ordered_quantity)
+			else
 			{
-				// Raise offered price
-				factoryManager->controlled_factory.orders_in[i].price *= FM_INCREASE_PRICE_FACTOR;
-				if (resetBuyOrder(
-					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_in[i].product_type),
-					&factoryManager->controlled_factory.orders_in[i])
-				) {
-					printf("Failed to reset buy order\n");
-				}
+				factoryManager->controlled_factory.orders_in[i].price = (
+					getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array)
+					* (sqrt((double)stockpile_ordered_quantity) / FM_DESIRED_BUY_STOCKPILE_ROOT)
+				);
+			}
+
+			if (resetBuyOrder(productMarket, &factoryManager->controlled_factory.orders_in[i])) 
+			{
+				printf("Failed to reset buy order\n");
 			}
 		}
 	}
+
 	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_out_num; i++)
 	{
 		QUANTITY_INT stockpile_free_quantity = 
@@ -68,7 +70,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 				&factoryManager->controlled_factory, 
 				factoryManager->controlled_factory.stockpiles_out[i].product_type
 		);
-		if (FM_ORDER_QUANTITY_MIN < stockpile_free_quantity)
+		if (stockpile_free_quantity > FM_ORDER_QUANTITY_MIN)
 		{
 			if (factoryManager->controlled_factory.orders_out[i].offer_num == 0)
 			{
@@ -85,27 +87,27 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 
 		if (factoryManager->controlled_factory.orders_out[i].offer_num > 0)
 		{
-			if (FM_DESIRED_STOCKPILE_MAX < stockpile_free_quantity)
+			// Re-calc selling price
+			ProductMarket* productMarket = getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type);
+			
+			if (getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) == 0)
 			{
-				// Lower selling price
-				factoryManager->controlled_factory.orders_out[i].price *= FM_DECREASE_PRICE_FACTOR;
-				if (resetSellOrder(
-					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-					&factoryManager->controlled_factory.orders_out[i])
-				) {
-					printf("Failed to reset sell order\n");
-				}
+				factoryManager->controlled_factory.orders_out[i].price = (
+					FM_DEFAULT_PRICE
+					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)stockpile_free_quantity))
+				);
 			}
-			else if (FM_DESIRED_STOCKPILE_MIN > stockpile_free_quantity)
+			else
 			{
-				// Raise selling price
-				factoryManager->controlled_factory.orders_out[i].price *= FM_INCREASE_PRICE_FACTOR;
-				if (resetSellOrder(
-					getProductMarketAtLocation(factoryManager->controlled_factory.location, factoryManager->controlled_factory.stockpiles_out[i].product_type),
-					&factoryManager->controlled_factory.orders_out[i])
-				) {
-					printf("Failed to reset sell order\n");
-				}
+				factoryManager->controlled_factory.orders_out[i].price = (
+					getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array)
+					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)stockpile_free_quantity))
+				);
+			}
+
+			if (resetSellOrder(productMarket, &factoryManager->controlled_factory.orders_out[i])) 
+			{
+				printf("Failed to reset sell order\n");
 			}
 		}
 	}
