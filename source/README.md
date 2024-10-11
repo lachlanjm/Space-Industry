@@ -101,7 +101,7 @@ Stockpile* stockpiles_in;
 ### Related struct functions
 I.e. instance methods. Functions that take a singular ptr to an instance of the struct as the first parameter (similar to Python's self parameter) use camelCase. E.g:
 ```c
-void assignNewFactoryValues(Factory* factory, [...]);
+void assignFactoryValues(Factory* factory, [...]);
 ```
 For parameters in these functions, use the same naming convention as for member variables, however, try to avoid naming parameters the same as their type unless it is the first parameter.
 <br><br>

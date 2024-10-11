@@ -12,10 +12,13 @@
 #define SAVE_FILE_FACTORY_MANAGER_ID "FactoryManager"
 #define SAVE_FILE_FACTORY_ID "Factory"
 #define SAVE_FILE_HISTORY_ARRAY_ID "HistoryArray"
+#define SAVE_FILE_HISTORY_ARRAY_AVG_ID "HistoryArrayAvg"
+#define SAVE_FILE_HISTORY_WTD_AVG_ARRAY_ID "HistoryWtdAvgArray"
 #define SAVE_FILE_LOCAL_POPULATION_ID "LocalPopulation"
 #define SAVE_FILE_LOGISTICS_CONTRACT_ID "LogisticsContract"
 #define SAVE_FILE_LOGISTICS_MANAGER_ID "LogisticsManager"
 #define SAVE_FILE_ORDER_ID "Order"
+#define SAVE_FILE_PRODUCT_MARKET_ID "ProductMarket"
 #define SAVE_FILE_STOCKPILE_ID "Stockpile"
 #define SAVE_FILE_VEHICLE_ID "Vehicle"
 
@@ -42,6 +45,11 @@
 
 #define SAVE_FILE_HIS_ARR_ITEM_ID "value"
 
+#define SAVE_FILE_HIS_ARR_AVG_ITEM_ID "value"
+
+#define SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID "value"
+#define SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID "weight"
+
 #define SAVE_FILE_LOC_POP_POP_NUM_ID "population_number"
 
 #define SAVE_FILE_LOC_POP_POP_CEN_ID "population_centre"
@@ -62,6 +70,11 @@
 #define SAVE_FILE_ORD_OFF_NUM_ID "offer_num"
 #define SAVE_FILE_ORD_PRI_ID "price"
 
+#define SAVE_FILE_PRO_MAR_LOC_ID "location"
+#define SAVE_FILE_PRO_MAR_PRO_ID "product"
+#define SAVE_FILE_PRO_MAR_SELL_HIS_ID "sell_hist_arr"
+#define SAVE_FILE_PRO_MAR_BUY_HIS_ID "buy_hist_arr"
+
 #define SAVE_FILE_STO_PRO_ID "product_type"
 #define SAVE_FILE_STO_QUA_ID "quantity"
 #define SAVE_FILE_STO_QUA_HIS_ID "quantity_history"
@@ -81,10 +94,13 @@ enum AttributeTypes {
 	FACTORY_MANAGER_SAVE,
 	FACTORY_SAVE,
 	HISTORY_ARRAY_SAVE,
+	HISTORY_ARRAY_AVG_SAVE,
+	HISTORY_WTD_AVG_ARRAY_SAVE,
 	LOCAL_POPULATION_SAVE,
 	LOGISTICS_CONTRACT_SAVE,
 	LOGISTICS_MANAGER_SAVE,
 	ORDER_SAVE,
+	PRODUCT_MARKET_SAVE,
 	STOCKPILE_SAVE,
 	VEHICLE_SAVE,
 	STRUCT_SAVE_NUM

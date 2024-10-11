@@ -13,7 +13,7 @@ void assignStockpileValues(Stockpile* stockpile, const Product product, const QU
 	stockpile->product_type = product;
 	stockpile->quantity = quantity;
 
-	assignNewHistoryArrayValues(&stockpile->quantity_history);
+	assignHistoryArrayValues(&stockpile->quantity_history);
 
 	stockpile->id = id_next++;
 }
@@ -87,7 +87,7 @@ uint_fast8_t moveStockpile(Stockpile* stockpile_out, Stockpile* stockpile_in, co
 
 void processTickStockpile(Stockpile* stockpile)
 {
-	tickHistoryArrayIndexClean(&stockpile->quantity_history);
+	tickHistoryArrayIndex(&stockpile->quantity_history);
 }
 
 void cleanStockpile(Stockpile* stockpile)

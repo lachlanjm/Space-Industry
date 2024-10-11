@@ -7,12 +7,15 @@ static int index_base = 0;
 HistoryArray* newHistoryArray()
 {
 	HistoryArray* hist_array = calloc(1, sizeof(HistoryArray));
-	assignNewHistoryArrayValues(hist_array);
+	assignHistoryArrayValues(hist_array);
 	return hist_array;
 }
 
-void assignNewHistoryArrayValues(HistoryArray* hist_array)
+void assignHistoryArrayValues(HistoryArray* hist_array)
 {
+	// TODO this shouldn't actually be needed but it makes it work?
+	for (int i=0;i<MAX_HISTORY;i++) { hist_array->array[i] = 0; }
+
 	hist_array->id = id_next++;
 }
 
@@ -26,12 +29,12 @@ void subFromHistoryArray(HistoryArray* hist_array, const HISTORY_INT value)
 	hist_array->array[index_base] -= value;
 }
 
-HISTORY_INT getValueAtIndex(const HistoryArray* hist_array, const int index)
+HISTORY_INT getValueAtIndexHistoryArray(const HistoryArray* hist_array, const int index)
 {
 	return hist_array->array[(index_base + index) % MAX_HISTORY];
 }
 
-void setValueAtIndex(HistoryArray* hist_array, const int index, const HISTORY_INT value)
+void setValueAtIndexHistoryArray(HistoryArray* hist_array, const int index, const HISTORY_INT value)
 {
 	hist_array->array[(index_base + index) % MAX_HISTORY] = value;
 }
@@ -43,7 +46,7 @@ void tickHistoryArrayIndexStatic()
 	index_base %= MAX_HISTORY;
 }
 
-void tickHistoryArrayIndexClean(HistoryArray* hist_array)
+void tickHistoryArrayIndex(HistoryArray* hist_array)
 {
 	hist_array->array[index_base] = 0;
 }

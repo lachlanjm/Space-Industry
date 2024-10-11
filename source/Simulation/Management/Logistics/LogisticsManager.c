@@ -5,11 +5,11 @@ static LOGISTICS_MANAGER_ID_INT id_next = 0;
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num)
 {
 	LogisticsManager* logisticsManager = (LogisticsManager*) malloc(1 * sizeof(LogisticsManager));
-	assignNewLogisticsManagerValues(logisticsManager, vehicles_num);
+	assignLogisticsManagerValues(logisticsManager, vehicles_num);
 	return logisticsManager;
 }
 
-void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
+void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
 {
 	logisticsManager->vehicles_num = vehicles_num;
 
@@ -17,7 +17,7 @@ void assignNewLogisticsManagerValues(LogisticsManager* logisticsManager, const u
 
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		assignNewVehicleValues(&logisticsManager->vehicles[i], 0);
+		assignVehicleValues(&logisticsManager->vehicles[i], 0);
 	}
 
 	logisticsManager->contracts_num = 0;
@@ -30,7 +30,7 @@ void addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicl
 	logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
 	addOrderedOutQuantity(selling_factory, product, quantity);
 	addOrderedInQuantity(buying_factory, product, quantity);
-	assignNewLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
+	assignLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
 }
 
 void loadLogisticsManagerConstructorVehicles(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
@@ -128,13 +128,13 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 	{
 		if (logisticsManager->vehicles[i].end_location == -1)
 		{
-			assignNewLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
+			assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
 		}
 	}
 }
 
 // TODO: return value to indicate no new state and stop iterating for current tick
-void assignNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
+void assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
 {
 	int from_max = -1;
 	int to_max = -1;

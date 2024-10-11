@@ -18,6 +18,12 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 		case HISTORY_ARRAY_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_HISTORY_ARRAY_ID);
 			break;
+		case HISTORY_ARRAY_AVG_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_HISTORY_ARRAY_AVG_ID);
+			break;
+		case HISTORY_WTD_AVG_ARRAY_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_HISTORY_WTD_AVG_ARRAY_ID);
+			break;
 		case LOCAL_POPULATION_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_LOCAL_POPULATION_ID);
 			break;
@@ -29,6 +35,9 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 			break;
 		case ORDER_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_ORDER_ID);
+			break;
+		case PRODUCT_MARKET_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_PRODUCT_MARKET_ID);
 			break;
 		case STOCKPILE_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_STOCKPILE_ID);
@@ -163,6 +172,17 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_LOC_POP_ID, LOCAL_POPULATION_SAVE, appState->local_population[i].id)
 		);
 	}
+
+	// TODO make it adjust to var sizes
+	for (int x=0; x<TRANSPORT_NODE_COUNT; x++)
+	{
+		for (int y=0; y<PRODUCT_COUNT; y++)
+		{
+			appendToQueue(PRODUCT_MARKET_SAVE, 
+				getProductMarketAtLocation(x, y)
+			);
+		}
+	}
 }
 
 static inline void saveFactoryManager(FILE* fptr, FactoryManager* factoryManager)
@@ -224,6 +244,82 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_ORD_NUM_OUT_ID, factory->ordered_out[i])
 		);
 	}
+}
+
+static inline void saveHistoryArray(FILE* fptr, HistoryArray* historyArray)
+{
+	static HistoryIterator* hist_iter;
+	static HISTORY_INT history_value;
+
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, HISTORY_ARRAY_SAVE, historyArray->id));
+
+	hist_iter = newHistoryIterator(historyArray, HISTORY_ARRAY_TYPE);
+	if (hist_iter)
+	{
+		while (getNextHistoryIterItem(hist_iter, &history_value)) 
+		{
+			writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+				getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_ARR_ITEM_ID, history_value)
+			);
+		}
+
+		closeHistoryIterator(hist_iter);
+	}
+}
+
+static inline void saveHistoryArrayAvg(FILE* fptr, HistoryArrayAvg* historyArray)
+{
+	static HistoryIterator* hist_iter;
+	static HISTORY_INT history_value;
+
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, HISTORY_ARRAY_AVG_SAVE, historyArray->id));
+
+	hist_iter = newHistoryIterator(historyArray, HISTORY_ARRAY_AVG_TYPE);
+	if (hist_iter)
+	{
+		while (getNextHistoryIterItem(hist_iter, &history_value)) 
+		{
+			writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+				getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_ARR_AVG_ITEM_ID, history_value)
+			);
+		}
+
+		closeHistoryIterator(hist_iter);
+	}
+}
+
+static inline void saveHistoryWtdAvgArray(FILE* fptr, HistoryWtdAvgArray* historyArray)
+{
+	static HistoryIterator* hist_value_iter;
+	static HistoryIterator* hist_weight_iter;
+	static HISTORY_INT history_value;
+	static HISTORY_INT history_weight;
+
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, HISTORY_WTD_AVG_ARRAY_SAVE, historyArray->id));
+
+	hist_value_iter = newHistoryIterator(historyArray, HISTORY_WTD_AVG_ARRAY_VALUE_TYPE);
+	if (hist_value_iter == NULL) { return; }
+
+	hist_weight_iter = newHistoryIterator(historyArray, HISTORY_WTD_AVG_ARRAY_WEIGHT_TYPE);
+	if (hist_weight_iter == NULL) { closeHistoryIterator(hist_value_iter); return; }
+
+	while (getNextHistoryIterItem(hist_value_iter, &history_value)) 
+	{
+		getNextHistoryIterItem(hist_weight_iter, &history_weight);
+
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID, history_value)
+		);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID, history_weight)
+		);
+	}
+
+	closeHistoryIterator(hist_weight_iter);
+	closeHistoryIterator(hist_value_iter);
 }
 
 static inline void saveLocalPopulation(FILE* fptr, LocalPopulation* population)
@@ -309,6 +405,29 @@ static inline void saveOrder(FILE* fptr, Order* order)
 	);
 }
 
+static inline void saveProductMarket(FILE* fptr, ProductMarket* productMarket)
+{
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, PRODUCT_MARKET_SAVE, productMarket->id));
+
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_PRO_MAR_LOC_ID, productMarket->location)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_PRO_MAR_PRO_ID, productMarket->product_type)
+	);
+
+	appendToQueue(HISTORY_WTD_AVG_ARRAY_SAVE, &productMarket->sell_hist_array);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_PRO_MAR_SELL_HIS_ID, HISTORY_WTD_AVG_ARRAY_SAVE, productMarket->sell_hist_array.id)
+	);
+
+	appendToQueue(HISTORY_WTD_AVG_ARRAY_SAVE, &productMarket->buy_hist_array);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_PRO_MAR_BUY_HIS_ID, HISTORY_WTD_AVG_ARRAY_SAVE, productMarket->buy_hist_array.id)
+	);
+}
+
 static inline void saveStockpile(FILE* fptr, Stockpile* stockpile)
 {
 	char buffer[BUF_SIZE];
@@ -358,28 +477,6 @@ static inline void saveVehicle(FILE* fptr, Vehicle* vehicle)
 	);
 }
 
-static inline void saveHistoryArray(FILE* fptr, HistoryArray* historyArray)
-{
-	static HistoryIterator* hist_iter;
-	static HISTORY_INT history_value;
-
-	char buffer[BUF_SIZE];
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, HISTORY_ARRAY_SAVE, historyArray->id));
-
-	hist_iter = newHistoryIterator(historyArray, HISTORY_ARRAY_TYPE);
-	if (hist_iter)
-	{
-		while (getNextHistoryIterItem(hist_iter, &history_value)) 
-		{
-			writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-				getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_ARR_ITEM_ID, history_value)
-			);
-		}
-
-		closeHistoryIterator(hist_iter);
-	}
-}
-
 static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 {
 	switch (item->type)
@@ -396,6 +493,12 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 		case HISTORY_ARRAY_SAVE:
 			saveHistoryArray(fptr, (HistoryArray*) item->data);
 			break;
+		case HISTORY_ARRAY_AVG_SAVE:
+			saveHistoryArrayAvg(fptr, (HistoryArrayAvg*) item->data);
+			break;
+		case HISTORY_WTD_AVG_ARRAY_SAVE:
+			saveHistoryWtdAvgArray(fptr, (HistoryWtdAvgArray*) item->data);
+			break;
 		case LOCAL_POPULATION_SAVE:
 			saveLocalPopulation(fptr, (LocalPopulation*) item->data);
 			break;
@@ -407,6 +510,9 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 			break;
 		case ORDER_SAVE:
 			saveOrder(fptr, (Order*) item->data);
+			break;
+		case PRODUCT_MARKET_SAVE:
+			saveProductMarket(fptr, (ProductMarket*) item->data);
 			break;
 		case STOCKPILE_SAVE:
 			saveStockpile(fptr, (Stockpile*) item->data);
@@ -445,6 +551,7 @@ int saveAppState(AppState* appState, const char* app_dir_path, const char* save_
 	{
 		saveNextStruct(fptr, current_item);
 		current_item = current_item->next;
+		fflush(stdout);
 	}
 
 	fclose(fptr);

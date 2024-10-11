@@ -4,10 +4,13 @@
 typedef struct AppState AppState;
 
 #include "..\..\..\History\HistoryArray.h"
+#include "..\..\..\History\HistoryArrayAvg.h"
+#include "..\..\..\History\HistoryWtdAvgArray.h"
 
 #include "..\..\Management\Logistics\LogisticsManager.h"
 #include "..\..\Management\Production\FactoryManager.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
+#include "..\..\Environment\Structures\MarketMap.h"
 
 #include ".\LoadAppState.h"
 #include ".\SaveAppState.h"

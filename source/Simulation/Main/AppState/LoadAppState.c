@@ -36,6 +36,14 @@ static inline enum AttributeTypes matchIdentifierWithType(const char* id)
 	{
 		return HISTORY_ARRAY_SAVE;
 	}
+	else if (strcmp(id, SAVE_FILE_HISTORY_ARRAY_AVG_ID) == 0)
+	{
+		return HISTORY_ARRAY_AVG_SAVE;
+	}
+	else if (strcmp(id, SAVE_FILE_HISTORY_WTD_AVG_ARRAY_ID) == 0)
+	{
+		return HISTORY_WTD_AVG_ARRAY_SAVE;
+	}
 	else if (strcmp(id, SAVE_FILE_LOCAL_POPULATION_ID) == 0)
 	{
 		return LOCAL_POPULATION_SAVE;
@@ -51,6 +59,10 @@ static inline enum AttributeTypes matchIdentifierWithType(const char* id)
 	else if (strcmp(id, SAVE_FILE_ORDER_ID) == 0)
 	{
 		return ORDER_SAVE;
+	}
+	else if (strcmp(id, SAVE_FILE_PRODUCT_MARKET_ID) == 0)
+	{
+		return PRODUCT_MARKET_SAVE;
 	}
 	else if (strcmp(id, SAVE_FILE_STOCKPILE_ID) == 0)
 	{
@@ -158,6 +170,8 @@ static inline void getNextObject(char new_data_point[BUF_SIZE + 1], enum Attribu
 
 static int current_index = 0;
 static char current_arr_name[BUF_SIZE] = "";
+static TransportNode current_location;
+static Product current_product;
 static inline void addNewStructForPtrs(char new_data_point[BUF_SIZE + 1], enum AttributeTypes* current_obj_type, struct LoadStateIdList** current_obj_ptr)
 {
 	int id = extractObjectId(new_data_point);
@@ -165,6 +179,20 @@ static inline void addNewStructForPtrs(char new_data_point[BUF_SIZE + 1], enum A
 	if (*current_obj_type == APP_STATE_SAVE)
 	{
 		addNewStructIdPtr(*current_obj_type, id, calloc(1, sizeof(AppState)));
+
+		// TODO make it adjust to var sizes and in the appState loading
+		if (getProductMarketAtLocation(0,0) != NULL) cleanMarketMap();
+		instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT); // TODO TBU
+
+		for (int x=0; x<TRANSPORT_NODE_COUNT; x++) // TODO TBU
+		{
+			for (int y=0; y<PRODUCT_COUNT; y++) // TODO TBU
+			{
+				// REALLY BAD USE OF ID - ERRORS?
+				printf("--%x\n", getProductMarketAtLocation(x, y));
+				addNewStructIdPtr(PRODUCT_MARKET_SAVE, x*PRODUCT_COUNT+y, getProductMarketAtLocation(x, y));
+			}
+		}
 	}
 	*current_obj_ptr = getObject(*current_obj_type, id);
 	current_index = 0;
@@ -266,7 +294,6 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				}
 
 				addNewStructIdPtr(STOCKPILE_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->stockpiles_in[current_index]);
-
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_OUT_ID) == 0)
 			{
@@ -314,7 +341,31 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case HISTORY_ARRAY_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_ITEM_ID) == 0)
 			{
-				setValueAtIndex(((HistoryArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
+				setValueAtIndexHistoryArray(((HistoryArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
+			else
+			{
+				current_index = 0;
+			}
+			break;
+		case HISTORY_ARRAY_AVG_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_AVG_ITEM_ID) == 0)
+			{
+				setValueAtIndexHistoryArrayAvg(((HistoryArrayAvg*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
+			else
+			{
+				current_index = 0;
+			}
+			break;
+		case HISTORY_WTD_AVG_ARRAY_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID) == 0)
+			{
+				setValueAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index++, atoi(attr_value));
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID) == 0)
+			{
+				setWeightAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index, atoi(attr_value));
 			}
 			else
 			{
@@ -369,6 +420,38 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				current_index++;
 			}
 			break;
+		case PRODUCT_MARKET_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_PRO_MAR_LOC_ID) == 0)
+			{
+				current_location = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_PRO_MAR_PRO_ID) == 0)
+			{
+				current_product = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_PRO_MAR_SELL_HIS_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_PRO_MAR_SELL_HIS_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_PRO_MAR_SELL_HIS_ID);
+				}
+
+				addNewStructIdPtr(HISTORY_WTD_AVG_ARRAY_SAVE, extractObjectId(attr_value), 
+					&getProductMarketAtLocation(current_location, current_product)->sell_hist_array
+				);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_PRO_MAR_BUY_HIS_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_PRO_MAR_BUY_HIS_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_PRO_MAR_BUY_HIS_ID);
+				}
+
+				addNewStructIdPtr(HISTORY_WTD_AVG_ARRAY_SAVE, extractObjectId(attr_value), 
+					&getProductMarketAtLocation(current_location, current_product)->buy_hist_array
+				);
+			}
+			break;
 		case ORDER_SAVE:
 			break;
 		case STOCKPILE_SAVE:
@@ -377,12 +460,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				if (strcmp(current_arr_name, SAVE_FILE_STO_QUA_HIS_ID))
 				{
 					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_STO_QUA_HIS_ID);
-					current_index = 0;
 				}
 
 				addNewStructIdPtr(HISTORY_ARRAY_SAVE, extractObjectId(attr_value), &((Stockpile*)current_obj_ptr->data)->quantity_history);
-
-				current_index++;
 			}
 			break;
 		case VEHICLE_SAVE:
@@ -391,12 +471,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				if (strcmp(current_arr_name, SAVE_FILE_VEH_STO_ID))
 				{
 					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_VEH_STO_ID);
-					current_index = 0;
 				}
 
 				addNewStructIdPtr(STOCKPILE_SAVE, extractObjectId(attr_value), &((Vehicle*)current_obj_ptr->data)->stockpile);
-
-				current_index++;
 			}
 			break;
 		default:
@@ -459,7 +536,7 @@ static inline void nextStructForAssignment(char new_data_point[BUF_SIZE + 1], en
 	setDefaults(*current_obj_type, *current_obj);
 }
 
-static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1], const enum AttributeTypes current_obj_type, struct LoadStateIdList* current_obj_ptr)
+static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], const enum AttributeTypes current_obj_type, struct LoadStateIdList* current_obj_ptr)
 {
 	char attr_value[BUF_SIZE];
 	new_data_point++; // Removes SAVE_FILE_ATTR_ID char
@@ -482,6 +559,10 @@ static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1
 			}
 			break;
 		case HISTORY_ARRAY_SAVE:
+			break;
+		case HISTORY_ARRAY_AVG_SAVE:
+			break;
+		case HISTORY_WTD_AVG_ARRAY_SAVE:
 			break;
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_NUM_ID) == 0)
@@ -530,6 +611,9 @@ static inline void assignNewAttributesForValues(char new_data_point[BUF_SIZE + 1
 			{
 				((Order*)current_obj_ptr->data)->price = atoi(attr_value);
 			}
+			break;
+		case PRODUCT_MARKET_SAVE:
+			// Should never happen (can't)
 			break;
 		case STOCKPILE_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_STO_PRO_ID) == 0)
@@ -591,7 +675,7 @@ static inline void processDataPointForValueAssignment(char new_data_point[BUF_SI
 	if (new_data_point[0] == SAVE_FILE_ATTR_ID)
 	{
 		// Add new attribute
-		assignNewAttributesForValues(new_data_point, *current_obj_type, *current_obj);
+		assignAttributesForValues(new_data_point, *current_obj_type, *current_obj);
 	}
 	else if (new_data_point[0] == '\0')
 	{

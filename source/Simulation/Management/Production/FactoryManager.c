@@ -20,7 +20,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 		);
 
 		if (FM_STOCKPILE_FULL - FM_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
-		{
+		{		
 			if (factoryManager->controlled_factory.orders_in[i].offer_num == 0)
 			{
 				// Add to market

@@ -1,6 +1,8 @@
 import os
 
 def main():
+	# no longer needed
+	return
 	market_map_h = """#ifndef MARKET_MAP_H
 #define MARKET_MAP_H
 

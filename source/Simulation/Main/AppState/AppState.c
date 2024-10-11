@@ -3,6 +3,11 @@
 void processTickAppState(AppState* appState)
 {
 	tickHistoryArrayIndexStatic();
+	tickHistoryArrayAvgIndexStatic();
+	tickHistoryWtdAvgArrayIndexStatic();
+
+	processTickMarketMap();
+
 	// MUST DO FACTORY BEFORE LOGISTICS (HISTORY SAVING FLOW)
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
@@ -50,7 +55,7 @@ AppState* newGameAppState()
 
     for (int i = 0; i < appState->logistics_managers_num; i++)
     {
-        assignNewLogisticsManagerValues(
+        assignLogisticsManagerValues(
             &appState->logistics_managers[i],
             10
         );
@@ -66,6 +71,8 @@ AppState* newGameAppState()
 			1000 // TODO TBU
 		);
 	}
+
+	instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT);
 
 	return appState;
 }
@@ -89,4 +96,6 @@ void cleanAppState(AppState* appState)
 		cleanLocalPopulation(&appState->local_population[i]);
 	}
 	free(appState->local_population);
+
+	cleanMarketMap();
 }

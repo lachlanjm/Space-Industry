@@ -26,7 +26,7 @@ typedef struct Vehicle {
 	VEHICLE_ID_INT id;
 } Vehicle;
 
-void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location);
+void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location);
 void assignLoadIdVehicle(Vehicle* obj, const int id);
 
 void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product);

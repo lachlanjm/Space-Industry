@@ -32,7 +32,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 		factory->ordered_out[i] = 0;
 	}
 
-	assignNewHistoryArrayValues(&factory->profit_history);
+	assignHistoryArrayValues(&factory->profit_history);
 	factory->id = id_next++;
 }
 
@@ -150,7 +150,7 @@ void withdrawFundsFactory(Factory* factory, const int funds)
 // TBU (CHECK FOR POSSIBLE, REVERT OTHERWISE)
 void processTickFactory(Factory* factory)
 {
-	tickHistoryArrayIndexClean(&factory->profit_history);
+	tickHistoryArrayIndex(&factory->profit_history);
 
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
 		processTickStockpile(&factory->stockpiles_in[i]);

@@ -4,11 +4,11 @@ static LOGISTICS_CONTRACT_ID_INT id_next = 0;
 LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
 	LogisticsContract* logisticsContract = (LogisticsContract*) malloc(1 * sizeof(LogisticsContract));
-	assignNewLogisticsContractValues(logisticsContract, assigned_vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
+	assignLogisticsContractValues(logisticsContract, assigned_vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
 	return logisticsContract;
 }
 
-void assignNewLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity)
+void assignLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsContract->assigned_vehicle = assigned_vehicle;
 	logisticsContract->selling_factory = selling_factory;

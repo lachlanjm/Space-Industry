@@ -2,7 +2,7 @@
 
 static VEHICLE_ID_INT id_next = 0;
 
-void assignNewVehicleValues(Vehicle* vehicle, const TransportNode start_location)
+void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location)
 {
 	vehicle->current_location = start_location;
 	vehicle->end_location = -1;

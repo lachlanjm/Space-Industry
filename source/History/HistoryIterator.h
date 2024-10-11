@@ -3,9 +3,14 @@
 
 #include "..\Helpers\HistoryStandards.h"
 #include "HistoryArray.h"
+#include "HistoryArrayAvg.h"
+#include "HistoryWtdAvgArray.h"
 
 enum HistoryType {
-	HISTORY_ARRAY_TYPE
+	HISTORY_ARRAY_TYPE,
+	HISTORY_ARRAY_AVG_TYPE,
+	HISTORY_WTD_AVG_ARRAY_VALUE_TYPE,
+	HISTORY_WTD_AVG_ARRAY_WEIGHT_TYPE
 };
 
 typedef struct HistoryIterator {
@@ -14,6 +19,8 @@ typedef struct HistoryIterator {
 	union
 	{
 		HistoryArray* hist_array;
+		HistoryArrayAvg* hist_array_avg;
+		HistoryWtdAvgArray* hist_wtd_avg_array;
 	} data;
 	
 } HistoryIterator;
