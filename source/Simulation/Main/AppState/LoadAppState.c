@@ -189,7 +189,6 @@ static inline void addNewStructForPtrs(char new_data_point[BUF_SIZE + 1], enum A
 			for (int y=0; y<PRODUCT_COUNT; y++) // TODO TBU
 			{
 				// REALLY BAD USE OF ID - ERRORS?
-				printf("--%x\n", getProductMarketAtLocation(x, y));
 				addNewStructIdPtr(PRODUCT_MARKET_SAVE, x*PRODUCT_COUNT+y, getProductMarketAtLocation(x, y));
 			}
 		}
