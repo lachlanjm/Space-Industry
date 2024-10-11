@@ -148,8 +148,8 @@ QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, P
 	insertFundsFactory(selling_order->offering_factory, exchanged_num * selling_order->price);
 	withdrawFundsFactory(buying_order->offering_factory, exchanged_num * buying_order->price);
 
-	addToHistoryWtdAvgArray(&selling_market->sell_hist_array, selling_order->price, exchanged_num);
-	addToHistoryWtdAvgArray(&buying_market->buy_hist_array, buying_order->price, exchanged_num);
+	addToHistoryWtdAvgArray(&selling_market->sell_hist_array, exchanged_num * selling_order->price, exchanged_num);
+	addToHistoryWtdAvgArray(&buying_market->buy_hist_array, exchanged_num * buying_order->price, exchanged_num);
 
 	if (selling_order->offer_num == 0)
 	{

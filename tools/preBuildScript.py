@@ -1,14 +1,12 @@
 from Production.productCreationScript import main as product_main
 from Production.productionChainCreationScript import main as chain_main
 from Environment.mapCreationScript import main as map_main
-from Environment.marketMapCreationScript import main as market_map_main
 import time
 
 sub_build_processes = [
 	("Product", product_main), 
 	("Production Chain", chain_main), 
-	("Map", map_main), 
-	("Market Map", market_map_main)
+	("Map", map_main)
 ]
 
 def main():
