@@ -297,8 +297,10 @@ static inline void saveHistoryWtdAvgArray(FILE* fptr, HistoryWtdAvgArray* histor
 {
 	static HistoryIterator* hist_value_iter;
 	static HistoryIterator* hist_weight_iter;
+	static HistoryIterator* hist_avg_iter;
 	static HISTORY_INT history_value;
 	static HISTORY_INT history_weight;
+	static HISTORY_INT history_avg;
 
 	char buffer[BUF_SIZE];
 	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, HISTORY_WTD_AVG_ARRAY_SAVE, historyArray->id));
@@ -308,10 +310,14 @@ static inline void saveHistoryWtdAvgArray(FILE* fptr, HistoryWtdAvgArray* histor
 
 	hist_weight_iter = newHistoryIterator(historyArray, HISTORY_WTD_AVG_ARRAY_WEIGHT_TYPE);
 	if (hist_weight_iter == NULL) { closeHistoryIterator(hist_value_iter); return; }
+	
+	hist_avg_iter = newHistoryIterator(historyArray, HISTORY_WTD_AVG_ARRAY_AVG_TYPE);
+	if (hist_avg_iter == NULL) { closeHistoryIterator(hist_value_iter); closeHistoryIterator(hist_weight_iter); return; }
 
 	while (getNextHistoryIterItem(hist_value_iter, &history_value)) 
 	{
 		getNextHistoryIterItem(hist_weight_iter, &history_weight);
+		getNextHistoryIterItem(hist_avg_iter, &history_avg);
 
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID, history_value)
@@ -319,8 +325,12 @@ static inline void saveHistoryWtdAvgArray(FILE* fptr, HistoryWtdAvgArray* histor
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID, history_weight)
 		);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_HIS_WTD_AVG_ARR_AVG_ID, history_avg)
+		);
 	}
 
+	closeHistoryIterator(hist_avg_iter);
 	closeHistoryIterator(hist_weight_iter);
 	closeHistoryIterator(hist_value_iter);
 }

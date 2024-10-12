@@ -554,6 +554,10 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			{
 				setWeightAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index, atoi(attr_value));
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_HIS_WTD_AVG_ARR_AVG_ID) == 0)
+			{
+				setAverageAtIndexHistoryWtdAvgArray(((HistoryWtdAvgArray*)current_obj_ptr->data), current_index, atoi(attr_value));
+			}
 			break;
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_NUM_ID) == 0)

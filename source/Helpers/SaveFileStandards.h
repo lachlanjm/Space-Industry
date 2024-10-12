@@ -50,6 +50,7 @@
 
 #define SAVE_FILE_HIS_WTD_AVG_ARR_VALUE_ID "value"
 #define SAVE_FILE_HIS_WTD_AVG_ARR_WEIGHT_ID "weight"
+#define SAVE_FILE_HIS_WTD_AVG_ARR_AVG_ID "average"
 
 #define SAVE_FILE_LOC_POP_POP_NUM_ID "population_number"
 
