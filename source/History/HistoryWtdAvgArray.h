@@ -9,9 +9,9 @@
 typedef struct HistoryWtdAvgArray {
 	HISTORY_INT values[MAX_HISTORY];
 	HISTORY_INT weights[MAX_HISTORY];
+	HISTORY_INT averages[MAX_HISTORY];
 	HISTORY_INT sum_value;
 	HISTORY_INT sum_weight;
-	HISTORY_INT avg;
 	HISTORY_ARRAY_ID_INT id;
 } HistoryWtdAvgArray;
 
@@ -26,6 +26,9 @@ void setValueAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const int
 
 HISTORY_INT getWeightAtIndexHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array, const int index);
 void setWeightAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const int index, const HISTORY_INT weight);
+
+HISTORY_INT getAverageAtIndexHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array, const int index);
+void setAverageAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const int index, const HISTORY_INT average);
 
 HISTORY_INT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
 HISTORY_INT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);

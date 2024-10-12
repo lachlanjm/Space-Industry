@@ -14,12 +14,15 @@ HistoryWtdAvgArray* newHistoryWtdAvgArray()
 void assignHistoryWtdAvgArrayValues(HistoryWtdAvgArray* hist_array)
 {
 	// TODO this shouldn't actually be needed but it makes it work?
-	for (int i=0;i<MAX_HISTORY;i++) { hist_array->values[i] = 0; }
-	for (int i=0;i<MAX_HISTORY;i++) { hist_array->weights[i] = 0; }
+	for (int i=0;i<MAX_HISTORY;i++) 
+	{ 
+		hist_array->values[i] = 0; 
+		hist_array->weights[i] = 0;
+		hist_array->averages[i] = 0;
+	}
 
 	hist_array->sum_value = 0;
 	hist_array->sum_weight = 0;
-	hist_array->avg = 0;
 
 	hist_array->id = id_next++;
 }
@@ -64,6 +67,16 @@ void setWeightAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const in
 	hist_array->sum_weight += weight;
 }
 
+HISTORY_INT getAverageAtIndexHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array, const int index)
+{
+	return hist_array->averages[(index_base + index) % MAX_HISTORY];
+}
+
+void setAverageAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const int index, const HISTORY_INT average)
+{
+	hist_array->averages[(index_base + index) % MAX_HISTORY] = average;
+}
+
 HISTORY_INT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
 {
 	return hist_array->sum_value;
@@ -76,7 +89,7 @@ HISTORY_INT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
 
 HISTORY_INT getAvgHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
 {
-	return hist_array->avg;
+	return hist_array->averages[index_base];
 }
 
 void tickHistoryWtdAvgArrayIndexStatic()
@@ -98,11 +111,11 @@ void tickHistoryWtdAvgArrayIndex(HistoryWtdAvgArray* hist_array)
 
 		if (hist_array->sum_weight == 0) 
 		{
-			hist_array->avg = 0;
+			hist_array->averages[index_base] = 0;
 		}
 		else
 		{
-			hist_array->avg = hist_array->sum_value / hist_array->sum_weight;
+			hist_array->averages[index_base] = hist_array->sum_value / hist_array->sum_weight;
 		}
 	}
 }

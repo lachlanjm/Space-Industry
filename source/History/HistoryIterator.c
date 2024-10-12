@@ -18,6 +18,7 @@ HistoryIterator* newHistoryIterator(const void* data, const enum HistoryType his
 			break;
 		case HISTORY_WTD_AVG_ARRAY_VALUE_TYPE:
 		case HISTORY_WTD_AVG_ARRAY_WEIGHT_TYPE:
+		case HISTORY_WTD_AVG_ARRAY_AVG_TYPE:
 			iter->data.hist_wtd_avg_array = data;
 			break;
 		default:
@@ -47,6 +48,10 @@ int getNextHistoryIterItem(HistoryIterator* iter, HISTORY_INT* value_buf)
 		case HISTORY_WTD_AVG_ARRAY_WEIGHT_TYPE:
 			if (iter->index == MAX_HISTORY) return 0;
 			*value_buf = getWeightAtIndexHistoryWtdAvgArray(iter->data.hist_wtd_avg_array, iter->index++);
+			break;
+		case HISTORY_WTD_AVG_ARRAY_AVG_TYPE:
+			if (iter->index == MAX_HISTORY) return 0;
+			*value_buf = getAverageAtIndexHistoryWtdAvgArray(iter->data.hist_wtd_avg_array, iter->index++);
 			break;
 		default:
 			return 0;
