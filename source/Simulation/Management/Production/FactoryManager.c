@@ -51,7 +51,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_in[i].price = (
 					getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array)
-					* (sqrt((double)stockpile_ordered_quantity) / FM_DESIRED_BUY_STOCKPILE_ROOT)
+					* (sqrt((double)factoryManager->controlled_factory.orders_in[i].offer_num) / FM_DESIRED_BUY_STOCKPILE_ROOT)
 				);
 			}
 

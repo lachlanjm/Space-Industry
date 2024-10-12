@@ -68,18 +68,16 @@ void update_dist_to_price_eff()
 				if (getProductMarketAtLocation(to, product)->buy_order_num > 0
 					&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 				{
+					// Needed to counter uint maths
+					const int price_diff = (int)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+						- (int)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
 					if (getTotalDistance(from, to) == 0)
 					{
-						__dist_to_price_eff__[from][to][product] =
-						(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-						- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price);
+						__dist_to_price_eff__[from][to][product] = (float)price_diff;
 					}
 					else 
 					{
-						__dist_to_price_eff__[from][to][product] =
-						(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-						- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price)
-						/ (float)getTotalDistance(from, to);
+						__dist_to_price_eff__[from][to][product] = (float)price_diff / (float)getTotalDistance(from, to);
 					}
 				}
 				else
@@ -100,18 +98,16 @@ void update_dist_to_price_eff_product_filtered(int product)
 			if (getProductMarketAtLocation(to, product)->buy_order_num > 0
 				&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 			{
+				// Needed to counter uint maths
+				const int price_diff = (int)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+					- (int)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
 				if (getTotalDistance(from, to) == 0)
 				{
-					__dist_to_price_eff__[from][to][product] =
-					(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-					- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price);
+					__dist_to_price_eff__[from][to][product] = (float)price_diff;
 				}
 				else 
 				{
-					__dist_to_price_eff__[from][to][product] =
-					(float) (getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-					- getProductMarketAtLocation(from, product)->sell_order_arr[0]->price)
-					/ (float)getTotalDistance(from, to);
+					__dist_to_price_eff__[from][to][product] = (float)price_diff / (float)getTotalDistance(from, to);
 				}
 			}
 			else
