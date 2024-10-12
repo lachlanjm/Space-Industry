@@ -35,6 +35,7 @@
 #define MAX_MEMORY 4294967295
 
 typedef struct AppPlatform AppPlatform;
+typedef enum AppTickRate AppTickRate;
 
 #include "..\Simulation\Main\AppState\AppState.h"
 #include "..\GUI\Structures\PopupWindow.h"
@@ -43,6 +44,23 @@ typedef struct AppPlatform AppPlatform;
 
 #define APP_WINDOW_STR "Space Industry"
 #define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
+
+// min. ms between ticks
+enum AppTickRate {
+	AP_VERY_SLOW = 1000,
+	AP_SLOW = 500,
+	AP_NORMAL = 250,
+	AP_FAST = 100,
+	AP_VERY_FAST = 20,
+	AP_MAX = 0
+};
+
+enum AppPlatformFlags {
+	AP_FLAG_LOAD_FILE = 1,
+	AP_FLAG_SAVE_STATE = 2,
+	AP_FLAG_RUN_SIMULATION = 4,
+	AP_FLAG_CLOSE = 8
+};
 
 struct AppPlatform {
 	int width;
@@ -53,13 +71,7 @@ struct AppPlatform {
 	char* app_dir_path;
 	PopupWindow* first_window;
 	AppState* current_app_state;
-};
-
-enum AppPlatformFlags {
-	AP_FLAG_LOAD_FILE = 1,
-	AP_FLAG_SAVE_STATE = 2,
-	AP_FLAG_RUN_SIMULATION = 4,
-	AP_FLAG_CLOSE = 8
+	AppTickRate tick_time;
 };
 
 int main(int argc, char* argv[]);

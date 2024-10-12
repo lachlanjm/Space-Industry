@@ -77,7 +77,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 
 	platform->flags = AP_FLAG_LOAD_FILE;
 
-	int ms_btw_tick = 500;
+	platform->tick_time = AP_SLOW;
 	struct _timeb prev_tstruct;
 	struct _timeb curr_tstruct;
 	_ftime(&prev_tstruct);
@@ -103,7 +103,7 @@ void runAppPlatform(AppPlatform* platform, GLFWwindow *win)
 			{
 				_ftime(&curr_tstruct);
 				if ((curr_tstruct.time - prev_tstruct.time) * 1000 
-					+ curr_tstruct.millitm - prev_tstruct.millitm >= ms_btw_tick)
+					+ curr_tstruct.millitm - prev_tstruct.millitm >= platform->tick_time)
 				{
 					processTickAppState(platform->current_app_state);
 					_ftime(&prev_tstruct);
