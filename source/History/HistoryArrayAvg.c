@@ -65,9 +65,13 @@ void tickHistoryArrayAvgIndexStatic()
 
 void tickHistoryArrayAvgIndex(HistoryArrayAvg* hist_array)
 {
-	hist_array->sum -= hist_array->array[index_base];
-	hist_array->array[index_base] = 0;
-	hist_array->avg = hist_array->sum / MAX_HISTORY;
+	if (tick == 0)
+	{
+		// Just changed index_base forward
+		hist_array->sum -= hist_array->array[index_base];
+		hist_array->array[index_base] = 0;
+		hist_array->avg = hist_array->sum / MAX_HISTORY;
+	}
 }
 
 void cleanHistoryArrayAvg(HistoryArrayAvg* hist_array)

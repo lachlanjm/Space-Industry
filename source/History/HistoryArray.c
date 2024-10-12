@@ -48,7 +48,11 @@ void tickHistoryArrayIndexStatic()
 
 void tickHistoryArrayIndex(HistoryArray* hist_array)
 {
-	hist_array->array[index_base] = 0;
+	if (tick == 0)
+	{
+		// Just changed index_base forward
+		hist_array->array[index_base] = 0;
+	}
 }
 
 void cleanHistoryArray(HistoryArray* hist_array)

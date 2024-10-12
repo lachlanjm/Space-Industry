@@ -44,7 +44,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_in[i].price = (
 					FM_DEFAULT_PRICE
-					* (sqrt((double)stockpile_ordered_quantity) / FM_DESIRED_BUY_STOCKPILE_ROOT)
+					* (sqrt((double)factoryManager->controlled_factory.orders_in[i].offer_num) / FM_DESIRED_BUY_STOCKPILE_ROOT)
 				);
 			}
 			else
@@ -94,14 +94,14 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_out[i].price = (
 					FM_DEFAULT_PRICE
-					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)stockpile_free_quantity))
+					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)factoryManager->controlled_factory.orders_out[i].offer_num))
 				);
 			}
 			else
 			{
 				factoryManager->controlled_factory.orders_out[i].price = (
 					getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array)
-					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)stockpile_free_quantity))
+					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)factoryManager->controlled_factory.orders_out[i].offer_num))
 				);
 			}
 

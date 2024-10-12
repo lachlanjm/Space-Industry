@@ -17,7 +17,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 
 	factory->location = location;
 	factory->processing_speed = 1;
-	factory->wealth = 0;
+	factory->wealth = 1000; // TODO adjust for circumstance
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -149,19 +149,31 @@ void withdrawFundsFactory(Factory* factory, const int funds)
 	subFromHistoryArray(&factory->profit_history, funds);
 }
 
-// TBU (CHECK FOR POSSIBLE, REVERT OTHERWISE)
 void processTickFactory(Factory* factory)
 {
 	tickHistoryArrayIndex(&factory->profit_history);
 
-	for (int i = 0; i < factory->stockpiles_in_num; i++) {
-		processTickStockpile(&factory->stockpiles_in[i]);
-		removeQuantity(&factory->stockpiles_in[i], factory->processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));
+	// Get the most the factory can make
+	uint_fast16_t max_processing_speed = factory->processing_speed;
+	for (int i = 0; i < factory->stockpiles_in_num; i++) 
+	{
+		if (factory->stockpiles_in[i].quantity < max_processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type))
+		{
+			max_processing_speed = factory->stockpiles_in[i].quantity / getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type);
+		}
 	}
 
-	for (int i = 0; i < factory->stockpiles_out_num; i++) {
+	// Process the production steps
+	for (int i = 0; i < factory->stockpiles_in_num; i++) 
+	{
+		processTickStockpile(&factory->stockpiles_in[i]);
+		removeQuantity(&factory->stockpiles_in[i], max_processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));
+	}
+
+	for (int i = 0; i < factory->stockpiles_out_num; i++) 
+	{
 		processTickStockpile(&factory->stockpiles_out[i]);
-		addQuantity(&factory->stockpiles_out[i], factory->processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
+		addQuantity(&factory->stockpiles_out[i], max_processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
 	}
 }
 

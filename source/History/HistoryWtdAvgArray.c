@@ -88,18 +88,22 @@ void tickHistoryWtdAvgArrayIndexStatic()
 
 void tickHistoryWtdAvgArrayIndex(HistoryWtdAvgArray* hist_array)
 {
-	hist_array->sum_value -= hist_array->values[index_base];
-	hist_array->values[index_base] = 0;
-	hist_array->sum_weight -= hist_array->weights[index_base];
-	hist_array->weights[index_base] = 0;
+	if (tick == 0)
+	{
+		// Just changed index_base forward
+		hist_array->sum_value -= hist_array->values[index_base];
+		hist_array->values[index_base] = 0;
+		hist_array->sum_weight -= hist_array->weights[index_base];
+		hist_array->weights[index_base] = 0;
 
-	if (hist_array->sum_weight == 0) 
-	{
-		hist_array->avg = 0;
-	}
-	else
-	{
-		hist_array->avg = hist_array->sum_value / hist_array->sum_weight;
+		if (hist_array->sum_weight == 0) 
+		{
+			hist_array->avg = 0;
+		}
+		else
+		{
+			hist_array->avg = hist_array->sum_value / hist_array->sum_weight;
+		}
 	}
 }
 
