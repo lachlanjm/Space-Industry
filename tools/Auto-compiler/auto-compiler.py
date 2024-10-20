@@ -4,6 +4,8 @@ import sys
 INFO_FILE_PATH = ".\\tools\\Auto-compiler\\info.txt"
 MOD_TIME_INFO_FILE = ".\\tools\\Auto-compiler\\times.txt"
 
+MAX_DEPTH = 1
+
 def main():
 	os.system(f"make auto_info > {INFO_FILE_PATH}")
 
@@ -40,6 +42,8 @@ def main():
 				
 				curr_mod_times.append(f"{file}<=>{curr_time}")
 	else:
+		changed_files = []
+
 		with open(MOD_TIME_INFO_FILE, "r") as f:
 			last_mod_times = f.read().splitlines()
 
@@ -62,6 +66,7 @@ def main():
 								c_files.append((file, root + "\\" + file))
 							else:
 								h_files.append((file, root + "\\" + file))
+							changed_files.append(file)
 
 						curr_mod_times.append(f"{file}<=>{curr_time}")
 						last_mod_times.pop(i)
@@ -76,11 +81,75 @@ def main():
 						c_files.append((file, root + "\\" + file))
 					else:
 						h_files.append((file, root + "\\" + file))
+					changed_files.append(file)
 
 					curr_mod_times.append(f"{file}<=>{curr_time}")
 				
+			# END FOR LOOP
+		# END FOR LOOP
+
+		changed = True
+		depth = MAX_DEPTH
+		while changed and depth > 0:
+			changed = False
+			depth -= 1
+			for (root,dirs,files) in os.walk('.\\source', topdown=True): 
+				if root.endswith("includes"):
+					continue
+
+				for file in files:
+					if not file.endswith((".c", ".h")):
+						continue
+					
+					if file in changed_files:
+						continue
+
+					found_chain = False
+					with open(root + "\\" + file, "r") as f:
+						for line in f:
+							if line.find("include") != -1:
+								for change_file in changed_files:
+									if line.find(change_file) != -1:
+										changed_files.append(file)
+										changed = True
+										found_chain = True
+										break
+								
+								if found_chain:
+									break
+						# END FOR LOOP
+					
+					if found_chain:
+						i = 0
+						while i < len(last_mod_times):
+							if last_mod_times[i].startswith(file):
+								curr_time = os.path.getmtime(root + "\\" + file)
+								prev_time = last_mod_times[i].split("<=>")[-1]
+
+								if file.endswith(".c"):
+									c_files.append((file, root + "\\" + file))
+								else:
+									h_files.append((file, root + "\\" + file))
+
+								curr_mod_times.append(f"{file}<=>{curr_time}")
+								last_mod_times.pop(i)
+								i -= 1
+								break
+							i += 1
+						
+						if i == len(last_mod_times):
+							curr_time = os.path.getmtime(root + "\\" + file)
+
+							if file.endswith(".c"):
+								c_files.append((file, root + "\\" + file))
+							else:
+								h_files.append((file, root + "\\" + file))
+
+							curr_mod_times.append(f"{file}<=>{curr_time}")
 				# END FOR LOOP
 			# END FOR LOOP
+		# END WHILE LOOP
+	# END IF
 
 	with open(BUILD_LOG_PATH, "w") as f:
 		f.write("") # CLEAR FILE
