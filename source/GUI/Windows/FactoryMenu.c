@@ -98,7 +98,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 		nk_label(platform->ctx, "Profit:", NK_TEXT_LEFT);
 		
 		nk_layout_row_static(platform->ctx, 100, 300, 1);
-		hist_iter = newHistoryIterator(&factory->profit_history, HISTORY_ARRAY_TYPE);
+		hist_iter = newHistoryIterator(&factory->profit_history, HISTORY_ARRAY_AVG_TYPE);
 		if (hist_iter)
 		{
 			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, -100000.0f, 100000.0f) ) // TODO: SET MIN MAX TO HIST MIN MAX

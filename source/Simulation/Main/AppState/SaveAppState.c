@@ -210,12 +210,18 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_PRO_SPE_ID, factory->processing_speed)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_CUR_EMP_ID, factory->current_employee_num)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_MAX_EMP_ID, factory->max_employee_num)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_WTH_ID, factory->wealth)
 	);
 
-	appendToQueue(HISTORY_ARRAY_SAVE, &factory->profit_history);
+	appendToQueue(HISTORY_ARRAY_AVG_SAVE, &factory->profit_history);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-		getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_PFT_HIS_ID, HISTORY_ARRAY_SAVE, factory->profit_history.id)
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_PFT_HIS_ID, HISTORY_ARRAY_AVG_SAVE, factory->profit_history.id)
 	);
 
 	for (int i = 0; i < factory->stockpiles_in_num; i++)

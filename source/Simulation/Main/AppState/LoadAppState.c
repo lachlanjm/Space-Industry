@@ -223,6 +223,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			{
 				((AppState*)current_obj_ptr->data)->local_population_num = atoi(attr_value);
 				((AppState*)current_obj_ptr->data)->local_population = (LocalPopulation*) calloc(((AppState*)current_obj_ptr->data)->local_population_num, sizeof(LocalPopulation));
+				setTransportNodeCountLocalPopulationStatic(((AppState*)current_obj_ptr->data)->local_population_num);
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
@@ -332,7 +333,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 					current_index = 0;
 				}
 
-				addNewStructIdPtr(HISTORY_ARRAY_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->profit_history);
+				addNewStructIdPtr(HISTORY_ARRAY_AVG_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->profit_history);
 
 				current_index++;
 			}
@@ -527,6 +528,14 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_PRO_SPE_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_CUR_EMP_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->current_employee_num = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_MAX_EMP_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->max_employee_num = atoi(attr_value);
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_WTH_ID) == 0)
 			{

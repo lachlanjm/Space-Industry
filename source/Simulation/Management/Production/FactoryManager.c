@@ -8,9 +8,31 @@ void assignFactoryManagerValues(FactoryManager* factoryManager, const Production
 	factoryManager->id = id_next++;
 } 
 
-// TODO update to include market price (not just local)
+// TODO make it actually a market
+void updateEmployeeOffers(FactoryManager* factoryManager)
+{
+	if (factoryManager->controlled_factory.current_employee_num < factoryManager->controlled_factory.max_employee_num)
+	{
+		const int employee_inc = MIN(
+			factoryManager->controlled_factory.max_employee_num - factoryManager->controlled_factory.current_employee_num,
+			(int)((float) factoryManager->controlled_factory.max_employee_num * FM_EMPLOYEE_MAX_INC)
+		);
+
+		if (increaseEmployedLocalPopulation(
+			getLocalPopulationByLocation(factoryManager->controlled_factory.location), employee_inc
+		) == TRUE)
+		{
+			addEmployees(&factoryManager->controlled_factory, employee_inc);
+		}
+	}
+}
+
 void updateOfferedPrices(FactoryManager* factoryManager)
 {
+	const int profit = getAvgHistoryArrayAvg(&factoryManager->controlled_factory.profit_history);
+	const double profit_factor_buy = MIN(1, pow((double)FM_MIN_PROFIT_FACTOR, (double)(profit-FM_MIN_PROFIT)));
+	const double profit_factor_sell = MAX(1, pow((double)FM_MIN_PROFIT_FACTOR, (double)(FM_MIN_PROFIT-profit)));
+
 	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_in_num; i++)
 	{
 		QUANTITY_INT stockpile_ordered_quantity = 
@@ -44,6 +66,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_in[i].price = (
 					FM_DEFAULT_PRICE
+					* profit_factor_buy
 					* (sqrt((double)factoryManager->controlled_factory.orders_in[i].offer_num) / FM_DESIRED_BUY_STOCKPILE_ROOT)
 				);
 			}
@@ -51,6 +74,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_in[i].price = (
 					getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array)
+					* profit_factor_buy
 					* (sqrt((double)factoryManager->controlled_factory.orders_in[i].offer_num) / FM_DESIRED_BUY_STOCKPILE_ROOT)
 				);
 			}
@@ -94,6 +118,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_out[i].price = (
 					FM_DEFAULT_PRICE
+					* profit_factor_sell
 					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)factoryManager->controlled_factory.orders_out[i].offer_num))
 				);
 			}
@@ -101,6 +126,7 @@ void updateOfferedPrices(FactoryManager* factoryManager)
 			{
 				factoryManager->controlled_factory.orders_out[i].price = (
 					getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array)
+					* profit_factor_sell
 					* (FM_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)factoryManager->controlled_factory.orders_out[i].offer_num))
 				);
 			}

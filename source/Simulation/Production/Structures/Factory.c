@@ -17,7 +17,12 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 
 	factory->location = location;
 	factory->processing_speed = 1;
-	factory->wealth = 1000; // TODO adjust for circumstance
+
+	factory->employee_wages = 10;
+	factory->max_employee_num = 100; // TODO make recipe specific
+	factory->current_employee_num = 0;
+
+	factory->wealth = 10000; // TODO adjust for circumstance
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -33,7 +38,7 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 		factory->ordered_out[i] = 0;
 	}
 
-	assignHistoryArrayValues(&factory->profit_history);
+	assignHistoryArrayAvgValues(&factory->profit_history);
 	factory->id = id_next++;
 }
 
@@ -135,10 +140,24 @@ void removeOrderedOutQuantity(Factory* factory, const Product product, const QUA
 	}
 }
 
+// TODO TBU
+void addEmployees(Factory* factory, const int employees)
+{
+	if (factory->current_employee_num + employees > factory->max_employee_num) { return; }
+	factory->current_employee_num += employees;
+}
+
+// TODO TBU
+void removeEmployees(Factory* factory, const int employees)
+{
+	// if (factory->current_employee_num - employees < 0) { return; } // SHOULD NEVER HAPPEN
+	factory->current_employee_num -= employees;
+}
+
 void insertFundsFactory(Factory* factory, const int funds)
 {
 	factory->wealth += funds;
-	addToHistoryArray(&factory->profit_history, funds);
+	addToHistoryArrayAvg(&factory->profit_history, funds);
 }
 
 // TODO check funds are avaliable
@@ -146,15 +165,13 @@ void withdrawFundsFactory(Factory* factory, const int funds)
 {
 	if (factory->wealth < funds) return; // reject payment
 	factory->wealth -= funds;
-	subFromHistoryArray(&factory->profit_history, funds);
+	subFromHistoryArrayAvg(&factory->profit_history, funds);
 }
 
-void processTickFactory(Factory* factory)
+void __processProductionTick(Factory* factory)
 {
-	tickHistoryArrayIndex(&factory->profit_history);
-
 	// Get the most the factory can make
-	uint_fast16_t max_processing_speed = factory->processing_speed;
+	uint_fast16_t max_processing_speed = (uint_fast16_t)((double)factory->processing_speed * ((double)factory->current_employee_num / (double)factory->max_employee_num));
 	for (int i = 0; i < factory->stockpiles_in_num; i++) 
 	{
 		if (factory->stockpiles_in[i].quantity < max_processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type))
@@ -177,6 +194,24 @@ void processTickFactory(Factory* factory)
 	}
 }
 
+void __processWagePaymentTick(Factory* factory)
+{
+	const int wage_payment = factory->employee_wages * factory->current_employee_num;
+	withdrawFundsFactory(factory, wage_payment);
+	insertFundsLocalPopulation(
+		getLocalPopulationByLocation(factory->location),
+		wage_payment
+	);
+}
+
+void processTickFactory(Factory* factory)
+{
+	tickHistoryArrayAvgIndex(&factory->profit_history);
+
+	__processProductionTick(factory);
+	__processWagePaymentTick(factory);
+}
+
 void cleanFactory(Factory* factory) {
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
 		cleanStockpile(&(factory->stockpiles_in[i]));
@@ -195,5 +230,5 @@ void cleanFactory(Factory* factory) {
 	free(factory->ordered_in);
 	free(factory->ordered_out);
 
-	cleanHistoryArray(&factory->profit_history);
+	cleanHistoryArrayAvg(&factory->profit_history);
 }

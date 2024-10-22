@@ -63,6 +63,7 @@ AppState* newGameAppState()
 
 	appState->local_population_num = TRANSPORT_NODE_COUNT;
     appState->local_population = (LocalPopulation*) calloc(appState->local_population_num, sizeof(LocalPopulation));
+	setTransportNodeCountLocalPopulationStatic(appState->local_population_num);
 	for (int i = 0; i < appState->local_population_num; i++)
 	{
 		assignLocalPopulationValues(

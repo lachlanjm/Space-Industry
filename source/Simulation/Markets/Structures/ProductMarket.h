@@ -1,12 +1,12 @@
 #ifndef PRODUCT_MARKET_H
 #define PRODUCT_MARKET_H
 
+#define PRODUCT_MARKET_ID_INT uint_least16_t
+
 #include "Order.h"
 #include "..\..\Production\Enums\Product.h"
 #include "..\..\Environment\Enums\TransportNode.h"
 #include "..\..\..\History\HistoryWtdAvgArray.h"
-
-#define PRODUCT_MARKET_ID_INT uint_least16_t
 
 typedef struct ProductMarket {
 	TransportNode location;
