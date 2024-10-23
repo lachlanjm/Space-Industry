@@ -3,6 +3,7 @@
 
 #include "..\..\Core\Core.h"
 #include "..\..\Simulation\Main\AppState\AppState.h"
+#include "..\..\Simulation\Production\Structures\Factory.h"
 #include "..\..\Simulation\Production\Enums\ProductionRecipe.h"
 
 #define BUF_SIZE 64
