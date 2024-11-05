@@ -30,8 +30,8 @@ void updateEmployeeOffers(FactoryManager* factoryManager)
 void updateOfferedPrices(FactoryManager* factoryManager)
 {
 	const int profit = getAvgHistoryArrayAvg(&factoryManager->controlled_factory.profit_history);
-	const double profit_factor_buy = MIN(1, pow((double)FM_MIN_PROFIT_FACTOR, (double)(profit-FM_MIN_PROFIT)));
-	const double profit_factor_sell = MAX(1, pow((double)FM_MIN_PROFIT_FACTOR, (double)(FM_MIN_PROFIT-profit)));
+	const double profit_factor_buy = MIN(1, pow((double)FM_MIN_PROFIT_FACTOR_BUY, (double)(profit-FM_MIN_PROFIT)));
+	const double profit_factor_sell = MAX(1, pow((double)FM_MIN_PROFIT_FACTOR_SELL, (double)(FM_MIN_PROFIT-profit)));
 
 	for (int i = 0; i < factoryManager->controlled_factory.stockpiles_in_num; i++)
 	{
@@ -205,6 +205,7 @@ void assignLoadIdFactoryManager(FactoryManager* obj, const int id)
 void processTickFactoryManager(FactoryManager* factoryManager)
 {
 	updateOfferedPrices(factoryManager);
+	updateEmployeeOffers(factoryManager);
 	processTickFactory(&factoryManager->controlled_factory);
 }
 

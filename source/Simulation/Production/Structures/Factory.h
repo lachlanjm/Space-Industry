@@ -17,6 +17,7 @@ struct Factory
 	TransportNode location;
 
 	uint_fast16_t processing_speed; // TODO TBU
+	float leftover_production; // TODO set to more approriate value size; i.e. smaller than float
 
 	uint_fast16_t employee_wages;
 	uint_fast16_t current_employee_num;
@@ -42,6 +43,8 @@ struct Factory
 
 #include "..\..\Population\Structures\LocalPopulation.h"
 
+#define WAGE_TICK_RATE 64 // process ticks per wage tick
+
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location);
 void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe);
@@ -61,6 +64,8 @@ void removeEmployees(Factory* factory, const int employees);
 void insertFundsFactory(Factory* factory, const int funds);
 void withdrawFundsFactory(Factory* factory, const int funds);
 
+// TODO TBU
+void processTickFactoryStatic(void);
 // TODO TBU
 void processTickFactory(Factory* factory);
 

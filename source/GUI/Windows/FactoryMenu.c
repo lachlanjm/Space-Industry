@@ -26,6 +26,41 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 		snprintf(buffer, BUF_SIZE, "%u", factory->processing_speed);
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 
+		nk_layout_row_static(platform->ctx, 30, 200, 2);
+		nk_label(platform->ctx, "Employee wages:", NK_TEXT_LEFT);
+		snprintf(buffer, BUF_SIZE, "$%u", factory->employee_wages);
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 200, 2);
+		nk_label(platform->ctx, "Employees:", NK_TEXT_LEFT);
+		snprintf(buffer, BUF_SIZE, "%u / %u", factory->current_employee_num, factory->max_employee_num);
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT); 
+
+		nk_layout_row_static(platform->ctx, 30, 200, 2);
+		nk_label(platform->ctx, "Wealth:", NK_TEXT_LEFT);
+		snprintf(buffer, BUF_SIZE, "$%u", factory->wealth);
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 200, 2);
+		nk_label(platform->ctx, "Profit:", NK_TEXT_LEFT);
+		snprintf(buffer, BUF_SIZE, "$%d", getAvgHistoryArrayAvg(&factory->profit_history));
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+		
+		nk_layout_row_static(platform->ctx, 100, 300, 1);
+		hist_iter = newHistoryIterator(&factory->profit_history, HISTORY_ARRAY_AVG_TYPE);
+		if (hist_iter)
+		{
+			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, -100000.0f, 100000.0f) ) // TODO: SET MIN MAX TO HIST MIN MAX
+			{
+				while (getNextHistoryIterItem(hist_iter, &history_value)) 
+				{
+					nk_chart_push(platform->ctx, (float) history_value);
+				};
+				nk_chart_end(platform->ctx);
+			};
+			closeHistoryIterator(hist_iter);
+		}
+
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		nk_label(platform->ctx, "Inputs:", NK_TEXT_LEFT);
 		
@@ -88,28 +123,6 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 			{
 				addNewPopupWindow(platform->first_window, ORDER_MENU, &factory->orders_out[i]);
 			}
-		}
-
-		nk_layout_row_static(platform->ctx, 30, 100, 1);
-		snprintf(buffer, BUF_SIZE, "Wealth: $%u", factory->wealth);
-		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
-
-		nk_layout_row_static(platform->ctx, 30, 100, 1);
-		nk_label(platform->ctx, "Profit:", NK_TEXT_LEFT);
-		
-		nk_layout_row_static(platform->ctx, 100, 300, 1);
-		hist_iter = newHistoryIterator(&factory->profit_history, HISTORY_ARRAY_AVG_TYPE);
-		if (hist_iter)
-		{
-			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, -100000.0f, 100000.0f) ) // TODO: SET MIN MAX TO HIST MIN MAX
-			{
-				while (getNextHistoryIterItem(hist_iter, &history_value)) 
-				{
-					nk_chart_push(platform->ctx, (float) history_value);
-				};
-				nk_chart_end(platform->ctx);
-			};
-			closeHistoryIterator(hist_iter);
 		}
 	}
 	nk_end(platform->ctx);

@@ -1,6 +1,7 @@
 #include "Factory.h"
 
 static FACTORY_ID_INT id_next = 0;
+static int wage_tick_index = 0;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
 {
@@ -17,12 +18,13 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 
 	factory->location = location;
 	factory->processing_speed = 1;
+	factory->leftover_production = 0.0;
 
 	factory->employee_wages = 10;
 	factory->max_employee_num = 100; // TODO make recipe specific
 	factory->current_employee_num = 0;
 
-	factory->wealth = 10000; // TODO adjust for circumstance
+	factory->wealth = 100000; // TODO adjust for circumstance
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -171,7 +173,10 @@ void withdrawFundsFactory(Factory* factory, const int funds)
 void __processProductionTick(Factory* factory)
 {
 	// Get the most the factory can make
-	uint_fast16_t max_processing_speed = (uint_fast16_t)((double)factory->processing_speed * ((double)factory->current_employee_num / (double)factory->max_employee_num));
+	float max_processing_speed = 
+		(float)factory->processing_speed 
+		* ((float)factory->current_employee_num / (float)factory->max_employee_num)
+		+ factory->leftover_production;
 	for (int i = 0; i < factory->stockpiles_in_num; i++) 
 	{
 		if (factory->stockpiles_in[i].quantity < max_processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type))
@@ -180,28 +185,42 @@ void __processProductionTick(Factory* factory)
 		}
 	}
 
+	uint_fast16_t next_processing_speed = (int) max_processing_speed;
+	factory->leftover_production = max_processing_speed - next_processing_speed;
+	factory->leftover_production = (float)(factory->leftover_production - (int) factory->leftover_production); // Equivalent to (X % 1)
+
 	// Process the production steps
 	for (int i = 0; i < factory->stockpiles_in_num; i++) 
 	{
 		processTickStockpile(&factory->stockpiles_in[i]);
-		removeQuantity(&factory->stockpiles_in[i], max_processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));
+		removeQuantity(&factory->stockpiles_in[i], next_processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type));
 	}
 
 	for (int i = 0; i < factory->stockpiles_out_num; i++) 
 	{
 		processTickStockpile(&factory->stockpiles_out[i]);
-		addQuantity(&factory->stockpiles_out[i], max_processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
+		addQuantity(&factory->stockpiles_out[i], next_processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
 	}
 }
 
 void __processWagePaymentTick(Factory* factory)
 {
-	const int wage_payment = factory->employee_wages * factory->current_employee_num;
-	withdrawFundsFactory(factory, wage_payment);
-	insertFundsLocalPopulation(
-		getLocalPopulationByLocation(factory->location),
-		wage_payment
-	);
+	if (wage_tick_index == 0)
+	{
+		const int wage_payment = factory->employee_wages * factory->current_employee_num;
+		withdrawFundsFactory(factory, wage_payment);
+		insertFundsLocalPopulation(
+			getLocalPopulationByLocation(factory->location),
+			wage_payment
+		);
+	}
+}
+
+// TODO make better
+void processTickFactoryStatic(void)
+{
+	wage_tick_index++;
+	wage_tick_index %= WAGE_TICK_RATE;
 }
 
 void processTickFactory(Factory* factory)

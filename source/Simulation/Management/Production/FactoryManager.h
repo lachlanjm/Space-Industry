@@ -36,9 +36,10 @@ struct FactoryManager {
 #define FM_ORDER_QUANTITY_MIN 100
 
 #define FM_MIN_PROFIT 100
-#define FM_MIN_PROFIT_FACTOR 1.03
+#define FM_MIN_PROFIT_FACTOR_BUY 1.001
+#define FM_MIN_PROFIT_FACTOR_SELL 1.002
 
-#define FM_DEFAULT_PRICE 30
+#define FM_DEFAULT_PRICE 100
 
 void assignFactoryManagerValues(FactoryManager* factoryManager, const ProductionRecipe productionRecipe, const TransportNode location);
 
