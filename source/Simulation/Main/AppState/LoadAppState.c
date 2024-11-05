@@ -529,6 +529,14 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_LEF_PRO_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->leftover_production = atof(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_EMP_WAG_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->employee_wages = atoi(attr_value);
+			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_CUR_EMP_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->current_employee_num = atoi(attr_value);

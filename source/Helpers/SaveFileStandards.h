@@ -41,6 +41,8 @@
 
 #define SAVE_FILE_FAC_LOC_ID "location"
 #define SAVE_FILE_FAC_PRO_SPE_ID "processing_speed"
+#define SAVE_FILE_FAC_LEF_PRO_ID "leftover_production"
+#define SAVE_FILE_FAC_EMP_WAG_ID "employee_wages"
 #define SAVE_FILE_FAC_CUR_EMP_ID "current_employee_num"
 #define SAVE_FILE_FAC_MAX_EMP_ID "max_employee_num"
 #define SAVE_FILE_FAC_PFT_HIS_ID "profit_history"

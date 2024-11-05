@@ -78,6 +78,12 @@ static inline char* getSaveFormatUnsignedIntegerAttribute(char buffer[BUF_SIZE],
 	return buffer;
 }
 
+static inline char* getSaveFormatFloatAttribute(char buffer[BUF_SIZE], const char* attribute_name, const float float_val)
+{
+	snprintf(buffer, BUF_SIZE, "%s%c%f", attribute_name, SAVE_FILE_SEP, float_val);
+	return buffer;
+}
+
 static inline char* getSaveFormatPointerAttribute(char buffer[BUF_SIZE], const char* attribute_name, const enum AttributeTypes attributeType, const int id)
 {
 	char buffer_2[BUF_SIZE];
@@ -208,6 +214,12 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_PRO_SPE_ID, factory->processing_speed)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatFloatAttribute(buffer, SAVE_FILE_FAC_LEF_PRO_ID, factory->leftover_production)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_EMP_WAG_ID, factory->employee_wages)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_CUR_EMP_ID, factory->current_employee_num)
