@@ -7,12 +7,12 @@ Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode
 {
 	Factory* factory = (Factory*) calloc(1, sizeof(Factory));
 
-	assignFactoryValues(factory, productionRecipe, location);
+	assignFactoryValuesCompany(factory, NULL, productionRecipe, location); // TODO make this better
 
 	return factory;
 }
 
-void assignFactoryValues(Factory* factory, const ProductionRecipe productionRecipe, const TransportNode location)
+void assignFactoryValuesCompany(Factory* factory, const Company* company, const ProductionRecipe productionRecipe, const TransportNode location)
 {
 	loadFactoryConstructor(factory, productionRecipe);
 
@@ -24,7 +24,50 @@ void assignFactoryValues(Factory* factory, const ProductionRecipe productionReci
 	factory->max_employee_num = 100; // TODO make recipe specific
 	factory->current_employee_num = 0;
 
-	factory->wealth = 100000; // TODO adjust for circumstance
+	if (company == NULL)
+	{
+		factory->managementType = MANAGEMENT_NONE;
+		factory->management = NULL;
+	}
+	else
+	{
+		factory->managementType = MANAGEMENT_COMPANY;
+		factory->management = company;
+	}
+
+	Stockpile* tmp_arr = getInputs(productionRecipe);
+	for (int i = 0; i < factory->stockpiles_in_num; i++) {
+		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
+		assignOrderValues(&factory->orders_in[i], factory, 0, 100); // TODO: DEF. PRICE
+		factory->ordered_in[i] = 0;
+	}
+
+	tmp_arr = getOutputs(productionRecipe);
+	for (int i = 0; i < factory->stockpiles_out_num; i++) {
+		assignStockpileValues(&factory->stockpiles_out[i], tmp_arr[i].product_type, 0);
+		assignOrderValues(&factory->orders_out[i], factory, 0, 100); // TODO: DEF. PRICE
+		factory->ordered_out[i] = 0;
+	}
+
+	assignHistoryArrayAvgValues(&factory->profit_history);
+	factory->id = id_next++;
+}
+
+void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode location)
+{
+	const ProductionRecipe productionRecipe = Population_Consumption;
+	loadFactoryConstructor(factory, productionRecipe);
+
+	factory->location = location;
+	factory->processing_speed = 1;
+	factory->leftover_production = 0.0;
+
+	factory->employee_wages = 10;
+	factory->max_employee_num = 100; // TODO make recipe specific
+	factory->current_employee_num = 0;
+
+	factory->managementType = MANAGEMENT_LOCAL_POPULATION;
+	factory->management = getLocalPopulationByLocation(factory->location);
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
@@ -156,17 +199,48 @@ void removeEmployees(Factory* factory, const int employees)
 	factory->current_employee_num -= employees;
 }
 
+// TODO smooth out and standardise the recording process
 void insertFundsFactory(Factory* factory, const int funds)
 {
-	factory->wealth += funds;
-	addToHistoryArrayAvg(&factory->profit_history, funds);
+	switch (factory->managementType)
+	{
+		case MANAGEMENT_COMPANY:
+			insertFundsCompany((Company*)factory->management, funds);
+			recordInsertFundsFactory(factory, funds);
+			break;
+		case MANAGEMENT_LOCAL_POPULATION:
+			insertFundsLocalPopulation((LocalPopulation*)factory->management, funds);
+			break;
+		case MANAGEMENT_NONE:
+			return;
+	}
 }
 
+// TODO smooth out and standardise the recording process
 // TODO check funds are avaliable
 void withdrawFundsFactory(Factory* factory, const int funds)
 {
-	if (factory->wealth < funds) return; // reject payment
-	factory->wealth -= funds;
+	switch (factory->managementType)
+	{
+		case MANAGEMENT_COMPANY:
+			withdrawFundsCompany((Company*)factory->management, funds);
+			recordWithdrawFundsFactory(factory, funds);
+			break;
+		case MANAGEMENT_LOCAL_POPULATION:
+			withdrawFundsLocalPopulation((LocalPopulation*)factory->management, funds);
+			break;
+		case MANAGEMENT_NONE:
+			return;
+	}
+}
+
+void recordInsertFundsFactory(Factory* factory, const int funds)
+{
+	addToHistoryArrayAvg(&factory->profit_history, funds);
+}
+
+void recordWithdrawFundsFactory(Factory* factory, const int funds)
+{
 	subFromHistoryArrayAvg(&factory->profit_history, funds);
 }
 

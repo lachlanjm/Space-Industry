@@ -24,9 +24,9 @@ static inline enum AttributeTypes matchIdentifierWithType(const char* id)
 	{
 		return APP_STATE_SAVE;
 	}
-	else if (strcmp(id, SAVE_FILE_FACTORY_MANAGER_ID) == 0)
+	else if (strcmp(id, SAVE_FILE_COMPANY_ID) == 0)
 	{
-		return FACTORY_MANAGER_SAVE;
+		return COMPANY_SAVE;
 	}
 	else if (strcmp(id, SAVE_FILE_FACTORY_ID) == 0)
 	{
@@ -217,7 +217,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			else if (strcmp(new_data_point, SAVE_FILE_AS_FAC_MAN_NUM) == 0)
 			{
 				((AppState*)current_obj_ptr->data)->factory_managers_num = atoi(attr_value);
-				((AppState*)current_obj_ptr->data)->factory_managers = (FactoryManager*) calloc(((AppState*)current_obj_ptr->data)->factory_managers_num, sizeof(FactoryManager));
+				((AppState*)current_obj_ptr->data)->factory_managers = (Company*) calloc(((AppState*)current_obj_ptr->data)->factory_managers_num, sizeof(Company));
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_NUM) == 0)
 			{
@@ -245,7 +245,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 					current_index = 0;
 				}
 
-				addNewStructIdPtr(FACTORY_MANAGER_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->factory_managers[current_index]);
+				addNewStructIdPtr(COMPANY_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->factory_managers[current_index]);
 
 				current_index++;
 			}
@@ -262,16 +262,16 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				current_index++;
 			}
 			break;
-		case FACTORY_MANAGER_SAVE:
-			if (strcmp(new_data_point, SAVE_FILE_FM_CON_FAC_ID) == 0)
+		case COMPANY_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_CO_CON_FAC_ID) == 0)
 			{
-				if (strcmp(current_arr_name, SAVE_FILE_FM_CON_FAC_ID))
+				if (strcmp(current_arr_name, SAVE_FILE_CO_CON_FAC_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_FM_CON_FAC_ID);
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_CO_CON_FAC_ID);
 					current_index = 0;
 				}
 
-				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((FactoryManager*)current_obj_ptr->data)->controlled_factory);
+				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((Company*)current_obj_ptr->data)->controlled_factory);
 
 				current_index++;
 			}
@@ -459,7 +459,7 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 	{
 		case APP_STATE_SAVE:
 			break;
-		case FACTORY_MANAGER_SAVE:
+		case COMPANY_SAVE:
 			break;
 		case FACTORY_SAVE:
 			((Factory*)current_obj->data)->location = 0;
@@ -518,7 +518,11 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 	{
 		case APP_STATE_SAVE:
 			break;
-		case FACTORY_MANAGER_SAVE:
+		case COMPANY_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_CO_WTH_ID) == 0)
+			{
+				((Company*)current_obj_ptr->data)->wealth = atoi(attr_value);
+			}
 			break;
 		case FACTORY_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_FAC_LOC_ID) == 0)
@@ -544,10 +548,6 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_MAX_EMP_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->max_employee_num = atoi(attr_value);
-			}
-			else if (strcmp(new_data_point, SAVE_FILE_FAC_WTH_ID) == 0)
-			{
-				((Factory*)current_obj_ptr->data)->wealth = atoi(attr_value);
 			}
 			break;
 		case HISTORY_ARRAY_SAVE:
@@ -714,10 +714,10 @@ static inline void assignAllNeededIds()
 		{
 			case APP_STATE_SAVE:
 				break;
-			case FACTORY_MANAGER_SAVE:
+			case COMPANY_SAVE:
 				while (current_obj_ptr != NULL)
 				{
-					assignLoadIdFactoryManager(current_obj_ptr->data, id++);
+					assignLoadIdCompany(current_obj_ptr->data, id++);
 					current_obj_ptr = current_obj_ptr->next;
 				}
 				break;
@@ -846,7 +846,7 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	// Assign orders to PMs
 	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers_num; i++)
 	{
-		loadFactoryManagerAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers[i]);
+		loadCompanyAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers[i]);
 	}
 	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->local_population_num; i++)
 	{

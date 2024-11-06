@@ -12,7 +12,7 @@ void processTickAppState(AppState* appState)
 	// MUST DO FACTORY BEFORE LOGISTICS (HISTORY SAVING FLOW)
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
-		processTickFactoryManager(&appState->factory_managers[i]);
+		processTickCompany(&appState->factory_managers[i]);
 	}
 
 	update_dist_to_price_eff();
@@ -39,11 +39,11 @@ AppState* newGameAppState()
 	if (appState == NULL) return NULL;
 
 	appState->factory_managers_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
-    appState->factory_managers = (FactoryManager*) calloc(appState->factory_managers_num, sizeof(FactoryManager));
+    appState->factory_managers = (Company*) calloc(appState->factory_managers_num, sizeof(Company));
 
     for (int i = 0; i < appState->factory_managers_num; i++) // LEAVE POP CONSUMPTION
     {
-        assignFactoryManagerValues(
+        assignCompanyValues(
             &appState->factory_managers[i],
             i % (PRODUCTION_RECIPE_COUNT - 1),
             i % (TRANSPORT_NODE_COUNT)
@@ -83,7 +83,7 @@ void cleanAppState(AppState* appState)
 {
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
-		cleanFactoryManager(&appState->factory_managers[i]);
+		cleanCompany(&appState->factory_managers[i]);
 	}
 	free(appState->factory_managers);
 

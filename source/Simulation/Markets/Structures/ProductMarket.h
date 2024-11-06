@@ -1,6 +1,8 @@
 #ifndef PRODUCT_MARKET_H
 #define PRODUCT_MARKET_H
 
+typedef struct ProductMarket ProductMarket;
+
 #define PRODUCT_MARKET_ID_INT uint_least16_t
 
 #include "Order.h"
@@ -8,7 +10,7 @@
 #include "..\..\Environment\Enums\TransportNode.h"
 #include "..\..\..\History\HistoryWtdAvgArray.h"
 
-typedef struct ProductMarket {
+struct ProductMarket {
 	TransportNode location;
 	Product product_type;
 
@@ -24,7 +26,7 @@ typedef struct ProductMarket {
 	Order** buy_order_arr;
 
 	PRODUCT_MARKET_ID_INT id;
-} ProductMarket;
+};
 
 ProductMarket* newProductMarket(const TransportNode location, const Product product_type);
 void assignProductMarketValues(ProductMarket* productMarket, const TransportNode location, const Product product_type);

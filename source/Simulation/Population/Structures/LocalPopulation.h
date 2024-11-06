@@ -11,6 +11,8 @@ struct LocalPopulation {
 	uint32_t population_number;
 	uint32_t employed_number;
 	Factory population_centre;
+	
+	int wealth;
 
 	// Government* controlling_government;
 	LOCAL_POPULATION_ID_INT id;

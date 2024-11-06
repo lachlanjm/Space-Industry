@@ -8,7 +8,7 @@ typedef struct AppState AppState;
 #include "..\..\..\History\HistoryWtdAvgArray.h"
 
 #include "..\..\Management\Logistics\LogisticsManager.h"
-#include "..\..\Management\Production\FactoryManager.h"
+#include "..\..\Management\Production\Company.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
 #include "..\..\Environment\Structures\MarketMap.h"
 
@@ -26,7 +26,7 @@ typedef struct AppState {
 	LogisticsManager* logistics_managers;
 
 	uint_fast16_t factory_managers_num;
-	FactoryManager* factory_managers;
+	Company* factory_managers;
 
 	uint_fast16_t local_population_num;
 	LocalPopulation* local_population;

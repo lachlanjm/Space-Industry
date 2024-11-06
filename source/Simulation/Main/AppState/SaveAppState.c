@@ -9,8 +9,8 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 		case APP_STATE_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_APP_STATE_ID);
 			break;
-		case FACTORY_MANAGER_SAVE:
-			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_MANAGER_ID);
+		case COMPANY_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_COMPANY_ID);
 			break;
 		case FACTORY_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_ID);
@@ -163,9 +163,9 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 	);
 	for (int i = 0; i < appState->factory_managers_num; i++)
 	{
-		appendToQueue(FACTORY_MANAGER_SAVE, &appState->factory_managers[i]);
+		appendToQueue(COMPANY_SAVE, &appState->factory_managers[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_FAC_MAN_ID, FACTORY_MANAGER_SAVE, appState->factory_managers[i].id)
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_FAC_MAN_ID, COMPANY_SAVE, appState->factory_managers[i].id)
 		);
 	}
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
@@ -191,13 +191,16 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 	}
 }
 
-static inline void saveFactoryManager(FILE* fptr, FactoryManager* factoryManager)
+static inline void saveCompany(FILE* fptr, Company* company)
 {
 	char buffer[BUF_SIZE];
-	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, FACTORY_MANAGER_SAVE, factoryManager->id));
-	appendToQueue(FACTORY_SAVE, &factoryManager->controlled_factory);
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, COMPANY_SAVE, company->id));
+	appendToQueue(FACTORY_SAVE, &company->controlled_factory);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute(buffer, SAVE_FILE_FM_CON_FAC_ID, FACTORY_SAVE, factoryManager->controlled_factory.id)
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_CO_WTH_ID, company->wealth)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_CO_CON_FAC_ID, FACTORY_SAVE, company->controlled_factory.id)
 	);
 }
 
@@ -226,9 +229,6 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_MAX_EMP_ID, factory->max_employee_num)
-	);
-	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_WTH_ID, factory->wealth)
 	);
 
 	appendToQueue(HISTORY_ARRAY_AVG_SAVE, &factory->profit_history);
@@ -360,6 +360,9 @@ static inline void saveLocalPopulation(FILE* fptr, LocalPopulation* population)
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOC_POP_POP_NUM_ID, population->population_number)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOC_POP_WTH_ID, population->wealth)
 	);
 
 	appendToQueue(FACTORY_SAVE, &population->population_centre);
@@ -515,8 +518,8 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 		case APP_STATE_SAVE:
 			saveAppStateFormat(fptr, (AppState*) item->data);
 			break;
-		case FACTORY_MANAGER_SAVE:
-			saveFactoryManager(fptr, (FactoryManager*) item->data);
+		case COMPANY_SAVE:
+			saveCompany(fptr, (Company*) item->data);
 			break;
 		case FACTORY_SAVE:
 			saveFactory(fptr, (Factory*) item->data);

@@ -31,14 +31,16 @@ LocalPopulation* newLocalPopulation(const TransportNode location, const uint32_t
 
 void assignLocalPopulationValues(LocalPopulation* population, const TransportNode location, const uint32_t population_number)
 {
+	__setLocalPopulationByLocation(population, location);
+
 	population->population_number = population_number;
 	population->employed_number = 0;
-	assignFactoryValues(&population->population_centre, Population_Consumption, location);
+	assignFactoryValuesLocalPopulation(&population->population_centre, location);
 	population->population_centre.current_employee_num = population->population_centre.max_employee_num;
 
-	population->id = id_next++;
+	population->wealth = 100000;
 
-	__setLocalPopulationByLocation(population, location);
+	population->id = id_next++;
 }
 
 void assignLoadIdLocalPopulation(LocalPopulation* obj, const int id)
@@ -216,12 +218,17 @@ void loadLocalPopulationAssignOrders(LocalPopulation* population)
 
 void insertFundsLocalPopulation(LocalPopulation* population, const int funds)
 {
-	insertFundsFactory(&population->population_centre, funds);
+	population->wealth += funds;
+
+	recordInsertFundsFactory(&population->population_centre, funds);
 }
 
 void withdrawFundsLocalPopulation(LocalPopulation* population, const int funds)
 {
-	withdrawFundsFactory(&population->population_centre, funds);
+	if (population->wealth < funds) return; // reject payment
+	population->wealth -= funds;
+
+	recordWithdrawFundsFactory(&population->population_centre, funds);
 }
 
 // TODO TBU
