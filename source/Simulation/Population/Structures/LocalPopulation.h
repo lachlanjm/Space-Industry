@@ -25,6 +25,7 @@ struct LocalPopulation {
 #include "..\..\Production\Structures\Stockpile.h"
 
 #include <stdint.h>
+#include <stdio.h>
 
 #define TRUE (1)
 #define FALSE (0)
@@ -40,10 +41,12 @@ struct LocalPopulation {
 #define LP_DEFAULT_PRICE 30
 
 void setTransportNodeCountLocalPopulationStatic(const int transport_node_count);
+int getLocalPopulationNum(void);
 LocalPopulation* getLocalPopulationByLocation(const TransportNode location);
+void cleanTransportNodeCountLocalPopulationStatic(void);
 
-LocalPopulation* newLocalPopulation(const TransportNode location, const uint32_t population_number);
-void assignLocalPopulationValues(LocalPopulation* population, const TransportNode location, const uint32_t population_number);
+void assignLocalPopulationValues(const TransportNode location, const uint32_t population_number);
+void moveLocalPopulationToStaticArray(LocalPopulation* origin, const TransportNode location);
 void assignLoadIdLocalPopulation(LocalPopulation* obj, const int id);
 void loadLocalPopulationAssignOrders(LocalPopulation* population);
 

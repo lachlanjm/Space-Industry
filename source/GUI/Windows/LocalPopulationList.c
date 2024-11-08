@@ -11,12 +11,12 @@ void drawLocalPopulationList(AppPlatform* platform, AppState* current_app_state,
 		nk_layout_row_static(platform->ctx, 30, 150, 1);
 		nk_label(platform->ctx, "Local Populations: ", NK_TEXT_LEFT);
 
-		for (int i = 0; i < current_app_state->local_population_num; i++)
+		for (int i = 0; i < getLocalPopulationNum(); i++)
 		{
 			nk_layout_row_static(platform->ctx, 30, 100, 1);
 			if (nk_button_label(platform->ctx, "Local Population"))
 			{
-				addNewPopupWindow(platform->first_window, LOCAL_POPULATION_MENU, &current_app_state->local_population[i]);
+				addNewPopupWindow(platform->first_window, LOCAL_POPULATION_MENU, getLocalPopulationByLocation(i));
 			}
 		}
 	}

@@ -90,18 +90,54 @@ void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode lo
 void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe)
 {
 	factory->productionRecipe = productionRecipe;
+
+	const int old_in_num = factory->stockpiles_in_num;
+	const int old_out_num = factory->stockpiles_out_num;
 	
 	factory->stockpiles_in_num = getNumOfInputs(productionRecipe);
 	factory->stockpiles_out_num = getNumOfOutputs(productionRecipe);
 
-	factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
-	factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
+	if (old_in_num > 0 && factory->stockpiles_in_num == 0)
+	{
+		free(factory->stockpiles_in);
+		factory->stockpiles_in = NULL;
+		free(factory->orders_in);
+		factory->orders_in = NULL;
+		free(factory->ordered_in);
+		factory->ordered_in = NULL;
+	}
+	else
+	{
+		factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
+		memset(factory->stockpiles_in, 0, factory->stockpiles_in_num * sizeof(Stockpile));
 
-	factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
-	factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
+		factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
+		memset(factory->orders_in, 0, factory->stockpiles_in_num * sizeof(Order));
 
-	factory->ordered_in = (QUANTITY_INT*) realloc(factory->ordered_in, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
-	factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+		factory->ordered_in = (QUANTITY_INT*) realloc(factory->ordered_in, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+		memset(factory->ordered_in, 0, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+	}
+
+	if (old_out_num > 0 && factory->stockpiles_out_num == 0)
+	{
+		free(factory->stockpiles_out);
+		factory->stockpiles_out = NULL;
+		free(factory->orders_out);
+		factory->orders_out = NULL;
+		free(factory->ordered_out);
+		factory->ordered_out = NULL;
+	}
+	else
+	{
+		factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
+		memset(factory->stockpiles_out, 0, factory->stockpiles_out_num * sizeof(Stockpile));
+
+		factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
+		memset(factory->orders_out, 0, factory->stockpiles_out_num * sizeof(Order));
+
+		factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+		memset(factory->ordered_out, 0, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+	}
 }
 
 void assignLoadIdFactory(Factory* obj, const int id)
@@ -110,6 +146,18 @@ void assignLoadIdFactory(Factory* obj, const int id)
 	if (id >= id_next)
 	{
 		id_next = id + 1;
+	}
+}
+
+void reassignOrderOfferingPtrs(const Factory* factory)
+{
+	for (int i = 0; i < factory->stockpiles_in_num; i++) 
+	{
+		factory->orders_in[i].offering_factory = factory;
+	}
+	for (int i = 0; i < factory->stockpiles_out_num; i++) 
+	{
+		factory->orders_out[i].offering_factory = factory;
 	}
 }
 

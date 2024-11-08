@@ -25,11 +25,8 @@ typedef struct AppState {
 	uint_fast16_t logistics_managers_next_process_tick_index;
 	LogisticsManager* logistics_managers;
 
-	uint_fast16_t factory_managers_num;
-	Company* factory_managers;
-
-	uint_fast16_t local_population_num;
-	LocalPopulation* local_population;
+	uint_fast16_t companies_num;
+	Company* companies;
 } AppState;
 
 void processTickAppState(AppState* appState);

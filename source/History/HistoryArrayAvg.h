@@ -15,6 +15,7 @@ typedef struct HistoryArrayAvg {
 
 HistoryArrayAvg* newHistoryArrayAvg();
 void assignHistoryArrayAvgValues(HistoryArrayAvg* hist_array);
+void assignLoadIdHistoryArrayAvg(HistoryArrayAvg* obj, const int id);
 
 void addToHistoryArrayAvg(HistoryArrayAvg* hist_array, const HISTORY_INT value);
 void subFromHistoryArrayAvg(HistoryArrayAvg* hist_array, const HISTORY_INT value);

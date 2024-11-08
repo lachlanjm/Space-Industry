@@ -10,9 +10,9 @@ void processTickAppState(AppState* appState)
 	processTickMarketMap();
 
 	// MUST DO FACTORY BEFORE LOGISTICS (HISTORY SAVING FLOW)
-	for (int i = 0; i < appState->factory_managers_num; i++)
+	for (int i = 0; i < appState->companies_num; i++)
 	{
-		processTickCompany(&appState->factory_managers[i]);
+		processTickCompany(&appState->companies[i]);
 	}
 
 	update_dist_to_price_eff();
@@ -27,9 +27,9 @@ void processTickAppState(AppState* appState)
 	appState->logistics_managers_next_process_tick_index++;
 	appState->logistics_managers_next_process_tick_index %= AS_LOG_MAN_GROUPS;
 
-	for (int i = 0; i < appState->local_population_num; i++)
+	for (int i = 0; i < getLocalPopulationNum(); i++)
 	{
-		processTickLocalPopulation(&appState->local_population[i]);
+		processTickLocalPopulation(getLocalPopulationByLocation(i));
 	}
 }
 
@@ -38,13 +38,13 @@ AppState* newGameAppState()
 	AppState* appState = calloc(1, sizeof(AppState));
 	if (appState == NULL) return NULL;
 
-	appState->factory_managers_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
-    appState->factory_managers = (Company*) calloc(appState->factory_managers_num, sizeof(Company));
+	appState->companies_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
+    appState->companies = (Company*) calloc(appState->companies_num, sizeof(Company));
 
-    for (int i = 0; i < appState->factory_managers_num; i++) // LEAVE POP CONSUMPTION
+    for (int i = 0; i < appState->companies_num; i++) // LEAVE POP CONSUMPTION
     {
         assignCompanyValues(
-            &appState->factory_managers[i],
+            &appState->companies[i],
             i % (PRODUCTION_RECIPE_COUNT - 1),
             i % (TRANSPORT_NODE_COUNT)
         );
@@ -62,16 +62,10 @@ AppState* newGameAppState()
         );
     }
 
-	appState->local_population_num = TRANSPORT_NODE_COUNT;
-    appState->local_population = (LocalPopulation*) calloc(appState->local_population_num, sizeof(LocalPopulation));
-	setTransportNodeCountLocalPopulationStatic(appState->local_population_num);
-	for (int i = 0; i < appState->local_population_num; i++)
+	setTransportNodeCountLocalPopulationStatic(TRANSPORT_NODE_COUNT);
+	for (int i = 0; i < getLocalPopulationNum(); i++)
 	{
-		assignLocalPopulationValues(
-            &appState->local_population[i],
-			i,
-			1000 // TODO TBU
-		);
+		assignLocalPopulationValues(i, 1000);
 	}
 
 	instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT);
@@ -81,11 +75,11 @@ AppState* newGameAppState()
 
 void cleanAppState(AppState* appState)
 {
-	for (int i = 0; i < appState->factory_managers_num; i++)
+	for (int i = 0; i < appState->companies_num; i++)
 	{
-		cleanCompany(&appState->factory_managers[i]);
+		cleanCompany(&appState->companies[i]);
 	}
-	free(appState->factory_managers);
+	free(appState->companies);
 
 	for (int i = 0; i < appState->logistics_managers_num; i++)
 	{
@@ -93,11 +87,6 @@ void cleanAppState(AppState* appState)
 	}
 	free(appState->logistics_managers);
 
-	for (int i = 0; i < appState->local_population_num; i++)
-	{
-		cleanLocalPopulation(&appState->local_population[i]);
-	}
-	free(appState->local_population);
-
+	cleanTransportNodeCountLocalPopulationStatic();
 	cleanMarketMap();
 }

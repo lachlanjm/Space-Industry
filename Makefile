@@ -135,6 +135,10 @@ full_build:
 run:
 	$(APP_PATH)\IndustryApp.exe $(APP_PATH) > $(APP_PATH)\run_time.log
 
+.PHONY: run_debug
+run_debug:
+	gdb --args $(APP_PATH)\IndustryApp.exe $(APP_PATH)
+
 .PHONY: final_compile
 final_compile:
 	$(CC) $(CFLAGS) $(LIBS) -I $(BUILD_OBJ_PATH) $(OBJ_FILES) $(LOCAL_LIBS) -o $(APP_PATH)\IndustryApp.exe

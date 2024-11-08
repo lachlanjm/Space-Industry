@@ -52,6 +52,8 @@ struct Factory
 #include "..\..\Management\Production\Company.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
 
+#include <stdio.h>
+
 #define WAGE_TICK_RATE 64 // process ticks per wage tick
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
@@ -60,6 +62,7 @@ void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode lo
 
 void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe);
 void assignLoadIdFactory(Factory* obj, const int id);
+void reassignOrderOfferingPtrs(const Factory* factory);
 
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
 QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);

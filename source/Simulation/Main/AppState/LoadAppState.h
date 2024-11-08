@@ -5,6 +5,8 @@
 #include "..\..\..\Helpers\SaveFileStandards.h"
 #include "..\..\..\Helpers\DirectoryReading.h"
 
+#include <stdio.h>
+
 struct LoadStateIdList {
 	struct LoadStateIdList* next;
 	int id; // Key

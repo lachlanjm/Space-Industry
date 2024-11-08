@@ -13,6 +13,7 @@ typedef struct HistoryArray {
 
 HistoryArray* newHistoryArray();
 void assignHistoryArrayValues(HistoryArray* hist_array);
+void assignLoadIdHistoryArray(HistoryArray* obj, const int id);
 
 void addToHistoryArray(HistoryArray* hist_array, const HISTORY_INT value);
 void subFromHistoryArray(HistoryArray* hist_array, const HISTORY_INT value);

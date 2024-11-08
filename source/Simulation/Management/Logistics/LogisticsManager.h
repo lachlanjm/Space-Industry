@@ -1,7 +1,6 @@
 #ifndef LOGISTICS_MANAGER_H
 #define LOGISTICS_MANAGER_H
 
-#include "..\..\Environment\Structures\MarketMap.h"
 #include "..\..\Transport\Structures\Vehicle.h"
 #include "LogisticsContract.h"
 
@@ -19,6 +18,10 @@ typedef struct LogisticsManager
 
 	LOGISTICS_MANAGER_ID_INT id;
 } LogisticsManager;
+
+#include "..\..\Environment\Structures\MarketMap.h"
+
+#include <stdio.h>
 
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num);
 void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);

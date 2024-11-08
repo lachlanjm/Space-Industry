@@ -17,6 +17,7 @@ typedef struct HistoryWtdAvgArray {
 
 HistoryWtdAvgArray* newHistoryWtdAvgArray();
 void assignHistoryWtdAvgArrayValues(HistoryWtdAvgArray* hist_array);
+void assignLoadIdHistoryWtdAvgArray(HistoryWtdAvgArray* obj, const int id);
 
 void addToHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const HISTORY_INT value, const HISTORY_INT weight);
 void subFromHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const HISTORY_INT value, const HISTORY_INT weight);

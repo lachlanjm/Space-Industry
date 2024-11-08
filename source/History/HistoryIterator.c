@@ -2,7 +2,7 @@
 
 HistoryIterator* newHistoryIterator(const void* data, const enum HistoryType history_type)
 {
-	HistoryIterator* iter = malloc(sizeof(HistoryIterator));
+	HistoryIterator* iter = calloc(1, sizeof(HistoryIterator));
 	if (iter == NULL) return NULL;
 
 	iter->index = 0;

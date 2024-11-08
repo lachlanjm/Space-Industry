@@ -22,6 +22,15 @@ void assignHistoryArrayAvgValues(HistoryArrayAvg* hist_array)
 	hist_array->id = id_next++;
 }
 
+void assignLoadIdHistoryArrayAvg(HistoryArrayAvg* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 void addToHistoryArrayAvg(HistoryArrayAvg* hist_array, const HISTORY_INT value)
 {
 	hist_array->array[index_base] += value;

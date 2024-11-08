@@ -1,37 +1,35 @@
 #include "LocalPopulation.h"
 
 static int local_population_count = 0;
-static LocalPopulation** __static_local_populations = NULL;
+static LocalPopulation* __static_local_populations = NULL;
 void setTransportNodeCountLocalPopulationStatic(const int transport_node_count)
 {
-	__static_local_populations = (LocalPopulation**) calloc(transport_node_count, sizeof(LocalPopulation*));
+	__static_local_populations = (LocalPopulation*) calloc(transport_node_count, sizeof(LocalPopulation));
 	local_population_count = transport_node_count;
+}
+
+int getLocalPopulationNum(void)
+{
+	return local_population_count;
 }
 
 LocalPopulation* getLocalPopulationByLocation(const TransportNode location)
 {
 	if (location >= local_population_count) { return NULL; }
-	return __static_local_populations[location];
+	return &__static_local_populations[location];
 }
 
-void __setLocalPopulationByLocation(const LocalPopulation* population, const TransportNode location)
+void cleanTransportNodeCountLocalPopulationStatic(void)
 {
-	if (location >= local_population_count) { return; }
-	__static_local_populations[location] = population;
+	free(__static_local_populations);
+	local_population_count = 0;
 }
 
 static LOCAL_POPULATION_ID_INT id_next = 0;
 
-LocalPopulation* newLocalPopulation(const TransportNode location, const uint32_t population_number)
+void assignLocalPopulationValues(const TransportNode location, const uint32_t population_number)
 {
-	LocalPopulation* population = calloc(1, sizeof(LocalPopulation));
-	assignLocalPopulationValues(population, location, population_number);
-	return population;
-}
-
-void assignLocalPopulationValues(LocalPopulation* population, const TransportNode location, const uint32_t population_number)
-{
-	__setLocalPopulationByLocation(population, location);
+	LocalPopulation* population = getLocalPopulationByLocation(location);
 
 	population->population_number = population_number;
 	population->employed_number = 0;
@@ -41,6 +39,17 @@ void assignLocalPopulationValues(LocalPopulation* population, const TransportNod
 	population->wealth = 100000;
 
 	population->id = id_next++;
+}
+
+// Will not clean or destroy `origin`; also does only a shallow copy
+void moveLocalPopulationToStaticArray(LocalPopulation* origin, const TransportNode location)
+{
+	LocalPopulation* dst = getLocalPopulationByLocation(location);
+	cleanLocalPopulation(dst);
+
+	memcpy(dst, origin, sizeof(LocalPopulation));
+	dst->population_centre.management = dst;
+	reassignOrderOfferingPtrs(&dst->population_centre);
 }
 
 void assignLoadIdLocalPopulation(LocalPopulation* obj, const int id)
@@ -100,7 +109,7 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 
 			if (resetBuyOrder(productMarket, &population->population_centre.orders_in[i])) 
 			{
-				printf("Failed to reset buy order\n");
+				printf("Failed to reset buy order; PM=%x, Order=%x\n", productMarket, &population->population_centre.orders_in[i]);
 			}
 		}
 	}

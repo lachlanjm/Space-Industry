@@ -24,8 +24,8 @@
 
 #define SAVE_FILE_AS_LOG_MAN_NUM "logistics_managers_num"
 #define SAVE_FILE_AS_LOG_MAN_ID "logistics_managers"
-#define SAVE_FILE_AS_FAC_MAN_NUM "factory_managers_num"
-#define SAVE_FILE_AS_FAC_MAN_ID "factory_managers"
+#define SAVE_FILE_AS_CO_NUM "companies_num"
+#define SAVE_FILE_AS_CO_ID "companies"
 #define SAVE_FILE_AS_LOC_POP_NUM "local_population_num"
 #define SAVE_FILE_AS_LOC_POP_ID "local_population"
 
@@ -41,6 +41,8 @@
 #define SAVE_FILE_FAC_ORD_NUM_OUT_ID "ordered_out"
 
 #define SAVE_FILE_FAC_LOC_ID "location"
+#define SAVE_FILE_FAC_MAN_ID "management"
+#define SAVE_FILE_FAC_MAN_TYP_ID "managementType"
 #define SAVE_FILE_FAC_PRO_SPE_ID "processing_speed"
 #define SAVE_FILE_FAC_LEF_PRO_ID "leftover_production"
 #define SAVE_FILE_FAC_EMP_WAG_ID "employee_wages"

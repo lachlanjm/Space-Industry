@@ -3,6 +3,10 @@
 // LOADING OBJECT REPOSITORY
 static struct LoadStateIdList* __object_arr = NULL;
 
+// TMP OBJECT array
+static int __lclpop_arr_num = 0;
+static LocalPopulation* __lclpop_arr = NULL;
+
 static inline int getNextDataPoint(FILE *fptr, char new_data_point[BUF_SIZE + 1])
 {
 	int i = 0;
@@ -141,18 +145,32 @@ static inline void addNewStructIdPtr(const enum AttributeTypes obj_type, const i
 	}
 }
 
+// Update ONLY the PTR such that the linked list and array share the same ordering and size of the pointers. 
+// Requires an array of LocalPopulations. Expects at least and will only traverse up to the length of linked list,
+static inline void updateLocalPopStructPtrsFromArr(const LocalPopulation* arr)
+{
+	struct LoadStateIdList* item = &__object_arr[LOCAL_POPULATION_SAVE];
+
+	if (item == NULL) return;
+
+	int i = 0;
+	do
+	{
+		item->data = &arr[i++];
+		item = item->next;
+	} while (item);
+}
+
 static inline struct LoadStateIdList* getItemWithId(const struct LoadStateIdList* item, const int id)
 {	
 	while (item != NULL)
 	{
-		if (item->id == id)
-		{
-			break;
-		}
+		if (item->id == id) return item;
 		item = item->next;
 	}
 
-	return item;
+	printf("Item not found; id=%i\n", id); fflush(stdout);
+	return NULL;
 }
 
 static inline struct LoadStateIdList* getObject(const enum AttributeTypes obj_type, const int id)
@@ -214,16 +232,14 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				((AppState*)current_obj_ptr->data)->logistics_managers_next_process_tick_index = 0;
 				((AppState*)current_obj_ptr->data)->logistics_managers = (LogisticsManager*) calloc(num, sizeof(LogisticsManager));
 			}
-			else if (strcmp(new_data_point, SAVE_FILE_AS_FAC_MAN_NUM) == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_AS_CO_NUM) == 0)
 			{
-				((AppState*)current_obj_ptr->data)->factory_managers_num = atoi(attr_value);
-				((AppState*)current_obj_ptr->data)->factory_managers = (Company*) calloc(((AppState*)current_obj_ptr->data)->factory_managers_num, sizeof(Company));
+				((AppState*)current_obj_ptr->data)->companies_num = atoi(attr_value);
+				((AppState*)current_obj_ptr->data)->companies = (Company*) calloc(((AppState*)current_obj_ptr->data)->companies_num, sizeof(Company));
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_NUM) == 0)
 			{
-				((AppState*)current_obj_ptr->data)->local_population_num = atoi(attr_value);
-				((AppState*)current_obj_ptr->data)->local_population = (LocalPopulation*) calloc(((AppState*)current_obj_ptr->data)->local_population_num, sizeof(LocalPopulation));
-				setTransportNodeCountLocalPopulationStatic(((AppState*)current_obj_ptr->data)->local_population_num);
+				setTransportNodeCountLocalPopulationStatic(atoi(attr_value));
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
@@ -237,29 +253,24 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 
 				current_index++;
 			}
-			else if (strcmp(new_data_point, SAVE_FILE_AS_FAC_MAN_ID) == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_AS_CO_ID) == 0)
 			{
-				if (strcmp(current_arr_name, SAVE_FILE_AS_FAC_MAN_ID))
+				if (strcmp(current_arr_name, SAVE_FILE_AS_CO_ID))
 				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_FAC_MAN_ID);
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_CO_ID);
 					current_index = 0;
 				}
 
-				addNewStructIdPtr(COMPANY_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->factory_managers[current_index]);
+				addNewStructIdPtr(COMPANY_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->companies[current_index]);
 
 				current_index++;
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_ID) == 0)
 			{
-				if (strcmp(current_arr_name, SAVE_FILE_AS_LOC_POP_ID))
-				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_LOC_POP_ID);
-					current_index = 0;
-				}
-
-				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->local_population[current_index]);
-
-				current_index++;
+				__lclpop_arr = (LocalPopulation*) realloc(__lclpop_arr, (++__lclpop_arr_num) * sizeof(LocalPopulation));
+				memset(&__lclpop_arr[__lclpop_arr_num-1], 0, sizeof(LocalPopulation));
+				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &__lclpop_arr[__lclpop_arr_num-1]);
+				updateLocalPopStructPtrsFromArr(__lclpop_arr);
 			}
 			break;
 		case COMPANY_SAVE:
@@ -347,13 +358,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_CEN_ID) == 0)
 			{
-				if (strcmp(current_arr_name, SAVE_FILE_LOC_POP_POP_CEN_ID))
-				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_LOC_POP_POP_CEN_ID);
-					current_index = 0;
-				}
 				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((LocalPopulation*)current_obj_ptr->data)->population_centre);
-				current_index++;
 			}
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
@@ -529,6 +534,16 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			{
 				((Factory*)current_obj_ptr->data)->location = atoi(attr_value);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_MAN_TYP_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->managementType = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_MAN_ID) == 0)
+			{
+				const int id = extractObjectId(attr_value);
+				const enum AttributeTypes type = matchIdentifierWithType(attr_value);
+				((Factory*)current_obj_ptr->data)->management = getObject(type, id)->data;
+			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_PRO_SPE_ID) == 0)
 			{
 				((Factory*)current_obj_ptr->data)->processing_speed = atoi(attr_value);
@@ -580,6 +595,10 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_NUM_ID) == 0)
 			{
 				((LocalPopulation*)current_obj_ptr->data)->population_number = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOC_POP_WTH_ID) == 0)
+			{
+				((LocalPopulation*)current_obj_ptr->data)->wealth = atoi(attr_value);
 			}
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
@@ -728,12 +747,34 @@ static inline void assignAllNeededIds()
 					current_obj_ptr = current_obj_ptr->next;
 				}
 				break;
+			case HISTORY_ARRAY_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdHistoryArray(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case HISTORY_ARRAY_AVG_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdHistoryArrayAvg(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case HISTORY_WTD_AVG_ARRAY_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdHistoryWtdAvgArray(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
 			case LOCAL_POPULATION_SAVE:
 				while (current_obj_ptr != NULL)
 				{
 					assignLoadIdLocalPopulation(current_obj_ptr->data, id++);
 					current_obj_ptr = current_obj_ptr->next;
 				}
+				break;
 			case LOGISTICS_CONTRACT_SAVE:
 				while (current_obj_ptr != NULL)
 				{
@@ -752,6 +793,13 @@ static inline void assignAllNeededIds()
 				while (current_obj_ptr != NULL)
 				{
 					assignLoadIdOrder(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case PRODUCT_MARKET_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdProductMarket(current_obj_ptr->data, id++);
 					current_obj_ptr = current_obj_ptr->next;
 				}
 				break;
@@ -843,17 +891,34 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	}
 	fclose(fptr);
 
-	// Assign orders to PMs
-	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers_num; i++)
+	assignAllNeededIds();
+
+	// Set LocalPops to static arr
+	if (__lclpop_arr)
 	{
-		loadCompanyAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->factory_managers[i]);
-	}
-	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->local_population_num; i++)
-	{
-		loadLocalPopulationAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->local_population[i]);
+		for (int i = 0; i < __lclpop_arr_num; i++)
+		{
+			moveLocalPopulationToStaticArray(
+				&__lclpop_arr[i],
+				__lclpop_arr[i].population_centre.location
+			);
+		}
+
+		free(__lclpop_arr);
+		__lclpop_arr = NULL;
+		__lclpop_arr_num = 0;
 	}
 
-	assignAllNeededIds();
+	// Assign orders to PMs
+	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->companies_num; i++)
+	{
+		loadCompanyAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->companies[i]);
+	}
+	for (int i = 0; i < getLocalPopulationNum(); i++) // TODO make this more adjustable to varying loc pop nums
+	{
+		loadLocalPopulationAssignOrders(getLocalPopulationByLocation(i));
+	}
+
 	AppState* result = (AppState*) __object_arr[APP_STATE_SAVE].data;// First element (Should be only)
 	cleanAllLoadStateIdLists();
 

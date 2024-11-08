@@ -27,6 +27,15 @@ void assignHistoryWtdAvgArrayValues(HistoryWtdAvgArray* hist_array)
 	hist_array->id = id_next++;
 }
 
+void assignLoadIdHistoryWtdAvgArray(HistoryWtdAvgArray* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 void addToHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const HISTORY_INT value, const HISTORY_INT weight)
 {
 	hist_array->values[index_base] += value;

@@ -159,23 +159,28 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 		);
 	}
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_AS_FAC_MAN_NUM, appState->factory_managers_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_AS_CO_NUM, appState->companies_num)
 	);
-	for (int i = 0; i < appState->factory_managers_num; i++)
+	for (int i = 0; i < appState->companies_num; i++)
 	{
-		appendToQueue(COMPANY_SAVE, &appState->factory_managers[i]);
+		appendToQueue(COMPANY_SAVE, &appState->companies[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_FAC_MAN_ID, COMPANY_SAVE, appState->factory_managers[i].id)
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_CO_ID, COMPANY_SAVE, appState->companies[i].id)
 		);
 	}
+
+	// TODO: fix up to non-appstate location (config file)
+	// Currently set to record the values as only place atm for this
+	const int pop_num = getLocalPopulationNum();
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_AS_LOC_POP_NUM, appState->local_population_num)
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_AS_LOC_POP_NUM, pop_num)
 	);
-	for (int i = 0; i < appState->local_population_num; i++)
+	for (int i = 0; i < pop_num; i++)
 	{
-		appendToQueue(LOCAL_POPULATION_SAVE, &appState->local_population[i]);
+		const LocalPopulation* pop = getLocalPopulationByLocation(i);
+		appendToQueue(LOCAL_POPULATION_SAVE, pop);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
-			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_LOC_POP_ID, LOCAL_POPULATION_SAVE, appState->local_population[i].id)
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_LOC_POP_ID, LOCAL_POPULATION_SAVE, pop->id)
 		);
 	}
 
@@ -215,6 +220,24 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_FAC_LOC_ID, factory->location)
 	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_FAC_MAN_TYP_ID, factory->managementType)
+	);
+	switch (factory->managementType)
+	{
+	case MANAGEMENT_COMPANY:
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_MAN_ID, COMPANY_SAVE, ((Company*)factory->management)->id)
+		);
+		break;
+	case MANAGEMENT_LOCAL_POPULATION:
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_MAN_ID, LOCAL_POPULATION_SAVE, ((LocalPopulation*)factory->management)->id)
+		);
+		break;
+	default:
+		break;
+	}
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_PRO_SPE_ID, factory->processing_speed)
 	);

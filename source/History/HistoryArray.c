@@ -19,6 +19,15 @@ void assignHistoryArrayValues(HistoryArray* hist_array)
 	hist_array->id = id_next++;
 }
 
+void assignLoadIdHistoryArray(HistoryArray* obj, const int id)
+{
+	obj->id = id;
+	if (id >= id_next)
+	{
+		id_next = id + 1;
+	}
+}
+
 void addToHistoryArray(HistoryArray* hist_array, const HISTORY_INT value)
 {
 	hist_array->array[index_base] += value;

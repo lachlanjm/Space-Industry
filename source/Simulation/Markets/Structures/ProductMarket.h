@@ -30,6 +30,7 @@ struct ProductMarket {
 
 ProductMarket* newProductMarket(const TransportNode location, const Product product_type);
 void assignProductMarketValues(ProductMarket* productMarket, const TransportNode location, const Product product_type);
+void assignLoadIdProductMarket(ProductMarket* obj, const int id);
 
 int addSellOrder(ProductMarket* productMarket, Order* new_order);
 Order* addNewSellOrder(ProductMarket* productMarket, const Factory* offering_factory, const QUANTITY_INT offer_num, const ORDER_PRICE_INT price);

@@ -11,9 +11,18 @@ LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num)
 
 void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
 {
-	logisticsManager->vehicles_num = vehicles_num;
+	if (logisticsManager->vehicles_num != 0 && vehicles_num == 0)
+	{
+		free(logisticsManager->vehicles);
+		logisticsManager->vehicles = NULL;
+	}
+	else
+	{
+		logisticsManager->vehicles = (Vehicle*) realloc(logisticsManager->vehicles, vehicles_num * sizeof(Vehicle));
+		memset(logisticsManager->vehicles, 0, vehicles_num * sizeof(Vehicle));
+	}
 
-	logisticsManager->vehicles = (Vehicle*) realloc(logisticsManager->vehicles, vehicles_num * sizeof(Vehicle));
+	logisticsManager->vehicles_num = vehicles_num;
 
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
@@ -28,6 +37,7 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 void addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, Factory* selling_factory, Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
+	memset(&logisticsManager->contracts[logisticsManager->contracts_num-1], 0, sizeof(LogisticsContract));
 	addOrderedOutQuantity(selling_factory, product, quantity);
 	addOrderedInQuantity(buying_factory, product, quantity);
 	assignLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
@@ -205,7 +215,16 @@ void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 				logisticsManager->contracts[x] = logisticsManager->contracts[x + 1];
 			}
 			cleanContract(&logisticsManager->contracts[logisticsManager->contracts_num]);
-			logisticsManager->contracts = realloc(logisticsManager->contracts, logisticsManager->contracts_num * sizeof(LogisticsContract));
+
+			if (logisticsManager->contracts_num == 0)
+			{
+				free(logisticsManager->contracts);
+				logisticsManager->contracts = NULL;
+			}
+			else
+			{
+				logisticsManager->contracts = realloc(logisticsManager->contracts, logisticsManager->contracts_num * sizeof(LogisticsContract));
+			}
 		}
 	}
 }
