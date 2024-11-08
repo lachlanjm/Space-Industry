@@ -77,23 +77,22 @@ void updateOfferedPrices(Company* company)
 		{
 			ProductMarket* productMarket = getProductMarketAtLocation(company->controlled_factory.location, company->controlled_factory.stockpiles_in[i].product_type);
 
+			const int base_price = ( 
+				(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
+				? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
+				: ( (getMarketBuyAvgByProduct(productMarket->product_type) != 0)
+					? getMarketBuyAvgByProduct(productMarket->product_type)
+					: ( (getMarketSellAvgByProduct(productMarket->product_type) != 0)
+						? getMarketSellAvgByProduct(productMarket->product_type)
+						: CO_DEFAULT_PRICE
+			))); // ?: needed to allow for const
+
 			// TODO TBU
-			if (getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) == 0)
-			{
-				company->controlled_factory.orders_in[i].price = (
-					CO_DEFAULT_PRICE
-					* profit_factor_buy
-					* (sqrt((double)company->controlled_factory.orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT)
-				);
-			}
-			else
-			{
-				company->controlled_factory.orders_in[i].price = (
-					getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array)
-					* profit_factor_buy
-					* (sqrt((double)company->controlled_factory.orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT)
-				);
-			}
+			company->controlled_factory.orders_in[i].price = (
+				base_price
+				* profit_factor_buy
+				* (sqrt((double)company->controlled_factory.orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT)
+			);
 
 			if (resetBuyOrder(productMarket, &company->controlled_factory.orders_in[i])) 
 			{
@@ -130,22 +129,21 @@ void updateOfferedPrices(Company* company)
 			// Re-calc selling price
 			ProductMarket* productMarket = getProductMarketAtLocation(company->controlled_factory.location, company->controlled_factory.stockpiles_out[i].product_type);
 			
-			if (getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) == 0)
-			{
-				company->controlled_factory.orders_out[i].price = (
-					CO_DEFAULT_PRICE
-					* profit_factor_sell
-					* (CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)company->controlled_factory.orders_out[i].offer_num))
-				);
-			}
-			else
-			{
-				company->controlled_factory.orders_out[i].price = (
-					getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array)
-					* profit_factor_sell
-					* (CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)company->controlled_factory.orders_out[i].offer_num))
-				);
-			}
+			const int base_price = ( 
+				(getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
+				? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
+				: ( (getMarketSellAvgByProduct(productMarket->product_type) != 0)
+					? getMarketSellAvgByProduct(productMarket->product_type)
+					: ( (getMarketBuyAvgByProduct(productMarket->product_type) != 0)
+						? getMarketBuyAvgByProduct(productMarket->product_type)
+						: CO_DEFAULT_PRICE
+			))); // ?: needed to allow for const
+
+			company->controlled_factory.orders_out[i].price = (
+				base_price
+				* profit_factor_sell
+				* (CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)company->controlled_factory.orders_out[i].offer_num))
+			);
 
 			if (resetSellOrder(productMarket, &company->controlled_factory.orders_out[i])) 
 			{
