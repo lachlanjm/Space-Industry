@@ -17,7 +17,7 @@ void assignFactoryValuesCompany(Factory* factory, const Company* company, const 
 	loadFactoryConstructor(factory, productionRecipe);
 
 	factory->location = location;
-	factory->processing_speed = 1;
+	factory->processing_speed = getBaseProcessingSpeed(productionRecipe);
 	factory->leftover_production = 0.0;
 
 	factory->employee_wages = 10;
@@ -59,7 +59,7 @@ void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode lo
 	loadFactoryConstructor(factory, productionRecipe);
 
 	factory->location = location;
-	factory->processing_speed = 1;
+	factory->processing_speed = getBaseProcessingSpeed(productionRecipe);
 	factory->leftover_production = 0.0;
 
 	factory->employee_wages = 10;

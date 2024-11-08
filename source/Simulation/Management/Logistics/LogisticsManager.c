@@ -68,7 +68,7 @@ void assignLoadIdLogisticsManager(LogisticsManager* obj, const int id)
 	}
 }
 
-static float __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
+static double __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
 void update_dist_to_price_eff()
 {
 	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
@@ -81,15 +81,15 @@ void update_dist_to_price_eff()
 					&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 				{
 					// Needed to counter uint maths
-					const int price_diff = (int)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-						- (int)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
+					const double price_diff = (double)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+						- (double)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
 					if (getTotalDistance(from, to) == 0)
 					{
-						__dist_to_price_eff__[from][to][product] = (float)price_diff;
+						__dist_to_price_eff__[from][to][product] = price_diff;
 					}
 					else 
 					{
-						__dist_to_price_eff__[from][to][product] = (float)price_diff / (float)getTotalDistance(from, to);
+						__dist_to_price_eff__[from][to][product] = price_diff / (double)getTotalDistance(from, to);
 					}
 				}
 				else
@@ -111,15 +111,15 @@ void update_dist_to_price_eff_product_filtered(int product)
 				&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 			{
 				// Needed to counter uint maths
-				const int price_diff = (int)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-					- (int)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
+				const double price_diff = (double)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
+					- (double)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
 				if (getTotalDistance(from, to) == 0)
 				{
-					__dist_to_price_eff__[from][to][product] = (float)price_diff;
+					__dist_to_price_eff__[from][to][product] = price_diff;
 				}
 				else 
 				{
-					__dist_to_price_eff__[from][to][product] = (float)price_diff / (float)getTotalDistance(from, to);
+					__dist_to_price_eff__[from][to][product] = price_diff / (double)getTotalDistance(from, to);
 				}
 			}
 			else
@@ -148,9 +148,9 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 	int from_max = -1;
 	int to_max = -1;
 	int product_max = -1;
-	float eff_max = 0;
+	double eff_max = 0;
 
-	float eff = 0;
+	double eff = 0;
 	int dist_to = 0;
 
 	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
@@ -161,7 +161,7 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 			{
 				eff = __dist_to_price_eff__[from][to][product];
 				dist_to = getTotalDistance(vehicle->current_location, from);
-				if (dist_to != 0) eff /= (float) dist_to;
+				if (dist_to != 0) eff /= (double) dist_to;
 
 				if (eff > eff_max)
 				{

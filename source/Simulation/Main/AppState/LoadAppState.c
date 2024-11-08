@@ -490,7 +490,7 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 			break;
 		case FACTORY_SAVE:
 			((Factory*)current_obj->data)->location = 0;
-			((Factory*)current_obj->data)->processing_speed = 0;
+			((Factory*)current_obj->data)->processing_speed = 1;
 			break;
 		case LOCAL_POPULATION_SAVE:
 			((LocalPopulation*)current_obj->data)->population_number = 0;

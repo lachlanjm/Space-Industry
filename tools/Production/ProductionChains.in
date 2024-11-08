@@ -1,282 +1,328 @@
 Extraction Iron Ore
-    Output:
-    1 x Iron Ore
+	Processing speed: 10
+	Output:
+	1 x Iron Ore
 
 Extraction Coal
-    Output:
-    1 x Coal
+	Processing speed: 10
+	Output:
+	1 x Coal
 
 Extraction Copper Ore
-    Output:
-    1 x Copper Ore
+	Processing speed: 10
+	Output:
+	1 x Copper Ore
 
 Extraction Oxygen
-    Output:
-    1 x Oxygen
+	Processing speed: 10
+	Output:
+	1 x Oxygen
 
 Extraction Hydrogen
-    Output:
-    1 x Hydrogen
+	Processing speed: 10
+	Output:
+	1 x Hydrogen
 
 Extraction Water
-    Output:
-    1 x Water
+	Processing speed: 10
+	Output:
+	1 x Water
 
 Extraction Heavy Water
-    Output:
-    1 x Heavy Water
+	Processing speed: 10
+	Output:
+	1 x Heavy Water
 
 Extraction Sand
-    Output:
-    1 x Sand
+	Processing speed: 10
+	Output:
+	1 x Sand
 
 Extraction Sulfur
-    Output:
-    1 x Sulfur
+	Processing speed: 10
+	Output:
+	1 x Sulfur
 
 Extraction Crude Oil
-    Output:
-    1 x Crude Oil
+	Processing speed: 10
+	Output:
+	1 x Crude Oil
 
 Extraction Rock
-    Output:
-    1 x Rock
+	Processing speed: 10
+	Output:
+	1 x Rock
 
 Extraction Lime
-    Output:
-    1 x Lime
+	Processing speed: 10
+	Output:
+	1 x Lime
 
 Extraction Nitrogen
+	Processing speed: 10
 	Output:
 	1 x Nitrogen
 
 Extraction Timber
+	Processing speed: 10
 	Output:
 	1 x Timber
 
 Extraction Lithium Carbonate
 	Energy: -10
+	Processing speed: 10
 	Output:
 	1 x Lithium Carbonate
 
 Extraction Lime Mineral
+	Processing speed: 10
 	Output:
 	1 x Lime Mineral
 
 Extraction Hydrogen Peroxide
+	Processing speed: 10
 	Output:
 	1 x Hydrogen Peroxide
 
 Extraction Fluorite
+	Processing speed: 10
 	Output:
 	1 x Fluorite
 
 Extraction Table Salt
+	Processing speed: 10
 	Output:
 	1 x Table Salt
 
 Extraction Phosphorite
+	Processing speed: 10
 	Output:
 	1 x Phosphorite
 
 Extraction Wollastonite
+	Processing speed: 10
 	Output:
 	1 x Wollastonite
 
 Extraction Bauxite
+	Processing speed: 10
 	Output:
 	1 x Bauxite
 
 Refinement Iron
-    Input:
-    1 x Iron Ore
-    Output:
-    1 x Iron
+	Processing speed: 10
+	Input:
+	1 x Iron Ore
+	Output:
+	1 x Iron
 
 Refinement Copper
-    Input:
-    1 x Copper Ore
-    Output:
-    1 x Copper
+	Processing speed: 10
+	Input:
+	1 x Copper Ore
+	Output:
+	1 x Copper
 
 Refinement Carbon
-    Input:
-    10 x Coal
-    2 x Oxygen
-    Output:
-    9 x Carbon
-    1 x Sulfur Dioxide
+	Processing speed: 1
+	Input:
+	10 x Coal
+	2 x Oxygen
+	Output:
+	9 x Carbon
+	1 x Sulfur Dioxide
 
 Refinement Silicon
-    Input:
-    1 x Sand
-    2 x Carbon
-    Output:
-    1 x Silicon
-    2 x Carbon Monoxide
+	Processing speed: 5
+	Input:
+	1 x Sand
+	2 x Carbon
+	Output:
+	1 x Silicon
+	2 x Carbon Monoxide
 
 Crush Rock
-    Energy: -1
-    Input:
-    2 x Rock
-    Output:
-    2 x Crushed Rock
+	Energy: -1
+	Processing speed: 5
+	Input:
+	2 x Rock
+	Output:
+	2 x Crushed Rock
 
 Fractional Distillation
-    Energy: -30
-    Input:
-    100 x Crude Oil
-    Output:
-    4 x Petroleum Gas
-    46 x Gasoline
-    2 x Naptha
-    11 x Kerosene
-    30 x Diesel
-    2 x Fuel Oil
-    1 x Lubricating Oil
-    2 x Bitumen
-    5 x Carbon
+	Processing speed: 1
+	Energy: -30
+	Input:
+	100 x Crude Oil
+	Output:
+	4 x Petroleum Gas
+	46 x Gasoline
+	2 x Naptha
+	11 x Kerosene
+	30 x Diesel
+	2 x Fuel Oil
+	1 x Lubricating Oil
+	2 x Bitumen
+	5 x Carbon
 
 Refinement Aviation Fuel
-    Input:
-    1 x Kerosene
-    Output:
-    1 x Aviation Fuel
+	Processing speed: 10
+	Input:
+	1 x Kerosene
+	Output:
+	1 x Aviation Fuel
 
 Plastic Production
-    Input:
-    1 x Naptha
-    Output:
-    1 x Plastic
+	Processing speed: 10
+	Input:
+	1 x Naptha
+	Output:
+	1 x Plastic
 
 Asphalt Production
-    Input:
-    5 x Crushed Rock
-    5 x Sand
-    5 x Lime
-    1 x Bitumen
-    Output:
-    15 x Asphalt
+	Processing speed: 1
+	Input:
+	5 x Crushed Rock
+	5 x Sand
+	5 x Lime
+	1 x Bitumen
+	Output:
+	15 x Asphalt
 
 Steel Production
-    Input:
-    49 x Iron
-    1 x Carbon
-    Output:
-    50 x Steel
+	Processing speed: 1
+	Input:
+	49 x Iron
+	1 x Carbon
+	Output:
+	50 x Steel
 
 Copper Wire Production
-    Input:
-    1 x Copper
-    Output:
-    1 x Copper Wire
+	Processing speed: 10
+	Input:
+	1 x Copper
+	Output:
+	1 x Copper Wire
 
 Electrolysis
-    Energy: -10
-    Input:
-    1 x Water
-    Output:
-    2 x Hydrogen
-    1 x Oxygen
+	Energy: -10
+	Processing speed: 5
+	Input:
+	1 x Water
+	Output:
+	2 x Hydrogen
+	1 x Oxygen
 
 Carbonic Acid Production
-    Input:
-    1 x Water
-    1 x Carbon Dioxide
-    Output:
-    1 x Carbonic Acid
+	Processing speed: 10
+	Input:
+	1 x Water
+	1 x Carbon Dioxide
+	Output:
+	1 x Carbonic Acid
 
 Combustion Hydrogen
-    Energy: +10
-    Input:
-    2 x Hydrogen
-    1 x Oxygen
-    Output:
-    1 x Water
+	Energy: +10
+	Processing speed: 5
+	Input:
+	2 x Hydrogen
+	1 x Oxygen
+	Output:
+	1 x Water
 
 Combustion Coal
-    Energy: +200
-    Input:
-    10 x Coal
-    20 x Oxygen
-    Output:
-    9 x Carbon Dioxide
-    1 x Sulfur Dioxide
+	Energy: +200
+	Processing speed: 1
+	Input:
+	10 x Coal
+	20 x Oxygen
+	Output:
+	9 x Carbon Dioxide
+	1 x Sulfur Dioxide
 
 Combustion Carbon
-    Energy: +20
-    Input:
-    1 x Carbon
-    2 x Oxygen
-    Output:
-    1 x Carbon Dioxide
+	Energy: +20
+	Processing speed: 10
+	Input:
+	1 x Carbon
+	2 x Oxygen
+	Output:
+	1 x Carbon Dioxide
 
 Combustion Sulfur
-    Energy: +20
-    Input:
-    1 x Sulfur
-    2 x Oxygen
-    Output:
-    1 x Sulfur Dioxide
+	Energy: +20
+	Processing speed: 10
+	Input:
+	1 x Sulfur
+	2 x Oxygen
+	Output:
+	1 x Sulfur Dioxide
 
 Combustion Crude Oil
-    Energy: +200
-    Input:
-    10 x Crude Oil
-    41 x Oxygen
-    Output:
-    9 x Carbon Dioxide
-    7 x Water
-    2 x Nitrogen Dioxide
-    6 x Sulfur Dioxide
+	Energy: +200
+	Processing speed: 1
+	Input:
+	10 x Crude Oil
+	41 x Oxygen
+	Output:
+	9 x Carbon Dioxide
+	7 x Water
+	2 x Nitrogen Dioxide
+	6 x Sulfur Dioxide
 
 Combustion Petroleum Gas
-    Energy: +200
-    Input:
-    10 x Petroleum Gas
-    13 x Oxygen
-    Output:
-    4 x Carbon Dioxide
-    5 x Water
+	Energy: +200
+	Processing speed: 1
+	Input:
+	10 x Petroleum Gas
+	13 x Oxygen
+	Output:
+	4 x Carbon Dioxide
+	5 x Water
 
 Combustion Gasoline
-    Energy: +100
-    Input:
-    5 x Gasoline
-    50 x Oxygen
-    Output:
-    16 x Carbon Dioxide
-    18 x Water
+	Energy: +100
+	Processing speed: 2
+	Input:
+	5 x Gasoline
+	50 x Oxygen
+	Output:
+	16 x Carbon Dioxide
+	18 x Water
 
 Combustion Kerosene
-    Energy: +40
-    Input:
-    2 x Kerosene
-    54 x Oxygen
-    Output:
-    24 x Carbon Dioxide
-    26 x Water
+	Energy: +40
+	Processing speed: 5
+	Input:
+	2 x Kerosene
+	54 x Oxygen
+	Output:
+	24 x Carbon Dioxide
+	26 x Water
 
 Combustion Aviation Fuel
-    Energy: +40
-    Input:
-    2 x Aviation Fuel
-    50 x Oxygen
-    Output:
-    16 x Carbon Dioxide
-    18 x Water
+	Energy: +40
+	Processing speed: 5
+	Input:
+	2 x Aviation Fuel
+	50 x Oxygen
+	Output:
+	16 x Carbon Dioxide
+	18 x Water
 
 Combustion Diesel
-    Energy: +40
-    Input:
-    2 x Diesel
-    72 x Oxygen
-    Output:
-    24 x Carbon Dioxide
-    24 x Water
+	Energy: +40
+	Processing speed: 5
+	Input:
+	2 x Diesel
+	72 x Oxygen
+	Output:
+	24 x Carbon Dioxide
+	24 x Water
 
 Ammonia Production
 	Energy: -10
+	Processing speed: 10
 	Input:
 	1 x Nitrogen
 	3 x Hydrogen
@@ -285,6 +331,7 @@ Ammonia Production
 
 Nitric Oxide Production
 	Energy: -30
+	Processing speed: 2
 	Input:
 	4 x Ammonia
 	5 x Oxygen
@@ -294,6 +341,7 @@ Nitric Oxide Production
 
 Nitrogen Dioxide Production
 	Energy: -10
+	Processing speed: 5
 	Input:
 	2 x Ammonia
 	1 x Oxygen
@@ -302,6 +350,7 @@ Nitrogen Dioxide Production
 
 Nitric Acid Production
 	Energy: -15
+	Processing speed: 3
 	Input:
 	4 x Nitrogen Dioxide
 	2 x Water
@@ -311,6 +360,7 @@ Nitric Acid Production
 
 Urea Production
 	Energy: -10
+	Processing speed: 10
 	Input:
 	1 x Carbon Dioxide
 	2 x Ammonia
@@ -318,7 +368,17 @@ Urea Production
 	1 x Urea
 	1 x Water
 
+Ammonium Nitrate Production
+	Energy: +10
+	Processing speed: 10
+	Input:
+	1 x Nitric Acid
+	1 x Ammonia
+	Output:
+	1 x Ammonium Nitrate
+
 Fertiliser Production Synthetic
+	Processing speed: 2
 	Input:
 	3 x Urea
 	4 x Ammonium Nitrate
@@ -327,6 +387,7 @@ Fertiliser Production Synthetic
 	10 x Fertiliser
 
 Wheat Production
+	Processing speed: 2
 	Input:
 	1 x Fertiliser
 	10 x Water
@@ -334,12 +395,14 @@ Wheat Production
 	20 x Wheat
 
 Flour Production
+	Processing speed: 10
 	Input:
 	1 x Wheat
 	Output:
 	1 x Flour
 
 Bread Production
+	Processing speed: 10
 	Input:
 	1 x Flour
 	1 x Water
@@ -347,54 +410,63 @@ Bread Production
 	1 x Bread
 
 Lumber Production
+	Processing speed: 10
 	Input:
 	1 x Timber
 	Output:
 	2 x Lumber
 
 Furniture Production
+	Processing speed: 10
 	Input:
 	1 x Lumber
 	Output:
 	1 x Furniture
 
 Paper Production
+	Processing speed: 5
 	Input:
 	1 x Timber
 	Output:
 	10 x Paper
 
 Tissue Production
+	Processing speed: 5
 	Input:
 	1 x Timber
 	Output:
 	20 x Tissue
 
 Cotton Production
+	Processing speed: 5
 	Input:
 	1 x Fertiliser
 	Output:
 	10 x Cotton
 
 Cotton Fabric Production
+	Processing speed: 10
 	Input:
 	2 x Cotton
 	Output:
 	1 x Cotton Fabric
 
 Apparel Production
+	Processing speed: 10
 	Input:
 	1 x Cotton Fabric
 	Output:
 	1 x Apparel
 
 Tool Production
+	Processing speed: 10
 	Input:
 	1 x Steel
 	Output:
 	1 x Tool
 
 Beef Production
+	Processing speed: 3
 	Input:
 	25 x Wheat
 	Output:
@@ -403,6 +475,7 @@ Beef Production
 	5 x Manure
 
 Fertiliser Production Manure
+	Processing speed: 2
 	Input:
 	10 x Manure
 	Output:
@@ -410,6 +483,7 @@ Fertiliser Production Manure
 
 Graphite Production
 	Energy: -10
+	Processing speed: 4
 	Input:
 	5 x Carbon
 	Output:
@@ -417,6 +491,7 @@ Graphite Production
 
 Calcium Hydroxide Production
 	Energy: -5
+	Processing speed: 10
 	Input:
 	1 x Lime Mineral
 	1 x Water
@@ -425,6 +500,7 @@ Calcium Hydroxide Production
 
 Lithium Hydroxide Production
 	Energy: -5
+	Processing speed: 10
 	Input:
 	1 x Lithium Carbonate
 	1 x Calcium Hydroxide
@@ -433,6 +509,7 @@ Lithium Hydroxide Production
 	1 x Calcium Carbonate
 
 Lithium Peroxide Production
+	Processing speed: 10
 	Input:
 	2 x Lithium Hydroxide
 	1 x Hydrogen Peroxide
@@ -441,6 +518,7 @@ Lithium Peroxide Production
 	1 x Lithium Peroxide
 
 Lithium Oxide Production
+	Processing speed: 10
 	Input:
 	2 x Lithium Peroxide
 	Output:
@@ -448,6 +526,7 @@ Lithium Oxide Production
 	2 x Oxygen
 
 Air Purification Lithium
+	Processing speed: 10
 	Input:
 	1 x Lithium Peroxide
 	1 x Carbon Dioxide
@@ -456,6 +535,7 @@ Air Purification Lithium
 	1 x Oxygen
 
 Lithium Battery Production
+	Processing speed: 5
 	Input:
 	1 x Graphite
 	1 x Lithium Oxide
@@ -467,6 +547,7 @@ Lithium Battery Production
 	1 x Lithium Battery
 
 Lithium Hexafluorophosphate Production
+	Processing speed: 5
 	Input:
 	1 x Phosphorus Pentachloride
 	5 x Hydrogen Fluoride
@@ -476,6 +557,7 @@ Lithium Hexafluorophosphate Production
 	5 x Hydrogen Chloride
 
 Hydrogen Fluoride Production
+	Processing speed: 10
 	Input:
 	1 x Fluorite
 	1 x Sulfuric Acid
@@ -484,6 +566,7 @@ Hydrogen Fluoride Production
 	1 x Calcium Sulfate
 
 Lithium Fluoride Production
+	Processing speed: 10
 	Input:
 	2 x Hydrogen Fluoride
 	1 x Lithium Carbonate
@@ -492,6 +575,7 @@ Lithium Fluoride Production
 	1 x Carbonic Acid
 
 Carbonic Acid Decomposition
+	Processing speed: 10
 	Input:
 	1 x Carbonic Acid
 	Output:
@@ -499,6 +583,7 @@ Carbonic Acid Decomposition
 	1 x Carbon Dioxide
 
 Phosphorus Pentachloride Production
+	Processing speed: 10
 	Input:
 	1 x Phosphorus Trichloride
 	2 x Chlorine
@@ -506,6 +591,7 @@ Phosphorus Pentachloride Production
 	1 x Phosphorus Pentachloride
 
 Phosphorus Trichloride Production
+	Processing speed: 10
 	Input:
 	1 x Phosphorus
 	3 x Chlorine
@@ -514,6 +600,7 @@ Phosphorus Trichloride Production
 
 Sulfuric Acid Production
 	Energy: -10
+	Processing speed: 10
 	Input:
 	1 x Sulfur Dioxide
 	1 x Oxygen
@@ -523,6 +610,7 @@ Sulfuric Acid Production
 
 Chlorine Production
 	Energy: -20
+	Processing speed: 10
 	Input:
 	1 x Table Salt
 	1 x Water
@@ -532,6 +620,7 @@ Chlorine Production
 	1 x Sodium Hydroxide
 
 Phosphorus Production
+	Processing speed: 2
 	Input:
 	1 x Phosphorite
 	3 x Sand
@@ -542,6 +631,7 @@ Phosphorus Production
 	2 x Phosphorus
 
 Sand Refinement
+	Processing speed: 10
 	Input:
 	1 x Wollastonite
 	1 x Carbon Dioxide
@@ -550,6 +640,7 @@ Sand Refinement
 	1 x Sand
 
 Calcium Production
+	Processing speed: 10
 	Input:
 	1 x Calcium Carbonate
 	2 x Hydrogen
@@ -559,6 +650,7 @@ Calcium Production
 	1 x Water
 
 Carbon Monoxide Shifting
+	Processing speed: 10
 	Input:
 	1 x Carbon Monoxide
 	1 x Water
@@ -568,6 +660,7 @@ Carbon Monoxide Shifting
 
 Alumina Refinement
 	Energy: -10
+	Processing speed: 5
 	Input:
 	2 x Bauxite
 	2 x Hydrogen Peroxide
@@ -578,6 +671,7 @@ Alumina Refinement
 
 Aluminum Production
 	Energy: -20
+	Processing speed: 10
 	Input:
 	1 x Alumina
 	Output:
@@ -586,6 +680,7 @@ Aluminum Production
 
 Population Consumption
 	Energy: -10
+	Processing speed: 1
 	Input:
 	2 x Water
 	4 x Oxygen

@@ -58,6 +58,7 @@ typedef enum ProductionRecipe
 	Nitrogen_Dioxide_Production,
 	Nitric_Acid_Production,
 	Urea_Production,
+	Ammonium_Nitrate_Production,
 	Fertiliser_Production_Synthetic,
 	Wheat_Production,
 	Flour_Production,
@@ -105,6 +106,7 @@ const uint_fast8_t getNumOfOutputs(const ProductionRecipe productionRecipe);
 const Stockpile* getOutputs(const ProductionRecipe productionRecipe);
 const QUANTITY_INT getCost(const ProductionRecipe productionRecipe, const Product product);
 const QUANTITY_INT getResult(const ProductionRecipe productionRecipe, const Product product);
+const uint_fast16_t getBaseProcessingSpeed(const ProductionRecipe productionRecipe);
 
 
 #endif

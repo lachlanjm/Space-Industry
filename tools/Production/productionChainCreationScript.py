@@ -28,6 +28,7 @@ typedef enum ProductionRecipe
 		def __init__(self, name) -> None:
 			self.name = name
 			self.energy = None
+			self.baseProcessingSpeed = None
 			self.inputs = []
 			self.outputs = []
 		
@@ -36,6 +37,9 @@ typedef enum ProductionRecipe
 
 		def addEnergy(self, energy):
 			self.energy = energy
+
+		def addBaseProcessingSpeed(self, speed):
+			self.baseProcessingSpeed = speed
 		
 		def addInputs(self, inputs):
 			self.inputs.append(inputs)
@@ -77,7 +81,7 @@ const {0} {{
 	### Start of program
 	products = []
 	recipes = []
-	data_types = ["char*", "int_fast16_t", "uint_fast8_t", "Stockpile*", "uint_fast8_t", "Stockpile*", "QUANTITY_INT", "QUANTITY_INT"]
+	data_types = ["char*", "int_fast16_t", "uint_fast8_t", "Stockpile*", "uint_fast8_t", "Stockpile*", "QUANTITY_INT", "QUANTITY_INT", "uint_fast16_t"]
 	recipe_funcs = [
 		f"{data_types[0]} getNameProductionRecipe(const ProductionRecipe productionRecipe)", 
 		f"{data_types[1]} getEnergy(const ProductionRecipe productionRecipe)", 
@@ -86,11 +90,12 @@ const {0} {{
 		f"{data_types[4]} getNumOfOutputs(const ProductionRecipe productionRecipe)",
 		f"{data_types[5]} getOutputs(const ProductionRecipe productionRecipe)",
 		f"{data_types[6]} getCost(const ProductionRecipe productionRecipe, const Product product)",
-		f"{data_types[7]} getResult(const ProductionRecipe productionRecipe, const Product product)"
+		f"{data_types[7]} getResult(const ProductionRecipe productionRecipe, const Product product)",
+		f"{data_types[8]} getBaseProcessingSpeed(const ProductionRecipe productionRecipe)"
 	]
-	arr_groups = ["", "", "", "", "", "", "", ""]
-	arr_names = ["__production_recipe_name_arr", "__production_recipe_energy_arr", "__production_recipe_num_inputs_arr", "__production_recipe_inputs_arr", "__production_recipe_num_outputs_arr", "__production_recipe_outputs_arr", "__production_recipe_costs_arr", "__production_recipe_results_arr"]
-	def_vals = ["NULL", "+0", "0", "NULL", "0", "NULL", "0", "0"]
+	arr_groups = ["", "", "", "", "", "", "", "", ""]
+	arr_names = ["__production_recipe_name_arr", "__production_recipe_energy_arr", "__production_recipe_num_inputs_arr", "__production_recipe_inputs_arr", "__production_recipe_num_outputs_arr", "__production_recipe_outputs_arr", "__production_recipe_costs_arr", "__production_recipe_results_arr", "__production_recipe_base_proc_speed_arr"]
+	def_vals = ["NULL", "+0", "0", "NULL", "0", "NULL", "0", "0", "1"]
 
 	with open(os.path.join(os.path.dirname(__file__), "Products.in"), "r") as f:
 		line = f.readline()
@@ -117,6 +122,11 @@ const {0} {{
 					arr_groups[1] += '\n\t' + def_vals[1] + ', '
 				else:
 					arr_groups[1] += '\n\t' + recipes[-1].energy + ', '
+				
+				if recipes[-1].baseProcessingSpeed is None:
+					arr_groups[8] += '\n\t' + def_vals[8] + ', '
+				else:
+					arr_groups[8] += '\n\t' + recipes[-1].baseProcessingSpeed + ', '
 
 				if len(recipes[-1].inputs):
 					arr_groups[2] += '\n\t' + str(len(recipes[-1].inputs)) + ', '
@@ -157,6 +167,9 @@ const {0} {{
 				if line.strip().startswith("Energy:"):
 					value = line[line.index(":")+2:].strip()
 					recipes[-1].addEnergy(value)
+				elif line.strip().startswith("Processing speed:"):
+					value = line[line.index(":")+2:].strip()
+					recipes[-1].addBaseProcessingSpeed(value)
 				
 				elif line.strip().startswith("Input:"):
 					inps = True
@@ -195,6 +208,7 @@ const {0} {{
 		f.write(function_format_arr_ext.format(recipe_funcs[6], data_types[6], arr_names[6], arr_groups[6]))
 		f.write(function_format_arr_ext.format(recipe_funcs[7], data_types[7], arr_names[7], arr_groups[7]))
 
+		f.write(function_format_arr.format(recipe_funcs[8], data_types[8], arr_names[8], arr_groups[8]))
 
 
 
