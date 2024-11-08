@@ -59,6 +59,13 @@ else
 	...
 }
 ```
+Unless you wish to utilise a single line if/else if/else statement, do not mix single line and multi-line if/else staments (default to multi-line standards):
+```c
+if (<conditions>) <statement>;
+else if (<conditions>) <statement>;
+else <statement>;
+```
+
 
 ### For loops
 Follow this convention:
@@ -83,9 +90,11 @@ For each struct that is meant to be avaliable externally, make one header file (
 ### Definition
 Always use `typedef` to define the structs meant for external use. If meant for a singular file, do not use `typedef`.
 ```c
-[typedef] struct <struct_name> {
-	...
-} [<struct_name>];
+[typedef struct <struct_name> <struct_name>;]
+// ...
+struct <struct_name> {
+	// ...
+};
 ```
 
 ### Member variables naming

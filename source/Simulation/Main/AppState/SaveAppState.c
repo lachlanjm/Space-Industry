@@ -194,6 +194,22 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 			);
 		}
 	}
+	for (int i=0; i<PRODUCT_COUNT; i++)
+	{
+		HistoryWtdAvgArray* wtd_arr = getMarketBuyHistoryWtdAvgArrByProduct(i);
+		appendToQueue(HISTORY_WTD_AVG_ARRAY_SAVE, wtd_arr);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_MAR_BUY_AVG_ID, HISTORY_WTD_AVG_ARRAY_SAVE, wtd_arr->id)
+		);
+	}
+	for (int i=0; i<PRODUCT_COUNT; i++)
+	{
+		HistoryWtdAvgArray* wtd_arr = getMarketSellHistoryWtdAvgArrByProduct(i);
+		appendToQueue(HISTORY_WTD_AVG_ARRAY_SAVE, wtd_arr);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_MAR_SELL_AVG_ID, HISTORY_WTD_AVG_ARRAY_SAVE, wtd_arr->id)
+		);
+	}
 }
 
 static inline void saveCompany(FILE* fptr, Company* company)

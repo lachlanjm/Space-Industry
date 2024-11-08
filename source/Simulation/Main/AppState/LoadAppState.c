@@ -272,6 +272,38 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &__lclpop_arr[__lclpop_arr_num-1]);
 				updateLocalPopStructPtrsFromArr(__lclpop_arr);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_AS_MAR_BUY_AVG_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_AS_MAR_BUY_AVG_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_MAR_BUY_AVG_ID);
+					current_index = 0;
+				}
+				int id = extractObjectId(attr_value);
+				addNewStructIdPtr(
+					HISTORY_WTD_AVG_ARRAY_SAVE, 
+					id, 
+					getMarketBuyHistoryWtdAvgArrByProduct(current_index)
+				);
+
+				current_index++;
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_AS_MAR_SELL_AVG_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_AS_MAR_SELL_AVG_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_MAR_SELL_AVG_ID);
+					current_index = 0;
+				}
+				int id = extractObjectId(attr_value);
+				addNewStructIdPtr(
+					HISTORY_WTD_AVG_ARRAY_SAVE, 
+					id, 
+					getMarketSellHistoryWtdAvgArrByProduct(current_index)
+				);
+
+				current_index++;
+			}
 			break;
 		case COMPANY_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_CO_CON_FAC_ID) == 0)
@@ -408,22 +440,12 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_PRO_MAR_SELL_HIS_ID) == 0)
 			{
-				if (strcmp(current_arr_name, SAVE_FILE_PRO_MAR_SELL_HIS_ID))
-				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_PRO_MAR_SELL_HIS_ID);
-				}
-
 				addNewStructIdPtr(HISTORY_WTD_AVG_ARRAY_SAVE, extractObjectId(attr_value), 
 					&getProductMarketAtLocation(current_location, current_product)->sell_hist_array
 				);
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_PRO_MAR_BUY_HIS_ID) == 0)
 			{
-				if (strcmp(current_arr_name, SAVE_FILE_PRO_MAR_BUY_HIS_ID))
-				{
-					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_PRO_MAR_BUY_HIS_ID);
-				}
-
 				addNewStructIdPtr(HISTORY_WTD_AVG_ARRAY_SAVE, extractObjectId(attr_value), 
 					&getProductMarketAtLocation(current_location, current_product)->buy_hist_array
 				);
@@ -909,17 +931,18 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 		__lclpop_arr_num = 0;
 	}
 
+	AppState* result = (AppState*) __object_arr[APP_STATE_SAVE].data;// First element (Should be only)
+
 	// Assign orders to PMs
-	for (int i = 0; i < ((AppState*) __object_arr[APP_STATE_SAVE].data)->companies_num; i++)
+	for (int i = 0; i < result->companies_num; i++)
 	{
-		loadCompanyAssignOrders(&((AppState*) __object_arr[APP_STATE_SAVE].data)->companies[i]);
+		loadCompanyAssignOrders(&result->companies[i]);
 	}
 	for (int i = 0; i < getLocalPopulationNum(); i++) // TODO make this more adjustable to varying loc pop nums
 	{
 		loadLocalPopulationAssignOrders(getLocalPopulationByLocation(i));
 	}
 
-	AppState* result = (AppState*) __object_arr[APP_STATE_SAVE].data;// First element (Should be only)
 	cleanAllLoadStateIdLists();
 
 	return result; // First element (Should be only)

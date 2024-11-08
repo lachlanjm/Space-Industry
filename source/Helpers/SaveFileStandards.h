@@ -28,6 +28,8 @@
 #define SAVE_FILE_AS_CO_ID "companies"
 #define SAVE_FILE_AS_LOC_POP_NUM "local_population_num"
 #define SAVE_FILE_AS_LOC_POP_ID "local_population"
+#define SAVE_FILE_AS_MAR_BUY_AVG_ID "market_buy_avg"
+#define SAVE_FILE_AS_MAR_SELL_AVG_ID "market_sell_avg"
 
 #define SAVE_FILE_CO_WTH_ID "wealth"
 #define SAVE_FILE_CO_CON_FAC_ID "controlled_factory"
