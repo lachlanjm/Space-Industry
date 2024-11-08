@@ -46,12 +46,12 @@ void updateEmployeeOffers(Company* company)
 void updateOfferedPrices(Company* company)
 {
 	const int profit = getAvgHistoryArrayAvg(&company->controlled_factory.profit_history);
-	const double profit_factor_buy = MIN(1, pow((double)CO_MIN_PROFIT_FACTOR_BUY, (double)(profit-CO_MIN_PROFIT)));
-	const double profit_factor_sell = MAX(1, pow((double)CO_MIN_PROFIT_FACTOR_SELL, (double)(CO_MIN_PROFIT-profit)));
+	const double profit_factor_sell = (profit>=CO_MIN_PROFIT) ? 1 : (log10((double)((2*CO_MIN_PROFIT)-profit))-1);
+	const double profit_factor_buy = (profit>=CO_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
 
 	for (int i = 0; i < company->controlled_factory.stockpiles_in_num; i++)
 	{
-		QUANTITY_INT stockpile_ordered_quantity = 
+		const QUANTITY_INT stockpile_ordered_quantity = 
 			company->controlled_factory.stockpiles_in[i].quantity
 			+ *getOrderedInQuantity(
 				&company->controlled_factory, 
@@ -77,22 +77,27 @@ void updateOfferedPrices(Company* company)
 		{
 			ProductMarket* productMarket = getProductMarketAtLocation(company->controlled_factory.location, company->controlled_factory.stockpiles_in[i].product_type);
 
+			const Product product_type = productMarket->product_type;
 			const int base_price = ( 
 				(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
 				? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
-				: ( (getMarketBuyAvgByProduct(productMarket->product_type) != 0)
-					? getMarketBuyAvgByProduct(productMarket->product_type)
-					: ( (getMarketSellAvgByProduct(productMarket->product_type) != 0)
-						? getMarketSellAvgByProduct(productMarket->product_type)
-						: CO_DEFAULT_PRICE
-			))); // ?: needed to allow for const
+				: ( (getMarketBuyAvgByProduct(product_type) != 0)
+					? getMarketBuyAvgByProduct(product_type)
+					: ( (getMarketSellAvgByProduct(product_type) != 0)
+						? getMarketSellAvgByProduct(product_type)
+						: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
+							? getMarketSellOfferAvgByProduct(product_type)
+							: CO_DEFAULT_PRICE
+			)))); // ?: needed to allow for const
+			const double stockpile_factor = sqrt((double)company->controlled_factory.orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT;
 
 			// TODO TBU
-			company->controlled_factory.orders_in[i].price = (
-				base_price
-				* profit_factor_buy
-				* (sqrt((double)company->controlled_factory.orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT)
-			);
+			company->controlled_factory.orders_in[i].price = MAX(1, base_price * profit_factor_buy * stockpile_factor);
+
+			if (company->controlled_factory.orders_in[i].price <= 0 || company->controlled_factory.orders_in[i].price > 1000000000) // FOR debugging
+			{
+				printf("b; %u, %f, %f, %u\n", base_price, profit_factor_buy, stockpile_factor, company->controlled_factory.orders_in[i].price);
+			}
 
 			if (resetBuyOrder(productMarket, &company->controlled_factory.orders_in[i])) 
 			{
@@ -103,12 +108,18 @@ void updateOfferedPrices(Company* company)
 
 	for (int i = 0; i < company->controlled_factory.stockpiles_out_num; i++)
 	{
-		QUANTITY_INT stockpile_free_quantity = 
+		const QUANTITY_INT stockpile_free_quantity = 
 			company->controlled_factory.stockpiles_out[i].quantity
 			- *getOrderedOutQuantity(
 				&company->controlled_factory, 
 				company->controlled_factory.stockpiles_out[i].product_type
 		);
+		if (company->controlled_factory.stockpiles_out[i].quantity 
+		< *getOrderedOutQuantity(&company->controlled_factory, company->controlled_factory.stockpiles_out[i].product_type))
+		{
+			printf("stockpile_free_quantity = %u; %u, %u\n", stockpile_free_quantity, company->controlled_factory.stockpiles_out[i].quantity, *getOrderedOutQuantity(&company->controlled_factory, company->controlled_factory.stockpiles_out[i].product_type));
+		}
+
 		if (stockpile_free_quantity > CO_ORDER_QUANTITY_MIN)
 		{
 			if (company->controlled_factory.orders_out[i].offer_num == 0)
@@ -129,21 +140,26 @@ void updateOfferedPrices(Company* company)
 			// Re-calc selling price
 			ProductMarket* productMarket = getProductMarketAtLocation(company->controlled_factory.location, company->controlled_factory.stockpiles_out[i].product_type);
 			
-			const int base_price = ( 
+			const Product product_type = productMarket->product_type;
+			const uint64_t base_price = ( 
 				(getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
 				? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
-				: ( (getMarketSellAvgByProduct(productMarket->product_type) != 0)
-					? getMarketSellAvgByProduct(productMarket->product_type)
-					: ( (getMarketBuyAvgByProduct(productMarket->product_type) != 0)
-						? getMarketBuyAvgByProduct(productMarket->product_type)
-						: CO_DEFAULT_PRICE
-			))); // ?: needed to allow for const
+				: ( (getMarketSellAvgByProduct(product_type) != 0)
+					? getMarketSellAvgByProduct(product_type)
+					: ( (getMarketBuyAvgByProduct(product_type) != 0)
+						? getMarketBuyAvgByProduct(product_type)
+						: ( (getMarketBuyOfferAvgByProduct(product_type) != 0)
+							? getMarketBuyOfferAvgByProduct(product_type)
+							: CO_DEFAULT_PRICE
+			)))); // ?: needed to allow for const
+			const double stockpile_factor = CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)company->controlled_factory.orders_out[i].offer_num);
 
-			company->controlled_factory.orders_out[i].price = (
-				base_price
-				* profit_factor_sell
-				* (CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)company->controlled_factory.orders_out[i].offer_num))
-			);
+			company->controlled_factory.orders_out[i].price = MAX(1, base_price * profit_factor_sell * stockpile_factor);
+
+			if (company->controlled_factory.orders_out[i].price <= 0 || company->controlled_factory.orders_out[i].price > 1000000000) // FOR debugging
+			{
+				printf("s; %u, %f, %f, %u\n", base_price, profit_factor_sell, stockpile_factor, company->controlled_factory.orders_out[i].price);
+			}
 
 			if (resetSellOrder(productMarket, &company->controlled_factory.orders_out[i])) 
 			{

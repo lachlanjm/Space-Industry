@@ -25,8 +25,8 @@
 #include "../GUI/includes/nuklear.h"
 #include "../GUI/includes/nuklear_glfw_gl3.h"
 
-#define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 1500
+#define WINDOW_HEIGHT 1000
 
 #define MAX_VERTEX_BUFFER 512 * 1024
 #define MAX_ELEMENT_BUFFER 128 * 1024

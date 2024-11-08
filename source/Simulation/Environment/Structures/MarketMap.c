@@ -3,6 +3,10 @@
 static ProductMarket** __product_market_at_location_arr__ = NULL;
 static HistoryWtdAvgArray* __market_wide_avg_buy_arr__ = NULL;
 static HistoryWtdAvgArray* __market_wide_avg_sell_arr__ = NULL;
+
+static int* __market_wide_avg_buy_offer_arr__ = NULL;
+static int* __market_wide_avg_sell_offer_arr__ = NULL;
+
 static int __location_num = 0;
 static int __product_num = 0;
 
@@ -29,6 +33,9 @@ void instantiateNewMarketMap(const int location_num, const int product_num)
 		assignHistoryWtdAvgArrayValues(&__market_wide_avg_buy_arr__[i]);
 		assignHistoryWtdAvgArrayValues(&__market_wide_avg_sell_arr__[i]);
 	}
+
+	__market_wide_avg_buy_offer_arr__ = calloc(product_num, sizeof(int));
+	__market_wide_avg_sell_offer_arr__ = calloc(product_num, sizeof(int));
 
 	__location_num = location_num;
 	__product_num = product_num;
@@ -62,6 +69,18 @@ int getMarketSellAvgByProduct(const Product product)
 	return getAvgHistoryWtdAvgArray(&__market_wide_avg_sell_arr__[product]);
 }
 
+int getMarketBuyOfferAvgByProduct(const Product product)
+{
+	if (product >= __product_num) return -1;
+	return __market_wide_avg_buy_offer_arr__[product];
+}
+
+int getMarketSellOfferAvgByProduct(const Product product)
+{
+	if (product >= __product_num) return -1;
+	return __market_wide_avg_sell_offer_arr__[product];
+}
+
 HistoryWtdAvgArray* getMarketBuyHistoryWtdAvgArrByProduct(const Product product)
 {
 	if (product >= __product_num) return NULL;
@@ -74,15 +93,49 @@ HistoryWtdAvgArray* getMarketSellHistoryWtdAvgArrByProduct(const Product product
 	return &__market_wide_avg_sell_arr__[product];
 }
 
+static int __offer_refresh_tick = 0;
 void processTickMarketMap(void)
 {
-	for (int x=0; x<__location_num; x++)
+	if (__offer_refresh_tick >= MARKET_MAP_OFFER_STAT_REFRESH_TICK_RATE)
 	{
 		for (int y=0; y<__product_num; y++)
 		{
-			processTickProductMarket(&__product_market_at_location_arr__[x][y]);
+			uint64_t buy_offer_sum = 0;
+			int buy_offer_num = 0;
+			uint64_t sell_offer_sum = 0;
+			int sell_offer_num = 0;
+			for (int x=0; x<__location_num; x++)
+			{
+				processTickProductMarket(&__product_market_at_location_arr__[x][y]);
+
+				if (__product_market_at_location_arr__[x][y].buy_order_num > 0)
+				{
+					buy_offer_sum += __product_market_at_location_arr__[x][y].buy_order_arr[0]->price;
+					buy_offer_num++;
+				}
+				if (__product_market_at_location_arr__[x][y].sell_order_num > 0)
+				{
+					sell_offer_sum += __product_market_at_location_arr__[x][y].sell_order_arr[0]->price;
+					sell_offer_num++;
+				}
+			}
+			__market_wide_avg_buy_offer_arr__[y] = (buy_offer_num > 0) ? (buy_offer_sum / buy_offer_num) : 0;
+			__market_wide_avg_sell_offer_arr__[y] = (sell_offer_num > 0) ? (sell_offer_sum / sell_offer_num) : 0;
+
+			__offer_refresh_tick = 0;
 		}
 	}
+	else
+	{
+		for (int y=0; y<__product_num; y++)
+		{
+			for (int x=0; x<__location_num; x++)
+			{
+				processTickProductMarket(&__product_market_at_location_arr__[x][y]);
+			}
+		}
+	}
+	__offer_refresh_tick++;
 }
 
 void cleanMarketMap(void)
@@ -102,6 +155,11 @@ void cleanMarketMap(void)
 	__market_wide_avg_buy_arr__ = NULL;
 	free(__market_wide_avg_sell_arr__);
 	__market_wide_avg_sell_arr__ = NULL;
+
+	free(__market_wide_avg_buy_offer_arr__);
+	__market_wide_avg_buy_offer_arr__ = NULL;
+	free(__market_wide_avg_sell_offer_arr__);
+	__market_wide_avg_sell_offer_arr__ = NULL;
 
 	__location_num = 0;
 	__product_num = 0;

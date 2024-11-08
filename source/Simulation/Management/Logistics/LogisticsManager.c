@@ -34,13 +34,15 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 	logisticsManager->id = id_next++;
 }
 
-void addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, Factory* selling_factory, Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
+LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, Factory* selling_factory, Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
-	memset(&logisticsManager->contracts[logisticsManager->contracts_num-1], 0, sizeof(LogisticsContract));
+	const LogisticsContract* new_contract = &logisticsManager->contracts[logisticsManager->contracts_num-1];
+	memset(new_contract, 0, sizeof(LogisticsContract));
 	addOrderedOutQuantity(selling_factory, product, quantity);
 	addOrderedInQuantity(buying_factory, product, quantity);
-	assignLogisticsContractValues(&logisticsManager->contracts[logisticsManager->contracts_num - 1], vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
+	assignLogisticsContractValues(new_contract, vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
+	return new_contract;
 }
 
 void loadLogisticsManagerConstructorVehicles(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
@@ -134,13 +136,14 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 	{
 		if (logisticsManager->vehicles[i].end_location == -1)
 		{
-			assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
+			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
+			if (new_contract) processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
 		}
 	}
 }
 
 // TODO: return value to indicate no new state and stop iterating for current tick
-void assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
+LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
 {
 	int from_max = -1;
 	int to_max = -1;
@@ -173,7 +176,7 @@ void assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicl
 
 	if (from_max == -1)
 	{
-		return;
+		return NULL;
 	}
 
 	// TODO !!!! IMPROVE FLOW AND MEMORY ASSIGNMENT
@@ -187,7 +190,7 @@ void assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicl
 		getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]
 	);
 
-	addNewLogisticsContract(
+	const LogisticsContract const* new_contract = addNewLogisticsContract(
 		logisticsManager,
 		vehicle,
 		selling_factory,
@@ -197,6 +200,7 @@ void assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicl
 	);
 
 	update_dist_to_price_eff_product_filtered(product_max);
+	return new_contract;
 }
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)

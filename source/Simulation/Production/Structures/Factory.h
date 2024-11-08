@@ -40,8 +40,8 @@ struct Factory
 	Stockpile* stockpiles_in;
 	Stockpile* stockpiles_out;
 
-	struct OrderDef* orders_in;
-	struct OrderDef* orders_out;
+	struct Order* orders_in;
+	struct Order* orders_out;
 
 	QUANTITY_INT* ordered_in;
 	QUANTITY_INT* ordered_out;

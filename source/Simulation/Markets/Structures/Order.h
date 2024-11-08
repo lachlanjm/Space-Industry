@@ -1,20 +1,20 @@
 #ifndef ORDER_H
 #define ORDER_H
 
-typedef struct OrderDef Order;
+typedef struct Order Order;
 
 #define ORDER_ID_INT uint_least16_t
-#define ORDER_PRICE_INT uint_fast32_t
+#define ORDER_PRICE_INT uint_fast64_t
 
 #include "..\..\Production\Structures\Factory.h"
 
-typedef struct OrderDef {
+struct Order {
 	Factory* offering_factory;
 	QUANTITY_INT offer_num;
-	uint_fast32_t price;
+	ORDER_PRICE_INT price;
 
 	ORDER_ID_INT id;
-} Order;
+};
 
 #include "..\..\Production\Structures\Stockpile.h"
 

@@ -86,12 +86,12 @@ void setAverageAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const i
 	hist_array->averages[(index_base + index) % MAX_HISTORY] = average;
 }
 
-HISTORY_INT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
+HISTORY_SUM_INT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
 {
 	return hist_array->sum_value;
 }
 
-HISTORY_INT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
+HISTORY_SUM_INT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array)
 {
 	return hist_array->sum_weight;
 }
