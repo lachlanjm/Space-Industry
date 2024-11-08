@@ -26,7 +26,9 @@ void drawStockpileMenu(AppPlatform* platform, Stockpile* stockpile, char* name)
 		hist_iter = newHistoryIterator(&stockpile->quantity_history, HISTORY_ARRAY_TYPE);
 		if (hist_iter)
 		{
-			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, -200.0f, 200.0f) ) // TODO: SET MIN MAX TO HIST MIN MAX
+			const float min = MIN(0, getMinValueHistoryArray(&stockpile->quantity_history));
+			const float max = MAX(0, getMaxValueHistoryArray(&stockpile->quantity_history));
+			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) ) // TODO: SET MIN MAX TO HIST MIN MAX
 			{
 				while (getNextHistoryIterItem(hist_iter, &history_value)) 
 				{

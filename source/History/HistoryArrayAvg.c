@@ -56,6 +56,19 @@ void setValueAtIndexHistoryArrayAvg(HistoryArrayAvg* hist_array, const int index
 	hist_array->avg = hist_array->sum / MAX_HISTORY;
 }
 
+HISTORY_INT getMaxValueHistoryArrayAvg(const HistoryArrayAvg const* hist_array)
+{
+	HISTORY_INT result = hist_array->array[0];
+	for (int i=1;i<MAX_HISTORY;i++) if (result < hist_array->array[i]) result = hist_array->array[i];
+	return result;
+}
+HISTORY_INT getMinValueHistoryArrayAvg(const HistoryArrayAvg const* hist_array)
+{
+	HISTORY_INT result = hist_array->array[0];
+	for (int i=1;i<MAX_HISTORY;i++) if (result > hist_array->array[i]) result = hist_array->array[i];
+	return result;
+}
+
 HISTORY_SUM_INT getSumHistoryArrayAvg(const HistoryArrayAvg* hist_array)
 {
 	return hist_array->sum;

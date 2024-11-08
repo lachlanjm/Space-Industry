@@ -23,6 +23,8 @@ void subFromHistoryArrayAvg(HistoryArrayAvg* hist_array, const HISTORY_INT value
 HISTORY_INT getValueAtIndexHistoryArrayAvg(const HistoryArrayAvg* hist_array, const int index);
 void setValueAtIndexHistoryArrayAvg(HistoryArrayAvg* hist_array, const int index, const HISTORY_INT value);
 
+HISTORY_INT getMaxValueHistoryArrayAvg(const HistoryArrayAvg const* hist_array);
+HISTORY_INT getMinValueHistoryArrayAvg(const HistoryArrayAvg const* hist_array);
 HISTORY_SUM_INT getSumHistoryArrayAvg(const HistoryArrayAvg* hist_array);
 HISTORY_INT getAvgHistoryArrayAvg(const HistoryArrayAvg* hist_array);
 

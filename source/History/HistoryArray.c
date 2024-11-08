@@ -14,7 +14,7 @@ HistoryArray* newHistoryArray()
 void assignHistoryArrayValues(HistoryArray* hist_array)
 {
 	// TODO this shouldn't actually be needed but it makes it work?
-	for (int i=0;i<MAX_HISTORY;i++) { hist_array->array[i] = 0; }
+	for (int i=0;i<MAX_HISTORY;i++) hist_array->array[i] = 0;
 
 	hist_array->id = id_next++;
 }
@@ -46,6 +46,19 @@ HISTORY_INT getValueAtIndexHistoryArray(const HistoryArray* hist_array, const in
 void setValueAtIndexHistoryArray(HistoryArray* hist_array, const int index, const HISTORY_INT value)
 {
 	hist_array->array[(index_base + index) % MAX_HISTORY] = value;
+}
+
+HISTORY_INT getMaxValueHistoryArray(const HistoryArray const* hist_array)
+{
+	HISTORY_INT result = hist_array->array[0];
+	for (int i=1;i<MAX_HISTORY;i++) if (result < hist_array->array[i]) result = hist_array->array[i];
+	return result;
+}
+HISTORY_INT getMinValueHistoryArray(const HistoryArray const* hist_array)
+{
+	HISTORY_INT result = hist_array->array[0];
+	for (int i=1;i<MAX_HISTORY;i++) if (result > hist_array->array[i]) result = hist_array->array[i];
+	return result;
 }
 
 void tickHistoryArrayIndexStatic()

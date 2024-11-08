@@ -5,6 +5,7 @@
 #include "..\..\Simulation\Markets\Structures\Order.h"
 #include "..\..\Simulation\Markets\Structures\ProductMarket.h"
 #include "..\..\Simulation\Production\Enums\Product.h"
+#include "..\..\History\HistoryIterator.h"
 
 #define BUF_SIZE 64
 

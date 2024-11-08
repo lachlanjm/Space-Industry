@@ -31,6 +31,13 @@ void setWeightAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const in
 HISTORY_INT getAverageAtIndexHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array, const int index);
 void setAverageAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const int index, const HISTORY_INT average);
 
+HISTORY_INT getMaxValueHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+HISTORY_INT getMaxWeightHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+HISTORY_INT getMaxAvgHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+HISTORY_INT getMinValueHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+HISTORY_INT getMinWeightHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+HISTORY_INT getMinAvgHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+
 HISTORY_SUM_INT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
 HISTORY_SUM_INT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
 HISTORY_INT getAvgHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
