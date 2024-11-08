@@ -92,6 +92,7 @@ static int find_index(const Order* order_arr[], const int length, const Order* o
 	{
 		if (order_arr[i] == order) return i;
 	}
+	printf("Could not find order; order_arr=%x, length=%i, order=%x\n", order_arr, length, order);
 	return -1;
 }
 
