@@ -4,7 +4,7 @@ static HistoryIterator* hist_iter;
 static HISTORY_INT history_value;
 void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Factory", nk_rect(50, 50, 450, 300),
+	if (nk_begin_titled(platform->ctx, name, "Factory", nk_rect(50, 50, 450, 600),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{

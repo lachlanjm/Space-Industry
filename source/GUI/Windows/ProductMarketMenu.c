@@ -2,7 +2,7 @@
 
 void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Product Market", nk_rect(50, 50, 250, 250),
+	if (nk_begin_titled(platform->ctx, name, "Product Market", nk_rect(50, 50, 350, 350),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
