@@ -81,7 +81,8 @@ void cleanGovernmentStatic(void)
 // TODO allow for product specific taxes
 int32_t getExportTaxRate(const Product product, const TransportNode from, const TransportNode to)
 {
-	return __static_government_control[from]->export_tariffs[to];
+	const int to_index = (__static_government_control[to] - __static_government_arr) / sizeof(Government);
+	return __static_government_control[from]->export_tariffs[to_index];
 }
 
 // TODO allow for product specific taxes
@@ -93,7 +94,8 @@ int32_t getGstTaxRate(const Product product, const TransportNode location)
 // TODO allow for product specific taxes
 int32_t getImportTaxRate(const Product product, const TransportNode from, const TransportNode to)
 {
-	return __static_government_control[from]->import_tariffs[to];
+	const int from_index = (__static_government_control[from] - __static_government_arr) / sizeof(Government);
+	return __static_government_control[to]->import_tariffs[from_index];
 }
 
 static GOVERNMENT_ID_INT id_next = 0;
