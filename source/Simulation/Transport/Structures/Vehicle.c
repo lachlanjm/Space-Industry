@@ -26,7 +26,7 @@ void assignLoadIdVehicle(Vehicle* obj, const int id)
 }
 
 /*
-TODO: MUST WORK AROUND LEFT-OVER QUANTITY
+TODO: MUST WORK AROUND LEFT-OVER QUANTITY??
 */
 void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product)
 {

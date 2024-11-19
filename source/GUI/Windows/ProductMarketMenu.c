@@ -25,7 +25,7 @@ void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, 
 		{
 			const float min = MIN(0, getMinAvgHistoryWtdAvgArray(&productMarket->buy_hist_array));
 			const float max = MAX(0, getMaxAvgHistoryWtdAvgArray(&productMarket->buy_hist_array));
-			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) ) // TODO: SET MIN MAX TO HIST MIN MAX
+			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) )
 			{
 				while (getNextHistoryIterItem(hist_iter, &history_value)) 
 				{
@@ -47,7 +47,7 @@ void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, 
 		{
 			const float min = MIN(0, getMinAvgHistoryWtdAvgArray(&productMarket->sell_hist_array));
 			const float max = MAX(0, getMaxAvgHistoryWtdAvgArray(&productMarket->sell_hist_array));
-			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) ) // TODO: SET MIN MAX TO HIST MIN MAX
+			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) )
 			{
 				while (getNextHistoryIterItem(hist_iter, &history_value)) 
 				{

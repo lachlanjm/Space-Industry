@@ -1,7 +1,6 @@
 #include "Factory.h"
 
 static FACTORY_ID_INT id_next = 0;
-static int wage_tick_index = 0;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
 {
@@ -247,14 +246,12 @@ void removeOrderedOutQuantity(Factory* factory, const Product product, const QUA
 	}
 }
 
-// TODO TBU
 void addEmployees(Factory* factory, const int employees)
 {
 	if (factory->current_employee_num + employees > factory->max_employee_num) { return; }
 	factory->current_employee_num += employees;
 }
 
-// TODO TBU
 void removeEmployees(Factory* factory, const int employees)
 {
 	// if (factory->current_employee_num - employees < 0) { return; } // SHOULD NEVER HAPPEN
@@ -398,22 +395,17 @@ void __processProductionTickLocalPopulation(Factory* factory)
 
 void __processWagePaymentTick(Factory* factory)
 {
-	if (wage_tick_index == 0)
-	{
-		const int wage_payment = factory->employee_wages * factory->current_employee_num;
-		withdrawFundsFactory(factory, wage_payment);
-		insertFundsLocalPopulation(
-			getLocalPopulationByLocation(factory->location),
-			wage_payment
-		);
-	}
+	const int wage_payment = factory->employee_wages * factory->current_employee_num;
+	withdrawFundsFactory(factory, wage_payment);
+	insertFundsLocalPopulation(
+		getLocalPopulationByLocation(factory->location),
+		wage_payment
+	);
 }
 
-// TODO make better
 void processTickFactoryStatic(void)
 {
-	wage_tick_index++;
-	wage_tick_index %= WAGE_TICK_RATE;
+	// TODO
 }
 
 void processTickFactory(Factory* factory)

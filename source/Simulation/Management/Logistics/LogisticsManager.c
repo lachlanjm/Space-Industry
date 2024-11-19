@@ -130,7 +130,6 @@ void update_dist_to_price_eff_product_filtered(int product)
 	}
 }
 
-// TODO: return value to indicate no new state and stop iterating for current tick
 LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
 {
 	int from_max = -1;
@@ -199,6 +198,7 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 		{
 			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
 			if (new_contract) processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
+			else return;
 		}
 	}
 }

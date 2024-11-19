@@ -1,6 +1,5 @@
 import os
 
-#### TODO FIX TO MAKE ARRAY-BASED INFO RETRIEVAL
 def main():
 	product_h_format = """#ifndef PRODUCTION_RECIPE_H
 #define PRODUCTION_RECIPE_H

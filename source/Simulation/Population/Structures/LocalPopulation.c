@@ -243,7 +243,6 @@ void withdrawFundsLocalPopulation(LocalPopulation* population, const int funds)
 	recordWithdrawFundsFactory(&population->population_centre, funds);
 }
 
-// TODO TBU
 IND_BOOL increaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
 {
 	if (population->employed_number + jobs > population->population_number) return FALSE;
@@ -251,15 +250,13 @@ IND_BOOL increaseEmployedLocalPopulation(LocalPopulation* population, const int 
 	return TRUE;
 }
 
-// TODO TBU
 IND_BOOL decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
 {
-	// if (population->employed_number - jobs < 0) { return FALSE; } // SHOULD NEVER HAPPEN
+	// if (population->employed_number - jobs < 0) { return FALSE; } // TODO SHOULD NEVER HAPPEN
 	population->employed_number -= jobs;
 	return TRUE;
 }
 
-// TODO TBU: CUSTOM MANAGEMENT OF FACTORY
 void processTickLocalPopulation(LocalPopulation* population)
 {
 	population->population_centre.processing_speed = population->population_number / CONSUMPTION_RATE_DIVISOR;

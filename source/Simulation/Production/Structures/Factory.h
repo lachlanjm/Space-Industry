@@ -25,7 +25,7 @@ struct Factory
 	ManagementType managementType;
 	void* management; // Company or LocalPopulation; depends on managementType
 
-	uint_fast16_t processing_speed; // TODO TBU
+	uint_fast16_t processing_speed;
 	float leftover_production; // TODO set to more approriate value size; i.e. smaller than float
 
 	uint_fast16_t employee_wages;
@@ -60,7 +60,6 @@ struct Factory
 
 #define FACTORY_DEFAULT_STOCKPILE_MAX (2000)
 #define FACTORY_DEFAULT_STOCKPILE_QUANT (FACTORY_DEFAULT_STOCKPILE_MAX - 200)
-#define WAGE_TICK_RATE 64 // process ticks per wage tick
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValuesCompany(Factory* factory, const Company* company, const ProductionRecipe productionRecipe, const TransportNode location);
@@ -91,7 +90,6 @@ IND_BOOL factoryIsAllOutputFull(const Factory* const factory);
 
 // TODO TBU
 void processTickFactoryStatic(void);
-// TODO TBU
 void processTickFactory(Factory* factory);
 void processTickFactoryLocalPopulation(Factory* factory);
 

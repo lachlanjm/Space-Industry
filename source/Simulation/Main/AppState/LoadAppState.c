@@ -946,7 +946,7 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 	{
 		loadCompanyAssignOrders(&result->companies[i]);
 	}
-	for (int i = 0; i < getLocalPopulationNum(); i++) // TODO make this more adjustable to varying loc pop nums
+	for (int i = 0; i < getLocalPopulationNum(); i++)
 	{
 		loadLocalPopulationAssignOrders(getLocalPopulationByLocation(i));
 	}

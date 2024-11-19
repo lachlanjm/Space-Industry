@@ -47,7 +47,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 		{
 			const float min = MIN(0, getMinValueHistoryArrayAvg(&factory->profit_history));
 			const float max = MAX(0, getMaxValueHistoryArrayAvg(&factory->profit_history));
-			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) ) // TODO: SET MIN MAX TO HIST MIN MAX
+			if ( nk_chart_begin(platform->ctx, NK_CHART_LINES, MAX_HISTORY + 1, min, max) )
 			{
 				while (getNextHistoryIterItem(hist_iter, &history_value)) 
 				{
