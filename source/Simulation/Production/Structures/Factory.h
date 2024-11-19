@@ -61,6 +61,8 @@ struct Factory
 #define FACTORY_DEFAULT_STOCKPILE_MAX (2000)
 #define FACTORY_DEFAULT_STOCKPILE_QUANT (FACTORY_DEFAULT_STOCKPILE_MAX - 200)
 
+#define FACTORY_WAGE_TICK_RATE (10)
+
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValuesCompany(Factory* factory, const Company* company, const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode location);

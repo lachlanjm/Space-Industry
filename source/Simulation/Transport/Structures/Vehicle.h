@@ -1,17 +1,17 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
+typedef struct Vehicle Vehicle;
+
 #include "..\..\Production\Structures\Stockpile.h"
 #include "..\..\Production\Structures\Factory.h"
 #include "..\..\Environment\Enums\TransportNode.h"
-#include "..\..\Environment\Structures\Map.h"
+
+#include <stdint.h>
 
 #define VEHICLE_ID_INT uint_least16_t
 
-#define VEHICLE_SPEED 1
-#define VEHICLE_CAPACITY 100
-
-typedef struct Vehicle {
+struct Vehicle {
 	TransportNode current_location;
 	TransportNode end_location;
 	uint_fast16_t distance_travelled; // distance travelled from last node
@@ -24,7 +24,12 @@ typedef struct Vehicle {
 	// TODO VehicleType type; (or so...)
 
 	VEHICLE_ID_INT id;
-} Vehicle;
+};
+
+#include "..\..\Environment\Structures\Map.h"
+
+#define VEHICLE_SPEED 1
+#define VEHICLE_CAPACITY 100
 
 void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location);
 void assignLoadIdVehicle(Vehicle* obj, const int id);

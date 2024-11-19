@@ -27,6 +27,7 @@ struct LocalPopulation {
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define CONSUMPTION_RATE_DIVISOR 500
 

@@ -217,6 +217,11 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 	}
 }
 
+void processTickLogisticsManager(LogisticsManager* logisticsManager)
+{
+	// TODO TBU
+}
+
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 {
 	// Search and add contracts

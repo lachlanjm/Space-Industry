@@ -15,6 +15,9 @@ static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum Attribut
 		case FACTORY_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_FACTORY_ID);
 			break;
+		case GOVERNMENT_SAVE:
+			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_GOVERNMENT_ID);
+			break;
 		case HISTORY_ARRAY_SAVE:
 			snprintf(buffer, BUF_SIZE, "%s", SAVE_FILE_HISTORY_ARRAY_ID);
 			break;
@@ -312,6 +315,26 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 	}
 }
 
+static inline void saveGovernment(FILE* fptr, Government* government)
+{
+	char buffer[BUF_SIZE];
+	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, GOVERNMENT_SAVE, government->id));
+
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_WTH_ID, government->wealth)
+	);
+
+	for (int i = 0; i < TRANSPORT_NODE_COUNT; i++)
+	{
+		if (government == getGovernmentByLocation(i))
+		{
+			writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+				getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_CTL_LOC_ID, i)
+			);
+		}
+	}
+}
+
 static inline void saveHistoryArray(FILE* fptr, HistoryArray* historyArray)
 {
 	static HistoryIterator* hist_iter;
@@ -446,6 +469,10 @@ static inline void saveLogisticsManager(FILE* fptr, LogisticsManager* logisticsM
 	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, LOGISTICS_MANAGER_SAVE, logisticsManager->id));
 	
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_WTH_ID, logisticsManager->wealth)
+	);
+
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_VEH_NUM, logisticsManager->vehicles_num)
 	);
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
@@ -568,6 +595,9 @@ static inline void saveNextStruct(FILE* fptr, struct SaveStateQueue* item)
 			break;
 		case FACTORY_SAVE:
 			saveFactory(fptr, (Factory*) item->data);
+			break;
+		case GOVERNMENT_SAVE:
+			saveGovernment(fptr, (Government*) item->data);
 			break;
 		case HISTORY_ARRAY_SAVE:
 			saveHistoryArray(fptr, (HistoryArray*) item->data);

@@ -1,6 +1,7 @@
 #include "Factory.h"
 
 static FACTORY_ID_INT id_next = 0;
+static int wage_tick = 0;
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
 {
@@ -405,7 +406,8 @@ void __processWagePaymentTick(Factory* factory)
 
 void processTickFactoryStatic(void)
 {
-	// TODO
+	wage_tick++;
+	wage_tick %= FACTORY_WAGE_TICK_RATE;
 }
 
 void processTickFactory(Factory* factory)
@@ -413,7 +415,7 @@ void processTickFactory(Factory* factory)
 	tickHistoryArrayAvgIndex(&factory->profit_history);
 
 	__processProductionTick(factory);
-	__processWagePaymentTick(factory);
+	if (wage_tick == 0) __processWagePaymentTick(factory);
 }
 
 void processTickFactoryLocalPopulation(Factory* factory)

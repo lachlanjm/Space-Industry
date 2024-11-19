@@ -11,6 +11,7 @@
 #define SAVE_FILE_APP_STATE_ID "AppState"
 #define SAVE_FILE_COMPANY_ID "Company"
 #define SAVE_FILE_FACTORY_ID "Factory"
+#define SAVE_FILE_GOVERNMENT_ID "Government"
 #define SAVE_FILE_HISTORY_ARRAY_ID "HistoryArray"
 #define SAVE_FILE_HISTORY_ARRAY_AVG_ID "HistoryArrayAvg"
 #define SAVE_FILE_HISTORY_WTD_AVG_ARRAY_ID "HistoryWtdAvgArray"
@@ -26,6 +27,8 @@
 #define SAVE_FILE_AS_LOG_MAN_ID "logistics_managers"
 #define SAVE_FILE_AS_CO_NUM "companies_num"
 #define SAVE_FILE_AS_CO_ID "companies"
+#define SAVE_FILE_AS_GOV_NUM "governments_num"
+#define SAVE_FILE_AS_GOV_ID "governments"
 #define SAVE_FILE_AS_LOC_POP_NUM "local_population_num"
 #define SAVE_FILE_AS_LOC_POP_ID "local_population"
 #define SAVE_FILE_AS_MAR_BUY_AVG_ID "market_buy_avg"
@@ -54,6 +57,9 @@
 #define SAVE_FILE_FAC_MAX_EMP_ID "max_employee_num"
 #define SAVE_FILE_FAC_PFT_HIS_ID "profit_history"
 
+#define SAVE_FILE_GOV_WTH_ID "wealth"
+#define SAVE_FILE_GOV_CTL_LOC_ID "controlled_location"
+
 #define SAVE_FILE_HIS_ARR_ITEM_ID "value"
 
 #define SAVE_FILE_HIS_ARR_AVG_ITEM_ID "value"
@@ -67,6 +73,7 @@
 
 #define SAVE_FILE_LOC_POP_POP_CEN_ID "population_centre"
 
+#define SAVE_FILE_LOG_MAN_WTH_ID "wealth"
 #define SAVE_FILE_LOG_MAN_VEH_NUM "vehicles_num"
 #define SAVE_FILE_LOG_MAN_VEH_ID "vehicles"
 #define SAVE_FILE_LOG_MAN_CON_NUM "contracts_num"
@@ -106,6 +113,7 @@ enum AttributeTypes {
 	APP_STATE_SAVE,
 	COMPANY_SAVE,
 	FACTORY_SAVE,
+	GOVERNMENT_SAVE,
 	HISTORY_ARRAY_SAVE,
 	HISTORY_ARRAY_AVG_SAVE,
 	HISTORY_WTD_AVG_ARRAY_SAVE,

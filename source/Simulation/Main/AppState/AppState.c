@@ -31,6 +31,11 @@ void processTickAppState(AppState* appState)
 	{
 		processTickLocalPopulation(getLocalPopulationByLocation(i));
 	}
+
+	for (int i = 0; i < appState->government_num; i++)
+	{
+		processTickGovernment(&appState->governments[i]);
+	}
 }
 
 AppState* newGameAppState()
@@ -39,8 +44,10 @@ AppState* newGameAppState()
 	if (appState == NULL) return NULL;
 
 	appState->companies_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
-    appState->companies = (Company*) calloc(appState->companies_num, sizeof(Company));
+    appState->logistics_managers_num = PRODUCTION_RECIPE_COUNT;
+	appState->government_num = 2;
 
+    appState->companies = (Company*) calloc(appState->companies_num, sizeof(Company));
     for (int i = 0; i < appState->companies_num; i++) // LEAVE POP CONSUMPTION
     {
         assignCompanyValues(
@@ -50,7 +57,6 @@ AppState* newGameAppState()
         );
     }
 
-    appState->logistics_managers_num = PRODUCTION_RECIPE_COUNT;
     appState->logistics_managers_next_process_tick_index = 0;
     appState->logistics_managers = (LogisticsManager*) calloc(appState->logistics_managers_num, sizeof(LogisticsManager));
 
@@ -66,6 +72,18 @@ AppState* newGameAppState()
 	for (int i = 0; i < getLocalPopulationNum(); i++)
 	{
 		assignLocalPopulationValues(i, 1000);
+	}
+
+	setGovernmentControlStatic(TRANSPORT_NODE_COUNT);
+	appState->governments = (Government*) calloc(appState->government_num, sizeof(Government));
+	
+	for (int i = 0; i < appState->government_num; i++)
+	{
+		assignGovernmentValues(&appState->governments[i], 3000);
+	}
+	for (int i = 0; i < TRANSPORT_NODE_COUNT; i++)
+	{
+		setGovernmentControlByLocation(&appState->governments[i%appState->government_num], i);
 	}
 
 	instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT);
@@ -87,6 +105,13 @@ void cleanAppState(AppState* appState)
 	}
 	free(appState->logistics_managers);
 
+	for (int i = 0; i < appState->government_num; i++)
+	{
+		cleanGovernment(&appState->governments[i]);
+	}
+	free(appState->governments);
+
 	cleanTransportNodeCountLocalPopulationStatic();
+	cleanGovernmentControlStatic();
 	cleanMarketMap();
 }

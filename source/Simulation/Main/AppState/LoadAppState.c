@@ -36,6 +36,10 @@ static inline enum AttributeTypes matchIdentifierWithType(const char* id)
 	{
 		return FACTORY_SAVE;
 	}
+	else if (strcmp(id, SAVE_FILE_GOVERNMENT_ID) == 0)
+	{
+		return GOVERNMENT_SAVE;
+	}
 	else if (strcmp(id, SAVE_FILE_HISTORY_ARRAY_ID) == 0)
 	{
 		return HISTORY_ARRAY_SAVE;
@@ -239,7 +243,13 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_NUM) == 0)
 			{
-				setTransportNodeCountLocalPopulationStatic(atoi(attr_value));
+				setTransportNodeCountLocalPopulationStatic(atoi(attr_value)); // TODO move
+				setGovernmentControlStatic(atoi(attr_value));
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_AS_GOV_NUM) == 0)
+			{
+				((AppState*)current_obj_ptr->data)->government_num = atoi(attr_value);
+				((AppState*)current_obj_ptr->data)->governments = (Government*) calloc(((AppState*)current_obj_ptr->data)->government_num, sizeof(Government));
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
@@ -271,6 +281,18 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				memset(&__lclpop_arr[__lclpop_arr_num-1], 0, sizeof(LocalPopulation));
 				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &__lclpop_arr[__lclpop_arr_num-1]);
 				updateLocalPopStructPtrsFromArr(__lclpop_arr);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_AS_GOV_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_AS_GOV_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_GOV_ID);
+					current_index = 0;
+				}
+
+				addNewStructIdPtr(GOVERNMENT_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->governments[current_index]);
+
+				current_index++;
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_MAR_BUY_AVG_ID) == 0)
 			{
@@ -389,6 +411,12 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				current_index++;
 			}
 			break;
+		case GOVERNMENT_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_GOV_CTL_LOC_ID) == 0)
+			{
+				setGovernmentControlByLocation(((Government*)current_obj_ptr->data), atoi(attr_value));
+			}
+			break;
 		case HISTORY_ARRAY_SAVE:
 			break;
 		case HISTORY_ARRAY_AVG_SAVE:
@@ -500,6 +528,9 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 			((Factory*)current_obj->data)->location = 0;
 			((Factory*)current_obj->data)->processing_speed = 1;
 			break;
+		case GOVERNMENT_SAVE:
+			((Government*)current_obj->data)->wealth = 0;
+			break;
 		case LOCAL_POPULATION_SAVE:
 			((LocalPopulation*)current_obj->data)->population_number = 0;
 			break;
@@ -595,6 +626,12 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 				((Factory*)current_obj_ptr->data)->max_employee_num = atoi(attr_value);
 			}
 			break;
+		case GOVERNMENT_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_GOV_WTH_ID) == 0)
+			{
+				((Government*)current_obj_ptr->data)->wealth = atoi(attr_value);
+			}
+			break;
 		case HISTORY_ARRAY_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_HIS_ARR_ITEM_ID) == 0)
 			{
@@ -658,6 +695,10 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			}
 			break;
 		case LOGISTICS_MANAGER_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_WTH_ID) == 0)
+			{
+				((LogisticsManager*)current_obj_ptr->data)->wealth = atoi(attr_value);
+			}
 			break;
 		case ORDER_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_ORD_OFF_FAC_ID) == 0)
@@ -774,6 +815,13 @@ static inline void assignAllNeededIds()
 				while (current_obj_ptr != NULL)
 				{
 					assignLoadIdFactory(current_obj_ptr->data, id++);
+					current_obj_ptr = current_obj_ptr->next;
+				}
+				break;
+			case GOVERNMENT_SAVE:
+				while (current_obj_ptr != NULL)
+				{
+					assignLoadIdGovernment(current_obj_ptr->data, id++);
 					current_obj_ptr = current_obj_ptr->next;
 				}
 				break;

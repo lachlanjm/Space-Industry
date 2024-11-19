@@ -1,6 +1,8 @@
 #ifndef LOGISTICS_MANAGER_H
 #define LOGISTICS_MANAGER_H
 
+typedef struct LogisticsManager LogisticsManager;
+
 #include "..\..\Transport\Structures\Vehicle.h"
 #include "LogisticsContract.h"
 
@@ -8,7 +10,7 @@
 
 #define LOGISTICS_MANAGER_ID_INT uint_least16_t
 
-typedef struct LogisticsManager 
+struct LogisticsManager 
 {
 	uint_fast16_t vehicles_num;
 	Vehicle* vehicles;
@@ -19,7 +21,7 @@ typedef struct LogisticsManager
 	int wealth;
 
 	LOGISTICS_MANAGER_ID_INT id;
-} LogisticsManager;
+};
 
 #include "..\..\Environment\Structures\MarketMap.h"
 
@@ -36,6 +38,7 @@ void withdrawFundsLogisticsManager(LogisticsManager* logisticsManager, const int
 
 void update_dist_to_price_eff(void);
 
+void processTickLogisticsManager(LogisticsManager* logisticsManager);
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager);
 void processTickLogisticsManagerVehicles(LogisticsManager* logisticsManager);
 

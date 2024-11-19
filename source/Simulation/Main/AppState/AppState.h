@@ -9,6 +9,7 @@ typedef struct AppState AppState;
 
 #include "..\..\Management\Logistics\LogisticsManager.h"
 #include "..\..\Management\Production\Company.h"
+#include "..\..\Population\Structures\Government.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
 #include "..\..\Environment\Structures\MarketMap.h"
 
@@ -17,6 +18,7 @@ typedef struct AppState AppState;
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define AS_LOG_MAN_GROUPS 4
 
@@ -27,6 +29,9 @@ typedef struct AppState {
 
 	uint_fast16_t companies_num;
 	Company* companies;
+
+	uint_fast16_t government_num;
+	Government* governments;
 } AppState;
 
 void processTickAppState(AppState* appState);
