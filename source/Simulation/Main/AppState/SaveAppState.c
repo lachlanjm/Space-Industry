@@ -335,19 +335,19 @@ static inline void saveGovernment(FILE* fptr, Government* government)
 	);
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_GST_ID, government->gst_rate)
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_GOV_GST_ID, government->gst_rate)
 	);
 
 	for (int i = 0; i < getGovernmentNum(); i++)
 	{
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_IMP_ID, government->import_tariffs[i])
+			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_GOV_IMP_ID, government->import_tariffs[i])
 		);
 	}
 	for (int i = 0; i < getGovernmentNum(); i++)
 	{
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_EXP_ID, government->export_tariffs[i])
+			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_GOV_EXP_ID, government->export_tariffs[i])
 		);
 	}
 

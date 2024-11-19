@@ -94,16 +94,28 @@ void update_dist_to_price_eff(void)
 				if (getProductMarketAtLocation(to, product)->buy_order_num > 0
 					&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 				{
-					// Needed to counter uint maths
-					const double price_diff = (double)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-						- (double)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
+					const int_fast64_t export_price = getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
+					const int_fast64_t export_tax = (double)export_price * (
+						(double)getExportTaxRate(product, from, to) 
+						/ 100000.0f
+					);
+
+					const int_fast64_t import_price = getProductMarketAtLocation(to, product)->buy_order_arr[0]->price;
+					const int_fast64_t import_tax = (double)import_price * (
+						(double)(getGstTaxRate(product, to)
+						+ getImportTaxRate(product, from, to)) 
+						/ 100000.0f
+					);
+
+					const double profit = (double)(import_price - import_tax - export_price - export_tax);
+					
 					if (getTotalDistance(from, to) == 0)
 					{
-						__dist_to_price_eff__[from][to][product] = price_diff;
+						__dist_to_price_eff__[from][to][product] = profit;
 					}
 					else 
 					{
-						__dist_to_price_eff__[from][to][product] = price_diff / (double)getTotalDistance(from, to);
+						__dist_to_price_eff__[from][to][product] = profit / (double)getTotalDistance(from, to);
 					}
 				}
 				else
@@ -124,16 +136,27 @@ void update_dist_to_price_eff_product_filtered(int product)
 			if (getProductMarketAtLocation(to, product)->buy_order_num > 0
 				&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
 			{
-				// Needed to counter uint maths
-				const double price_diff = (double)getProductMarketAtLocation(to, product)->buy_order_arr[0]->price 
-					- (double)getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
+				const int_fast64_t export_price = getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
+				const int_fast64_t export_tax = (double)export_price * (
+					(double)getExportTaxRate(product, from, to) 
+					/ 100000.0f
+				);
+
+				const int_fast64_t import_price = getProductMarketAtLocation(to, product)->buy_order_arr[0]->price;
+				const int_fast64_t import_tax = (double)import_price * (
+					(double)(getGstTaxRate(product, to)
+					+ getImportTaxRate(product, from, to)) 
+					/ 100000.0f
+				);
+
+				const double profit = (double)(import_price - import_tax - export_price - export_tax);
 				if (getTotalDistance(from, to) == 0)
 				{
-					__dist_to_price_eff__[from][to][product] = price_diff;
+					__dist_to_price_eff__[from][to][product] = profit;
 				}
 				else 
 				{
-					__dist_to_price_eff__[from][to][product] = price_diff / (double)getTotalDistance(from, to);
+					__dist_to_price_eff__[from][to][product] = profit / (double)getTotalDistance(from, to);
 				}
 			}
 			else

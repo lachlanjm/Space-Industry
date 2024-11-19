@@ -155,15 +155,34 @@ QUANTITY_INT match_orders(LogisticsManager* logisticsManager, ProductMarket* sel
 	selling_order->offer_num -= exchanged_num;
 	buying_order->offer_num -= exchanged_num;
 
-	insertFundsFactory(selling_order->offering_factory, exchanged_num * selling_order->price);
-	withdrawFundsFactory(buying_order->offering_factory, exchanged_num * buying_order->price);
+	const Product product_type = selling_market->product_type;
 
-	insertFundsLogisticsManager(logisticsManager, exchanged_num * (buying_order->price - selling_order->price) );
+	const int_fast64_t export_price = selling_order->price;
+	const int_fast64_t export_tax = (int_fast64_t)((double)export_price * (
+		(double)getExportTaxRate(product_type, selling_market->location, buying_market->location) 
+		/ 100000.0f
+	));
 
-	addToHistoryWtdAvgArray(&selling_market->sell_hist_array, exchanged_num * selling_order->price, exchanged_num);
-	addToHistoryWtdAvgArray(&buying_market->buy_hist_array, exchanged_num * buying_order->price, exchanged_num);
+	const int_fast64_t import_price = buying_order->price;
+	const int_fast64_t import_tax = (int_fast64_t)((double)import_price * (
+		(double)(getGstTaxRate(product_type, buying_market->location)
+		+ getImportTaxRate(product_type, selling_market->location, buying_market->location)) 
+		/ 100000.0f
+	));
 
-	recordMarketProductTransactionPrice(selling_market->product_type, exchanged_num, buying_order->price, selling_order->price);
+	withdrawFundsFactory(buying_order->offering_factory, exchanged_num * import_price);
+	insertFundsFactory(selling_order->offering_factory, exchanged_num * export_price);
+	if (export_tax >= 0) insertFundsGovernment(getGovernmentByLocation(selling_market->location), exchanged_num * export_tax);
+	else withdrawFundsGovernment(getGovernmentByLocation(selling_market->location), exchanged_num * abs(export_tax));
+	if (import_tax >= 0) insertFundsGovernment(getGovernmentByLocation(buying_market->location), exchanged_num * import_tax);
+	else withdrawFundsGovernment(getGovernmentByLocation(buying_market->location), exchanged_num * abs(import_tax));
+
+	insertFundsLogisticsManager(logisticsManager, exchanged_num * (import_price - import_tax - export_price - export_tax));
+
+	addToHistoryWtdAvgArray(&selling_market->sell_hist_array, exchanged_num * export_price, exchanged_num);
+	addToHistoryWtdAvgArray(&buying_market->buy_hist_array, exchanged_num * import_price, exchanged_num);
+
+	recordMarketProductTransactionPrice(product_type, exchanged_num, buying_order->price, selling_order->price);
 
 	if (selling_order->offer_num == 0)
 	{

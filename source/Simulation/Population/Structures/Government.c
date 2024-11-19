@@ -78,6 +78,24 @@ void cleanGovernmentStatic(void)
 	location_count = 0;
 }
 
+// TODO allow for product specific taxes
+int32_t getExportTaxRate(const Product product, const TransportNode from, const TransportNode to)
+{
+	return __static_government_control[from]->export_tariffs[to];
+}
+
+// TODO allow for product specific taxes
+int32_t getGstTaxRate(const Product product, const TransportNode location)
+{
+	return __static_government_control[location]->gst_rate;
+}
+
+// TODO allow for product specific taxes
+int32_t getImportTaxRate(const Product product, const TransportNode from, const TransportNode to)
+{
+	return __static_government_control[from]->import_tariffs[to];
+}
+
 static GOVERNMENT_ID_INT id_next = 0;
 void assignGovernmentValues(Government* government, const int wealth)
 {

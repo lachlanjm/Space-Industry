@@ -432,7 +432,6 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_CEN_ID) == 0)
 			{
-				printf("%s; %x\n", attr_value, &((LocalPopulation*)current_obj_ptr->data)->population_centre);
 				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((LocalPopulation*)current_obj_ptr->data)->population_centre);
 			}
 			break;
