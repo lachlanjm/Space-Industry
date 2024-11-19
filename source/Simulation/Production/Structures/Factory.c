@@ -114,17 +114,10 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	}
 	else
 	{
-		factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
-		memset(factory->stockpiles_in, 0, factory->stockpiles_in_num * sizeof(Stockpile));
-
-		factory->stockpiles_in_max_quant = (QUANTITY_INT*) realloc(factory->stockpiles_in_max_quant, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
-		memset(factory->stockpiles_in_max_quant, 0, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
-
-		factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
-		memset(factory->orders_in, 0, factory->stockpiles_in_num * sizeof(Order));
-
-		factory->ordered_in = (QUANTITY_INT*) realloc(factory->ordered_in, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
-		memset(factory->ordered_in, 0, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+		factory->stockpiles_in = (Stockpile*) calloc(factory->stockpiles_in_num, sizeof(Stockpile));
+		factory->stockpiles_in_max_quant = (QUANTITY_INT*) calloc(factory->stockpiles_in_num, sizeof(QUANTITY_INT));
+		factory->orders_in = (Order*) calloc(factory->stockpiles_in_num, sizeof(Order));
+		factory->ordered_in = (QUANTITY_INT*) calloc(factory->stockpiles_in_num, sizeof(QUANTITY_INT));
 	}
 
 	if (old_out_num > 0 && factory->stockpiles_out_num == 0)
@@ -140,17 +133,10 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	}
 	else
 	{
-		factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
-		memset(factory->stockpiles_out, 0, factory->stockpiles_out_num * sizeof(Stockpile));
-
-		factory->stockpiles_out_max_quant = (QUANTITY_INT*) realloc(factory->stockpiles_out_max_quant, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
-		memset(factory->stockpiles_out_max_quant, 0, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
-
-		factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
-		memset(factory->orders_out, 0, factory->stockpiles_out_num * sizeof(Order));
-
-		factory->ordered_out = (QUANTITY_INT*) realloc(factory->ordered_out, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
-		memset(factory->ordered_out, 0, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+		factory->stockpiles_out = (Stockpile*) calloc(factory->stockpiles_out_num, sizeof(Stockpile));
+		factory->stockpiles_out_max_quant = (QUANTITY_INT*) calloc(factory->stockpiles_out_num, sizeof(QUANTITY_INT));
+		factory->orders_out = (Order*) calloc(factory->stockpiles_out_num, sizeof(Order));
+		factory->ordered_out = (QUANTITY_INT*) calloc(factory->stockpiles_out_num, sizeof(QUANTITY_INT));
 	}
 }
 

@@ -29,9 +29,6 @@ typedef struct AppState {
 
 	uint_fast16_t companies_num;
 	Company* companies;
-
-	uint_fast16_t government_num;
-	Government* governments;
 } AppState;
 
 void processTickAppState(AppState* appState);

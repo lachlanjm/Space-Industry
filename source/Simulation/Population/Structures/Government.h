@@ -9,6 +9,10 @@ typedef struct Government Government;
 
 struct Government {
 	int wealth;
+	uint32_t gst_rate; // [0%, 100%]:10^-3
+
+	uint32_t* export_tariffs; // [-inf%, inf%] 10^-3
+	uint32_t* import_tariffs; // [-inf%, inf%] 10^-3
 
 	int controlled_local_population_num;
 
@@ -20,11 +24,15 @@ struct Government {
 
 #include <stdlib.h>
 
+void setGovernmentCountStatic(const int _government_count);
+int getGovernmentNum(void);
+Government* getGovernmentByIndex(const int index);
+
 void setGovernmentControlStatic(const int transport_node_count);
 Government* getGovernmentByLocation(const TransportNode location);
 void setGovernmentControlByLocation(Government* government, const TransportNode location);
 void resetGovernmentControlByLocation(const TransportNode location);
-void cleanGovernmentControlStatic(void);
+void cleanGovernmentStatic(void);
 
 void assignGovernmentValues(Government* government, const int wealth);
 void assignLoadIdGovernment(Government* obj, const int id);
@@ -32,6 +40,7 @@ void assignLoadIdGovernment(Government* obj, const int id);
 void insertFundsGovernment(Government* government, const int funds);
 void withdrawFundsGovernment(Government* government, const int funds);
 
+void processTickAllGovernments(void);
 void processTickGovernment(Government* government);
 
 void cleanGovernment(Government* government);

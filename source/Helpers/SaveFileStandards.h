@@ -59,6 +59,9 @@
 
 #define SAVE_FILE_GOV_WTH_ID "wealth"
 #define SAVE_FILE_GOV_CTL_LOC_ID "controlled_location"
+#define SAVE_FILE_GOV_GST_ID "gst_rate"
+#define SAVE_FILE_GOV_IMP_ID "import_rate"
+#define SAVE_FILE_GOV_EXP_ID "export_rate"
 
 #define SAVE_FILE_HIS_ARR_ITEM_ID "value"
 

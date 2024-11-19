@@ -43,8 +43,8 @@ struct Factory
 	QUANTITY_INT* stockpiles_in_max_quant;
 	QUANTITY_INT* stockpiles_out_max_quant;
 
-	struct Order* orders_in;
-	struct Order* orders_out;
+	Order* orders_in;
+	Order* orders_out;
 
 	QUANTITY_INT* ordered_in;
 	QUANTITY_INT* ordered_out;

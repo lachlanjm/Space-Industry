@@ -44,12 +44,22 @@ void assignLocalPopulationValues(const TransportNode location, const uint32_t po
 // Will not clean or destroy `origin`; also does only a shallow copy
 void moveLocalPopulationToStaticArray(LocalPopulation* origin, const TransportNode location)
 {
-	LocalPopulation* dst = getLocalPopulationByLocation(location);
-	cleanLocalPopulation(dst);
+	LocalPopulation* dest = getLocalPopulationByLocation(location);
+	cleanLocalPopulation(dest);
 
-	memcpy(dst, origin, sizeof(LocalPopulation));
-	dst->population_centre.management = dst;
-	reassignOrderOfferingPtrs(&dst->population_centre);
+	memcpy(dest, origin, sizeof(LocalPopulation));
+	dest->population_centre.management = dest;
+
+	for (int i = 0; i < dest->population_centre.stockpiles_in_num; i++)
+	{
+		dest->population_centre.orders_in[i].offering_factory = dest;
+	}
+	for (int i = 0; i < dest->population_centre.stockpiles_out_num; i++)
+	{
+		dest->population_centre.orders_out[i].offering_factory = dest;
+	}
+	
+	reassignOrderOfferingPtrs(&dest->population_centre);
 }
 
 void assignLoadIdLocalPopulation(LocalPopulation* obj, const int id)

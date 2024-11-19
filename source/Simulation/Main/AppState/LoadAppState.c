@@ -244,12 +244,13 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_NUM) == 0)
 			{
 				setTransportNodeCountLocalPopulationStatic(atoi(attr_value)); // TODO move
-				setGovernmentControlStatic(atoi(attr_value));
+				__lclpop_arr_num = atoi(attr_value);
+				__lclpop_arr = (LocalPopulation*) calloc(__lclpop_arr_num, sizeof(LocalPopulation));
+				setGovernmentControlStatic(atoi(attr_value)); // TODO update
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_GOV_NUM) == 0)
 			{
-				((AppState*)current_obj_ptr->data)->government_num = atoi(attr_value);
-				((AppState*)current_obj_ptr->data)->governments = (Government*) calloc(((AppState*)current_obj_ptr->data)->government_num, sizeof(Government));
+				setGovernmentCountStatic(atoi(attr_value));
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOG_MAN_ID) == 0)
 			{
@@ -277,10 +278,15 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_LOC_POP_ID) == 0)
 			{
-				__lclpop_arr = (LocalPopulation*) realloc(__lclpop_arr, (++__lclpop_arr_num) * sizeof(LocalPopulation));
-				memset(&__lclpop_arr[__lclpop_arr_num-1], 0, sizeof(LocalPopulation));
-				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &__lclpop_arr[__lclpop_arr_num-1]);
+				if (strcmp(current_arr_name, SAVE_FILE_AS_LOC_POP_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_AS_LOC_POP_ID);
+					current_index = 0;
+				}
+
+				addNewStructIdPtr(LOCAL_POPULATION_SAVE, extractObjectId(attr_value), &__lclpop_arr[current_index]);
 				updateLocalPopStructPtrsFromArr(__lclpop_arr);
+				current_index++;
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_AS_GOV_ID) == 0)
 			{
@@ -290,7 +296,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 					current_index = 0;
 				}
 
-				addNewStructIdPtr(GOVERNMENT_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->governments[current_index]);
+				addNewStructIdPtr(GOVERNMENT_SAVE, extractObjectId(attr_value), getGovernmentByIndex(current_index));
 
 				current_index++;
 			}
@@ -426,6 +432,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case LOCAL_POPULATION_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOC_POP_POP_CEN_ID) == 0)
 			{
+				printf("%s; %x\n", attr_value, &((LocalPopulation*)current_obj_ptr->data)->population_centre);
 				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((LocalPopulation*)current_obj_ptr->data)->population_centre);
 			}
 			break;
@@ -630,6 +637,38 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			if (strcmp(new_data_point, SAVE_FILE_GOV_WTH_ID) == 0)
 			{
 				((Government*)current_obj_ptr->data)->wealth = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_GOV_GST_ID) == 0)
+			{
+				((Government*)current_obj_ptr->data)->gst_rate = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_GOV_IMP_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_GOV_IMP_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_GOV_IMP_ID);
+					current_index = 0;
+				}
+				else
+				{
+					current_index++;
+				}
+
+				((Government*)current_obj_ptr->data)->import_tariffs[current_index] = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_GOV_EXP_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_GOV_EXP_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_GOV_EXP_ID);
+					current_index = 0;
+				}
+				else
+				{
+					current_index++;
+				}
+
+				((Government*)current_obj_ptr->data)->export_tariffs[current_index] = atoi(attr_value);
 			}
 			break;
 		case HISTORY_ARRAY_SAVE:
@@ -984,6 +1023,39 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 				&__lclpop_arr[i],
 				__lclpop_arr[i].population_centre.location
 			);
+
+			// Shift other external data
+			const Factory* new_loc = &getLocalPopulationByLocation(i)->population_centre;
+			// Vehicles
+			struct LoadStateIdList* current_obj_ptr = &__object_arr[VEHICLE_SAVE];
+			if (current_obj_ptr->data != NULL)
+			{
+				while (current_obj_ptr != NULL)
+				{
+					if (((Vehicle*)current_obj_ptr->data)->end_factory == &__lclpop_arr[i].population_centre)
+					{
+						((Vehicle*)current_obj_ptr->data)->end_factory = new_loc;
+					}
+					current_obj_ptr = current_obj_ptr->next;
+				}
+			}
+			// LogisticsContracts
+			current_obj_ptr = &__object_arr[LOGISTICS_CONTRACT_SAVE];
+			if (current_obj_ptr->data != NULL)
+			{
+				while (current_obj_ptr != NULL)
+				{
+					if (((LogisticsContract*)current_obj_ptr->data)->buying_factory == &__lclpop_arr[i].population_centre)
+					{
+						((LogisticsContract*)current_obj_ptr->data)->buying_factory = new_loc;
+					}
+					if (((LogisticsContract*)current_obj_ptr->data)->selling_factory == &__lclpop_arr[i].population_centre)
+					{
+						((LogisticsContract*)current_obj_ptr->data)->selling_factory = new_loc;
+					}
+					current_obj_ptr = current_obj_ptr->next;
+				}
+			}
 		}
 
 		free(__lclpop_arr);

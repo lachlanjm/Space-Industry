@@ -213,6 +213,16 @@ static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_MAR_SELL_AVG_ID, HISTORY_WTD_AVG_ARRAY_SAVE, wtd_arr->id)
 		);
 	}
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_AS_GOV_NUM, getGovernmentNum())
+	);
+	for (int i=0; i<getGovernmentNum(); i++)
+	{
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_AS_GOV_ID, GOVERNMENT_SAVE, getGovernmentByIndex(i)->id)
+		);
+		appendToQueue(GOVERNMENT_SAVE, getGovernmentByIndex(i));
+	}
 }
 
 static inline void saveCompany(FILE* fptr, Company* company)
@@ -323,6 +333,23 @@ static inline void saveGovernment(FILE* fptr, Government* government)
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_WTH_ID, government->wealth)
 	);
+
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_GST_ID, government->gst_rate)
+	);
+
+	for (int i = 0; i < getGovernmentNum(); i++)
+	{
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_IMP_ID, government->import_tariffs[i])
+		);
+	}
+	for (int i = 0; i < getGovernmentNum(); i++)
+	{
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_EXP_ID, government->export_tariffs[i])
+		);
+	}
 
 	for (int i = 0; i < TRANSPORT_NODE_COUNT; i++)
 	{
