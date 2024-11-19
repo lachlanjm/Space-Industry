@@ -28,6 +28,8 @@ struct ProductMarket {
 	PRODUCT_MARKET_ID_INT id;
 };
 
+#include "..\..\Management\Logistics\LogisticsManager.h"
+
 ProductMarket* newProductMarket(const TransportNode location, const Product product_type);
 void assignProductMarketValues(ProductMarket* productMarket, const TransportNode location, const Product product_type);
 void assignLoadIdProductMarket(ProductMarket* obj, const int id);
@@ -42,7 +44,7 @@ int removeBuyOrderIndexed(ProductMarket* productMarket, int index);
 int removeSellOrder(ProductMarket* productMarket, Order* selling_order);
 int removeSellOrderIndexed(ProductMarket* productMarket, int index);
 
-QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order);
+QUANTITY_INT match_orders(LogisticsManager* logisticsManager, ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order);
 void swap_orders_arr(Order** order_1, Order** order_2);
 
 int resetBuyOrder(ProductMarket* productMarket, Order* reset_order);

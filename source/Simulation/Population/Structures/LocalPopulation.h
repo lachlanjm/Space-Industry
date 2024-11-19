@@ -28,7 +28,7 @@ struct LocalPopulation {
 #include <stdint.h>
 #include <stdio.h>
 
-#define CONSUMPTION_RATE_DIVISOR 100
+#define CONSUMPTION_RATE_DIVISOR 500
 
 // TODO: TBU finetune AI
 #define LP_STOCKPILE_FULL 2000

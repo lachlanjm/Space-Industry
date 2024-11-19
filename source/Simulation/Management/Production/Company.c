@@ -96,17 +96,19 @@ void updateOfferedPrices(Company* company)
 			ProductMarket* productMarket = getProductMarketAtLocation(company->controlled_factory.location, company->controlled_factory.stockpiles_in[i].product_type);
 
 			const Product product_type = productMarket->product_type;
-			const int base_price = ( 
-				(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
-				? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
-				: ( (getMarketBuyAvgByProduct(product_type) != 0)
-					? getMarketBuyAvgByProduct(product_type)
-					: ( (getMarketSellAvgByProduct(product_type) != 0)
-						? getMarketSellAvgByProduct(product_type)
-						: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
-							? getMarketSellOfferAvgByProduct(product_type)
-							: CO_DEFAULT_PRICE
-			)))); // ?: needed to allow for const
+			// TODO TBU also divide by factory_num; also to better the calculation of the max allowable price
+			const int base_price = MIN(
+				company->wealth / MAX(1, company->controlled_factory.stockpiles_in_num-1), ( 
+					(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
+					? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
+					: ( (getMarketBuyAvgByProduct(product_type) != 0)
+						? getMarketBuyAvgByProduct(product_type)
+						: ( (getMarketSellAvgByProduct(product_type) != 0)
+							? getMarketSellAvgByProduct(product_type)
+							: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
+								? getMarketSellOfferAvgByProduct(product_type)
+								: CO_DEFAULT_PRICE
+			))))); // ?: needed to allow for const
 			const double stockpile_factor = sqrt((double)company->controlled_factory.orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT;
 
 			// TODO TBU

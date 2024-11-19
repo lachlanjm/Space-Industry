@@ -16,6 +16,8 @@ typedef struct LogisticsManager
 	uint_fast16_t contracts_num;
 	LogisticsContract* contracts;
 
+	int wealth;
+
 	LOGISTICS_MANAGER_ID_INT id;
 } LogisticsManager;
 
@@ -28,6 +30,9 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 void loadLogisticsManagerConstructorVehicles(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);
 void loadLogisticsManagerConstructorLogisticsContract(LogisticsManager* logisticsManager, const uint_fast16_t contracts_num);
 void assignLoadIdLogisticsManager(LogisticsManager* obj, const int id);
+
+void insertFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds);
+void withdrawFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds);
 
 void update_dist_to_price_eff(void);
 

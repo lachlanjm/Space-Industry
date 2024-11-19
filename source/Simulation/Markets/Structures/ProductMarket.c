@@ -140,7 +140,7 @@ int removeSellOrderIndexed(ProductMarket* productMarket, int index)
 	return resetSellOrderIndexed(productMarket, index);
 }
 
-QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order)
+QUANTITY_INT match_orders(LogisticsManager* logisticsManager, ProductMarket* selling_market, Order* selling_order, ProductMarket* buying_market, Order* buying_order)
 {
 	QUANTITY_INT exchanged_num;
 	if (selling_order->offer_num > buying_order->offer_num)
@@ -158,8 +158,7 @@ QUANTITY_INT match_orders(ProductMarket* selling_market, Order* selling_order, P
 	insertFundsFactory(selling_order->offering_factory, exchanged_num * selling_order->price);
 	withdrawFundsFactory(buying_order->offering_factory, exchanged_num * buying_order->price);
 
-	// TODO
-	// insertFunds(transport, exchanged_num * (buying_order->price - selling_order->price) )
+	insertFundsLogisticsManager(logisticsManager, exchanged_num * (buying_order->price - selling_order->price) );
 
 	addToHistoryWtdAvgArray(&selling_market->sell_hist_array, exchanged_num * selling_order->price, exchanged_num);
 	addToHistoryWtdAvgArray(&buying_market->buy_hist_array, exchanged_num * buying_order->price, exchanged_num);

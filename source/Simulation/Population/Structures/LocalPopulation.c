@@ -96,17 +96,19 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			ProductMarket* productMarket = getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type);
 
 			const Product product_type = productMarket->product_type;
-			const int base_price = ( 
-				(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
-				? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
-				: ( (getMarketBuyAvgByProduct(product_type) != 0)
-					? getMarketBuyAvgByProduct(product_type)
-					: ( (getMarketSellAvgByProduct(product_type) != 0)
-						? getMarketSellAvgByProduct(product_type)
-						: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
-							? getMarketSellOfferAvgByProduct(product_type)
-							: LP_DEFAULT_PRICE
-			)))); // ?: needed to allow for const
+			// TODO TBU better the calculation of the max allowable price
+			const int base_price = MIN(
+				population->wealth / MAX(1, population->population_centre.stockpiles_in_num-1), ( 
+					(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
+					? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
+					: ( (getMarketBuyAvgByProduct(product_type) != 0)
+						? getMarketBuyAvgByProduct(product_type)
+						: ( (getMarketSellAvgByProduct(product_type) != 0)
+							? getMarketSellAvgByProduct(product_type)
+							: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
+								? getMarketSellOfferAvgByProduct(product_type)
+								: LP_DEFAULT_PRICE
+			))))); // ?: needed to allow for const
 			const double stockpile_factor = sqrt((double)population->population_centre.orders_in[i].offer_num) / LP_DESIRED_BUY_STOCKPILE_ROOT;
 
 			// TODO TBU

@@ -31,6 +31,9 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 
 	logisticsManager->contracts_num = 0;
 	logisticsManager->contracts = NULL;
+
+	logisticsManager->wealth = 100000;
+
 	logisticsManager->id = id_next++;
 }
 
@@ -66,6 +69,16 @@ void assignLoadIdLogisticsManager(LogisticsManager* obj, const int id)
 	{
 		id_next = id + 1;
 	}
+}
+
+void insertFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds)
+{
+	logisticsManager->wealth += funds;
+}
+void withdrawFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds)
+{
+	if (logisticsManager->wealth < funds) return; // reject payment
+	logisticsManager->wealth -= funds;
 }
 
 static double __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
@@ -171,6 +184,7 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 	Factory* buying_factory = getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]->offering_factory;
 
 	QUANTITY_INT quantity = match_orders(
+		logisticsManager,
 		getProductMarketAtLocation(from_max, product_max), 
 		getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0],
 		getProductMarketAtLocation(to_max, product_max),
