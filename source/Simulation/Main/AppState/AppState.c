@@ -21,6 +21,7 @@ void processTickAppState(AppState* appState)
 		if (i % AS_LOG_MAN_GROUPS == appState->logistics_managers_next_process_tick_index)
 		{
 			processTickLogisticsManagerContracts(&appState->logistics_managers[i]);
+			processTickLogisticsManager(&appState->logistics_managers[i]); // TODO MOVE
 		}
 		processTickLogisticsManagerVehicles(&appState->logistics_managers[i]);
 	}
@@ -64,7 +65,8 @@ AppState* newGameAppState()
     {
         assignLogisticsManagerValues(
             &appState->logistics_managers[i],
-            10
+            10,
+			i%TRANSPORT_NODE_COUNT
         );
     }
 

@@ -74,6 +74,7 @@
 #define SAVE_FILE_LOC_POP_POP_CEN_ID "population_centre"
 
 #define SAVE_FILE_LOG_MAN_WTH_ID "wealth"
+#define SAVE_FILE_LOG_MAN_HQ_LOC_ID "headquarters_location"
 #define SAVE_FILE_LOG_MAN_VEH_NUM "vehicles_num"
 #define SAVE_FILE_LOG_MAN_VEH_ID "vehicles"
 #define SAVE_FILE_LOG_MAN_CON_NUM "contracts_num"

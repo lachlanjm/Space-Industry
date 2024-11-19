@@ -699,6 +699,10 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			{
 				((LogisticsManager*)current_obj_ptr->data)->wealth = atoi(attr_value);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_HQ_LOC_ID) == 0)
+			{
+				((LogisticsManager*)current_obj_ptr->data)->headquarters_location = atoi(attr_value);
+			}
 			break;
 		case ORDER_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_ORD_OFF_FAC_ID) == 0)

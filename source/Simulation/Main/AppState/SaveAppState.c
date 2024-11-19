@@ -471,6 +471,9 @@ static inline void saveLogisticsManager(FILE* fptr, LogisticsManager* logisticsM
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_WTH_ID, logisticsManager->wealth)
 	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_HQ_LOC_ID, logisticsManager->headquarters_location)
+	);
 
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_VEH_NUM, logisticsManager->vehicles_num)

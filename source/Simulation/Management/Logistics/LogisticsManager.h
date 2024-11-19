@@ -4,6 +4,7 @@
 typedef struct LogisticsManager LogisticsManager;
 
 #include "..\..\Transport\Structures\Vehicle.h"
+#include "..\..\Environment\Enums\TransportNode.h"
 #include "LogisticsContract.h"
 
 #include <stdint.h>
@@ -12,6 +13,8 @@ typedef struct LogisticsManager LogisticsManager;
 
 struct LogisticsManager 
 {
+	TransportNode headquarters_location;
+
 	uint_fast16_t vehicles_num;
 	Vehicle* vehicles;
 
@@ -24,11 +27,12 @@ struct LogisticsManager
 };
 
 #include "..\..\Environment\Structures\MarketMap.h"
+#include "..\..\Population\Structures\Government.h"
 
 #include <stdio.h>
 
-LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num);
-void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);
+LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num, const TransportNode headquarters_location);
+void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num, const TransportNode headquarters_location);
 void loadLogisticsManagerConstructorVehicles(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num);
 void loadLogisticsManagerConstructorLogisticsContract(LogisticsManager* logisticsManager, const uint_fast16_t contracts_num);
 void assignLoadIdLogisticsManager(LogisticsManager* obj, const int id);

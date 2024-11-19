@@ -2,14 +2,14 @@
 
 static LOGISTICS_MANAGER_ID_INT id_next = 0;
 
-LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num)
+LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num, const TransportNode headquarters_location)
 {
 	LogisticsManager* logisticsManager = (LogisticsManager*) calloc(1, sizeof(LogisticsManager));
-	assignLogisticsManagerValues(logisticsManager, vehicles_num);
+	assignLogisticsManagerValues(logisticsManager, vehicles_num, headquarters_location);
 	return logisticsManager;
 }
 
-void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
+void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num, const TransportNode headquarters_location)
 {
 	if (logisticsManager->vehicles_num != 0 && vehicles_num == 0)
 	{
@@ -32,6 +32,7 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 	logisticsManager->contracts_num = 0;
 	logisticsManager->contracts = NULL;
 
+	logisticsManager->headquarters_location = headquarters_location;
 	logisticsManager->wealth = 100000;
 
 	logisticsManager->id = id_next++;
@@ -220,6 +221,11 @@ void assignFreeVehicles(LogisticsManager* logisticsManager)
 void processTickLogisticsManager(LogisticsManager* logisticsManager)
 {
 	// TODO TBU
+	insertFundsGovernment(
+		getGovernmentByLocation(logisticsManager->headquarters_location),
+		logisticsManager->wealth
+	);
+	logisticsManager->wealth = 0;
 }
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
