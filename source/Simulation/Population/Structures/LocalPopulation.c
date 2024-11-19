@@ -63,6 +63,10 @@ void assignLoadIdLocalPopulation(LocalPopulation* obj, const int id)
 
 void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 {
+	const int profit = getAvgHistoryArrayAvg(&population->population_centre.profit_history);
+	const double profit_factor_sell = (profit>=LP_MIN_PROFIT) ? 1 : (log10((double)((2*LP_MIN_PROFIT)-profit))-1);
+	const double profit_factor_buy = (profit>=LP_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
+
 	for (int i = 0; i < population->population_centre.stockpiles_in_num; i++)
 	{
 		QUANTITY_INT stockpile_ordered_quantity = 
@@ -91,21 +95,22 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 		{
 			ProductMarket* productMarket = getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type);
 
+			const Product product_type = productMarket->product_type;
+			const int base_price = ( 
+				(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
+				? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
+				: ( (getMarketBuyAvgByProduct(product_type) != 0)
+					? getMarketBuyAvgByProduct(product_type)
+					: ( (getMarketSellAvgByProduct(product_type) != 0)
+						? getMarketSellAvgByProduct(product_type)
+						: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
+							? getMarketSellOfferAvgByProduct(product_type)
+							: LP_DEFAULT_PRICE
+			)))); // ?: needed to allow for const
+			const double stockpile_factor = sqrt((double)population->population_centre.orders_in[i].offer_num) / LP_DESIRED_BUY_STOCKPILE_ROOT;
+
 			// TODO TBU
-			if (getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) == 0)
-			{
-				population->population_centre.orders_in[i].price = (
-					LP_DEFAULT_PRICE
-					* (sqrt((double)population->population_centre.orders_in[i].offer_num) / LP_DESIRED_BUY_STOCKPILE_ROOT)
-				);
-			}
-			else
-			{
-				population->population_centre.orders_in[i].price = (
-					getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array)
-					* (sqrt((double)population->population_centre.orders_in[i].offer_num) / LP_DESIRED_BUY_STOCKPILE_ROOT)
-				);
-			}
+			population->population_centre.orders_in[i].price = MAX(1, base_price * profit_factor_buy * stockpile_factor);
 
 			if (resetBuyOrder(productMarket, &population->population_centre.orders_in[i])) 
 			{
@@ -143,20 +148,22 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			// Re-calc selling price
 			ProductMarket* productMarket = getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_out[i].product_type);
 			
-			if (getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) == 0)
-			{
-				population->population_centre.orders_out[i].price = (
-					LP_DEFAULT_PRICE
-					* (LP_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)population->population_centre.orders_out[i].offer_num))
-				);
-			}
-			else
-			{
-				population->population_centre.orders_out[i].price = (
-					getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array)
-					* (LP_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)population->population_centre.orders_out[i].offer_num))
-				);
-			}
+			const Product product_type = productMarket->product_type;
+			const uint64_t base_price = ( 
+				(getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
+				? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
+				: ( (getMarketSellAvgByProduct(product_type) != 0)
+					? getMarketSellAvgByProduct(product_type)
+					: ( (getMarketBuyAvgByProduct(product_type) != 0)
+						? getMarketBuyAvgByProduct(product_type)
+						: ( (getMarketBuyOfferAvgByProduct(product_type) != 0)
+							? getMarketBuyOfferAvgByProduct(product_type)
+							: LP_DEFAULT_PRICE
+			)))); // ?: needed to allow for const
+			const double stockpile_factor = LP_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)population->population_centre.orders_out[i].offer_num);
+
+			// TODO TBU
+			population->population_centre.orders_out[i].price = MAX(1, base_price * profit_factor_sell * stockpile_factor);
 
 			if (resetSellOrder(productMarket, &population->population_centre.orders_out[i])) 
 			{
@@ -186,7 +193,7 @@ void loadLocalPopulationAssignOrders(LocalPopulation* population)
 			) {
 				printf("Failed to add buy order\n");
 			}
-			population->population_centre.orders_in[i].offer_num = CO_STOCKPILE_FULL - stockpile_ordered_quantity;
+			population->population_centre.orders_in[i].offer_num = LP_STOCKPILE_FULL - stockpile_ordered_quantity;
 		}
 		else 
 		{
@@ -237,15 +244,15 @@ void withdrawFundsLocalPopulation(LocalPopulation* population, const int funds)
 }
 
 // TODO TBU
-int increaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
+IND_BOOL increaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
 {
-	if (population->employed_number + jobs > population->population_number) { return FALSE; }
+	if (population->employed_number + jobs > population->population_number) return FALSE;
 	population->employed_number += jobs;
 	return TRUE;
 }
 
 // TODO TBU
-int decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
+IND_BOOL decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
 {
 	// if (population->employed_number - jobs < 0) { return FALSE; } // SHOULD NEVER HAPPEN
 	population->employed_number -= jobs;
@@ -256,7 +263,7 @@ int decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs)
 void processTickLocalPopulation(LocalPopulation* population)
 {
 	population->population_centre.processing_speed = population->population_number / CONSUMPTION_RATE_DIVISOR;
-	processTickFactory(&population->population_centre);
+	processTickFactoryLocalPopulation(&population->population_centre);
 	updateLocalPopulationOfferedPrices(population);
 }
 

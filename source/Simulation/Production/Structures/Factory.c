@@ -37,15 +37,17 @@ void assignFactoryValuesCompany(Factory* factory, const Company* company, const 
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
-		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
-		assignOrderValues(&factory->orders_in[i], factory, 0, 100); // TODO: DEF. PRICE
+		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, FACTORY_DEFAULT_STOCKPILE_QUANT);
+		factory->stockpiles_in_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
+		assignOrderValues(&factory->orders_in[i], factory, 0, 1);
 		factory->ordered_in[i] = 0;
 	}
 
 	tmp_arr = getOutputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_out_num; i++) {
 		assignStockpileValues(&factory->stockpiles_out[i], tmp_arr[i].product_type, 0);
-		assignOrderValues(&factory->orders_out[i], factory, 0, 100); // TODO: DEF. PRICE
+		factory->stockpiles_out_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
+		assignOrderValues(&factory->orders_out[i], factory, 0, 1);
 		factory->ordered_out[i] = 0;
 	}
 
@@ -71,15 +73,17 @@ void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode lo
 
 	Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
-		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, 0);
-		assignOrderValues(&factory->orders_in[i], factory, 0, 100); // TODO: DEF. PRICE
+		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, FACTORY_DEFAULT_STOCKPILE_QUANT);
+		factory->stockpiles_in_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
+		assignOrderValues(&factory->orders_in[i], factory, 0, 1);
 		factory->ordered_in[i] = 0;
 	}
 
 	tmp_arr = getOutputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_out_num; i++) {
 		assignStockpileValues(&factory->stockpiles_out[i], tmp_arr[i].product_type, 0);
-		assignOrderValues(&factory->orders_out[i], factory, 0, 100); // TODO: DEF. PRICE
+		factory->stockpiles_out_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
+		assignOrderValues(&factory->orders_out[i], factory, 0, 1);
 		factory->ordered_out[i] = 0;
 	}
 
@@ -101,6 +105,8 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	{
 		free(factory->stockpiles_in);
 		factory->stockpiles_in = NULL;
+		free(factory->stockpiles_in_max_quant);
+		factory->stockpiles_in_max_quant = NULL;
 		free(factory->orders_in);
 		factory->orders_in = NULL;
 		free(factory->ordered_in);
@@ -110,6 +116,9 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	{
 		factory->stockpiles_in = (Stockpile*) realloc(factory->stockpiles_in, factory->stockpiles_in_num * sizeof(Stockpile));
 		memset(factory->stockpiles_in, 0, factory->stockpiles_in_num * sizeof(Stockpile));
+
+		factory->stockpiles_in_max_quant = (QUANTITY_INT*) realloc(factory->stockpiles_in_max_quant, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
+		memset(factory->stockpiles_in_max_quant, 0, factory->stockpiles_in_num * sizeof(QUANTITY_INT));
 
 		factory->orders_in = (Order*) realloc(factory->orders_in, factory->stockpiles_in_num * sizeof(Order));
 		memset(factory->orders_in, 0, factory->stockpiles_in_num * sizeof(Order));
@@ -122,6 +131,8 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	{
 		free(factory->stockpiles_out);
 		factory->stockpiles_out = NULL;
+		free(factory->stockpiles_out_max_quant);
+		factory->stockpiles_out_max_quant = NULL;
 		free(factory->orders_out);
 		factory->orders_out = NULL;
 		free(factory->ordered_out);
@@ -131,6 +142,9 @@ void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionR
 	{
 		factory->stockpiles_out = (Stockpile*) realloc(factory->stockpiles_out, factory->stockpiles_out_num * sizeof(Stockpile));
 		memset(factory->stockpiles_out, 0, factory->stockpiles_out_num * sizeof(Stockpile));
+
+		factory->stockpiles_out_max_quant = (QUANTITY_INT*) realloc(factory->stockpiles_out_max_quant, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
+		memset(factory->stockpiles_out_max_quant, 0, factory->stockpiles_out_num * sizeof(QUANTITY_INT));
 
 		factory->orders_out = (Order*) realloc(factory->orders_out, factory->stockpiles_out_num * sizeof(Order));
 		memset(factory->orders_out, 0, factory->stockpiles_out_num * sizeof(Order));
@@ -292,8 +306,28 @@ void recordWithdrawFundsFactory(Factory* factory, const int funds)
 	subFromHistoryArrayAvg(&factory->profit_history, funds);
 }
 
+IND_BOOL factoryIsInputStarved(const Factory* const factory)
+{
+	for (int i = (factory->stockpiles_in_num-1); i >= 0; i--) 
+	{
+		if (factory->stockpiles_in[i].quantity == 0) return TRUE;
+	}
+	return FALSE;
+}
+
+IND_BOOL factoryIsAllOutputFull(const Factory* const factory)
+{
+	for (int i = (factory->stockpiles_out_num-1); i >= 0; i--) 
+	{
+		if (factory->stockpiles_out[i].quantity < factory->stockpiles_out_max_quant[i]) return FALSE;
+	}
+	return TRUE;
+}
+
 void __processProductionTick(Factory* factory)
 {
+	if (factoryIsAllOutputFull(factory) == TRUE) return;
+
 	// Get the most the factory can make
 	float max_processing_speed = 
 		(float)factory->processing_speed 
@@ -321,7 +355,44 @@ void __processProductionTick(Factory* factory)
 	for (int i = 0; i < factory->stockpiles_out_num; i++) 
 	{
 		processTickStockpile(&factory->stockpiles_out[i]);
-		addQuantity(&factory->stockpiles_out[i], next_processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
+
+		// Waste excess production
+		if (factory->stockpiles_out[i].quantity < factory->stockpiles_out_max_quant[i])
+		{
+			addQuantity(&factory->stockpiles_out[i], next_processing_speed * getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type));
+		}
+	}
+}
+
+void __processProductionTickLocalPopulation(Factory* factory)
+{
+	// Process the production steps
+	for (int i = 0; i < factory->stockpiles_in_num; i++) 
+	{
+		processTickStockpile(&factory->stockpiles_in[i]);
+
+		removeQuantity(
+			&factory->stockpiles_in[i], 
+			MIN(
+				factory->processing_speed * getCost(factory->productionRecipe, factory->stockpiles_in[i].product_type),
+				factory->stockpiles_in[i].quantity
+			)				
+		);
+	}
+
+	for (int i = 0; i < factory->stockpiles_out_num; i++) 
+	{
+		processTickStockpile(&factory->stockpiles_out[i]);
+
+		// Waste excess production
+		if (factory->stockpiles_out[i].quantity < factory->stockpiles_out_max_quant[i])
+		{
+			addQuantity(
+				&factory->stockpiles_out[i], 
+				factory->processing_speed 
+					* getResult(factory->productionRecipe, factory->stockpiles_out[i].product_type)
+			);
+		}
 	}
 }
 
@@ -351,6 +422,14 @@ void processTickFactory(Factory* factory)
 
 	__processProductionTick(factory);
 	__processWagePaymentTick(factory);
+}
+
+void processTickFactoryLocalPopulation(Factory* factory)
+{
+	tickHistoryArrayAvgIndex(&factory->profit_history);
+
+	__processProductionTickLocalPopulation(factory);
+	// __processWagePaymentTick(factory); TODO gov employment???
 }
 
 void cleanFactory(Factory* factory) {

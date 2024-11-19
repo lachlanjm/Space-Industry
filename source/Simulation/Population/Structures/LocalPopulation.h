@@ -23,22 +23,21 @@ struct LocalPopulation {
 #include "..\..\Markets\Structures\ProductMarket.h"
 #include "..\..\Production\Enums\Product.h"
 #include "..\..\Production\Structures\Stockpile.h"
+#include "..\..\..\Helpers\GeneralHelpers.h"
 
 #include <stdint.h>
 #include <stdio.h>
 
-#define TRUE (1)
-#define FALSE (0)
-
-#define CONSUMPTION_RATE_DIVISOR 1000
+#define CONSUMPTION_RATE_DIVISOR 100
 
 // TODO: TBU finetune AI
-#define LP_STOCKPILE_FULL 500
+#define LP_STOCKPILE_FULL 2000
 #define LP_DESIRED_SELL_STOCKPILE_ROOT 18.6 // !!MUST BE!! < STOCKPILE_FULL - ORDER_QUANTITY_MIN
 #define LP_DESIRED_BUY_STOCKPILE_ROOT 12.3
 #define LP_ORDER_QUANTITY_MIN 100
 
 #define LP_DEFAULT_PRICE 30
+#define LP_MIN_PROFIT 100 // TODO TBU
 
 void setTransportNodeCountLocalPopulationStatic(const int transport_node_count);
 int getLocalPopulationNum(void);
@@ -53,8 +52,8 @@ void loadLocalPopulationAssignOrders(LocalPopulation* population);
 void insertFundsLocalPopulation(LocalPopulation* population, const int funds);
 void withdrawFundsLocalPopulation(LocalPopulation* population, const int funds);
 
-int increaseEmployedLocalPopulation(LocalPopulation* population, const int jobs);
-int decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs);
+IND_BOOL increaseEmployedLocalPopulation(LocalPopulation* population, const int jobs);
+IND_BOOL decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs);
 
 void processTickLocalPopulation(LocalPopulation* population);
 void updateLocalPopulationOfferedPrices(LocalPopulation* population);

@@ -281,6 +281,9 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_STO_IN_ID, STOCKPILE_SAVE, factory->stockpiles_in[i].id)
 		);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_STO_IN_MAX_ID, factory->stockpiles_in_max_quant[i])
+		);
 		appendToQueue(ORDER_SAVE, &factory->orders_in[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_ORD_IN_ID, ORDER_SAVE, factory->orders_in[i].id)
@@ -295,6 +298,9 @@ static inline void saveFactory(FILE* fptr, Factory* factory)
 		appendToQueue(STOCKPILE_SAVE, &factory->stockpiles_out[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_FAC_STO_OUT_ID, STOCKPILE_SAVE, factory->stockpiles_out[i].id)
+		);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_FAC_STO_OUT_MAX_ID, factory->stockpiles_out_max_quant[i])
 		);
 		appendToQueue(ORDER_SAVE, &factory->orders_out[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,

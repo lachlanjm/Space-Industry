@@ -40,6 +40,9 @@ struct Factory
 	Stockpile* stockpiles_in;
 	Stockpile* stockpiles_out;
 
+	QUANTITY_INT* stockpiles_in_max_quant;
+	QUANTITY_INT* stockpiles_out_max_quant;
+
 	struct Order* orders_in;
 	struct Order* orders_out;
 
@@ -51,9 +54,12 @@ struct Factory
 
 #include "..\..\Management\Production\Company.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
+#include "..\..\..\Helpers\GeneralHelpers.h"
 
 #include <stdio.h>
 
+#define FACTORY_DEFAULT_STOCKPILE_MAX (2000)
+#define FACTORY_DEFAULT_STOCKPILE_QUANT (FACTORY_DEFAULT_STOCKPILE_MAX - 200)
 #define WAGE_TICK_RATE 64 // process ticks per wage tick
 
 Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
@@ -80,10 +86,14 @@ void withdrawFundsFactory(Factory* factory, const int funds);
 void recordInsertFundsFactory(Factory* factory, const int funds);
 void recordWithdrawFundsFactory(Factory* factory, const int funds);
 
+IND_BOOL factoryIsInputStarved(const Factory* const factory);
+IND_BOOL factoryIsAllOutputFull(const Factory* const factory);
+
 // TODO TBU
 void processTickFactoryStatic(void);
 // TODO TBU
 void processTickFactory(Factory* factory);
+void processTickFactoryLocalPopulation(Factory* factory);
 
 // DO NOT CLEAN ITEM (ONLY CONSTITUENTS)
 void cleanFactory(Factory* factory);

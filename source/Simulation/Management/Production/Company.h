@@ -18,18 +18,14 @@ struct Company {
 #include "..\..\Environment\Structures\MarketMap.h"
 #include "..\..\Markets\Structures\ProductMarket.h"
 #include "..\..\Markets\Structures\Order.h"
+#include "..\..\..\Helpers\GeneralHelpers.h"
 
 #include <stdint.h>
 #include <stdio.h>
 #include <math.h>
 
-#define TRUE (1)
-#define FALSE (0)
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-#define MIN(a,b) (((a) < (b)) ? (a) : (b))
-
 // TODO: TBU finetune AI
-#define CO_EMPLOYEE_MAX_INC 0.1f
+#define CO_EMPLOYEE_DELTA_FACTOR 0.1f
 
 // TODO: TBU finetune AI
 #define CO_STOCKPILE_FULL 500

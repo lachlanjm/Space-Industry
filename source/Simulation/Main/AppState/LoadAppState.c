@@ -352,6 +352,14 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 
 				addNewStructIdPtr(STOCKPILE_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->stockpiles_out[current_index]);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_IN_MAX_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->stockpiles_in_max_quant[current_index] = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_FAC_STO_OUT_MAX_ID) == 0)
+			{
+				((Factory*)current_obj_ptr->data)->stockpiles_out_max_quant[current_index] = atoi(attr_value);
+			}
 			else if (strcmp(new_data_point, SAVE_FILE_FAC_ORD_IN_ID) == 0)
 			{
 				addNewStructIdPtr(ORDER_SAVE, extractObjectId(attr_value), &((Factory*)current_obj_ptr->data)->orders_in[current_index]);

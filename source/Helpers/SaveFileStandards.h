@@ -37,6 +37,8 @@
 #define SAVE_FILE_FAC_PRO_REC_ID "productionRecipe"
 #define SAVE_FILE_FAC_STO_IN_ID "stockpiles_in"
 #define SAVE_FILE_FAC_STO_OUT_ID "stockpiles_out"
+#define SAVE_FILE_FAC_STO_IN_MAX_ID "stockpiles_in_max_quant"
+#define SAVE_FILE_FAC_STO_OUT_MAX_ID "stockpiles_out_max_quant"
 #define SAVE_FILE_FAC_ORD_IN_ID "orders_in"
 #define SAVE_FILE_FAC_ORD_OUT_ID "orders_out"
 #define SAVE_FILE_FAC_ORD_NUM_IN_ID "ordered_in"

@@ -23,15 +23,32 @@ void withdrawFundsCompany(Company* company, const int funds)
 // TODO make it actually a market
 void updateEmployeeOffers(Company* company)
 {
-	if (NULL) // TODO implement employee cutback
-	{
-		// Leftover production was too high
+	if (
+		factoryIsInputStarved(&company->controlled_factory) == TRUE
+		|| factoryIsAllOutputFull(&company->controlled_factory)
+	) {
+		const int employee_dec = MIN(
+			company->controlled_factory.current_employee_num,
+			(int)((float) company->controlled_factory.max_employee_num * CO_EMPLOYEE_DELTA_FACTOR)
+		);
+
+		if (decreaseEmployedLocalPopulation(
+			getLocalPopulationByLocation(company->controlled_factory.location), employee_dec
+		) == TRUE)
+		{
+			removeEmployees(&company->controlled_factory, employee_dec);
+		}
 	}
-	else if (company->controlled_factory.current_employee_num < company->controlled_factory.max_employee_num)
+	else if (company->controlled_factory.current_employee_num >= company->controlled_factory.max_employee_num)
+	{
+		// Can't increase worker numbers
+		// pass
+	}
+	else
 	{
 		const int employee_inc = MIN(
 			company->controlled_factory.max_employee_num - company->controlled_factory.current_employee_num,
-			(int)((float) company->controlled_factory.max_employee_num * CO_EMPLOYEE_MAX_INC)
+			(int)((float) company->controlled_factory.max_employee_num * CO_EMPLOYEE_DELTA_FACTOR)
 		);
 
 		if (increaseEmployedLocalPopulation(
@@ -57,8 +74,9 @@ void updateOfferedPrices(Company* company)
 				&company->controlled_factory, 
 				company->controlled_factory.stockpiles_in[i].product_type
 		);
+		const QUANTITY_INT stockpile_max = company->controlled_factory.stockpiles_in_max_quant[i];
 
-		if (stockpile_ordered_quantity < CO_STOCKPILE_FULL - CO_ORDER_QUANTITY_MIN)
+		if (stockpile_ordered_quantity < stockpile_max - CO_ORDER_QUANTITY_MIN)
 		{		
 			if (company->controlled_factory.orders_in[i].offer_num == 0)
 			{
@@ -70,7 +88,7 @@ void updateOfferedPrices(Company* company)
 					printf("Failed to add buy order\n");
 				}
 			}
-			company->controlled_factory.orders_in[i].offer_num = CO_STOCKPILE_FULL - stockpile_ordered_quantity;
+			company->controlled_factory.orders_in[i].offer_num = stockpile_max - stockpile_ordered_quantity;
 		}
 
 		if (company->controlled_factory.orders_in[i].offer_num > 0)
@@ -173,14 +191,15 @@ void loadCompanyAssignOrders(Company* company)
 {
 	for (int i = 0; i < company->controlled_factory.stockpiles_in_num; i++)
 	{
-		QUANTITY_INT stockpile_ordered_quantity = 
+		const QUANTITY_INT stockpile_ordered_quantity = 
 			company->controlled_factory.stockpiles_in[i].quantity
 			+ *getOrderedInQuantity(
 				&company->controlled_factory, 
 				company->controlled_factory.stockpiles_in[i].product_type
 		);
+		const QUANTITY_INT stockpile_max = company->controlled_factory.stockpiles_in_max_quant[i];
 
-		if (CO_STOCKPILE_FULL - CO_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
+		if (stockpile_max - CO_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
 		{
 			// Add to market
 			 if (addBuyOrder(
@@ -189,7 +208,7 @@ void loadCompanyAssignOrders(Company* company)
 			) {
 				printf("Failed to add buy order\n");
 			}
-			company->controlled_factory.orders_in[i].offer_num = CO_STOCKPILE_FULL - stockpile_ordered_quantity;
+			company->controlled_factory.orders_in[i].offer_num = stockpile_max - stockpile_ordered_quantity;
 		}
 		else 
 		{
