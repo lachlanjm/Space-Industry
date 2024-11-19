@@ -285,6 +285,26 @@ int resetSellOrderIndexed(ProductMarket* productMarket, int index)
 	return 0;
 }
 
+QUANTITY_INT getBuyOfferNumSum(const ProductMarket const* productMarket)
+{
+	QUANTITY_INT result = 0;
+	for (int i = 0; i < productMarket->buy_order_num; i++)
+	{
+		result += productMarket->buy_order_arr[i]->offer_num;
+	}
+	return result;
+}
+
+QUANTITY_INT getSellOfferNumSum(const ProductMarket const* productMarket)
+{
+	QUANTITY_INT result = 0;
+	for (int i = 0; i < productMarket->sell_order_num; i++)
+	{
+		result += productMarket->sell_order_arr[i]->offer_num;
+	}
+	return result;
+}
+
 void processTickProductMarket(ProductMarket* productMarket)
 {
 	tickHistoryWtdAvgArrayIndex(&productMarket->sell_hist_array);
