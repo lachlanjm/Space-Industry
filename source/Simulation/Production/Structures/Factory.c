@@ -438,6 +438,7 @@ void cleanFactory(Factory* factory) {
 		cleanOrder(&(factory->orders_in[i]));
 	}
 	free(factory->stockpiles_in);
+	free(factory->stockpiles_in_max_quant);
 	free(factory->orders_in);
 
 	for (int i = 0; i < factory->stockpiles_out_num; i++) {
@@ -445,6 +446,7 @@ void cleanFactory(Factory* factory) {
 		cleanOrder(&(factory->orders_out[i]));
 	}
 	free(factory->stockpiles_out);
+	free(factory->stockpiles_out_max_quant);
 	free(factory->orders_out);
 
 	free(factory->ordered_in);

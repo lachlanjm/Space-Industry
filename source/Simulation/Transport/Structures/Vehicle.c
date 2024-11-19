@@ -42,6 +42,12 @@ void assignDelivery(Vehicle* vehicle, const Factory* factory)
 	vehicle->end_location = factory->location;
 }
 
+void moveVehicleToNextLoc(Vehicle* vehicle)
+{
+	vehicle->current_location = getNext(vehicle->current_location, vehicle->end_location);
+	vehicle->distance_travelled = 0;
+}
+
 void stepToNextLocation(Vehicle* vehicle)
 {
 	uint_fast32_t dist_to_travel = VEHICLE_SPEED;
@@ -63,12 +69,6 @@ void stepToNextLocation(Vehicle* vehicle)
 uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
 {
 	return getNextDistance(vehicle->current_location, vehicle->end_location);
-}
-
-void moveVehicleToNextLoc(Vehicle* vehicle)
-{
-	vehicle->current_location = getNext(vehicle->current_location, vehicle->end_location);
-	vehicle->distance_travelled = 0;
 }
 
 void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_type)

@@ -56,7 +56,6 @@ IND_BOOL increaseEmployedLocalPopulation(LocalPopulation* population, const int 
 IND_BOOL decreaseEmployedLocalPopulation(LocalPopulation* population, const int jobs);
 
 void processTickLocalPopulation(LocalPopulation* population);
-void updateLocalPopulationOfferedPrices(LocalPopulation* population);
 
 void cleanLocalPopulation(LocalPopulation* population);
 

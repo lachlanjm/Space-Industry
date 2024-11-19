@@ -69,7 +69,7 @@ void assignLoadIdLogisticsManager(LogisticsManager* obj, const int id)
 }
 
 static double __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
-void update_dist_to_price_eff()
+void update_dist_to_price_eff(void)
 {
 	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
 	{
@@ -126,18 +126,6 @@ void update_dist_to_price_eff_product_filtered(int product)
 			{
 				__dist_to_price_eff__[from][to][product] = 0;
 			}
-		}
-	}
-}
-	
-void assignFreeVehicles(LogisticsManager* logisticsManager)
-{
-	for (int i = 0; i < logisticsManager->vehicles_num; i++)
-	{
-		if (logisticsManager->vehicles[i].end_location == -1)
-		{
-			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
-			if (new_contract) processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
 		}
 	}
 }
@@ -201,6 +189,18 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 
 	update_dist_to_price_eff_product_filtered(product_max);
 	return new_contract;
+}
+
+void assignFreeVehicles(LogisticsManager* logisticsManager)
+{
+	for (int i = 0; i < logisticsManager->vehicles_num; i++)
+	{
+		if (logisticsManager->vehicles[i].end_location == -1)
+		{
+			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
+			if (new_contract) processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
+		}
+	}
 }
 
 void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)

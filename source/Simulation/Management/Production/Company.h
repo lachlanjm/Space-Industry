@@ -44,8 +44,6 @@ void assignCompanyValues(Company* company, const ProductionRecipe productionReci
 void insertFundsCompany(Company* company, const int funds);
 void withdrawFundsCompany(Company* company, const int funds);
 
-void updateEmployeeOffers(Company* company);
-void updateOfferedPrices(Company* company);
 void loadCompanyAssignOrders(Company* company);
 void assignLoadIdCompany(Company* obj, const int id);
 

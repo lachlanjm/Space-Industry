@@ -32,8 +32,6 @@ void assignLoadIdVehicle(Vehicle* obj, const int id);
 void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product);
 void assignDelivery(Vehicle* vehicle, const Factory* factory);
 
-void stepToNextLocation(Vehicle* vehicle);
-void moveVehicleToNextLoc(Vehicle* vehicle);
 uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle);
 
 void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_type);
