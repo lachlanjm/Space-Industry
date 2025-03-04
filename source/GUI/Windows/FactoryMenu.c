@@ -38,7 +38,7 @@ void drawFactoryMenu(AppPlatform* platform, Factory* factory, char* name)
 
 		nk_layout_row_static(platform->ctx, 30, 200, 2);
 		nk_label(platform->ctx, "Profit:", NK_TEXT_LEFT);
-		snprintf(buffer, BUF_SIZE, "$%d", getAvgHistoryArrayAvg(&factory->profit_history));
+		snprintf(buffer, BUF_SIZE, "$%Lf", getAvgHistoryArrayAvg(&factory->profit_history));
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 		
 		nk_layout_row_static(platform->ctx, 100, 300, 1);

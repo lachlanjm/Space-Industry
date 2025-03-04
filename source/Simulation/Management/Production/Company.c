@@ -62,9 +62,9 @@ void updateEmployeeOffers(Company* company)
 
 void updateOfferedPrices(Company* company)
 {
-	const int profit = getAvgHistoryArrayAvg(&company->controlled_factory.profit_history);
-	const double profit_factor_sell = (profit>=CO_MIN_PROFIT) ? 1 : (log10((double)((2*CO_MIN_PROFIT)-profit))-1);
-	const double profit_factor_buy = (profit>=CO_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
+	const long double profit = getAvgHistoryArrayAvg(&company->controlled_factory.profit_history);
+	const long double profit_factor_sell = (profit>=CO_MIN_PROFIT) ? 1 : (log10((double)((2*CO_MIN_PROFIT)-profit))-1);
+	const long double profit_factor_buy = (profit>=CO_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
 
 	for (int i = 0; i < company->controlled_factory.stockpiles_in_num; i++)
 	{

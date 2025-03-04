@@ -44,12 +44,19 @@ AppState* newGameAppState()
 	appState->companies_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
     appState->logistics_managers_num = PRODUCTION_RECIPE_COUNT;
 
-	const int gov_count = 2;
+	const int gov_count = 2; // TMP
 	setGovernmentCountStatic(gov_count);
 	setGovernmentControlStatic(TRANSPORT_NODE_COUNT);
+	setTransportNodeCountLocalPopulationStatic(TRANSPORT_NODE_COUNT);
+	instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT);
 	for (int i = 0; i < TRANSPORT_NODE_COUNT; i++)
 	{
 		setGovernmentControlByLocation(getGovernmentByIndex(i%gov_count), i);
+	}
+	
+	for (int i = 0; i < getLocalPopulationNum(); i++)
+	{
+		assignLocalPopulationValues(i, 1000);
 	}
 
     appState->companies = (Company*) calloc(appState->companies_num, sizeof(Company));
@@ -73,14 +80,6 @@ AppState* newGameAppState()
 			i%TRANSPORT_NODE_COUNT
         );
     }
-
-	setTransportNodeCountLocalPopulationStatic(TRANSPORT_NODE_COUNT);
-	for (int i = 0; i < getLocalPopulationNum(); i++)
-	{
-		assignLocalPopulationValues(i, 1000);
-	}
-
-	instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT);
 
 	return appState;
 }

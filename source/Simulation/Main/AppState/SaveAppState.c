@@ -149,7 +149,7 @@ static inline void cleanUpQueue()
 
 static inline void saveAppStateFormat(FILE* fptr, AppState* appState)
 {
-	char* buffer[BUF_SIZE];
+	char buffer[BUF_SIZE];
 	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, APP_STATE_SAVE, 0));
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_AS_LOG_MAN_NUM, appState->logistics_managers_num)

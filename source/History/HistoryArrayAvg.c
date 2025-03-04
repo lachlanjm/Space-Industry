@@ -56,25 +56,25 @@ void setValueAtIndexHistoryArrayAvg(HistoryArrayAvg* hist_array, const int index
 	hist_array->avg = hist_array->sum / MAX_HISTORY;
 }
 
-HISTORY_INT getMaxValueHistoryArrayAvg(const HistoryArrayAvg const* hist_array)
+HISTORY_INT getMaxValueHistoryArrayAvg(const HistoryArrayAvg* const hist_array)
 {
 	HISTORY_INT result = hist_array->array[0];
 	for (int i=1;i<MAX_HISTORY;i++) if (result < hist_array->array[i]) result = hist_array->array[i];
 	return result;
 }
-HISTORY_INT getMinValueHistoryArrayAvg(const HistoryArrayAvg const* hist_array)
+HISTORY_INT getMinValueHistoryArrayAvg(const HistoryArrayAvg* const hist_array)
 {
 	HISTORY_INT result = hist_array->array[0];
 	for (int i=1;i<MAX_HISTORY;i++) if (result > hist_array->array[i]) result = hist_array->array[i];
 	return result;
 }
 
-HISTORY_SUM_INT getSumHistoryArrayAvg(const HistoryArrayAvg* hist_array)
+HISTORY_FLOAT getSumHistoryArrayAvg(const HistoryArrayAvg* hist_array)
 {
 	return hist_array->sum;
 }
 
-HISTORY_INT getAvgHistoryArrayAvg(const HistoryArrayAvg* hist_array)
+HISTORY_FLOAT getAvgHistoryArrayAvg(const HistoryArrayAvg* hist_array)
 {
 	return hist_array->avg;
 }
@@ -86,13 +86,27 @@ void tickHistoryArrayAvgIndexStatic()
 	index_base %= MAX_HISTORY;
 }
 
+static inline void recalcHistoryArraySum(HistoryArrayAvg* const hist_array)
+{
+	hist_array->sum = 0;
+	hist_array->array[index_base] = 0;
+	for (int i = 0; i < MAX_HISTORY; i++) hist_array->sum += hist_array->array[i];
+}
+
 void tickHistoryArrayAvgIndex(HistoryArrayAvg* hist_array)
 {
 	if (tick == 0)
 	{
 		// Just changed index_base forward
-		hist_array->sum -= hist_array->array[index_base];
-		hist_array->array[index_base] = 0;
+		if (ABS(hist_array->array[index_base]) >= ABS(hist_array->sum) / HISTORY_FLOAT_RECALC_FACTOR)
+		{
+			recalcHistoryArraySum(hist_array);
+		}
+		else
+		{
+			hist_array->sum -= hist_array->array[index_base];
+			hist_array->array[index_base] = 0;
+		}
 		hist_array->avg = hist_array->sum / MAX_HISTORY;
 	}
 }

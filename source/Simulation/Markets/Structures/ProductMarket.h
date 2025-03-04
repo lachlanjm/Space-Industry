@@ -52,8 +52,8 @@ int resetBuyOrderIndexed(ProductMarket* productMarket, int index);
 int resetSellOrder(ProductMarket* productMarket, Order* reset_order);
 int resetSellOrderIndexed(ProductMarket* productMarket, int index);
 
-QUANTITY_INT getBuyOfferNumSum(const ProductMarket const* productMarket);
-QUANTITY_INT getSellOfferNumSum(const ProductMarket const* productMarket);
+QUANTITY_INT getBuyOfferNumSum(const ProductMarket* const productMarket);
+QUANTITY_INT getSellOfferNumSum(const ProductMarket* const productMarket);
 
 void processTickProductMarket(ProductMarket* productMarket);
 void cleanProductMarket(ProductMarket* productMarket);

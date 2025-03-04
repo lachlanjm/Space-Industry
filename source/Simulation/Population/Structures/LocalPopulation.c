@@ -52,11 +52,11 @@ void moveLocalPopulationToStaticArray(LocalPopulation* origin, const TransportNo
 
 	for (int i = 0; i < dest->population_centre.stockpiles_in_num; i++)
 	{
-		dest->population_centre.orders_in[i].offering_factory = dest;
+		dest->population_centre.orders_in[i].offering_factory = &dest->population_centre;
 	}
 	for (int i = 0; i < dest->population_centre.stockpiles_out_num; i++)
 	{
-		dest->population_centre.orders_out[i].offering_factory = dest;
+		dest->population_centre.orders_out[i].offering_factory = &dest->population_centre;
 	}
 	
 	reassignOrderOfferingPtrs(&dest->population_centre);
@@ -73,9 +73,9 @@ void assignLoadIdLocalPopulation(LocalPopulation* obj, const int id)
 
 void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 {
-	const int profit = getAvgHistoryArrayAvg(&population->population_centre.profit_history);
-	const double profit_factor_sell = (profit>=LP_MIN_PROFIT) ? 1 : (log10((double)((2*LP_MIN_PROFIT)-profit))-1);
-	const double profit_factor_buy = (profit>=LP_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
+	const long double profit = getAvgHistoryArrayAvg(&population->population_centre.profit_history);
+	const long double profit_factor_sell = (profit>=LP_MIN_PROFIT) ? 1 : (log10((double)((2*LP_MIN_PROFIT)-profit))-1);
+	const long double profit_factor_buy = (profit>=LP_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
 
 	for (int i = 0; i < population->population_centre.stockpiles_in_num; i++)
 	{

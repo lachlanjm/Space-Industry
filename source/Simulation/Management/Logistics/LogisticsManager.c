@@ -215,7 +215,7 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 		getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]
 	);
 
-	const LogisticsContract const* new_contract = addNewLogisticsContract(
+	const LogisticsContract* const new_contract = addNewLogisticsContract(
 		logisticsManager,
 		vehicle,
 		selling_factory,

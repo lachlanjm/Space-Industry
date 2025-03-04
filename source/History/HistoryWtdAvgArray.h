@@ -10,8 +10,8 @@ typedef struct HistoryWtdAvgArray {
 	HISTORY_INT values[MAX_HISTORY];
 	HISTORY_INT weights[MAX_HISTORY];
 	HISTORY_INT averages[MAX_HISTORY];
-	HISTORY_SUM_INT sum_value;
-	HISTORY_SUM_INT sum_weight;
+	HISTORY_FLOAT sum_value;
+	HISTORY_FLOAT sum_weight;
 	HISTORY_ARRAY_ID_INT id;
 } HistoryWtdAvgArray;
 
@@ -31,15 +31,15 @@ void setWeightAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const in
 HISTORY_INT getAverageAtIndexHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array, const int index);
 void setAverageAtIndexHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array, const int index, const HISTORY_INT average);
 
-HISTORY_INT getMaxValueHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
-HISTORY_INT getMaxWeightHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
-HISTORY_INT getMaxAvgHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
-HISTORY_INT getMinValueHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
-HISTORY_INT getMinWeightHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
-HISTORY_INT getMinAvgHistoryWtdAvgArray(const HistoryWtdAvgArray const* hist_array);
+HISTORY_INT getMaxValueHistoryWtdAvgArray(const HistoryWtdAvgArray* const hist_array);
+HISTORY_INT getMaxWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* const hist_array);
+HISTORY_INT getMaxAvgHistoryWtdAvgArray(const HistoryWtdAvgArray* const hist_array);
+HISTORY_INT getMinValueHistoryWtdAvgArray(const HistoryWtdAvgArray* const hist_array);
+HISTORY_INT getMinWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* const hist_array);
+HISTORY_INT getMinAvgHistoryWtdAvgArray(const HistoryWtdAvgArray* const hist_array);
 
-HISTORY_SUM_INT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
-HISTORY_SUM_INT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
+HISTORY_FLOAT getSumValueHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
+HISTORY_FLOAT getSumWeightHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
 HISTORY_INT getAvgHistoryWtdAvgArray(const HistoryWtdAvgArray* hist_array);
 
 void tickHistoryWtdAvgArrayIndexStatic();

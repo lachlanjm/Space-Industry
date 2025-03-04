@@ -88,7 +88,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\HistoryIterator.c.o
 
 GUI_LIBS_PATH := $(GUI_PATH)\libs
 
-CFLAGS := -Wall -g -DGLEW_STATIC
+CFLAGS := -std=c23 -Wall -g -DGLEW_STATIC
 
 ifeq ($(OS),Windows_NT)
 	CFLAGS += -D_WIN64

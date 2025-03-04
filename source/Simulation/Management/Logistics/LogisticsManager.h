@@ -30,6 +30,7 @@ struct LogisticsManager
 #include "..\..\Population\Structures\Government.h"
 
 #include <stdio.h>
+#include <string.h>
 
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num, const TransportNode headquarters_location);
 void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num, const TransportNode headquarters_location);

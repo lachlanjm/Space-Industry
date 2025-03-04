@@ -86,7 +86,7 @@ Order* addNewBuyOrder(ProductMarket* productMarket, const Factory* offering_fact
 	return order;
 }
 
-static int find_index(const Order* order_arr[], const int length, const Order* order)
+static int find_index(Order* const order_arr[], const int length, const Order* order)
 {
 	for (int i = 0; i < length; i++)
 	{
@@ -304,7 +304,7 @@ int resetSellOrderIndexed(ProductMarket* productMarket, int index)
 	return 0;
 }
 
-QUANTITY_INT getBuyOfferNumSum(const ProductMarket const* productMarket)
+QUANTITY_INT getBuyOfferNumSum(const ProductMarket* const productMarket)
 {
 	QUANTITY_INT result = 0;
 	for (int i = 0; i < productMarket->buy_order_num; i++)
@@ -314,7 +314,7 @@ QUANTITY_INT getBuyOfferNumSum(const ProductMarket const* productMarket)
 	return result;
 }
 
-QUANTITY_INT getSellOfferNumSum(const ProductMarket const* productMarket)
+QUANTITY_INT getSellOfferNumSum(const ProductMarket* const productMarket)
 {
 	QUANTITY_INT result = 0;
 	for (int i = 0; i < productMarket->sell_order_num; i++)

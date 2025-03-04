@@ -48,13 +48,13 @@ void setValueAtIndexHistoryArray(HistoryArray* hist_array, const int index, cons
 	hist_array->array[(index_base + index) % MAX_HISTORY] = value;
 }
 
-HISTORY_INT getMaxValueHistoryArray(const HistoryArray const* hist_array)
+HISTORY_INT getMaxValueHistoryArray(const HistoryArray* const hist_array)
 {
 	HISTORY_INT result = hist_array->array[0];
 	for (int i=1;i<MAX_HISTORY;i++) if (result < hist_array->array[i]) result = hist_array->array[i];
 	return result;
 }
-HISTORY_INT getMinValueHistoryArray(const HistoryArray const* hist_array)
+HISTORY_INT getMinValueHistoryArray(const HistoryArray* const hist_array)
 {
 	HISTORY_INT result = hist_array->array[0];
 	for (int i=1;i<MAX_HISTORY;i++) if (result > hist_array->array[i]) result = hist_array->array[i];

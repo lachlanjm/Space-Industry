@@ -20,8 +20,8 @@ void subFromHistoryArray(HistoryArray* hist_array, const HISTORY_INT value);
 
 HISTORY_INT getValueAtIndexHistoryArray(const HistoryArray* hist_array, const int index);
 void setValueAtIndexHistoryArray(HistoryArray* hist_array, const int index, const HISTORY_INT value);
-HISTORY_INT getMaxValueHistoryArray(const HistoryArray const* hist_array);
-HISTORY_INT getMinValueHistoryArray(const HistoryArray const* hist_array);
+HISTORY_INT getMaxValueHistoryArray(const HistoryArray* const hist_array);
+HISTORY_INT getMinValueHistoryArray(const HistoryArray* const hist_array);
 
 void tickHistoryArrayIndexStatic();
 void tickHistoryArrayIndex(HistoryArray* hist_array);
