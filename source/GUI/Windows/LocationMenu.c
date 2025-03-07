@@ -27,7 +27,7 @@ void drawLocationMenu(AppPlatform* platform, TransportNode location, char* name)
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Product Markets"))
 		{
-			addNewPopupWindow(platform->first_window, PRODUCT_MARKET_LIST, &location);
+			addNewPopupWindow(platform->first_window, LOCAL_PRODUCT_MARKET_LIST, &location);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);

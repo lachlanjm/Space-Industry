@@ -5,6 +5,7 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 	switch (window->window_type)
 	{
 	case COMPANY_LIST:
+	case GLOBAL_PRODUCT_MARKET_LIST:
 	case GOVERNMENT_LIST:
 	case LOCAL_POPULATION_LIST:
 	case LOCATION_GROUP:
@@ -21,6 +22,10 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 		window->coreData.factory = coreData;
 		break;
 
+	case GLOBAL_PRODUCT_MARKET_MENU:
+		window->coreData.product = *((Product*) coreData);
+		break;
+	
 	case GOVERNMENT_MENU:
 		window->coreData.government = coreData;
 		break;
@@ -29,9 +34,13 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 		window->coreData.population = coreData;
 		break;
 
+	case LOCAL_PRODUCT_MARKET_LIST:
 	case LOCATION_MENU:
-	case PRODUCT_MARKET_LIST:
 		window->coreData.location = *((TransportNode*) coreData);
+		break;
+	
+	case LOCAL_PRODUCT_MARKET_MENU:
+		window->coreData.productMarket = coreData;
 		break;
 
 	case LOGISTICS_CONTRACT_MENU:
@@ -44,10 +53,6 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 
 	case ORDER_MENU:
 		window->coreData.order = coreData;
-		break;
-
-	case PRODUCT_MARKET_MENU:
-		window->coreData.productMarket = coreData;
 		break;
 
 	case STOCKPILE_MENU:
@@ -90,6 +95,14 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 		drawFactoryMenu(platform, window->coreData.factory, window->name);
 		break;
 	
+	case GLOBAL_PRODUCT_MARKET_LIST:
+		drawGlobalProductMarketList(platform, window->coreData.appState, window->name);
+		break;
+
+	case GLOBAL_PRODUCT_MARKET_MENU:
+		drawGlobalProductMarketMenu(platform, window->coreData.product, window->name);
+		break;
+	
 	case GOVERNMENT_LIST:
 		drawGovernmentList(platform, window->coreData.appState, window->name);
 		break;
@@ -104,6 +117,14 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 
 	case LOCAL_POPULATION_MENU:
 		drawLocalPopulationMenu(platform, window->coreData.population, window->name);
+		break;
+	
+	case LOCAL_PRODUCT_MARKET_LIST:
+		drawLocalProductMarketList(platform, window->coreData.location, window->name);
+		break;
+
+	case LOCAL_PRODUCT_MARKET_MENU:
+		drawLocalProductMarketMenu(platform, window->coreData.productMarket, window->name);
 		break;
 
 	case LOCATION_GROUP:
@@ -132,14 +153,6 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 
 	case ORDER_MENU:
 		drawOrderMenu(platform, window->coreData.order, window->name);
-		break;
-	
-	case PRODUCT_MARKET_LIST:
-		drawProductMarketList(platform, window->coreData.location, window->name);
-		break;
-
-	case PRODUCT_MARKET_MENU:
-		drawProductMarketMenu(platform, window->coreData.productMarket, window->name);
 		break;
 
 	case SIMULATION_CONTROL_MENU:

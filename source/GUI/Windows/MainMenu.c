@@ -19,6 +19,12 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Global Markets"))
+		{
+			addNewPopupWindow(platform->first_window, GLOBAL_PRODUCT_MARKET_LIST, current_app_state);
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Map"))
 		{
 			addNewPopupWindow(platform->first_window, LOCATION_GROUP, current_app_state);

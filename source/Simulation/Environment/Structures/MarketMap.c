@@ -75,8 +75,8 @@ void recordMarketProductTransactionPrice(const Product product, const QUANTITY_I
 {
 	if (product >= __product_num) return;
 	if (quantity < 0) return;
-	addToHistoryWtdAvgArray(&__market_wide_avg_buy_arr__[product], buy_price, quantity);
-	addToHistoryWtdAvgArray(&__market_wide_avg_sell_arr__[product], sell_price, quantity);
+	addToHistoryWtdAvgArray(&__market_wide_avg_buy_arr__[product], quantity * buy_price, quantity);
+	addToHistoryWtdAvgArray(&__market_wide_avg_sell_arr__[product], quantity * sell_price, quantity);
 }
 
 int getMarketBuyAvgByProduct(const Product product)
@@ -116,6 +116,7 @@ HistoryWtdAvgArray* getMarketSellHistoryWtdAvgArrByProduct(const Product product
 }
 
 static int __offer_refresh_tick = MARKET_MAP_OFFER_STAT_REFRESH_TICK_RATE;
+
 void processTickMarketMap(void)
 {
 	if (__offer_refresh_tick <= 0)
@@ -157,6 +158,9 @@ void processTickMarketMap(void)
 			__market_wide_buy_order_num_sum_arr__[y] = buy_offer_num;
 			__market_wide_sell_order_num_sum_arr__[y] = sell_offer_num;
 
+			tickHistoryWtdAvgArrayIndex(&__market_wide_avg_buy_arr__[y]);
+			tickHistoryWtdAvgArrayIndex(&__market_wide_avg_sell_arr__[y]);
+			
 			__offer_refresh_tick = MARKET_MAP_OFFER_STAT_REFRESH_TICK_RATE;
 		}
 	}
@@ -168,6 +172,8 @@ void processTickMarketMap(void)
 			{
 				processTickProductMarket(&__product_market_at_location_arr__[x][y]);
 			}
+			tickHistoryWtdAvgArrayIndex(&__market_wide_avg_buy_arr__[y]);
+			tickHistoryWtdAvgArrayIndex(&__market_wide_avg_sell_arr__[y]);
 		}
 	}
 	__offer_refresh_tick--;

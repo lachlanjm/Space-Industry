@@ -1,6 +1,6 @@
-#include "ProductMarketMenu.h"
+#include "LocalProductMarketMenu.h"
 
-void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, char* name)
+void drawLocalProductMarketMenu(AppPlatform* const platform, ProductMarket* const productMarket, const char* const name)
 {
 	if (nk_begin_titled(platform->ctx, name, "Product Market", nk_rect(50, 50, 350, 350),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
@@ -13,6 +13,22 @@ void drawProductMarketMenu(AppPlatform* platform, ProductMarket* productMarket, 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Product: ", NK_TEXT_LEFT);
 		nk_label(platform->ctx, getNameProduct(productMarket->product_type), NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_label(platform->ctx, "Location: ", NK_TEXT_LEFT);
+		if (nk_button_label(platform->ctx, getNameTransportNode(productMarket->location)))
+		{
+			const TransportNode loc = productMarket->location;
+			addNewPopupWindow(platform->first_window, LOCATION_MENU, &loc);
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_label(platform->ctx, "Global Market: ", NK_TEXT_LEFT);
+		if (nk_button_label(platform->ctx, getNameProduct(productMarket->product_type)))
+		{
+			const Product prod = productMarket->product_type;
+			addNewPopupWindow(platform->first_window, GLOBAL_PRODUCT_MARKET_MENU, &prod);
+		}
 
 		nk_layout_row_static(platform->ctx, 30, 150, 2);
 		nk_label(platform->ctx, "Average Buy Price: ", NK_TEXT_LEFT);

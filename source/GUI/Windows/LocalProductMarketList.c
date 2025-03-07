@@ -1,6 +1,6 @@
-#include "ProductMarketList.h"
+#include "LocalProductMarketList.h"
 
-void drawProductMarketList(AppPlatform* platform, TransportNode location, char* name)
+void drawLocalProductMarketList(AppPlatform* const platform, const TransportNode location, const char* const name)
 {
 	if (nk_begin_titled(platform->ctx, name, "Product Market List", nk_rect(50, 50, 250, 250),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
@@ -21,7 +21,7 @@ void drawProductMarketList(AppPlatform* platform, TransportNode location, char* 
 			snprintf(buffer, BUF_SIZE, "%s", getNameProduct((Product) i)); // Work around hardware issue TODO
 			if (nk_button_label(platform->ctx, buffer))
 			{
-				addNewPopupWindow(platform->first_window, PRODUCT_MARKET_MENU, getProductMarketAtLocation(location, (Product) i));
+				addNewPopupWindow(platform->first_window, LOCAL_PRODUCT_MARKET_MENU, getProductMarketAtLocation(location, (Product) i));
 			}
 		}
 	}
