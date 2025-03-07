@@ -2,7 +2,9 @@
 
 void drawLocationMenu(AppPlatform* platform, TransportNode location, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Location", nk_rect(50, 50, 250, 250),
+	if (nk_begin_titled(platform->ctx, name, "Location", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -15,19 +17,28 @@ void drawLocationMenu(AppPlatform* platform, TransportNode location, char* name)
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Controlling Government"))
 		{
-			addNewPopupWindow(platform->first_window, GOVERNMENT_MENU, getGovernmentByLocation(location));
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, GOVERNMENT_MENU, getGovernmentByLocation(location));
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Local Population"))
 		{
-			addNewPopupWindow(platform->first_window, LOCAL_POPULATION_MENU, getLocalPopulationByLocation(location));
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, LOCAL_POPULATION_MENU, getLocalPopulationByLocation(location));
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Product Markets"))
 		{
-			addNewPopupWindow(platform->first_window, LOCAL_PRODUCT_MARKET_LIST, &location);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, LOCAL_PRODUCT_MARKET_LIST, &location);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
@@ -39,7 +50,10 @@ void drawLocationMenu(AppPlatform* platform, TransportNode location, char* name)
 				nk_layout_row_static(platform->ctx, 30, 100, 1);
 				if (nk_button_label(platform->ctx, getNameTransportNode((TransportNode) i)))
 				{
-					addNewPopupWindow(platform->first_window, LOCATION_MENU, (TransportNode*) &i);
+					const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+					const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+					setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+					addNewPopupWindow(platform, LOCATION_MENU, (TransportNode*) &i);
 				}
 			}
 		}

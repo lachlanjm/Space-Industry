@@ -32,7 +32,6 @@ typedef struct PopupWindow {
 	WindowTypes window_type;
 	char name[BUF_SIZE];
 
-	void* struct_ptr;
 	union CoreData
 	{
 		AppState* appState;
@@ -56,7 +55,7 @@ typedef struct PopupWindow {
 
 void assignPopupWindowValues(PopupWindow* window, const WindowTypes window_type, void* coreData);
 void drawPopupWindow(PopupWindow* window, AppPlatform* platform);
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, const WindowTypes window_type, void* coreData);
+PopupWindow* addNewPopupWindow(AppPlatform* const platform, const WindowTypes window_type, void* coreData);
 void removePopupWindow(PopupWindow* old_window);
 
 

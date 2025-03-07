@@ -8,6 +8,24 @@
 static void error_callback(int e, const char *d)
 {printf("Error %d: %s\n", e, d);}
 
+void setParentDimensions(AppPlatform* const platform, const float parent_x, const float parent_y, const float parent_w, const float parent_h)
+{
+	platform->new_win_info.parent_x = parent_x;
+	platform->new_win_info.parent_y = parent_y;
+	platform->new_win_info.parent_w = parent_w;
+	platform->new_win_info.parent_h = parent_h;
+}
+
+// results stored in AppPlatform.new_win_info.(child_x | child_y | child_w | child_h)
+void calcChildPosition(AppPlatform* const platform, const float child_w, const float child_h)
+{
+	// TODO
+	platform->new_win_info.child_x = platform->new_win_info.parent_x;
+	platform->new_win_info.child_y = platform->new_win_info.parent_y;
+	platform->new_win_info.child_w = child_w;
+	platform->new_win_info.child_h = child_h;
+}
+
 int main(int argc, char* argv[])
 {
 	if (argc < 2)
@@ -166,7 +184,7 @@ void resetPlatform(AppPlatform* platform)
 	clearPopupWindows(platform);
 	platform->first_window = calloc(1, sizeof(PopupWindow));
 	assignPopupWindowValues(platform->first_window, MAIN_MENU, platform->current_app_state);
-	addNewPopupWindow(platform->first_window, SIMULATION_CONTROL_MENU, NULL);
+	addNewPopupWindow(platform, SIMULATION_CONTROL_MENU, NULL);
 }
 
 int closeApp(AppState* appState)

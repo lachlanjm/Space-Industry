@@ -2,7 +2,9 @@
 
 void drawGlobalProductMarketMenu(AppPlatform* const platform, const Product product, const char* const name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Global Product Market", nk_rect(50, 50, 350, 350),
+	if (nk_begin_titled(platform->ctx, name, "Global Product Market", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{

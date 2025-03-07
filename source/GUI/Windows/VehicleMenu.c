@@ -2,7 +2,9 @@
 
 void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Vehicle", nk_rect(50, 50, 400, 250),
+	if (nk_begin_titled(platform->ctx, name, "Vehicle", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -36,7 +38,10 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Stockpile"))
 		{
-			addNewPopupWindow(platform->first_window, STOCKPILE_MENU, &vehicle->stockpile);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, STOCKPILE_MENU, &vehicle->stockpile);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 150, 1);
@@ -44,7 +49,10 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 		{
 			if (nk_button_label(platform->ctx, "End Factory"))
 			{
-				addNewPopupWindow(platform->first_window, FACTORY_MENU, vehicle->end_factory);
+				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+				addNewPopupWindow(platform, FACTORY_MENU, vehicle->end_factory);
 			}
 		}
 		else

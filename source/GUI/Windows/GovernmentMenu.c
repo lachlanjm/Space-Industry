@@ -2,7 +2,9 @@
 
 void drawGovernmentMenu(AppPlatform* const platform, Government* const government, const char* const name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Government", nk_rect(50, 50, 450, 600),
+	if (nk_begin_titled(platform->ctx, name, "Government", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -32,7 +34,10 @@ void drawGovernmentMenu(AppPlatform* const platform, Government* const governmen
 			nk_layout_row_static(platform->ctx, 30, 200, 3);
 			if (nk_button_label(platform->ctx, "Government"))
 			{
-				addNewPopupWindow(platform->first_window, GOVERNMENT_MENU, other_gov);
+				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+				addNewPopupWindow(platform, GOVERNMENT_MENU, other_gov);
 			}
 			
 			snprintf(buffer, BUF_SIZE, "%.3f%%", (float)government->import_tariffs[i] / 1000.0f);

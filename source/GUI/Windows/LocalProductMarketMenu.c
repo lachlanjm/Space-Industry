@@ -2,7 +2,9 @@
 
 void drawLocalProductMarketMenu(AppPlatform* const platform, ProductMarket* const productMarket, const char* const name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Product Market", nk_rect(50, 50, 350, 350),
+	if (nk_begin_titled(platform->ctx, name, "Product Market", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -19,7 +21,10 @@ void drawLocalProductMarketMenu(AppPlatform* const platform, ProductMarket* cons
 		if (nk_button_label(platform->ctx, getNameTransportNode(productMarket->location)))
 		{
 			const TransportNode loc = productMarket->location;
-			addNewPopupWindow(platform->first_window, LOCATION_MENU, &loc);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, LOCATION_MENU, &loc);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
@@ -27,7 +32,10 @@ void drawLocalProductMarketMenu(AppPlatform* const platform, ProductMarket* cons
 		if (nk_button_label(platform->ctx, getNameProduct(productMarket->product_type)))
 		{
 			const Product prod = productMarket->product_type;
-			addNewPopupWindow(platform->first_window, GLOBAL_PRODUCT_MARKET_MENU, &prod);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, GLOBAL_PRODUCT_MARKET_MENU, &prod);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 150, 2);
@@ -79,7 +87,10 @@ void drawLocalProductMarketMenu(AppPlatform* const platform, ProductMarket* cons
 			nk_layout_row_static(platform->ctx, 30, 150, 1);
 			if (nk_button_label(platform->ctx, "Highest Buy Order"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->buy_order_arr[0]);
+				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+				addNewPopupWindow(platform, ORDER_MENU, productMarket->buy_order_arr[0]);
 			}
 		}
 		if (productMarket->sell_order_arr_size > 0)
@@ -87,7 +98,10 @@ void drawLocalProductMarketMenu(AppPlatform* const platform, ProductMarket* cons
 			nk_layout_row_static(platform->ctx, 30, 150, 1);
 			if (nk_button_label(platform->ctx, "Lowest Sell Order"))
 			{
-				addNewPopupWindow(platform->first_window, ORDER_MENU, productMarket->sell_order_arr[0]);
+				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+				addNewPopupWindow(platform, ORDER_MENU, productMarket->sell_order_arr[0]);
 			}
 		}
 	}

@@ -2,7 +2,9 @@
 
 void drawLogisticsContractMenu(AppPlatform* platform, LogisticsContract* logisticsContract, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Logistics Contract", nk_rect(50, 50, 250, 250),
+	if (nk_begin_titled(platform->ctx, name, "Logistics Contract", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -12,21 +14,30 @@ void drawLogisticsContractMenu(AppPlatform* platform, LogisticsContract* logisti
 		nk_label(platform->ctx, "Vehicle: ", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, "Show"))
 		{
-			addNewPopupWindow(platform->first_window, VEHICLE_MENU, logisticsContract->assigned_vehicle);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, VEHICLE_MENU, logisticsContract->assigned_vehicle);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Selling factory: ", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, "Show"))
 		{
-			addNewPopupWindow(platform->first_window, FACTORY_MENU, logisticsContract->selling_factory);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, FACTORY_MENU, logisticsContract->selling_factory);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Buying Factory: ", NK_TEXT_LEFT);
 		if (nk_button_label(platform->ctx, "Show"))
 		{
-			addNewPopupWindow(platform->first_window, FACTORY_MENU, logisticsContract->buying_factory);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, FACTORY_MENU, logisticsContract->buying_factory);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);

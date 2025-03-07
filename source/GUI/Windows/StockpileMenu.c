@@ -4,7 +4,9 @@ static HistoryIterator* hist_iter;
 static HISTORY_INT history_value;
 void drawStockpileMenu(AppPlatform* platform, Stockpile* stockpile, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Stockpile", nk_rect(50, 50, 250, 150),
+	if (nk_begin_titled(platform->ctx, name, "Stockpile", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{

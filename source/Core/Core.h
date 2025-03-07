@@ -43,7 +43,6 @@ typedef enum AppTickRate AppTickRate;
 #include "..\GUI\Windows\SaveFileMenu.h"
 
 #define APP_WINDOW_STR "Space Industry"
-#define NUMBER_OF_ITERATIONS 100 // TEMPORARY: TBU
 
 // min. ms between ticks
 enum AppTickRate {
@@ -62,19 +61,37 @@ enum AppPlatformFlags {
 	AP_FLAG_CLOSE = 8
 };
 
+struct NewWindowInfo {
+	float parent_x;
+	float parent_y;
+	float parent_w;
+	float parent_h;
+	float child_x;
+	float child_y;
+	float child_w;
+	float child_h;
+};
+
 struct AppPlatform {
 	int width;
 	int height;
+
 	uint8_t flags;
 	struct nk_colorf bg;
 	struct nk_context *ctx;
 	char* app_dir_path;
+
+	struct NewWindowInfo new_win_info;
+
 	PopupWindow* first_window;
 	AppState* current_app_state;
 	AppTickRate tick_time;
 };
 
 int main(int argc, char* argv[]);
+
+void setParentDimensions(AppPlatform* const platform, const float parent_x, const float parent_y, const float parent_w, const float parent_h);
+void calcChildPosition(AppPlatform* const platform, const float child_w, const float child_h);
 
 void runAppPlatform(AppPlatform* platform, GLFWwindow *win);
 void clearPopupWindows(AppPlatform* platform);

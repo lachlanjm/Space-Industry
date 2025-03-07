@@ -9,37 +9,55 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Companies"))
 		{
-			addNewPopupWindow(platform->first_window, COMPANY_LIST, current_app_state);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, COMPANY_LIST, current_app_state);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Governments"))
 		{
-			addNewPopupWindow(platform->first_window, GOVERNMENT_LIST, current_app_state);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, GOVERNMENT_LIST, current_app_state);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Global Markets"))
 		{
-			addNewPopupWindow(platform->first_window, GLOBAL_PRODUCT_MARKET_LIST, current_app_state);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, GLOBAL_PRODUCT_MARKET_LIST, current_app_state);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Map"))
 		{
-			addNewPopupWindow(platform->first_window, LOCATION_GROUP, current_app_state);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, LOCATION_GROUP, current_app_state);
 		}
 			
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Logistics"))
 		{
-			addNewPopupWindow(platform->first_window, LOGISTICS_MANAGER_LIST, current_app_state);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, LOGISTICS_MANAGER_LIST, current_app_state);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Populations"))
 		{
-			addNewPopupWindow(platform->first_window, LOCAL_POPULATION_LIST, current_app_state);
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, LOCAL_POPULATION_LIST, current_app_state);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);

@@ -69,6 +69,100 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 	}
 }
 
+static void setWindowSize(AppPlatform* const platform, const WindowTypes window_type)
+{
+	switch (window_type)
+	{
+	case COMPANY_LIST:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case COMPANY_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	case FACTORY_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	case GLOBAL_PRODUCT_MARKET_LIST:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case GLOBAL_PRODUCT_MARKET_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	case GOVERNMENT_LIST:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case GOVERNMENT_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	case LOCAL_POPULATION_LIST:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOCAL_POPULATION_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	case LOCAL_PRODUCT_MARKET_LIST:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOCAL_PRODUCT_MARKET_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOCATION_GROUP:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOCATION_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOGISTICS_CONTRACT_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOGISTICS_MANAGER_LIST:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case LOGISTICS_MANAGER_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	case MAIN_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case ORDER_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case SIMULATION_CONTROL_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case STOCKPILE_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+
+	case VEHICLE_MENU:
+		calcChildPosition(platform, 100, 100);
+		break;
+	
+	default:
+		calcChildPosition(platform, 100, 100);
+		break;
+	}
+}
+
 void assignPopupWindowValues(PopupWindow* window, const WindowTypes window_type, void* coreData)
 {
 	static int id = 0;
@@ -182,12 +276,13 @@ static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window)
 	new_window->prev = base_window;
 }
 
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, const WindowTypes window_type, void* coreData)
+PopupWindow* addNewPopupWindow(AppPlatform* const platform, const WindowTypes window_type, void* coreData)
 {
 	PopupWindow* new_window = calloc(1, sizeof(PopupWindow));
 
 	assignPopupWindowValues(new_window, window_type, coreData);
-	appendPopupWindow(first_window, new_window);
+	setWindowSize(platform, window_type);
+	appendPopupWindow(platform->first_window, new_window);
 
 	return new_window;
 }

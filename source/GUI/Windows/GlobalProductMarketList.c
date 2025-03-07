@@ -2,7 +2,9 @@
 
 void drawGlobalProductMarketList(AppPlatform* const platform, AppState* const current_app_state, const char* const name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Global Product Market List", nk_rect(50, 50, 250, 250),
+	if (nk_begin_titled(platform->ctx, name, "Global Product Market List", 
+		nk_rect(platform->new_win_info.child_x, platform->new_win_info.child_y,
+			platform->new_win_info.child_w, platform->new_win_info.child_h),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -18,7 +20,10 @@ void drawGlobalProductMarketList(AppPlatform* const platform, AppState* const cu
 			snprintf(buffer, BUF_SIZE, "%s", getNameProduct(prod)); // Work around hardware issue TODO
 			if (nk_button_label(platform->ctx, buffer))
 			{
-				addNewPopupWindow(platform->first_window, GLOBAL_PRODUCT_MARKET_MENU, &prod);
+				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+				addNewPopupWindow(platform, GLOBAL_PRODUCT_MARKET_MENU, &prod);
 			}
 		}
 	}
