@@ -2,7 +2,7 @@
 
 void drawFactoryList(AppPlatform* platform, AppState* current_app_state, char* name)
 {
-	if (nk_begin_titled(platform->ctx, name, "Factory List", nk_rect(50, 50, 450, 500),
+	if (nk_begin_titled(platform->ctx, name, "Factory List TODO CHANGE TO COMPANIES", nk_rect(50, 50, 450, 500),
 		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE
 		|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
@@ -12,10 +12,10 @@ void drawFactoryList(AppPlatform* platform, AppState* current_app_state, char* n
 		for (int i = 0; i < current_app_state->companies_num; i++)
 		{
 			nk_layout_row_static(platform->ctx, 30, 200, 2);
-			nk_label(platform->ctx, getNameProductionRecipe(current_app_state->companies[i].controlled_factory.productionRecipe), NK_TEXT_LEFT);
+			nk_label(platform->ctx, getNameProductionRecipe(current_app_state->companies[i].controlled_factories[0]->productionRecipe), NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))
 			{
-				addNewPopupWindow(platform->first_window, FACTORY_MENU, &(current_app_state->companies[i].controlled_factory));
+				addNewPopupWindow(platform->first_window, FACTORY_MENU, current_app_state->companies[i].controlled_factories[0]);
 			}
 		}
 		

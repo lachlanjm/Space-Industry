@@ -273,6 +273,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				}
 
 				addNewStructIdPtr(COMPANY_SAVE, extractObjectId(attr_value), &((AppState*)current_obj_ptr->data)->companies[current_index]);
+				assignNewCompanyValues(&((AppState*)current_obj_ptr->data)->companies[current_index]);
 
 				current_index++;
 			}
@@ -341,8 +342,9 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_CO_CON_FAC_ID);
 					current_index = 0;
 				}
-
-				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), &((Company*)current_obj_ptr->data)->controlled_factory);
+				
+				const Factory* new_fact = loadAddNewFactoryToCompany((Company*)current_obj_ptr->data);
+				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), new_fact);
 
 				current_index++;
 			}

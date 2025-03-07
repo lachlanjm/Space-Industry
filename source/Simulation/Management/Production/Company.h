@@ -8,7 +8,8 @@ typedef struct Company Company;
 #include "..\..\Production\Structures\Factory.h"
 
 struct Company {
-	Factory controlled_factory;
+	int controlled_factories_num;
+	Factory** controlled_factories;
 
 	int wealth;
 
@@ -25,7 +26,7 @@ struct Company {
 #include <math.h>
 
 // TODO: TBU finetune AI
-#define CO_EMPLOYEE_DELTA_FACTOR 0.1f
+#define CO_EMPLOYEE_DELTA_FACTOR 0.05f
 
 // TODO: TBU finetune AI
 #define CO_STOCKPILE_FULL 500
@@ -34,20 +35,20 @@ struct Company {
 #define CO_ORDER_QUANTITY_MIN 100
 
 #define CO_MIN_PROFIT 100
-#define CO_MIN_PROFIT_FACTOR_BUY 1.001
-#define CO_MIN_PROFIT_FACTOR_SELL 1.002
 
 #define CO_DEFAULT_PRICE 100
 
-void assignCompanyValues(Company* company, const ProductionRecipe productionRecipe, const TransportNode location);
+void assignNewCompanyValues(Company* const company);
+void addNewFactoryToCompany(Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
+Factory* loadAddNewFactoryToCompany(Company* const company);
 
-void insertFundsCompany(Company* company, const int funds);
-void withdrawFundsCompany(Company* company, const int funds);
+void insertFundsCompany(Company* const company, const int funds);
+void withdrawFundsCompany(Company* const company, const int funds);
 
-void loadCompanyAssignOrders(Company* company);
-void assignLoadIdCompany(Company* obj, const int id);
+void loadCompanyAssignOrders(Company* const company);
+void assignLoadIdCompany(Company* const obj, const int id);
 
-void processTickCompany(Company* company);
+void processTickCompany(Company* const company);
 
 void cleanCompany(Company* company);
 

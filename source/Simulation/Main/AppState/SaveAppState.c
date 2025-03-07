@@ -229,13 +229,19 @@ static inline void saveCompany(FILE* fptr, Company* company)
 {
 	char buffer[BUF_SIZE];
 	writeToFile(fptr, NEW_STRUCT_WRITE, getSaveFormatName(buffer, COMPANY_SAVE, company->id));
-	appendToQueue(FACTORY_SAVE, &company->controlled_factory);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_CO_WTH_ID, company->wealth)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute(buffer, SAVE_FILE_CO_CON_FAC_ID, FACTORY_SAVE, company->controlled_factory.id)
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_CO_CON_FAC_NUM_ID, company->controlled_factories_num)
 	);
+	for (int i = 0; i < company->controlled_factories_num; i++)
+	{
+		appendToQueue(FACTORY_SAVE, company->controlled_factories[i]);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_CO_CON_FAC_ID, FACTORY_SAVE, company->controlled_factories[i]->id)
+		);
+	}
 }
 
 static inline void saveFactory(FILE* fptr, Factory* factory)

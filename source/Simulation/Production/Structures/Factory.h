@@ -63,9 +63,10 @@ struct Factory
 
 #define FACTORY_WAGE_TICK_RATE (10)
 
-Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location);
-void assignFactoryValuesCompany(Factory* factory, const Company* company, const ProductionRecipe productionRecipe, const TransportNode location);
-void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode location);
+Factory* newFactoryCompany(const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
+Factory* loadNewFactoryCompany(void);
+void assignFactoryValuesCompany(Factory* const factory, const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
+void assignFactoryValuesLocalPopulation(Factory* const factory, const TransportNode location);
 
 void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe);
 void assignLoadIdFactory(Factory* obj, const int id);

@@ -3,16 +3,23 @@
 static FACTORY_ID_INT id_next = 0;
 static int wage_tick = 0;
 
-Factory* newFactory(const ProductionRecipe productionRecipe, const TransportNode location)
+Factory* newFactoryCompany(const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location)
 {
 	Factory* factory = (Factory*) calloc(1, sizeof(Factory));
 
-	assignFactoryValuesCompany(factory, NULL, productionRecipe, location); // TODO make this better
+	assignFactoryValuesCompany(factory, company, productionRecipe, location);
 
 	return factory;
 }
 
-void assignFactoryValuesCompany(Factory* factory, const Company* company, const ProductionRecipe productionRecipe, const TransportNode location)
+Factory* loadNewFactoryCompany(void)
+{
+	Factory* factory = (Factory*) calloc(1, sizeof(Factory));
+
+	return factory;
+}
+
+void assignFactoryValuesCompany(Factory* const factory, const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location)
 {
 	loadFactoryConstructor(factory, productionRecipe);
 
@@ -55,7 +62,7 @@ void assignFactoryValuesCompany(Factory* factory, const Company* company, const 
 	factory->id = id_next++;
 }
 
-void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode location)
+void assignFactoryValuesLocalPopulation(Factory* const factory, const TransportNode location)
 {
 	const ProductionRecipe productionRecipe = Population_Consumption;
 	loadFactoryConstructor(factory, productionRecipe);
@@ -94,6 +101,9 @@ void assignFactoryValuesLocalPopulation(Factory* factory, const TransportNode lo
 void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe)
 {
 	factory->productionRecipe = productionRecipe;
+
+	factory->processing_speed = getBaseProcessingSpeed(productionRecipe);
+	factory->leftover_production = 0.0;
 
 	const int old_in_num = factory->stockpiles_in_num;
 	const int old_out_num = factory->stockpiles_out_num;

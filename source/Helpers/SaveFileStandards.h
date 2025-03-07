@@ -35,7 +35,8 @@
 #define SAVE_FILE_AS_MAR_SELL_AVG_ID "market_sell_avg"
 
 #define SAVE_FILE_CO_WTH_ID "wealth"
-#define SAVE_FILE_CO_CON_FAC_ID "controlled_factory"
+#define SAVE_FILE_CO_CON_FAC_NUM_ID "controlled_factories_num"
+#define SAVE_FILE_CO_CON_FAC_ID "controlled_factories"
 
 #define SAVE_FILE_FAC_PRO_REC_ID "productionRecipe"
 #define SAVE_FILE_FAC_STO_IN_ID "stockpiles_in"

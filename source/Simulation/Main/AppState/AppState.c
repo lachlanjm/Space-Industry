@@ -62,11 +62,12 @@ AppState* newGameAppState()
     appState->companies = (Company*) calloc(appState->companies_num, sizeof(Company));
     for (int i = 0; i < appState->companies_num; i++) // LEAVE POP CONSUMPTION
     {
-        assignCompanyValues(
-            &appState->companies[i],
-            i % (PRODUCTION_RECIPE_COUNT - 1),
-            i % (TRANSPORT_NODE_COUNT)
-        );
+        assignNewCompanyValues(&appState->companies[i]);
+		addNewFactoryToCompany(
+			&appState->companies[i],
+			i % (PRODUCTION_RECIPE_COUNT - 1),
+			i % (TRANSPORT_NODE_COUNT)
+		);
     }
 
     appState->logistics_managers_next_process_tick_index = 0;
