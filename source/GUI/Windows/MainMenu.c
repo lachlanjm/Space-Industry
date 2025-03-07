@@ -7,9 +7,15 @@ void drawMainMenu(AppPlatform* platform, AppState* current_app_state, char* name
 		NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
-		if (nk_button_label(platform->ctx, "Factories"))
+		if (nk_button_label(platform->ctx, "Companies"))
 		{
-			addNewPopupWindow(platform->first_window, FACTORY_LIST, current_app_state);
+			addNewPopupWindow(platform->first_window, COMPANY_LIST, current_app_state);
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Governments"))
+		{
+			addNewPopupWindow(platform->first_window, GOVERNMENT_LIST, current_app_state);
 		}
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);

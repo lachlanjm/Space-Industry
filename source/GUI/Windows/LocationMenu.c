@@ -13,6 +13,18 @@ void drawLocationMenu(AppPlatform* platform, TransportNode location, char* name)
 		nk_label(platform->ctx, getNameTransportNode(location), NK_TEXT_LEFT);
 
 		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Controlling Government"))
+		{
+			addNewPopupWindow(platform->first_window, GOVERNMENT_MENU, getGovernmentByLocation(location));
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Local Population"))
+		{
+			addNewPopupWindow(platform->first_window, LOCAL_POPULATION_MENU, getLocalPopulationByLocation(location));
+		}
+
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
 		if (nk_button_label(platform->ctx, "Product Markets"))
 		{
 			addNewPopupWindow(platform->first_window, PRODUCT_MARKET_LIST, &location);

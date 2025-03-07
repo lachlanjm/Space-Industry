@@ -61,9 +61,13 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\ProductionRecipe.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Factory.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Stockpile.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Vehicle.c.o
+
 OBJ_FILES += $(BUILD_OBJ_PATH)\PopupWindow.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\CompanyList.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\CompanyMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryMenu.c.o
-OBJ_FILES += $(BUILD_OBJ_PATH)\FactoryList.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\GovernmentList.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\GovernmentMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LoadFileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocalPopulationList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocalPopulationMenu.c.o

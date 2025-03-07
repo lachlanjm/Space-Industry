@@ -3,8 +3,11 @@
 
 typedef struct PopupWindow PopupWindow;
 
-#include "..\Windows\FactoryList.h"
+#include "..\Windows\CompanyList.h"
+#include "..\Windows\CompanyMenu.h"
 #include "..\Windows\FactoryMenu.h"
+#include "..\Windows\GovernmentList.h"
+#include "..\Windows\GovernmentMenu.h"
 #include "..\Windows\LocalPopulationList.h"
 #include "..\Windows\LocalPopulationMenu.h"
 #include "..\Windows\LocationGroup.h"
@@ -31,7 +34,9 @@ typedef struct PopupWindow {
 	union CoreData
 	{
 		AppState* appState;
+		Company* company;
 		Factory* factory;
+		Government* government;
 		LocalPopulation* population;
 		TransportNode location;
 		LogisticsContract* logisticsContract;

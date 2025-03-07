@@ -1,12 +1,11 @@
 #include "PopupWindow.h"
 
-static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window);
-
 static void castCoreData(PopupWindow* window, const WindowTypes window_type, void* coreData)
 {
 	switch (window->window_type)
 	{
-	case FACTORY_LIST:
+	case COMPANY_LIST:
+	case GOVERNMENT_LIST:
 	case LOCAL_POPULATION_LIST:
 	case LOCATION_GROUP:
 	case LOGISTICS_MANAGER_LIST:
@@ -14,8 +13,16 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 		window->coreData.appState = coreData;
 		break;
 	
+	case COMPANY_MENU:
+		window->coreData.company = coreData;
+		break;
+	
 	case FACTORY_MENU:
 		window->coreData.factory = coreData;
+		break;
+
+	case GOVERNMENT_MENU:
+		window->coreData.government = coreData;
 		break;
 
 	case LOCAL_POPULATION_MENU:
@@ -71,12 +78,24 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 {
 	switch (window->window_type)
 	{
-	case FACTORY_LIST:
-		drawFactoryList(platform, window->coreData.appState, window->name);
+	case COMPANY_LIST:
+		drawCompanyList(platform, window->coreData.appState, window->name);
+		break;
+
+	case COMPANY_MENU:
+		drawCompanyMenu(platform, window->coreData.company, window->name);
 		break;
 	
 	case FACTORY_MENU:
 		drawFactoryMenu(platform, window->coreData.factory, window->name);
+		break;
+	
+	case GOVERNMENT_LIST:
+		drawGovernmentList(platform, window->coreData.appState, window->name);
+		break;
+
+	case GOVERNMENT_MENU:
+		drawGovernmentMenu(platform, window->coreData.government, window->name);
 		break;
 	
 	case LOCAL_POPULATION_LIST:
@@ -140,16 +159,6 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 	}
 }
 
-PopupWindow* addNewPopupWindow(PopupWindow* first_window, const WindowTypes window_type, void* coreData)
-{
-	PopupWindow* new_window = calloc(1, sizeof(PopupWindow));
-
-	assignPopupWindowValues(new_window, window_type, coreData);
-	appendPopupWindow(first_window, new_window);
-
-	return new_window;
-}
-
 static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window)
 {
 	while(base_window->next != NULL)
@@ -158,6 +167,16 @@ static void appendPopupWindow(PopupWindow* base_window, PopupWindow* new_window)
 	}
 	base_window->next = new_window;
 	new_window->prev = base_window;
+}
+
+PopupWindow* addNewPopupWindow(PopupWindow* first_window, const WindowTypes window_type, void* coreData)
+{
+	PopupWindow* new_window = calloc(1, sizeof(PopupWindow));
+
+	assignPopupWindowValues(new_window, window_type, coreData);
+	appendPopupWindow(first_window, new_window);
+
+	return new_window;
 }
 
 void removePopupWindow(PopupWindow* old_window)
