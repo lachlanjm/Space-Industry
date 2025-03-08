@@ -19,11 +19,37 @@ void setParentDimensions(AppPlatform* const platform, const float parent_x, cons
 // results stored in AppPlatform.new_win_info.(child_x | child_y | child_w | child_h)
 void calcChildPosition(AppPlatform* const platform, const float child_w, const float child_h)
 {
-	// TODO
-	platform->new_win_info.child_x = platform->new_win_info.parent_x;
-	platform->new_win_info.child_y = platform->new_win_info.parent_y;
 	platform->new_win_info.child_w = child_w;
 	platform->new_win_info.child_h = child_h;
+
+	if (platform->new_win_info.parent_x + platform->new_win_info.parent_w + child_w < platform->width)
+	{
+		platform->new_win_info.child_x = platform->new_win_info.parent_x + platform->new_win_info.parent_w;
+	}
+	else if (platform->new_win_info.parent_x - child_w > 0)
+	{
+		platform->new_win_info.child_x = platform->new_win_info.parent_x - child_w;
+	}
+	else
+	{
+		if (child_w >= platform->width) platform->new_win_info.child_w = platform->width;
+		platform->new_win_info.child_x = 0;
+	}
+
+	if (platform->new_win_info.parent_y + child_h < platform->height)
+	{
+		platform->new_win_info.child_y = platform->new_win_info.parent_y;
+	}
+	else if (platform->new_win_info.parent_y + child_h > platform->height
+		&& child_h < platform->height
+	) {
+		platform->new_win_info.child_y = platform->height - child_h;
+	}
+	else
+	{
+		if (child_h >= platform->height) platform->new_win_info.child_h = platform->height;
+		platform->new_win_info.child_y = 0;
+	}
 }
 
 int main(int argc, char* argv[])
@@ -183,8 +209,8 @@ void resetPlatform(AppPlatform* platform)
 {
 	clearPopupWindows(platform);
 	platform->first_window = calloc(1, sizeof(PopupWindow));
-	assignPopupWindowValues(platform->first_window, MAIN_MENU, platform->current_app_state);
-	addNewPopupWindow(platform, SIMULATION_CONTROL_MENU, NULL);
+	assignPopupWindowValues(platform->first_window, SIMULATION_CONTROL_MENU, NULL);
+	addNewPopupWindow(platform, MAIN_MENU, platform->current_app_state);
 }
 
 int closeApp(AppState* appState)

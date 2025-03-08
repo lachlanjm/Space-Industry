@@ -74,91 +74,87 @@ static void setWindowSize(AppPlatform* const platform, const WindowTypes window_
 	switch (window_type)
 	{
 	case COMPANY_LIST:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 450, 400);
 		break;
 
 	case COMPANY_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 450, 200);
 		break;
 	
 	case FACTORY_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 450, 700);
 		break;
 	
 	case GLOBAL_PRODUCT_MARKET_LIST:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 250, 400);
 		break;
 
 	case GLOBAL_PRODUCT_MARKET_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 350, 400);
 		break;
 	
 	case GOVERNMENT_LIST:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 450, 250);
 		break;
 
 	case GOVERNMENT_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 650, 300);
 		break;
 	
 	case LOCAL_POPULATION_LIST:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 200, 400);
 		break;
 
 	case LOCAL_POPULATION_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 250, 250);
 		break;
 	
 	case LOCAL_PRODUCT_MARKET_LIST:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 250, 400);
 		break;
 
 	case LOCAL_PRODUCT_MARKET_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 350, 450);
 		break;
 
 	case LOCATION_GROUP:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 200, 400);
 		break;
 
 	case LOCATION_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 250, 400);
 		break;
 
 	case LOGISTICS_CONTRACT_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 250, 250);
 		break;
 
 	case LOGISTICS_MANAGER_LIST:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 200, 400);
 		break;
 
 	case LOGISTICS_MANAGER_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 200, 400);
 		break;
 	
 	case MAIN_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 125, 350);
 		break;
 
 	case ORDER_MENU:
-		calcChildPosition(platform, 100, 100);
-		break;
-
-	case SIMULATION_CONTROL_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 250, 150);
 		break;
 
 	case STOCKPILE_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 350, 250);
 		break;
 
 	case VEHICLE_MENU:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 350, 250);
 		break;
 	
 	default:
-		calcChildPosition(platform, 100, 100);
+		calcChildPosition(platform, 200, 300);
 		break;
 	}
 }
