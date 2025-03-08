@@ -27,6 +27,7 @@ static void castCoreData(PopupWindow* window, const WindowTypes window_type, voi
 		break;
 	
 	case GOVERNMENT_MENU:
+	case GOVERNMENT_MARKET_MENU:
 		window->coreData.government = coreData;
 		break;
 
@@ -99,6 +100,10 @@ static void setWindowSize(AppPlatform* const platform, const WindowTypes window_
 
 	case GOVERNMENT_MENU:
 		calcChildPosition(platform, 650, 300);
+		break;
+
+	case GOVERNMENT_MARKET_MENU:
+		calcChildPosition(platform, 350, 700);
 		break;
 	
 	case LOCAL_POPULATION_LIST:
@@ -199,6 +204,10 @@ void drawPopupWindow(PopupWindow* window, AppPlatform* platform)
 
 	case GOVERNMENT_MENU:
 		drawGovernmentMenu(platform, window->coreData.government, window->name);
+		break;
+
+	case GOVERNMENT_MARKET_MENU:
+		drawGovernmentMarketMenu(platform, window->coreData.government, window->name);
 		break;
 	
 	case LOCAL_POPULATION_LIST:

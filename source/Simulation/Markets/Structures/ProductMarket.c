@@ -182,6 +182,8 @@ QUANTITY_INT match_orders(LogisticsManager* logisticsManager, ProductMarket* sel
 	addToHistoryWtdAvgArray(&selling_market->sell_hist_array, exchanged_num * export_price, exchanged_num);
 	addToHistoryWtdAvgArray(&buying_market->buy_hist_array, exchanged_num * import_price, exchanged_num);
 
+	recordGovMarketProductSellPrice(getGovernmentByLocation(selling_market->location), product_type, exchanged_num, export_price);
+	recordGovMarketProductBuyPrice(getGovernmentByLocation(buying_market->location), product_type, exchanged_num, import_price);
 	recordMarketProductTransactionPrice(product_type, exchanged_num, import_price, export_price);
 
 	if (selling_order->offer_num == 0)

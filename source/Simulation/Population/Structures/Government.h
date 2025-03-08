@@ -1,9 +1,11 @@
 #ifndef GOVERNMENT_H
 #define GOVERNMENT_H
 
+#include <stdint.h>
+
 typedef struct Government Government;
 
-#include <stdint.h>
+#include "..\..\Markets\Structures\ProductMarket.h"
 
 #define GOVERNMENT_ID_INT uint_least16_t
 
@@ -15,6 +17,9 @@ struct Government {
 	int32_t* import_tariffs; // [-inf%, inf%] 10^-3%
 
 	int controlled_local_population_num;
+
+	HistoryWtdAvgArray* gov_market_buy_avg;
+	HistoryWtdAvgArray* gov_market_sell_avg;
 
 	GOVERNMENT_ID_INT id;
 };
@@ -40,6 +45,14 @@ int32_t getImportTaxRate(const Product product, const TransportNode from, const 
 
 void assignGovernmentValues(Government* government, const int wealth);
 void assignLoadIdGovernment(Government* obj, const int id);
+
+void recordGovMarketProductBuyPrice(Government* const government, const Product product, const QUANTITY_INT quantity, const int price);
+void recordGovMarketProductSellPrice(Government* const government, const Product product, const QUANTITY_INT quantity, const int price);
+int getGovMarketBuyAvgByProduct(const Government* const government, const Product product);
+int getGovMarketSellAvgByProduct(const Government* const government, const Product product);
+
+HistoryWtdAvgArray* getGovMarketBuyHistoryWtdAvgArrByProduct(const Government* const government, const Product product);
+HistoryWtdAvgArray* getGovMarketSellHistoryWtdAvgArrByProduct(const Government* const government, const Product product);
 
 void insertFundsGovernment(Government* government, const int funds);
 void withdrawFundsGovernment(Government* government, const int funds);

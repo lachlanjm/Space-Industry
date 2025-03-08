@@ -192,4 +192,5 @@ void tickHistoryWtdAvgArrayIndex(HistoryWtdAvgArray* hist_array)
 void cleanHistoryWtdAvgArray(HistoryWtdAvgArray* hist_array)
 {
 	// NOTHING -> TBU
+	// UPDATE GOV clean if so
 }

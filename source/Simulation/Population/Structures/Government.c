@@ -106,13 +106,13 @@ void assignGovernmentValues(Government* government, const int wealth)
 
 	government->gst_rate = 5000; // 5%
 
-	if (government->import_tariffs == NULL)
+	if (government->import_tariffs != NULL)
 	{
 		free(government->import_tariffs);
 	}
 	government->import_tariffs = (int*) calloc(government_count, sizeof(int));
 
-	if (government->export_tariffs == NULL)
+	if (government->export_tariffs != NULL)
 	{
 		free(government->export_tariffs);
 	}
@@ -132,6 +132,18 @@ void assignGovernmentValues(Government* government, const int wealth)
 		}
 	}
 
+	if (government->gov_market_buy_avg != NULL) free(government->gov_market_buy_avg);
+	government->gov_market_buy_avg = (HistoryWtdAvgArray*) calloc(PRODUCT_COUNT, sizeof(HistoryWtdAvgArray));
+
+	if (government->gov_market_sell_avg != NULL) free(government->gov_market_sell_avg);
+	government->gov_market_sell_avg = (HistoryWtdAvgArray*) calloc(PRODUCT_COUNT, sizeof(HistoryWtdAvgArray));
+
+	for (int i = 0; i < PRODUCT_COUNT; i++)
+	{
+		assignHistoryWtdAvgArrayValues(&government->gov_market_buy_avg[i]);
+		assignHistoryWtdAvgArrayValues(&government->gov_market_sell_avg[i]);
+	}
+
 	government->id = id_next++;
 }
 
@@ -142,6 +154,42 @@ void assignLoadIdGovernment(Government* obj, const int id)
 	{
 		id_next = id + 1;
 	}
+}
+
+void recordGovMarketProductBuyPrice(Government* const government, const Product product, const QUANTITY_INT quantity, const int price)
+{
+	if (product >= PRODUCT_COUNT) return;
+	if (quantity < 0) return;
+	addToHistoryWtdAvgArray(&government->gov_market_buy_avg[product], quantity * price, quantity);
+}
+
+void recordGovMarketProductSellPrice(Government* const government, const Product product, const QUANTITY_INT quantity, const int price)
+{
+	if (product >= PRODUCT_COUNT) return;
+	if (quantity < 0) return;
+	addToHistoryWtdAvgArray(&government->gov_market_sell_avg[product], quantity * price, quantity);
+}
+
+int getGovMarketBuyAvgByProduct(const Government* const government, const Product product)
+{
+	if (product >= PRODUCT_COUNT) return -1;
+	return getAvgHistoryWtdAvgArray(&government->gov_market_buy_avg[product]);
+}
+
+int getGovMarketSellAvgByProduct(const Government* const government, const Product product)
+{
+	if (product >= PRODUCT_COUNT) return -1;
+	return getAvgHistoryWtdAvgArray(&government->gov_market_sell_avg[product]);
+}
+
+HistoryWtdAvgArray* getGovMarketBuyHistoryWtdAvgArrByProduct(const Government* const government, const Product product)
+{
+	return &government->gov_market_buy_avg[product];
+}
+
+HistoryWtdAvgArray* getGovMarketSellHistoryWtdAvgArrByProduct(const Government* const government, const Product product)
+{
+	return &government->gov_market_sell_avg[product];
 }
 
 void insertFundsGovernment(Government* government, const int funds)
@@ -178,18 +226,33 @@ void processTickGovernment(Government* government)
 			);
 		}
 	}
+	for (int i = 0; i < PRODUCT_COUNT; i++)
+	{
+		tickHistoryWtdAvgArrayIndex(&government->gov_market_buy_avg[i]);
+		tickHistoryWtdAvgArrayIndex(&government->gov_market_sell_avg[i]);
+	}
 }
 
 void cleanGovernment(Government* government)
 {
-	if (government->import_tariffs == NULL)
+	if (government->import_tariffs != NULL)
 	{
 		free(government->import_tariffs);
 		government->import_tariffs = NULL;
 	}
-	if (government->export_tariffs == NULL)
+	if (government->export_tariffs != NULL)
 	{
 		free(government->export_tariffs);
 		government->export_tariffs = NULL;
+	}
+	if (government->gov_market_buy_avg != NULL)
+	{
+		free(government->gov_market_buy_avg);
+		government->gov_market_buy_avg = NULL;
+	}
+	if (government->gov_market_sell_avg != NULL)
+	{
+		free(government->gov_market_sell_avg);
+		government->gov_market_sell_avg = NULL;
 	}
 }

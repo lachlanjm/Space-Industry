@@ -232,9 +232,6 @@ static inline void saveCompany(FILE* fptr, Company* company)
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_CO_WTH_ID, company->wealth)
 	);
-	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_CO_CON_FAC_NUM_ID, company->controlled_factories_num)
-	);
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
 		appendToQueue(FACTORY_SAVE, company->controlled_factories[i]);
@@ -365,6 +362,21 @@ static inline void saveGovernment(FILE* fptr, Government* government)
 				getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_GOV_CTL_LOC_ID, i)
 			);
 		}
+	}
+
+	for (int i = 0; i < PRODUCT_COUNT; i++)
+	{
+		appendToQueue(HISTORY_WTD_AVG_ARRAY_SAVE, &government->gov_market_buy_avg[i]);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_GOV_BUY_AVG_ID, HISTORY_WTD_AVG_ARRAY_SAVE, government->gov_market_buy_avg[i].id)
+		);
+	}
+	for (int i = 0; i < PRODUCT_COUNT; i++)
+	{
+		appendToQueue(HISTORY_WTD_AVG_ARRAY_SAVE, &government->gov_market_sell_avg[i]);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_GOV_SELL_AVG_ID, HISTORY_WTD_AVG_ARRAY_SAVE, government->gov_market_sell_avg[i].id)
+		);
 	}
 }
 

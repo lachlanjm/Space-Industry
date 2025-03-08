@@ -35,7 +35,6 @@
 #define SAVE_FILE_AS_MAR_SELL_AVG_ID "market_sell_avg"
 
 #define SAVE_FILE_CO_WTH_ID "wealth"
-#define SAVE_FILE_CO_CON_FAC_NUM_ID "controlled_factories_num"
 #define SAVE_FILE_CO_CON_FAC_ID "controlled_factories"
 
 #define SAVE_FILE_FAC_PRO_REC_ID "productionRecipe"
@@ -63,6 +62,8 @@
 #define SAVE_FILE_GOV_GST_ID "gst_rate"
 #define SAVE_FILE_GOV_IMP_ID "import_rate"
 #define SAVE_FILE_GOV_EXP_ID "export_rate"
+#define SAVE_FILE_GOV_BUY_AVG_ID "buy_avg"
+#define SAVE_FILE_GOV_SELL_AVG_ID "sell_avg"
 
 #define SAVE_FILE_HIS_ARR_ITEM_ID "value"
 

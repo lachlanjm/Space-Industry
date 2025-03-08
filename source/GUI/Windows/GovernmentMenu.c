@@ -20,6 +20,15 @@ void drawGovernmentMenu(AppPlatform* const platform, Government* const governmen
 		snprintf(buffer, BUF_SIZE, "%.3f%%", (float)government->gst_rate / 1000.0f);
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 		
+		nk_layout_row_static(platform->ctx, 30, 100, 1);
+		if (nk_button_label(platform->ctx, "Government Markets"))
+		{
+			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+			addNewPopupWindow(platform, GOVERNMENT_MARKET_MENU, government);
+		}
+		
 		const int gov_num = getGovernmentNum();
 		for (int i = 0; i < gov_num; i++)
 		{

@@ -10,6 +10,7 @@ typedef struct PopupWindow PopupWindow;
 #include "..\Windows\GlobalProductMarketMenu.h"
 #include "..\Windows\GovernmentList.h"
 #include "..\Windows\GovernmentMenu.h"
+#include "..\Windows\GovernmentMarketMenu.h"
 #include "..\Windows\LocalPopulationList.h"
 #include "..\Windows\LocalPopulationMenu.h"
 #include "..\Windows\LocalProductMarketList.h"

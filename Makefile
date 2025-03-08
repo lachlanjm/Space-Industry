@@ -76,6 +76,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\GlobalProductMarketList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\GlobalProductMarketMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\GovernmentList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\GovernmentMenu.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\GovernmentMarketMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LoadFileMenu.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocalPopulationList.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LocalPopulationMenu.c.o
