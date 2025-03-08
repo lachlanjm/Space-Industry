@@ -138,7 +138,7 @@ static void setWindowSize(AppPlatform* const platform, const WindowTypes window_
 		break;
 	
 	case MAIN_MENU:
-		calcChildPosition(platform, 125, 350);
+		calcChildPosition(platform, 125, 360);
 		break;
 
 	case ORDER_MENU:

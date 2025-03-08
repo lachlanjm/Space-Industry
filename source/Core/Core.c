@@ -210,6 +210,7 @@ void resetPlatform(AppPlatform* platform)
 	clearPopupWindows(platform);
 	platform->first_window = calloc(1, sizeof(PopupWindow));
 	assignPopupWindowValues(platform->first_window, SIMULATION_CONTROL_MENU, NULL);
+	setParentDimensions(platform, 50, 50, 0, 0); // start pos for main menu
 	addNewPopupWindow(platform, MAIN_MENU, platform->current_app_state);
 }
 
