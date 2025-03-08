@@ -6,6 +6,7 @@
 typedef struct Government Government;
 
 #include "..\..\Markets\Structures\ProductMarket.h"
+#include "..\..\..\History\HistoryArrayAvg.h"
 
 #define GOVERNMENT_ID_INT uint_least16_t
 
@@ -17,6 +18,8 @@ struct Government {
 	int32_t* import_tariffs; // [-inf%, inf%] 10^-3%
 
 	int controlled_local_population_num;
+
+	HistoryArrayAvg consumption;
 
 	HistoryWtdAvgArray* gov_market_buy_avg;
 	HistoryWtdAvgArray* gov_market_sell_avg;
@@ -51,6 +54,7 @@ void recordGovMarketProductSellPrice(Government* const government, const Product
 int getGovMarketBuyAvgByProduct(const Government* const government, const Product product);
 int getGovMarketSellAvgByProduct(const Government* const government, const Product product);
 
+HistoryArrayAvg* getGovMarketConsumerAndNetExports(const Government* const government);
 HistoryWtdAvgArray* getGovMarketBuyHistoryWtdAvgArrByProduct(const Government* const government, const Product product);
 HistoryWtdAvgArray* getGovMarketSellHistoryWtdAvgArrByProduct(const Government* const government, const Product product);
 

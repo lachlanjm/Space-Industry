@@ -14,7 +14,7 @@ void drawGovernmentList(AppPlatform* const platform, AppState* const current_app
 
 		for (int i = 0; i < getGovernmentNum(); i++)
 		{
-			nk_layout_row_static(platform->ctx, 30, 200, 2);
+			nk_layout_row_static(platform->ctx, 30, 100, 2);
 			snprintf(buffer, BUF_SIZE, "Government #%i", getGovernmentByIndex(i)->id);
 			nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 			if (nk_button_label(platform->ctx, "Show"))

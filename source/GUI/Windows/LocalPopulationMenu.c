@@ -16,6 +16,11 @@ void drawLocalPopulationMenu(AppPlatform* platform, LocalPopulation* population,
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_label(platform->ctx, "Wealth: ", NK_TEXT_LEFT);
+		snprintf(buffer, BUF_SIZE, "$%i", population->wealth);
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Employed Pop.: ", NK_TEXT_LEFT);
 		snprintf(buffer, BUF_SIZE, "%d", population->employed_number);
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);

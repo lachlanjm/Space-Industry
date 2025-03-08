@@ -341,6 +341,11 @@ static inline void saveGovernment(FILE* fptr, Government* government)
 		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_GOV_GST_ID, government->gst_rate)
 	);
 
+	appendToQueue(HISTORY_ARRAY_AVG_SAVE, &government->consumption);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_GOV_CON_SPE_NEX_ID, HISTORY_ARRAY_AVG_SAVE, government->consumption.id)
+	);
+
 	for (int i = 0; i < getGovernmentNum(); i++)
 	{
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 

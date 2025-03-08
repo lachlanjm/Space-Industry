@@ -10,10 +10,13 @@ void processTickAppState(AppState* appState)
 	processTickMarketMap();
 
 	// MUST DO FACTORY BEFORE LOGISTICS (HISTORY SAVING FLOW)
+	static int building_company = 0;
 	for (int i = 0; i < appState->companies_num; i++)
 	{
 		processTickCompany(&appState->companies[i]);
 	}
+	processBuildingTickCompany(&appState->companies[building_company]);
+	building_company = ++building_company % appState->companies_num;
 
 	update_dist_to_price_eff();
 	for (int i = 0; i < appState->logistics_managers_num; i++)
@@ -44,7 +47,7 @@ AppState* newGameAppState()
 	appState->companies_num = 3 * (PRODUCTION_RECIPE_COUNT - 1);
     appState->logistics_managers_num = PRODUCTION_RECIPE_COUNT;
 
-	const int gov_count = 2; // TMP
+	const int gov_count = 3; // TMP
 	setGovernmentCountStatic(gov_count);
 	setGovernmentControlStatic(TRANSPORT_NODE_COUNT);
 	setTransportNodeCountLocalPopulationStatic(TRANSPORT_NODE_COUNT);

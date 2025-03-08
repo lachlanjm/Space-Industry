@@ -95,11 +95,11 @@ static void setWindowSize(AppPlatform* const platform, const WindowTypes window_
 		break;
 	
 	case GOVERNMENT_LIST:
-		calcChildPosition(platform, 450, 250);
+		calcChildPosition(platform, 250, 250);
 		break;
 
 	case GOVERNMENT_MENU:
-		calcChildPosition(platform, 650, 300);
+		calcChildPosition(platform, 350, 400);
 		break;
 
 	case GOVERNMENT_MARKET_MENU:

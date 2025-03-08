@@ -424,6 +424,20 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			{
 				setGovernmentControlByLocation(((Government*)current_obj_ptr->data), atoi(attr_value));
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_GOV_CON_SPE_NEX_ID) == 0)
+			{
+				if (strcmp(current_arr_name, SAVE_FILE_GOV_CON_SPE_NEX_ID))
+				{
+					snprintf(current_arr_name, BUF_SIZE, "%s", SAVE_FILE_GOV_CON_SPE_NEX_ID);
+					current_index = 0;
+				}
+				else
+				{
+					current_index++;
+				}
+
+				addNewStructIdPtr(HISTORY_ARRAY_AVG_SAVE, extractObjectId(attr_value), &((Government*)current_obj_ptr->data)->consumption);
+			}
 			else if (strcmp(new_data_point, SAVE_FILE_GOV_BUY_AVG_ID) == 0)
 			{
 				if (strcmp(current_arr_name, SAVE_FILE_GOV_BUY_AVG_ID))

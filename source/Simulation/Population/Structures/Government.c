@@ -106,6 +106,8 @@ void assignGovernmentValues(Government* government, const int wealth)
 
 	government->gst_rate = 5000; // 5%
 
+	assignHistoryArrayAvgValues(&government->consumption);
+
 	if (government->import_tariffs != NULL)
 	{
 		free(government->import_tariffs);
@@ -160,6 +162,7 @@ void recordGovMarketProductBuyPrice(Government* const government, const Product 
 {
 	if (product >= PRODUCT_COUNT) return;
 	if (quantity < 0) return;
+	addToHistoryArrayAvg(&government->consumption, quantity * price);
 	addToHistoryWtdAvgArray(&government->gov_market_buy_avg[product], quantity * price, quantity);
 }
 
@@ -180,6 +183,11 @@ int getGovMarketSellAvgByProduct(const Government* const government, const Produ
 {
 	if (product >= PRODUCT_COUNT) return -1;
 	return getAvgHistoryWtdAvgArray(&government->gov_market_sell_avg[product]);
+}
+
+HistoryArrayAvg* getGovMarketConsumerAndNetExports(const Government* const government)
+{
+	return &government->consumption;
 }
 
 HistoryWtdAvgArray* getGovMarketBuyHistoryWtdAvgArrByProduct(const Government* const government, const Product product)
@@ -226,6 +234,7 @@ void processTickGovernment(Government* government)
 			);
 		}
 	}
+	tickHistoryArrayAvgIndex(&government->consumption);
 	for (int i = 0; i < PRODUCT_COUNT; i++)
 	{
 		tickHistoryWtdAvgArrayIndex(&government->gov_market_buy_avg[i]);

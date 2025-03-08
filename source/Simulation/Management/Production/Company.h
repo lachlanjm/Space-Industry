@@ -34,9 +34,13 @@ struct Company {
 #define CO_DESIRED_BUY_STOCKPILE_ROOT 12.3
 #define CO_ORDER_QUANTITY_MIN 100
 
+#define CO_NEW_FACTORY_MATERIAL_COST 1000000
+#define CO_NEW_FACTORY_LABOR_COST 1000000
+#define CO_NEW_FACTORY_MIN_RETURN 10 // per prod. tick, exclusive
+
 #define CO_MIN_PROFIT 100
 
-#define CO_DEFAULT_PRICE 100
+#define CO_DEFAULT_PRICE 10
 
 void assignNewCompanyValues(Company* const company);
 void addNewFactoryToCompany(Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
@@ -49,6 +53,7 @@ void loadCompanyAssignOrders(Company* const company);
 void assignLoadIdCompany(Company* const obj, const int id);
 
 void processTickCompany(Company* const company);
+void processBuildingTickCompany(Company* const company);
 
 void cleanCompany(Company* company);
 

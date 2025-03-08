@@ -45,12 +45,12 @@ Factory* loadAddNewFactoryToCompany(Company* const company)
 	return company->controlled_factories[company->controlled_factories_num - 1];
 }
 
-void insertFundsCompany(Company* company, const int funds)
+void insertFundsCompany(Company* const company, const int funds)
 {
 	company->wealth += funds;
 }
 
-void withdrawFundsCompany(Company* company, const int funds)
+void withdrawFundsCompany(Company* const company, const int funds)
 {
 	if (company->wealth < funds) return; // reject payment
 	company->wealth -= funds;
@@ -80,8 +80,43 @@ static inline IND_BOOL nearEmptyFactoryStockpileOutputs(const Factory* const fac
 	return TRUE;
 }
 
+static inline const int getBaseBuyPrice(const ProductMarket* const productMarket, const Government* const government, const Product product)
+{
+	return (getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
+			? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
+			: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
+				? getGovMarketBuyAvgByProduct(government, product)
+				: ( (getGovMarketSellAvgByProduct(government, product) != 0)
+					? getGovMarketSellAvgByProduct(government, product)
+					: ( (getMarketBuyAvgByProduct(product) != 0)
+						? getMarketBuyAvgByProduct(product)
+						: ( (getMarketSellAvgByProduct(product) != 0)
+							? getMarketSellAvgByProduct(product)
+							: ( (getMarketSellOfferAvgByProduct(product) != 0)
+								? getMarketSellOfferAvgByProduct(product)
+								: CO_DEFAULT_PRICE
+		)))));
+}
+static inline const int getBaseSellPrice(const ProductMarket* const productMarket, const Government* const government, const Product product)
+{
+	return (getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
+			? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
+			: ( (getGovMarketSellAvgByProduct(government, product) != 0)
+				? getGovMarketSellAvgByProduct(government, product)
+				: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
+					? getGovMarketBuyAvgByProduct(government, product)
+					: ( (getMarketSellAvgByProduct(product) != 0)
+						? getMarketSellAvgByProduct(product)
+						: ( (getMarketBuyAvgByProduct(product) != 0)
+							? getMarketBuyAvgByProduct(product)
+							: ( (getMarketBuyOfferAvgByProduct(product) != 0)
+								? getMarketBuyOfferAvgByProduct(product)
+								: CO_DEFAULT_PRICE
+		)))));
+}
+
 // TODO make it actually a market
-void updateEmployeeOffers(Company* const company)
+static inline void updateEmployeeOffers(Company* const company)
 {
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
@@ -125,7 +160,7 @@ void updateEmployeeOffers(Company* const company)
 	}
 }
 
-void updateOfferedPrices(Company* const company)
+static inline void updateOfferedPrices(Company* const company)
 {
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
@@ -167,17 +202,9 @@ void updateOfferedPrices(Company* const company)
 				const Product product_type = productMarket->product_type;
 				// TODO TBU also divide by factory_num; also to better the calculation of the max allowable price
 				const int base_price = MIN(
-					company->wealth / MAX(1, curr_fact->stockpiles_in_num-1), ( 
-						(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
-						? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
-						: ( (getMarketBuyAvgByProduct(product_type) != 0)
-							? getMarketBuyAvgByProduct(product_type)
-							: ( (getMarketSellAvgByProduct(product_type) != 0)
-								? getMarketSellAvgByProduct(product_type)
-								: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
-									? getMarketSellOfferAvgByProduct(product_type)
-									: CO_DEFAULT_PRICE
-				))))); // ?: needed to allow for const
+					company->wealth / MAX(1, curr_fact->stockpiles_in_num-1), 
+					getBaseBuyPrice(productMarket, getGovernmentByLocation(productMarket->location), product_type)
+				);
 				const double stockpile_factor = sqrt((double)curr_fact->orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT;
 
 				// TODO TBU
@@ -230,17 +257,7 @@ void updateOfferedPrices(Company* const company)
 				ProductMarket* productMarket = getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_out[i].product_type);
 				
 				const Product product_type = productMarket->product_type;
-				const uint64_t base_price = ( 
-					(getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
-					? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
-					: ( (getMarketSellAvgByProduct(product_type) != 0)
-						? getMarketSellAvgByProduct(product_type)
-						: ( (getMarketBuyAvgByProduct(product_type) != 0)
-							? getMarketBuyAvgByProduct(product_type)
-							: ( (getMarketBuyOfferAvgByProduct(product_type) != 0)
-								? getMarketBuyOfferAvgByProduct(product_type)
-								: CO_DEFAULT_PRICE
-				)))); // ?: needed to allow for const
+				const uint64_t base_price = getBaseSellPrice(productMarket, getGovernmentByLocation(productMarket->location), product_type);
 				const double stockpile_factor = CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)curr_fact->orders_out[i].offer_num);
 
 				curr_fact->orders_out[i].price = MAX(1, base_price * profit_factor_sell * stockpile_factor);
@@ -259,7 +276,65 @@ void updateOfferedPrices(Company* const company)
 	}
 }
 
-void loadCompanyAssignOrders(Company* company)
+// TODO add employee wages into consideration
+static inline void buildNewFactories(Company* const company)
+{
+	if (company->wealth > (CO_NEW_FACTORY_MATERIAL_COST + CO_NEW_FACTORY_LABOR_COST))
+	{
+		ProductionRecipe max_rcp = -1;
+		TransportNode max_loc = -1;
+		int max_profit = CO_NEW_FACTORY_MIN_RETURN;
+
+		for (ProductionRecipe rcp = 0; rcp < PRODUCTION_RECIPE_COUNT; rcp++)
+		{
+			const int input_num = getNumOfInputs(rcp);
+			const Stockpile* const inputs = getInputs(rcp);
+			const int output_num = getNumOfOutputs(rcp);
+			const Stockpile* const outputs = getOutputs(rcp);
+
+			for (TransportNode loc = 0; loc < TRANSPORT_NODE_COUNT; loc++)
+			{
+				const Government* const gov = getGovernmentByLocation(loc);
+				
+				int costs = 0;
+				int revenues = 0;
+				for (int i = 0; i < input_num; i++)
+					costs += inputs[i].quantity * getBaseBuyPrice(
+						getProductMarketAtLocation(loc, inputs[i].product_type),
+						gov,
+						inputs[i].product_type
+					);
+				
+				for (int i = 0; i < output_num; i++)
+					revenues += outputs[i].quantity * getBaseSellPrice(
+						getProductMarketAtLocation(loc, outputs[i].product_type),
+						gov,
+						outputs[i].product_type
+					);
+
+				if (revenues - costs > max_profit)
+				{
+					max_profit = revenues - costs;
+					max_loc = loc;
+					max_rcp = rcp;
+				}
+			}
+		}
+
+		if (max_loc != -1 && max_rcp != -1)
+		{
+			withdrawFundsCompany(company, CO_NEW_FACTORY_MATERIAL_COST + CO_NEW_FACTORY_LABOR_COST);
+			
+			// TODO ftm sends material costs to gov
+			insertFundsGovernment(getGovernmentByLocation(max_loc), CO_NEW_FACTORY_MATERIAL_COST); 
+			insertFundsLocalPopulation(getLocalPopulationByLocation(max_loc), CO_NEW_FACTORY_LABOR_COST);
+
+			addNewFactoryToCompany(company, max_rcp, max_loc);
+		}
+	}
+}
+
+void loadCompanyAssignOrders(Company* const company)
 {
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
@@ -318,7 +393,7 @@ void loadCompanyAssignOrders(Company* company)
 	}
 }
 
-void assignLoadIdCompany(Company* obj, const int id)
+void assignLoadIdCompany(Company* const obj, const int id)
 {
 	obj->id = id;
 	if (id >= id_next)
@@ -327,16 +402,22 @@ void assignLoadIdCompany(Company* obj, const int id)
 	}
 }
 
-void processTickCompany(Company* company)
+void processTickCompany(Company* const company)
 {
 	updateOfferedPrices(company);
 	updateEmployeeOffers(company);
-
+	
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
 		processTickFactory(company->controlled_factories[i]);
 	}
 }
+
+void processBuildingTickCompany(Company* const company)
+{
+	buildNewFactories(company);
+}
+
 
 void cleanCompany(Company* company)
 {
