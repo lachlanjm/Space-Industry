@@ -345,8 +345,12 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 				
 				const Factory* new_fact = loadAddNewFactoryToCompany((Company*)current_obj_ptr->data);
 				addNewStructIdPtr(FACTORY_SAVE, extractObjectId(attr_value), new_fact);
-
+				
 				current_index++;
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_CO_DEF_TCK_ID) == 0)
+			{
+				((Company*)current_obj_ptr->data)->deficit_ticks[current_index] = atoi(attr_value);
 			}
 			break;
 		case FACTORY_SAVE:

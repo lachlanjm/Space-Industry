@@ -14,7 +14,7 @@ Extraction Copper Ore
 	1 x Copper Ore
 
 Extraction Oxygen
-	Processing speed: 10
+	Processing speed: 100
 	Output:
 	1 x Oxygen
 
@@ -466,7 +466,7 @@ Tool Production
 	1 x Tool
 
 Beef Production
-	Processing speed: 3
+	Processing speed: 5
 	Input:
 	25 x Wheat
 	Output:

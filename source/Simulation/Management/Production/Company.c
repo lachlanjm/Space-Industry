@@ -5,6 +5,7 @@ static COMPANY_ID_INT id_next = 0;
 void assignNewCompanyValues(Company* const company)
 {
 	company->controlled_factories_num = 0;
+	company->deficit_ticks = NULL;
 	company->controlled_factories = NULL;
 	company->wealth = 100000;
 	company->id = id_next++;
@@ -14,32 +15,74 @@ void addNewFactoryToCompany(Company* const company, const ProductionRecipe produ
 {
 	if (company->controlled_factories_num == 0)
 	{
-		company->controlled_factories = calloc(++company->controlled_factories_num, sizeof(Factory*));
+		company->deficit_ticks = calloc(++company->controlled_factories_num, sizeof(int));
+		company->controlled_factories = calloc(company->controlled_factories_num, sizeof(Factory*));
 	}
 	else
 	{
+		company->deficit_ticks = realloc(
+			company->deficit_ticks, 
+			++company->controlled_factories_num * sizeof(int)
+		);
 		company->controlled_factories = realloc(
 			company->controlled_factories, 
-			++company->controlled_factories_num * sizeof(Factory*)
+			company->controlled_factories_num * sizeof(Factory*)
 		);
 	}
+	company->deficit_ticks[company->controlled_factories_num - 1] = 0;
 	company->controlled_factories[company->controlled_factories_num - 1] 
 		= newFactoryCompany(company, productionRecipe, location);
+}
+
+static inline void destroyFactoryFromCompany(Company* const company, const int index)
+{
+	Factory* const old_factory = company->controlled_factories[index];
+
+	company->deficit_ticks[index] = company->deficit_ticks[--company->controlled_factories_num];
+	company->controlled_factories[index] = company->controlled_factories[company->controlled_factories_num];
+
+	if (company->controlled_factories_num > 0)
+	{
+		company->deficit_ticks = realloc(
+			company->deficit_ticks, 
+			company->controlled_factories_num * sizeof(int)
+		);
+		company->controlled_factories = realloc(
+			company->controlled_factories, 
+			company->controlled_factories_num * sizeof(Factory*)
+		);
+	}
+	else
+	{
+		free(company->deficit_ticks);
+		free(company->controlled_factories);
+		company->controlled_factories_num = 0;
+	}
+
+	removeOrders(old_factory);
+	cleanFactory(old_factory);
+	free(old_factory);
 }
 
 Factory* loadAddNewFactoryToCompany(Company* const company)
 {
 	if (company->controlled_factories_num == 0)
 	{
-		company->controlled_factories = calloc(++company->controlled_factories_num, sizeof(Factory*));
+		company->deficit_ticks = calloc(++company->controlled_factories_num, sizeof(int));
+		company->controlled_factories = calloc(company->controlled_factories_num, sizeof(Factory*));
 	}
 	else
 	{
+		company->deficit_ticks = realloc(
+			company->deficit_ticks, 
+			++company->controlled_factories_num * sizeof(int)
+		);
 		company->controlled_factories = realloc(
 			company->controlled_factories, 
-			++company->controlled_factories_num * sizeof(Factory*)
+			company->controlled_factories_num * sizeof(Factory*)
 		);
 	}
+	company->deficit_ticks[company->controlled_factories_num - 1] = 0;
 	company->controlled_factories[company->controlled_factories_num - 1]
 		= loadNewFactoryCompany();
 	return company->controlled_factories[company->controlled_factories_num - 1];
@@ -409,7 +452,11 @@ void processTickCompany(Company* const company)
 	
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
-		processTickFactory(company->controlled_factories[i]);
+		if (getAvgHistoryArrayAvg(&company->controlled_factories[i]->profit_history) < 0) company->deficit_ticks[i]++;
+		else company->deficit_ticks[i] = MAX(--company->deficit_ticks[i], 0);
+
+		if (company->deficit_ticks[i] > CO_DESTROY_FACTORY_TICKS) destroyFactoryFromCompany(company, i);
+		else processTickFactory(company->controlled_factories[i]);
 	}
 }
 
@@ -417,7 +464,6 @@ void processBuildingTickCompany(Company* const company)
 {
 	buildNewFactories(company);
 }
-
 
 void cleanCompany(Company* company)
 {

@@ -21,7 +21,7 @@ struct LogisticsManager
 	uint_fast16_t contracts_num;
 	LogisticsContract* contracts;
 
-	int wealth;
+	uint64_t wealth;
 
 	LOGISTICS_MANAGER_ID_INT id;
 };

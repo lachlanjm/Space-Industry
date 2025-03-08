@@ -36,6 +36,7 @@
 
 #define SAVE_FILE_CO_WTH_ID "wealth"
 #define SAVE_FILE_CO_CON_FAC_ID "controlled_factories"
+#define SAVE_FILE_CO_DEF_TCK_ID "deficit_ticks"
 
 #define SAVE_FILE_FAC_PRO_REC_ID "productionRecipe"
 #define SAVE_FILE_FAC_STO_IN_ID "stockpiles_in"

@@ -11,7 +11,7 @@ typedef struct Government Government;
 #define GOVERNMENT_ID_INT uint_least16_t
 
 struct Government {
-	int wealth;
+	uint64_t wealth;
 	int32_t gst_rate; // [0%, 100%]:10^-3%
 
 	int32_t* export_tariffs; // [-inf%, inf%] 10^-3%

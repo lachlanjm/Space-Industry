@@ -9,9 +9,10 @@ typedef struct Company Company;
 
 struct Company {
 	int controlled_factories_num;
+	int* deficit_ticks;
 	Factory** controlled_factories;
 
-	int wealth;
+	uint64_t wealth;
 
 	COMPANY_ID_INT id;
 };
@@ -37,6 +38,7 @@ struct Company {
 #define CO_NEW_FACTORY_MATERIAL_COST 1000000
 #define CO_NEW_FACTORY_LABOR_COST 1000000
 #define CO_NEW_FACTORY_MIN_RETURN 10 // per prod. tick, exclusive
+#define CO_DESTROY_FACTORY_TICKS 10000
 
 #define CO_MIN_PROFIT 100
 

@@ -96,6 +96,7 @@ void processTickFactoryStatic(void);
 void processTickFactory(Factory* factory);
 void processTickFactoryLocalPopulation(Factory* factory);
 
+void removeOrders(Factory* const factory);
 // DO NOT CLEAN ITEM (ONLY CONSTITUENTS)
 void cleanFactory(Factory* factory);
 

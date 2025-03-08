@@ -238,6 +238,9 @@ static inline void saveCompany(FILE* fptr, Company* company)
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 			getSaveFormatPointerAttribute(buffer, SAVE_FILE_CO_CON_FAC_ID, FACTORY_SAVE, company->controlled_factories[i]->id)
 		);
+		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+			getSaveFormatIntegerAttribute(buffer, SAVE_FILE_CO_DEF_TCK_ID, company->deficit_ticks[i])
+		);
 	}
 }
 

@@ -422,6 +422,24 @@ void processTickFactoryLocalPopulation(Factory* factory)
 	// __processWagePaymentTick(factory); TODO gov employment???
 }
 
+void removeOrders(Factory* const factory)
+{
+	for (int i = 0; i < factory->stockpiles_in_num; i++)
+	{
+		removeBuyOrder(
+			getProductMarketAtLocation(factory->location, factory->stockpiles_in[i].product_type),
+			&factory->orders_in[i]
+		);
+	}
+	for (int i = 0; i < factory->stockpiles_out_num; i++)
+	{
+		removeSellOrder(
+			getProductMarketAtLocation(factory->location, factory->stockpiles_out[i].product_type),
+			&factory->orders_out[i]
+		);
+	}
+}
+
 void cleanFactory(Factory* factory) {
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
 		cleanStockpile(&(factory->stockpiles_in[i]));
