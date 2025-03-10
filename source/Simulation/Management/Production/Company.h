@@ -44,6 +44,8 @@ struct Company {
 
 #define CO_DEFAULT_PRICE 10
 
+void cleanUpFactoryPurgatoryStatic(void);
+
 void assignNewCompanyValues(Company* const company);
 void addNewFactoryToCompany(Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
 Factory* loadAddNewFactoryToCompany(Company* const company);

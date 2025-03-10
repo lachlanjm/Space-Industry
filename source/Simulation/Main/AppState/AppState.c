@@ -6,6 +6,7 @@ void processTickAppState(AppState* appState)
 	tickHistoryArrayAvgIndexStatic();
 	tickHistoryWtdAvgArrayIndexStatic();
 	processTickFactoryStatic();
+	cleanUpFactoryPurgatoryStatic();
 
 	processTickMarketMap();
 

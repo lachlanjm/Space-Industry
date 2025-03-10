@@ -2,6 +2,9 @@
 
 static COMPANY_ID_INT id_next = 0;
 
+static int factories_deletion_purgatory_num = 0;
+static Factory** factories_deletion_purgatory = NULL;
+
 void assignNewCompanyValues(Company* const company)
 {
 	company->controlled_factories_num = 0;
@@ -34,6 +37,53 @@ void addNewFactoryToCompany(Company* const company, const ProductionRecipe produ
 		= newFactoryCompany(company, productionRecipe, location);
 }
 
+static inline void addFactoryToPurgatory(const Factory* const factory)
+{
+	if (factories_deletion_purgatory_num++ == 0)
+	{
+		factories_deletion_purgatory = malloc(factories_deletion_purgatory_num * sizeof(Factory*));
+	}
+	else 
+	{
+		factories_deletion_purgatory = realloc(factories_deletion_purgatory, factories_deletion_purgatory_num * sizeof(Factory*));
+	}
+	factories_deletion_purgatory[factories_deletion_purgatory_num-1] = factory;
+}
+
+static inline void deleteFactoryFromPurgatory(Factory* const factory, const int index)
+{
+	if (--factories_deletion_purgatory_num == 0)
+	{
+		free(factories_deletion_purgatory);
+		factories_deletion_purgatory = NULL;
+	}
+	else 
+	{
+		factories_deletion_purgatory[index] = factories_deletion_purgatory[factories_deletion_purgatory_num];
+		factories_deletion_purgatory = realloc(factories_deletion_purgatory, factories_deletion_purgatory_num * sizeof(Factory*));
+	}
+
+	cleanFactory(factory);
+	free(factory);
+}
+
+static inline IND_BOOL checkNoOrderedInOrOut(const Factory* const factory)
+{
+	for (int i = 0; i < factory->stockpiles_in_num; i++) if (factory->ordered_in[i] > 0) return FALSE;
+	for (int i = 0; i < factory->stockpiles_out_num; i++) if (factory->ordered_out[i] > 0) return FALSE;
+	return TRUE;
+}
+
+void cleanUpFactoryPurgatoryStatic(void)
+{
+	for (int i = 0; i < factories_deletion_purgatory_num; i++)
+	{
+		Factory* const factory = factories_deletion_purgatory[i];
+
+		if (checkNoOrderedInOrOut(factory) == TRUE) deleteFactoryFromPurgatory(factory, i);
+	}
+}
+
 static inline void destroyFactoryFromCompany(Company* const company, const int index)
 {
 	Factory* const old_factory = company->controlled_factories[index];
@@ -60,8 +110,7 @@ static inline void destroyFactoryFromCompany(Company* const company, const int i
 	}
 
 	removeOrders(old_factory);
-	cleanFactory(old_factory);
-	free(old_factory);
+	addFactoryToPurgatory(old_factory);
 }
 
 Factory* loadAddNewFactoryToCompany(Company* const company)
@@ -455,7 +504,7 @@ void processTickCompany(Company* const company)
 		if (getAvgHistoryArrayAvg(&company->controlled_factories[i]->profit_history) < 0) company->deficit_ticks[i]++;
 		else company->deficit_ticks[i] = MAX(--company->deficit_ticks[i], 0);
 
-		if (company->deficit_ticks[i] > CO_DESTROY_FACTORY_TICKS) destroyFactoryFromCompany(company, i);
+		if (company->deficit_ticks[i] > CO_DESTROY_FACTORY_TICKS) destroyFactoryFromCompany(company, i--); // i-- to redo the newly missed factory otherwise
 		else processTickFactory(company->controlled_factories[i]);
 	}
 }

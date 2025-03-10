@@ -1,13 +1,15 @@
 #ifndef LOGISTICS_MANAGER_H
 #define LOGISTICS_MANAGER_H
 
+#include <stdint.h>
+
 typedef struct LogisticsManager LogisticsManager;
 
 #include "..\..\Transport\Structures\Vehicle.h"
 #include "..\..\Environment\Enums\TransportNode.h"
 #include "LogisticsContract.h"
 
-#include <stdint.h>
+#define LOGISTICS_MANAGER_NEW_VEHICLE_COST 10000
 
 #define LOGISTICS_MANAGER_ID_INT uint_least16_t
 
