@@ -19,13 +19,13 @@ void processTickAppState(AppState* appState)
 	processBuildingTickCompany(&appState->companies[building_company]);
 	building_company = ++building_company % appState->companies_num;
 
-	update_dist_to_price_eff();
+	update_dist_to_profit_eff();
 	for (int i = 0; i < appState->logistics_managers_num; i++)
 	{
 		if (i % AS_LOG_MAN_GROUPS == appState->logistics_managers_next_process_tick_index)
 		{
-			processTickLogisticsManagerContracts(&appState->logistics_managers[i]);
 			processTickLogisticsManager(&appState->logistics_managers[i]); // TODO MOVE
+			processTickLogisticsManagerContracts(&appState->logistics_managers[i]);
 		}
 		processTickLogisticsManagerVehicles(&appState->logistics_managers[i]);
 	}

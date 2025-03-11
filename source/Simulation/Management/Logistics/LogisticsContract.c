@@ -32,7 +32,7 @@ void assignLoadIdLogisticsContract(LogisticsContract* obj, const int id)
 /*
 TODO: ACCOUNT FOR END FACTORY diff END LOCATION
 */
-int processTickLogisticsContract(LogisticsContract* logisticsContract)
+int processTickLogisticsContract(LogisticsContract* const logisticsContract)
 {
 	switch (logisticsContract->current_phase)
 	{

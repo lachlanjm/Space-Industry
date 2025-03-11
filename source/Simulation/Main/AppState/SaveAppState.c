@@ -528,14 +528,11 @@ static inline void saveLogisticsManager(FILE* fptr, LogisticsManager* logisticsM
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_HQ_LOC_ID, logisticsManager->headquarters_location)
 	);
 
-	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_MAN_VEH_NUM, logisticsManager->vehicles_num)
-	);
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		appendToQueue(VEHICLE_SAVE, &logisticsManager->vehicles[i]);
+		appendToQueue(VEHICLE_SAVE, logisticsManager->vehicles[i]);
 		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_MAN_VEH_ID, VEHICLE_SAVE, logisticsManager->vehicles[i].id)
+			getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_MAN_VEH_ID, VEHICLE_SAVE, logisticsManager->vehicles[i]->id)
 		);
 	}
 

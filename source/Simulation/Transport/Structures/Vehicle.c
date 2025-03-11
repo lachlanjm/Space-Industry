@@ -2,6 +2,13 @@
 
 static VEHICLE_ID_INT id_next = 0;
 
+Vehicle* newVehicle(const TransportNode start_location)
+{
+	Vehicle* vehicle = calloc(1, sizeof(Vehicle));
+	assignVehicleValues(vehicle, start_location);
+	return vehicle;
+}
+
 void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location)
 {
 	vehicle->current_location = start_location;

@@ -10,23 +10,21 @@ LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num, const Tr
 }
 
 void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num, const TransportNode headquarters_location)
-{
-	if (logisticsManager->vehicles_num != 0 && vehicles_num == 0)
+{	
+	logisticsManager->vehicles_num = vehicles_num;
+
+	if (logisticsManager->vehicles_num > 0)
 	{
-		free(logisticsManager->vehicles);
-		logisticsManager->vehicles = NULL;
+		logisticsManager->vehicles = calloc(logisticsManager->vehicles_num, sizeof(Vehicle*));
 	}
 	else
 	{
-		logisticsManager->vehicles = (Vehicle*) realloc(logisticsManager->vehicles, vehicles_num * sizeof(Vehicle));
-		memset(logisticsManager->vehicles, 0, vehicles_num * sizeof(Vehicle));
+		logisticsManager->vehicles = NULL;
 	}
-
-	logisticsManager->vehicles_num = vehicles_num;
 
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		assignVehicleValues(&logisticsManager->vehicles[i], 0);
+		logisticsManager->vehicles[i] = newVehicle(headquarters_location);
 	}
 
 	logisticsManager->contracts_num = 0;
@@ -49,13 +47,6 @@ LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, V
 	return new_contract;
 }
 
-void loadLogisticsManagerConstructorVehicles(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num)
-{
-	logisticsManager->vehicles_num = vehicles_num;
-	if (logisticsManager->vehicles) free(logisticsManager->vehicles);
-	logisticsManager->vehicles = (Vehicle*) calloc(vehicles_num, sizeof(Vehicle));
-}
-
 void loadLogisticsManagerConstructorLogisticsContract(LogisticsManager* logisticsManager, const uint_fast16_t contracts_num)
 {
 	logisticsManager->contracts_num = contracts_num;
@@ -72,6 +63,19 @@ void assignLoadIdLogisticsManager(LogisticsManager* obj, const int id)
 	}
 }
 
+void addVehicleToLogisticsManager(LogisticsManager* const logisticsManager)
+{
+	if (logisticsManager->vehicles_num++ == 0)
+	{
+		logisticsManager->vehicles = calloc(1, sizeof(Vehicle*));
+	}
+	else
+	{
+		logisticsManager->vehicles = realloc(logisticsManager->vehicles, logisticsManager->vehicles_num * sizeof(Vehicle*));
+	}
+	logisticsManager->vehicles[logisticsManager->vehicles_num-1] = newVehicle(logisticsManager->headquarters_location);
+}
+
 void insertFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds)
 {
 	logisticsManager->wealth += funds;
@@ -82,87 +86,61 @@ void withdrawFundsLogisticsManager(LogisticsManager* logisticsManager, const int
 	logisticsManager->wealth -= funds;
 }
 
-static double __dist_to_price_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
-void update_dist_to_price_eff(void)
+static double __dist_to_profit_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
+static inline void calculate_route_profit(const int from, const ProductMarket* const from_market, const int to, const ProductMarket* const to_market, const int product)
 {
-	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
+	if (to_market->buy_order_num > 0
+		&& from_market->sell_order_num > 0)
 	{
-		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
+		const int_fast64_t export_price = from_market->sell_order_arr[0]->price;
+		const int_fast64_t export_tax = (double)export_price * (
+			(double)getExportTaxRate(product, from, to) 
+			/ 100000.0f
+		);
+
+		const int_fast64_t import_price = to_market->buy_order_arr[0]->price;
+		const int_fast64_t import_tax = (double)import_price * (
+			(double)(getGstTaxRate(product, to)
+			+ getImportTaxRate(product, from, to)) 
+			/ 100000.0f
+		);
+
+		const double profit = (double) (import_price - import_tax - export_price - export_tax);
+		const double quantity = (double) MIN(from_market->sell_order_arr[0]->offer_num, to_market->buy_order_arr[0]->offer_num);
+		
+		if (getTotalDistance(from, to) == 0)
+			__dist_to_profit_eff__[from][to][product] = profit * quantity;
+		else 
+			__dist_to_profit_eff__[from][to][product] = (profit / (double)getTotalDistance(from, to)) * quantity;
+		
+	}
+	else
+		__dist_to_profit_eff__[from][to][product] = 0;
+}
+
+void update_dist_to_profit_eff(void)
+{
+	for (int product = 0; product < PRODUCT_COUNT; product++)
+	{
+		for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
 		{
-			for (int product = 0; product < PRODUCT_COUNT; product++)
+			const ProductMarket* const from_market = getProductMarketAtLocation(from, product);
+			for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
 			{
-				if (getProductMarketAtLocation(to, product)->buy_order_num > 0
-					&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
-				{
-					const int_fast64_t export_price = getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
-					const int_fast64_t export_tax = (double)export_price * (
-						(double)getExportTaxRate(product, from, to) 
-						/ 100000.0f
-					);
-
-					const int_fast64_t import_price = getProductMarketAtLocation(to, product)->buy_order_arr[0]->price;
-					const int_fast64_t import_tax = (double)import_price * (
-						(double)(getGstTaxRate(product, to)
-						+ getImportTaxRate(product, from, to)) 
-						/ 100000.0f
-					);
-
-					const double profit = (double)(import_price - import_tax - export_price - export_tax);
-					
-					if (getTotalDistance(from, to) == 0)
-					{
-						__dist_to_price_eff__[from][to][product] = profit;
-					}
-					else 
-					{
-						__dist_to_price_eff__[from][to][product] = profit / (double)getTotalDistance(from, to);
-					}
-				}
-				else
-				{
-					__dist_to_price_eff__[from][to][product] = 0;
-				}
+				calculate_route_profit(from, from_market, to, getProductMarketAtLocation(to, product), product);
 			}
 		}
 	}
 }
 
-void update_dist_to_price_eff_product_filtered(int product)
+static inline void update_dist_to_profit_eff_product_filtered(int product)
 {
 	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
 	{
+		const ProductMarket* const from_market = getProductMarketAtLocation(from, product);
 		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
 		{
-			if (getProductMarketAtLocation(to, product)->buy_order_num > 0
-				&& getProductMarketAtLocation(from, product)->sell_order_num > 0)
-			{
-				const int_fast64_t export_price = getProductMarketAtLocation(from, product)->sell_order_arr[0]->price;
-				const int_fast64_t export_tax = (double)export_price * (
-					(double)getExportTaxRate(product, from, to) 
-					/ 100000.0f
-				);
-
-				const int_fast64_t import_price = getProductMarketAtLocation(to, product)->buy_order_arr[0]->price;
-				const int_fast64_t import_tax = (double)import_price * (
-					(double)(getGstTaxRate(product, to)
-					+ getImportTaxRate(product, from, to)) 
-					/ 100000.0f
-				);
-
-				const double profit = (double)(import_price - import_tax - export_price - export_tax);
-				if (getTotalDistance(from, to) == 0)
-				{
-					__dist_to_price_eff__[from][to][product] = profit;
-				}
-				else 
-				{
-					__dist_to_price_eff__[from][to][product] = profit / (double)getTotalDistance(from, to);
-				}
-			}
-			else
-			{
-				__dist_to_price_eff__[from][to][product] = 0;
-			}
+			calculate_route_profit(from, from_market, to, getProductMarketAtLocation(to, product), product);
 		}
 	}
 }
@@ -183,7 +161,7 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 		{
 			for (int product = 0; product < PRODUCT_COUNT; product++)
 			{
-				eff = __dist_to_price_eff__[from][to][product];
+				eff = __dist_to_profit_eff__[from][to][product];
 				dist_to = getTotalDistance(vehicle->current_location, from);
 				if (dist_to != 0) eff /= (double) dist_to;
 
@@ -224,34 +202,49 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 		quantity
 	);
 
-	update_dist_to_price_eff_product_filtered(product_max);
+	update_dist_to_profit_eff_product_filtered(product_max);
 	return new_contract;
 }
 
-void assignFreeVehicles(LogisticsManager* logisticsManager)
+static inline void assignFreeVehicles(LogisticsManager* const logisticsManager)
 {
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		if (logisticsManager->vehicles[i].end_location == -1)
+		if (logisticsManager->vehicles[i]->end_location == -1)
 		{
-			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, &logisticsManager->vehicles[i]);
+			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, logisticsManager->vehicles[i]);
 			if (new_contract) processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
 			else return;
 		}
 	}
 }
 
-void processTickLogisticsManager(LogisticsManager* logisticsManager)
+void processTickLogisticsManager(LogisticsManager* const logisticsManager)
 {
-	// TODO TBU
-	insertFundsGovernment(
-		getGovernmentByLocation(logisticsManager->headquarters_location),
-		logisticsManager->wealth
-	);
-	logisticsManager->wealth = 0;
+	if (logisticsManager->wealth >= LOGISTICS_MANAGER_NEW_VEHICLE_COST
+		&& ((float)logisticsManager->contracts_num / (float)logisticsManager->vehicles_num) >= (1-LOGISTICS_MANAGER_DESIRED_FREE_VEHICLE_FACTOR))
+	{
+		addVehicleToLogisticsManager(logisticsManager);	
+		// TODO TBU
+		withdrawFundsLogisticsManager(logisticsManager, LOGISTICS_MANAGER_NEW_VEHICLE_COST);
+		insertFundsGovernment(
+			getGovernmentByLocation(logisticsManager->headquarters_location),
+			LOGISTICS_MANAGER_NEW_VEHICLE_COST
+		);
+	}
+	else if (logisticsManager->wealth >= LOGISTICS_MANAGER_MAX_WEALTH_DONATION_TRIGGER * LOGISTICS_MANAGER_NEW_VEHICLE_COST)
+	{
+		// TODO TBU
+		const int wealth = logisticsManager->wealth;
+		withdrawFundsLogisticsManager(logisticsManager, wealth);
+		insertFundsGovernment(
+			getGovernmentByLocation(logisticsManager->headquarters_location),
+			wealth
+		);
+	}
 }
 
-void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
+void processTickLogisticsManagerContracts(LogisticsManager* const logisticsManager)
 {
 	// Search and add contracts
 	assignFreeVehicles(logisticsManager);
@@ -281,12 +274,12 @@ void processTickLogisticsManagerContracts(LogisticsManager* logisticsManager)
 	}
 }
 
-void processTickLogisticsManagerVehicles(LogisticsManager* logisticsManager)
+void processTickLogisticsManagerVehicles(const LogisticsManager* const logisticsManager)
 {
 	// Tick vehicles
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		processTickVehicle(&logisticsManager->vehicles[i]);
+		processTickVehicle(logisticsManager->vehicles[i]);
 	}
 }
 
@@ -294,7 +287,8 @@ void cleanLogisticsManager(LogisticsManager* logisticsManager)
 {
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		cleanVehicle(&logisticsManager->vehicles[i]);
+		cleanVehicle(logisticsManager->vehicles[i]);
+		free(logisticsManager->vehicles[i]);
 	}
 	free(logisticsManager->vehicles);
 

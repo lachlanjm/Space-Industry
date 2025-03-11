@@ -486,11 +486,7 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 		case LOGISTICS_CONTRACT_SAVE:
 			break;
 		case LOGISTICS_MANAGER_SAVE:
-			if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_VEH_NUM) == 0)
-			{
-				loadLogisticsManagerConstructorVehicles(((LogisticsManager*)current_obj_ptr->data), atoi(attr_value));
-			}
-			else if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_CON_NUM) == 0)
+			if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_CON_NUM) == 0)
 			{
 				loadLogisticsManagerConstructorLogisticsContract(((LogisticsManager*)current_obj_ptr->data), atoi(attr_value));
 			}
@@ -502,7 +498,10 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 					current_index = 0;
 				}
 
-				addNewStructIdPtr(VEHICLE_SAVE, extractObjectId(attr_value), &(((LogisticsManager*)current_obj_ptr->data)->vehicles[current_index]));
+				LogisticsManager* const log_man = ((LogisticsManager*)current_obj_ptr->data);
+				addVehicleToLogisticsManager(log_man); // 0 is default TODO TBU
+				addNewStructIdPtr(VEHICLE_SAVE, extractObjectId(attr_value),
+					log_man->vehicles[log_man->vehicles_num-1]);
 
 				current_index++;
 			}

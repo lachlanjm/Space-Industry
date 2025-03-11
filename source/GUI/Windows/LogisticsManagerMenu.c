@@ -36,7 +36,7 @@ void drawLogisticsManagerMenu(AppPlatform* platform, LogisticsManager* logistics
 				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
 				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
 				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
-				addNewPopupWindow(platform, VEHICLE_MENU, &logisticsManager->vehicles[i]);
+				addNewPopupWindow(platform, VEHICLE_MENU, logisticsManager->vehicles[i]);
 			}
 		}
 	}
