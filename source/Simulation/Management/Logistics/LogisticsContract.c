@@ -72,13 +72,14 @@ int processTickLogisticsContract(LogisticsContract* const logisticsContract)
 	case DELIVERY:
 		if (assigned_vehicle->current_location == assigned_vehicle->end_location)
 		{
+			const QUANTITY_INT dropped_off_quantity = assigned_vehicle->stockpile.quantity;
 			if (unloadCargo(assigned_vehicle, logisticsContract->dropoff_stockpile)) return 0;
 
-			if (logisticsContract->ordered_out_val != NULL)
+			if (logisticsContract->ordered_in_val != NULL)
 			{
-				if (*logisticsContract->ordered_in_val >= assigned_vehicle->stockpile.quantity) // TODO make better
+				if (*logisticsContract->ordered_in_val >= dropped_off_quantity) // TODO make better
 				{
-					*logisticsContract->ordered_in_val -= assigned_vehicle->stockpile.quantity;
+					*logisticsContract->ordered_in_val -= dropped_off_quantity;
 				}
 			}
 
