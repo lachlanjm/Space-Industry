@@ -14,10 +14,14 @@ void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location)
 	vehicle->current_location = start_location;
 	vehicle->end_location = -1;
 	vehicle->distance_travelled = 0;
+	
+	vehicle->location_hook.next = NULL;
+	vehicle->location_hook.prev = NULL;
+	vehicle->location_hook.vehicle = vehicle;
+	vehicle->location_hook.manager = NULL; // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	assignStockpileValues(&vehicle->stockpile, 0, 0);
 
-	vehicle->end_factory = NULL;
 	vehicle->max_capacity = VEHICLE_CAPACITY;
 
 	vehicle->id = id_next++;
@@ -35,18 +39,16 @@ void assignLoadIdVehicle(Vehicle* obj, const int id)
 /*
 TODO: MUST WORK AROUND LEFT-OVER QUANTITY??
 */
-void assignPickup(Vehicle* vehicle, const Factory* factory, const Product product)
+void assignPickup(Vehicle* vehicle, const TransportNode location, const Product product)
 {
-	vehicle->end_factory = factory;
-	vehicle->end_location = factory->location;
+	vehicle->end_location = location;
 	vehicle->stockpile.quantity = 0; // TODO
 	vehicle->stockpile.product_type = product;
 }
 
-void assignDelivery(Vehicle* vehicle, const Factory* factory)
+void assignDelivery(Vehicle* vehicle, const TransportNode location)
 {
-	vehicle->end_factory = factory;
-	vehicle->end_location = factory->location;
+	vehicle->end_location = location;
 }
 
 void moveVehicleToNextLoc(Vehicle* vehicle)
@@ -78,66 +80,56 @@ uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle)
 	return getNextDistance(vehicle->current_location, vehicle->end_location);
 }
 
-void loadCargo(Vehicle* vehicle, const Factory* factory, const Product product_type)
+int loadCargo(Vehicle* vehicle, Stockpile* stockpile, const Product product_type)
 {
-	for (int i = 0; i < factory->stockpiles_out_num; i++) 
+	if (vehicle->stockpile.quantity == 0)
 	{
-		if (factory->stockpiles_out[i].product_type == product_type) 
+		setDiffProduct(&vehicle->stockpile, product_type);
+		if (stockpile->quantity >= vehicle->max_capacity)
 		{
-			if (vehicle->stockpile.quantity == 0)
-			{
-				setDiffProduct(&vehicle->stockpile, product_type);
-				if (factory->stockpiles_out[i].quantity >= vehicle->max_capacity)
-				{
-					moveStockpile(&factory->stockpiles_out[i], &vehicle->stockpile, vehicle->max_capacity);
-				}
-				else 
-				{
-					moveStockpile(&factory->stockpiles_out[i], &vehicle->stockpile, factory->stockpiles_out[i].quantity);
-				}
-				return;
-			}
-			else if (vehicle->stockpile.product_type == product_type)
-			{
-				if (factory->stockpiles_out[i].quantity >= vehicle->max_capacity - product_type)
-				{
-					moveStockpile(&factory->stockpiles_out[i], &vehicle->stockpile, vehicle->max_capacity - product_type);
-				}
-				else 
-				{
-					moveStockpile(&factory->stockpiles_out[i], &vehicle->stockpile, factory->stockpiles_out[i].quantity);
-				}
-				return;
-			}
-			// Fail
+			moveStockpile(stockpile, &vehicle->stockpile, vehicle->max_capacity);
 		}
+		else 
+		{
+			moveStockpile(stockpile, &vehicle->stockpile, stockpile->quantity);
+		}
+		return 0;
 	}
-	// Fail
+	else if (vehicle->stockpile.product_type == product_type)
+	{
+		if (stockpile->quantity >= vehicle->max_capacity - product_type)
+		{
+			moveStockpile(stockpile, &vehicle->stockpile, vehicle->max_capacity - product_type);
+		}
+		else 
+		{
+			moveStockpile(stockpile, &vehicle->stockpile, stockpile->quantity);
+		}
+		return 0;
+	}
+	else return 1; // Fail
 }
 
-int unloadCargo(Vehicle* vehicle, const Factory* factory)
+int unloadCargo(Vehicle* vehicle, Stockpile* stockpile)
 {
-	for (int i = 0; i < factory->stockpiles_in_num; i++) 
+	if (stockpile->product_type == vehicle->stockpile.product_type) 
 	{
-		if (factory->stockpiles_in[i].product_type == vehicle->stockpile.product_type) 
+		if (QUANTITY_INT_MAX - stockpile->quantity >= vehicle->stockpile.quantity)
 		{
-			if (QUANTITY_INT_MAX - factory->stockpiles_in[i].quantity >= vehicle->stockpile.quantity)
-			{
-				if (moveStockpile(&vehicle->stockpile, &factory->stockpiles_in[i], vehicle->stockpile.quantity)) return 1;
-			}
-			else 
-			{
-				if (moveStockpile(&vehicle->stockpile, &factory->stockpiles_in[i], QUANTITY_INT_MAX - factory->stockpiles_in[i].quantity)) return 1;
-			}
-			return 0;
+			if (moveStockpile(&vehicle->stockpile, stockpile, vehicle->stockpile.quantity)) return 1;
 		}
+		else 
+		{
+			if (moveStockpile(&vehicle->stockpile, stockpile, QUANTITY_INT_MAX - stockpile->quantity)) return 1;
+		}
+		return 0;
 	}
-	return 1;
+	else return 1; // Fail
 }
 
 void processTickVehicle(Vehicle* vehicle)
 {
-	if (vehicle->end_factory)
+	if (vehicle->end_location != -1)
 	{
 		stepToNextLocation(vehicle);
 	}

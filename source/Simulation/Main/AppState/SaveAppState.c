@@ -1,5 +1,6 @@
 #include "SaveAppState.h"
 
+static AppState* current_app_state;
 static struct SaveStateQueue* first_item;
 
 static inline char* getSaveFormatName(char buffer[BUF_SIZE], const enum AttributeTypes attributeType, const int id)
@@ -500,11 +501,90 @@ static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logistic
 		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_VEH_ID, VEHICLE_SAVE, logisticsContract->assigned_vehicle->id)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_SEL_FAC_ID, FACTORY_SAVE, logisticsContract->selling_factory->id)
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_LOG_CON_PIC_LOC_ID, logisticsContract->pickup_location)
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_BUY_FAC_ID, FACTORY_SAVE, logisticsContract->buying_factory->id)
+		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_LOG_CON_DRO_LOC_ID, logisticsContract->dropoff_location)
 	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_PIC_STO_ID, STOCKPILE_SAVE, logisticsContract->pickup_stockpile->id)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_DRO_STO_ID, STOCKPILE_SAVE, logisticsContract->dropoff_stockpile->id)
+	);
+
+	const int const* ordered_in = logisticsContract->ordered_in_val;
+	const int const* ordered_out = logisticsContract->ordered_out_val;
+
+	IND_BOOL found_ordered_in = FALSE;
+	IND_BOOL found_ordered_out = FALSE;
+	for (int i = 0; i < current_app_state->companies_num; i++)
+	{
+		const Company company = current_app_state->companies[i];
+		for (int x = 0; x < company.controlled_factories_num; x++)
+		{
+			const Factory const* factory = company.controlled_factories[x];
+			
+			if (!found_ordered_in){ for (int y = 0; y < factory->stockpiles_in_num; y++)
+			{
+				if (ordered_in == &factory->ordered_in[y])
+				{
+					writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+						getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_ORD_IN_ID, FACTORY_SAVE, factory->id)
+					);
+					found_ordered_in = TRUE;
+					break;
+				}
+			}}
+
+			if (!found_ordered_out){ for (int y = 0; y < factory->stockpiles_out_num; y++)
+			{
+				if (ordered_out == &factory->ordered_out[y])
+				{
+					writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+						getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_ORD_OUT_ID, FACTORY_SAVE, factory->id)
+					);
+					found_ordered_out = TRUE;
+					break;
+				}
+			}}
+		}
+		if (found_ordered_in && found_ordered_out) break;
+	}
+	if (!(found_ordered_in && found_ordered_out))
+	{
+		for (int i = 0; i < getLocalPopulationNum(); i++)
+		{
+			const LocalPopulation const* local_pop = getLocalPopulationByLocation(i);
+			
+			if (!found_ordered_in){ for (int x = 0; x < local_pop->population_centre.stockpiles_in; x++)
+			{
+				if (ordered_in == &local_pop->population_centre.ordered_in[x])
+				{
+					writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+						getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_ORD_IN_ID, LOCAL_POPULATION_SAVE, local_pop->id)
+					);
+					found_ordered_in = TRUE;
+					break;
+				}
+			}}
+			
+			if (!found_ordered_out){ for (int x = 0; x < local_pop->population_centre.stockpiles_out; x++)
+			{
+				if (ordered_out == &local_pop->population_centre.ordered_out[x])
+				{
+					writeToFile(fptr, ADD_ATTRIBUTE_WRITE,
+						getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_ORD_OUT_ID, LOCAL_POPULATION_SAVE, local_pop->id)
+					);
+					found_ordered_out = TRUE;
+					break;
+				}
+			}}
+
+			if (found_ordered_in && found_ordered_out) break;
+		}
+	}
+
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatIntegerAttribute(buffer, SAVE_FILE_LOG_CON_CUR_PHA_ID, logisticsContract->current_phase)
 	);
@@ -513,6 +593,9 @@ static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logistic
 	);
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_CON_QUA_ID, logisticsContract->quantity)
+	);
+	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
+		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_LOG_CON_QUA_UNA_ID, logisticsContract->quantity_unassigned)
 	);
 }
 
@@ -624,13 +707,6 @@ static inline void saveVehicle(FILE* fptr, Vehicle* vehicle)
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatPointerAttribute(buffer, SAVE_FILE_VEH_STO_ID, STOCKPILE_SAVE, vehicle->stockpile.id)
 	);
-
-	if (vehicle->end_factory != NULL)
-	{
-		writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
-			getSaveFormatPointerAttribute(buffer, SAVE_FILE_VEH_END_FAC_ID, FACTORY_SAVE, vehicle->end_factory->id)
-		);
-	}
 	writeToFile(fptr, ADD_ATTRIBUTE_WRITE, 
 		getSaveFormatUnsignedIntegerAttribute(buffer, SAVE_FILE_VEH_MAX_CAP_ID, vehicle->max_capacity)
 	);
@@ -695,6 +771,7 @@ int saveAppState(AppState* appState, const char* app_dir_path, const char* save_
 	snprintf(save_file_path, BUF_SIZE, "%s\\saves\\%s", app_dir_path, save_file_name);
 	// TODO !!!!!!!!!!!!!!! ADD SAVE FILE COLLISION HANDLING!!!
 
+	current_app_state = appState;
 	// Queue creation
 	first_item = createQueue(appState);
 	struct SaveStateQueue* current_item = first_item;

@@ -43,22 +43,6 @@ void drawVehicleMenu(AppPlatform* platform, Vehicle* vehicle, char* name)
 			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
 			addNewPopupWindow(platform, STOCKPILE_MENU, &vehicle->stockpile);
 		}
-
-		nk_layout_row_static(platform->ctx, 30, 150, 1);
-		if (vehicle->end_factory != NULL)
-		{
-			if (nk_button_label(platform->ctx, "End Factory"))
-			{
-				const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
-				const struct nk_vec2 size = nk_window_get_size(platform->ctx);
-				setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
-				addNewPopupWindow(platform, FACTORY_MENU, vehicle->end_factory);
-			}
-		}
-		else
-		{
-			nk_label(platform->ctx, "No end factory", NK_TEXT_LEFT);
-		}
 	}
 	nk_end(platform->ctx);
 }

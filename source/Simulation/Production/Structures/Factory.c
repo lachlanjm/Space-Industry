@@ -195,6 +195,30 @@ QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product produc
 	return NULL;
 }
 
+Stockpile* getStockpileInByProduct(const Factory* factory, const Product product)
+{
+	for (int i = 0; i < factory->stockpiles_in_num; i++)
+	{
+		if (factory->stockpiles_in[i].product_type == product)
+		{
+			return &factory->stockpiles_in[i];
+		}
+	}
+	return NULL;
+}
+
+Stockpile* getStockpileOutByProduct(const Factory* factory, const Product product)
+{
+	for (int i = 0; i < factory->stockpiles_out_num; i++)
+	{
+		if (factory->stockpiles_out[i].product_type == product)
+		{
+			return &factory->stockpiles_out[i];
+		}
+	}
+	return NULL;
+}
+
 void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity)
 {
 	QUANTITY_INT* result = getOrderedInQuantity(factory, product);

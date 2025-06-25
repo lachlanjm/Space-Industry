@@ -36,14 +36,22 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 	logisticsManager->id = id_next++;
 }
 
-LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, Factory* selling_factory, Factory* buying_factory, const Product product, const QUANTITY_INT quantity)
+LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile const* pickup_stockpile, Stockpile const* dropoff_stockpile, QUANTITY_INT* const ordered_in_val, QUANTITY_INT* const ordered_out_val, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
 	const LogisticsContract* new_contract = &logisticsManager->contracts[logisticsManager->contracts_num-1];
 	memset(new_contract, 0, sizeof(LogisticsContract));
-	addOrderedOutQuantity(selling_factory, product, quantity);
-	addOrderedInQuantity(buying_factory, product, quantity);
-	assignLogisticsContractValues(new_contract, vehicle, selling_factory, buying_factory, ASSIGNMENT, product, quantity);
+
+	if (ordered_out_val != NULL) // TODO make better
+	{
+		*ordered_out_val += quantity;
+	}
+	if (ordered_in_val != NULL) // TODO make better
+	{
+		*ordered_in_val += quantity;
+	}
+
+	assignLogisticsContractValues(new_contract, vehicle, pickup_location, dropoff_location, pickup_stockpile, dropoff_stockpile, ordered_in_val, ordered_out_val, ASSIGNMENT, product, quantity);
 	return new_contract;
 }
 
@@ -182,8 +190,8 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 	}
 
 	// TODO !!!! IMPROVE FLOW AND MEMORY ASSIGNMENT
-	Factory* selling_factory = getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0]->offering_factory;
-	Factory* buying_factory = getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]->offering_factory;
+	Factory const* selling_factory = getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0]->offering_factory;
+	Factory const* buying_factory = getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]->offering_factory;
 
 	QUANTITY_INT quantity = match_orders(
 		logisticsManager,
@@ -193,11 +201,21 @@ LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, V
 		getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]
 	);
 
+	Stockpile const* pickup_stockpile = getStockpileOutByProduct(selling_factory, product_max);
+	Stockpile const* dropoff_stockpile = getStockpileInByProduct(buying_factory, product_max);
+
+	QUANTITY_INT const* ordered_in_val = getOrderedInQuantity(buying_factory, product_max);
+	QUANTITY_INT const* ordered_out_val = getOrderedOutQuantity(selling_factory, product_max);
+
 	const LogisticsContract* const new_contract = addNewLogisticsContract(
 		logisticsManager,
 		vehicle,
-		selling_factory,
-		buying_factory,
+		from_max,
+		to_max,
+		pickup_stockpile,
+		dropoff_stockpile,
+		ordered_in_val,
+		ordered_out_val,
 		product_max,
 		quantity
 	);

@@ -19,20 +19,48 @@ enum ContractPhase {
 };
 
 struct LogisticsContract {
-	// uint_fast16_t vehicle_num;
+	uint_fast16_t assigned_vehicle_num; // placeholder
 	Vehicle* assigned_vehicle; // TODO make array
 
-	Factory* selling_factory;
-	Factory* buying_factory;
-
+	TransportNode pickup_location;
+	TransportNode dropoff_location;
+	
+	Stockpile* pickup_stockpile;
+	Stockpile* dropoff_stockpile;
+	
+	QUANTITY_INT* ordered_in_val;
+	QUANTITY_INT* ordered_out_val;
+	
 	enum ContractPhase current_phase;
 	Product product;
 	QUANTITY_INT quantity;
+	QUANTITY_INT quantity_unassigned;
 	LOGISTICS_CONTRACT_ID_INT id;
 };
 
-LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const Product product, const QUANTITY_INT quantity);
-void assignLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const Factory* selling_factory, const Factory* buying_factory, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity);
+LogisticsContract* newLogisticsContract(
+	const Vehicle* assigned_vehicle,
+	const TransportNode pickup_location,
+	const TransportNode dropoff_location,
+	Stockpile const* pickup_stockpile,
+	Stockpile const* dropoff_stockpile,
+	QUANTITY_INT const* ordered_in_val,
+	QUANTITY_INT const* ordered_out_val,
+	const Product product, 
+	const QUANTITY_INT quantity
+);
+void assignLogisticsContractValues(LogisticsContract* logisticsContract, 
+	const Vehicle* assigned_vehicle, 
+	const TransportNode pickup_location,
+	const TransportNode dropoff_location,
+	Stockpile const* pickup_stockpile,
+	Stockpile const* dropoff_stockpile,
+	QUANTITY_INT const* ordered_in_val,
+	QUANTITY_INT const* ordered_out_val,
+	const enum ContractPhase current_phase, 
+	const Product product, 
+	const QUANTITY_INT quantity
+);
 void assignLoadIdLogisticsContract(LogisticsContract* obj, const int id);
 
 int processTickLogisticsContract(LogisticsContract* const logisticsContract);

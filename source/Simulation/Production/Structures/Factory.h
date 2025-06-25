@@ -75,6 +75,9 @@ void reassignOrderOfferingPtrs(const Factory* factory);
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
 QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);
 
+Stockpile* getStockpileInByProduct(const Factory* factory, const Product product);
+Stockpile* getStockpileOutByProduct(const Factory* factory, const Product product);
+
 void addOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
 void addOrderedOutQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);
 void removeOrderedInQuantity(Factory* factory, const Product product, const QUANTITY_INT quantity);

@@ -20,25 +20,28 @@ void drawLogisticsContractMenu(AppPlatform* platform, LogisticsContract* logisti
 			addNewPopupWindow(platform, VEHICLE_MENU, logisticsContract->assigned_vehicle);
 		}
 
-		nk_layout_row_static(platform->ctx, 30, 100, 2);
-		nk_label(platform->ctx, "Selling factory: ", NK_TEXT_LEFT);
-		if (nk_button_label(platform->ctx, "Show"))
-		{
-			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
-			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
-			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
-			addNewPopupWindow(platform, FACTORY_MENU, logisticsContract->selling_factory);
-		}
+		// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+		// need to make similar-ish replacement
 
-		nk_layout_row_static(platform->ctx, 30, 100, 2);
-		nk_label(platform->ctx, "Buying Factory: ", NK_TEXT_LEFT);
-		if (nk_button_label(platform->ctx, "Show"))
-		{
-			const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
-			const struct nk_vec2 size = nk_window_get_size(platform->ctx);
-			setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
-			addNewPopupWindow(platform, FACTORY_MENU, logisticsContract->buying_factory);
-		}
+		// nk_layout_row_static(platform->ctx, 30, 100, 2);
+		// nk_label(platform->ctx, "Selling factory: ", NK_TEXT_LEFT);
+		// if (nk_button_label(platform->ctx, "Show"))
+		// {
+		// 	const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+		// 	const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+		// 	setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+		// 	addNewPopupWindow(platform, FACTORY_MENU, logisticsContract->selling_factory);
+		// }
+
+		// nk_layout_row_static(platform->ctx, 30, 100, 2);
+		// nk_label(platform->ctx, "Buying Factory: ", NK_TEXT_LEFT);
+		// if (nk_button_label(platform->ctx, "Show"))
+		// {
+		// 	const struct nk_vec2 pos = nk_window_get_position(platform->ctx);
+		// 	const struct nk_vec2 size = nk_window_get_size(platform->ctx);
+		// 	setParentDimensions(platform, pos.x, pos.y, size.x, size.y);
+		// 	addNewPopupWindow(platform, FACTORY_MENU, logisticsContract->buying_factory);
+		// }
 
 		nk_layout_row_static(platform->ctx, 30, 100, 2);
 		nk_label(platform->ctx, "Contract Phase: ", NK_TEXT_LEFT);

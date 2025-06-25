@@ -87,11 +87,16 @@
 #define SAVE_FILE_LOG_MAN_CON_ID "contracts"
 
 #define SAVE_FILE_LOG_CON_VEH_ID "assigned_vehicle"
-#define SAVE_FILE_LOG_CON_SEL_FAC_ID "selling_factory"
-#define SAVE_FILE_LOG_CON_BUY_FAC_ID "buying_factory"
+#define SAVE_FILE_LOG_CON_PIC_LOC_ID "pickup_location"
+#define SAVE_FILE_LOG_CON_DRO_LOC_ID "dropoff_location"
+#define SAVE_FILE_LOG_CON_PIC_STO_ID "pickup_stockpile"
+#define SAVE_FILE_LOG_CON_DRO_STO_ID "dropoff_stockpile"
+#define SAVE_FILE_LOG_CON_ORD_IN_ID "ordered_in_val"
+#define SAVE_FILE_LOG_CON_ORD_OUT_ID "ordered_out_val"
 #define SAVE_FILE_LOG_CON_CUR_PHA_ID "current_phase"
 #define SAVE_FILE_LOG_CON_PRO_ID "product"
 #define SAVE_FILE_LOG_CON_QUA_ID "quantity"
+#define SAVE_FILE_LOG_CON_QUA_UNA_ID "quantity_unassigned"
 
 #define SAVE_FILE_ORD_OFF_FAC_ID "offering_factory"
 #define SAVE_FILE_ORD_OFF_NUM_ID "offer_num"
@@ -111,7 +116,6 @@
 #define SAVE_FILE_VEH_CUR_LOC_ID "current_location"
 #define SAVE_FILE_VEH_END_LOC_ID "end_location"
 #define SAVE_FILE_VEH_DIS_TRA_ID "distance_travelled"
-#define SAVE_FILE_VEH_END_FAC_ID "end_factory"
 #define SAVE_FILE_VEH_MAX_CAP_ID "max_capacity"
 
 #define BUF_SIZE 128

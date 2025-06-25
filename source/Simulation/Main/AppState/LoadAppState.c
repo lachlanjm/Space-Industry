@@ -484,6 +484,10 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 			}
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
+			if (strcmp(new_data_point, SAVE_FILE_LOG_CON_PRO_ID) == 0)
+			{
+				((LogisticsContract*)current_obj_ptr->data)->product = atoi(attr_value);
+			}
 			break;
 		case LOGISTICS_MANAGER_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOG_MAN_CON_NUM) == 0)
@@ -589,11 +593,16 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 			break;
 		case LOGISTICS_CONTRACT_SAVE:
 			((LogisticsContract*)current_obj->data)->assigned_vehicle = NULL;
-			((LogisticsContract*)current_obj->data)->selling_factory = NULL;
-			((LogisticsContract*)current_obj->data)->buying_factory = NULL;
+			((LogisticsContract*)current_obj->data)->pickup_location = -1;
+			((LogisticsContract*)current_obj->data)->dropoff_location = -1;
+			((LogisticsContract*)current_obj->data)->pickup_stockpile = NULL;
+			((LogisticsContract*)current_obj->data)->dropoff_stockpile = NULL;
+			((LogisticsContract*)current_obj->data)->ordered_in_val = NULL;
+			((LogisticsContract*)current_obj->data)->ordered_out_val = NULL;
 			((LogisticsContract*)current_obj->data)->current_phase = 0;
 			((LogisticsContract*)current_obj->data)->product = 0;
 			((LogisticsContract*)current_obj->data)->quantity = 0;
+			((LogisticsContract*)current_obj->data)->quantity_unassigned = 0;
 			break;
 		case LOGISTICS_MANAGER_SAVE:
 			break;
@@ -610,7 +619,6 @@ static inline void setDefaults(const enum AttributeTypes current_obj_type, struc
 			((Vehicle*)current_obj->data)->current_location = 0;
 			((Vehicle*)current_obj->data)->end_location = -1;
 			((Vehicle*)current_obj->data)->distance_travelled = 0;
-			((Vehicle*)current_obj->data)->end_factory = NULL;
 			((Vehicle*)current_obj->data)->max_capacity = 0;
 			break;
 		default:
@@ -758,25 +766,113 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			{
 				((LogisticsContract*)current_obj_ptr->data)->assigned_vehicle = (Vehicle*) getObject(VEHICLE_SAVE, extractObjectId(attr_value))->data;
 			}
-			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_SEL_FAC_ID) == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_PIC_LOC_ID) == 0)
 			{
-				((LogisticsContract*)current_obj_ptr->data)->selling_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
+				((LogisticsContract*)current_obj_ptr->data)->pickup_location = (TransportNode) atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_BUY_FAC_ID) == 0)
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_DRO_LOC_ID) == 0)
 			{
-				((LogisticsContract*)current_obj_ptr->data)->buying_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
+				((LogisticsContract*)current_obj_ptr->data)->dropoff_location = (TransportNode) atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_PIC_STO_ID) == 0)
+			{
+				((LogisticsContract*)current_obj_ptr->data)->pickup_stockpile = (Stockpile*) getObject(STOCKPILE_SAVE, extractObjectId(attr_value))->data;
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_DRO_STO_ID) == 0)
+			{
+				((LogisticsContract*)current_obj_ptr->data)->dropoff_stockpile = (Stockpile*) getObject(STOCKPILE_SAVE, extractObjectId(attr_value))->data;
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_CUR_PHA_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->current_phase = atoi(attr_value);
 			}
-			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_PRO_ID) == 0)
-			{
-				((LogisticsContract*)current_obj_ptr->data)->product = atoi(attr_value);
-			}
 			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_QUA_ID) == 0)
 			{
 				((LogisticsContract*)current_obj_ptr->data)->quantity = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_QUA_UNA_ID) == 0)
+			{
+				((LogisticsContract*)current_obj_ptr->data)->quantity_unassigned = atoi(attr_value);
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_ORD_IN_ID) == 0)
+			{
+				int id = extractObjectId(attr_value);
+				const enum AttributeTypes ordered_in_obj_type = matchIdentifierWithType(attr_value);
+				
+				switch (ordered_in_obj_type)
+				{
+					case FACTORY_SAVE:
+						const Factory const* factory = (Factory*) getObject(FACTORY_SAVE, id)->data;
+						int f_index = 0;
+						const enum Product f_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
+						for (int i = 0; i < factory->stockpiles_in_num; i++)
+						{
+							if (factory->stockpiles_in[i].product_type == f_product_type)
+							{
+								f_index = i;
+								break;
+							}
+						}
+						((LogisticsContract*)current_obj_ptr->data)->ordered_in_val = &factory->ordered_in[f_index];
+						break;
+					case LOCAL_POPULATION_SAVE:
+						const LocalPopulation const* local_pop = (LocalPopulation*) getObject(LOCAL_POPULATION_SAVE, id)->data;
+						int lp_index = 0;
+						const enum Product lp_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
+						for (int i = 0; i < local_pop->population_centre.stockpiles_in_num; i++)
+						{
+							if (local_pop->population_centre.stockpiles_in[i].product_type == lp_product_type)
+							{
+								lp_index = i;
+								break;
+							}
+						}
+						((LogisticsContract*)current_obj_ptr->data)->ordered_in_val = &local_pop->population_centre.ordered_in[lp_index];
+						break;
+					default:
+						((LogisticsContract*)current_obj_ptr->data)->ordered_in_val = NULL;
+						break;
+				}
+			}
+			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_ORD_OUT_ID) == 0)
+			{
+				int id = extractObjectId(attr_value);
+				const enum AttributeTypes ordered_out_obj_type = matchIdentifierWithType(attr_value);
+				
+				switch (ordered_out_obj_type)
+				{
+					case FACTORY_SAVE:
+						const Factory const* factory = (Factory*) getObject(FACTORY_SAVE, id)->data;
+						int f_index = 0;
+						const enum Product f_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
+						for (int i = 0; i < factory->stockpiles_out_num; i++)
+						{
+							if (factory->stockpiles_out[i].product_type == f_product_type)
+							{
+								f_index = i;
+								break;
+							}
+						}
+						((LogisticsContract*)current_obj_ptr->data)->ordered_out_val = &factory->ordered_out[f_index];
+						break;
+					case LOCAL_POPULATION_SAVE:
+						const LocalPopulation const* local_pop = (LocalPopulation*) getObject(LOCAL_POPULATION_SAVE, id)->data;
+						int lp_index = 0;
+						const enum Product lp_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
+						for (int i = 0; i < local_pop->population_centre.stockpiles_out_num; i++)
+						{
+							if (local_pop->population_centre.stockpiles_out[i].product_type == lp_product_type)
+							{
+								lp_index = i;
+								break;
+							}
+						}
+						((LogisticsContract*)current_obj_ptr->data)->ordered_out_val = &local_pop->population_centre.ordered_out[lp_index];
+						break;
+					default:
+						((LogisticsContract*)current_obj_ptr->data)->ordered_out_val = NULL;
+						break;
+				}
 			}
 			break;
 		case LOGISTICS_MANAGER_SAVE:
@@ -828,10 +924,6 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			else if (strcmp(new_data_point, SAVE_FILE_VEH_DIS_TRA_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->distance_travelled = atoi(attr_value);
-			}
-			else if (strcmp(new_data_point, SAVE_FILE_VEH_END_FAC_ID) == 0)
-			{
-				((Vehicle*)current_obj_ptr->data)->end_factory = (Factory*) getObject(FACTORY_SAVE, extractObjectId(attr_value))->data;
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_VEH_MAX_CAP_ID) == 0)
 			{
@@ -1072,32 +1164,25 @@ AppState* loadAppState(const char* app_dir_path, const char* save_file_name)
 
 			// Shift other external data
 			const Factory* new_loc = &getLocalPopulationByLocation(i)->population_centre;
-			// Vehicles
-			struct LoadStateIdList* current_obj_ptr = &__object_arr[VEHICLE_SAVE];
-			if (current_obj_ptr->data != NULL)
-			{
-				while (current_obj_ptr != NULL)
-				{
-					if (((Vehicle*)current_obj_ptr->data)->end_factory == &__lclpop_arr[i].population_centre)
-					{
-						((Vehicle*)current_obj_ptr->data)->end_factory = new_loc;
-					}
-					current_obj_ptr = current_obj_ptr->next;
-				}
-			}
 			// LogisticsContracts
 			current_obj_ptr = &__object_arr[LOGISTICS_CONTRACT_SAVE];
 			if (current_obj_ptr->data != NULL)
 			{
 				while (current_obj_ptr != NULL)
 				{
-					if (((LogisticsContract*)current_obj_ptr->data)->buying_factory == &__lclpop_arr[i].population_centre)
+					for (int x = 0; x < new_loc->stockpiles_in_num; x++)
 					{
-						((LogisticsContract*)current_obj_ptr->data)->buying_factory = new_loc;
+						if (((LogisticsContract*)current_obj_ptr->data)->dropoff_stockpile == &__lclpop_arr[i].population_centre.stockpiles_in[x])
+						{
+							((LogisticsContract*)current_obj_ptr->data)->dropoff_stockpile = &new_loc->stockpiles_in[x];
+						}
 					}
-					if (((LogisticsContract*)current_obj_ptr->data)->selling_factory == &__lclpop_arr[i].population_centre)
+					for (int x = 0; x < new_loc->stockpiles_out_num; x++)
 					{
-						((LogisticsContract*)current_obj_ptr->data)->selling_factory = new_loc;
+						if (((LogisticsContract*)current_obj_ptr->data)->pickup_stockpile == &__lclpop_arr[i].population_centre.stockpiles_out[x])
+						{
+							((LogisticsContract*)current_obj_ptr->data)->pickup_stockpile = &new_loc->stockpiles_out[x];
+						}
 					}
 					current_obj_ptr = current_obj_ptr->next;
 				}
