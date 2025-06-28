@@ -32,6 +32,9 @@ struct Government {
 
 #include <stdlib.h>
 
+#define GOVERNMENT_MONETARY_PRINTING 200
+#define GOVERNMENT_PAYMENT_PERC 0.01
+
 void setGovernmentCountStatic(const int _government_count);
 int getGovernmentNum(void);
 Government* getGovernmentByIndex(const int index);

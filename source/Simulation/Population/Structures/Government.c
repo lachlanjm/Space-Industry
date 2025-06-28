@@ -222,7 +222,8 @@ void processTickAllGovernments(void)
 // TODO optimise runtime
 void processTickGovernment(Government* government)
 {
-	const int welfare_payments = government->wealth / government->controlled_local_population_num;
+	government->wealth += GOVERNMENT_MONETARY_PRINTING;
+	const int welfare_payments = (government->wealth * GOVERNMENT_PAYMENT_PERC) / government->controlled_local_population_num;
 	for (TransportNode curr_loc = 0; curr_loc<location_count;curr_loc++)
 	{
 		if (government == getGovernmentByLocation(curr_loc))
