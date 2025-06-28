@@ -186,16 +186,6 @@ QUANTITY_INT match_orders(LogisticsManager* logisticsManager, ProductMarket* sel
 	recordGovMarketProductBuyPrice(getGovernmentByLocation(buying_market->location), product_type, exchanged_num, import_price);
 	recordMarketProductTransactionPrice(product_type, exchanged_num, import_price, export_price);
 
-	if (selling_order->offer_num == 0)
-	{
-		if (removeSellOrder(selling_market, selling_order)) printf("Failed to remove sell order\n");
-	}
-
-	if (buying_order->offer_num == 0)
-	{
-		if (removeBuyOrder(buying_market, buying_order)) printf("Failed to remove buy order\n");
-	}
-
 	return exchanged_num;
 }
 

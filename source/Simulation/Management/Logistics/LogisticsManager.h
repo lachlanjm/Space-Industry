@@ -34,7 +34,7 @@ struct LogisticsManager
 
 #define LOGISTICS_MANAGER_NEW_VEHICLE_COST 100000
 #define LOGISTICS_MANAGER_DESIRED_FREE_VEHICLE_FACTOR 0.1
-#define LOGISTICS_MANAGER_MAX_WEALTH_DONATION_TRIGGER 4 // TODO remove after TBU
+#define LOGISTICS_MANAGER_MAX_WEALTH_DONATION_TRIGGER 2 // TODO remove after TBU
 
 LogisticsManager* newLogisticsManager(const uint_fast16_t vehicles_num, const TransportNode headquarters_location);
 void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint_fast16_t vehicles_num, const TransportNode headquarters_location);

@@ -48,6 +48,13 @@ void assignFactoryValuesCompany(Factory* const factory, const Company* const com
 		factory->stockpiles_in_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
 		assignOrderValues(&factory->orders_in[i], factory, 0, 1);
 		factory->ordered_in[i] = 0;
+
+		if (addBuyOrder(
+			getProductMarketAtLocation(factory->location, factory->stockpiles_in[i].product_type),
+			&factory->orders_in[i])
+		) {
+			printf("Failed to add buy order\n");
+		}
 	}
 
 	tmp_arr = getOutputs(productionRecipe);
@@ -56,6 +63,13 @@ void assignFactoryValuesCompany(Factory* const factory, const Company* const com
 		factory->stockpiles_out_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
 		assignOrderValues(&factory->orders_out[i], factory, 0, 1);
 		factory->ordered_out[i] = 0;
+
+		if (addSellOrder(
+			getProductMarketAtLocation(factory->location, factory->stockpiles_out[i].product_type),
+			&factory->orders_out[i])
+		) {
+			printf("Failed to add sell order\n");
+		}
 	}
 
 	assignHistoryArrayAvgValues(&factory->profit_history);
@@ -84,6 +98,13 @@ void assignFactoryValuesLocalPopulation(Factory* const factory, const TransportN
 		factory->stockpiles_in_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
 		assignOrderValues(&factory->orders_in[i], factory, 0, 1);
 		factory->ordered_in[i] = 0;
+		
+		if (addBuyOrder(
+			getProductMarketAtLocation(factory->location, factory->stockpiles_in[i].product_type),
+			&factory->orders_in[i])
+		) {
+			printf("Failed to add buy order\n");
+		}
 	}
 
 	tmp_arr = getOutputs(productionRecipe);
@@ -92,6 +113,13 @@ void assignFactoryValuesLocalPopulation(Factory* const factory, const TransportN
 		factory->stockpiles_out_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
 		assignOrderValues(&factory->orders_out[i], factory, 0, 1);
 		factory->ordered_out[i] = 0;
+
+		if (addSellOrder(
+			getProductMarketAtLocation(factory->location, factory->stockpiles_out[i].product_type),
+			&factory->orders_out[i])
+		) {
+			printf("Failed to add sell order\n");
+		}
 	}
 
 	assignHistoryArrayAvgValues(&factory->profit_history);

@@ -26,22 +26,35 @@ struct Company {
 #include <stdio.h>
 #include <math.h>
 
-// TODO: TBU finetune AI
-#define CO_EMPLOYEE_DELTA_FACTOR 0.05f
+// TODO: TBU finetune AI !!!!!!!!!!!!!!!!!!!!!!!!
+//-----------------
+// Orders
+//-----------------
+#define CO_ORDER_DESIRED_SELL_STOCKPILE_ROOT 28.3 // !!MUST BE!! < STOCKPILE_FULL - ORDER_QUANTITY_MIN
+#define CO_ORDER_DESIRED_BUY_STOCKPILE_ROOT 38.7
 
-// TODO: TBU finetune AI
-#define CO_DESIRED_SELL_STOCKPILE_ROOT 28.3 // !!MUST BE!! < STOCKPILE_FULL - ORDER_QUANTITY_MIN
-#define CO_DESIRED_BUY_STOCKPILE_ROOT 38.7
-#define CO_ORDER_QUANTITY_MIN 100
+//-----------------
+// Employment
+//-----------------
+#define CO_EMPLOYEE_DELTA_FACTOR 0.01f
+#define CO_DESIRED_SELL_STOCKPILE_MIN 150
+#define CO_DESIRED_SELL_STOCKPILE_MAX 850
+#define CO_DESIRED_BUY_STOCKPILE_MIN 100
+#define CO_DESIRED_BUY_STOCKPILE_MAX 800
 
+//-----------------
+// Construction
+//-----------------
 #define CO_NEW_FACTORY_MATERIAL_COST 1000000
 #define CO_NEW_FACTORY_LABOR_COST 1000000
 #define CO_NEW_FACTORY_MIN_RETURN 10 // per prod. tick, exclusive
 #define CO_DESTROY_FACTORY_TICKS 10000
 
+//-----------------
+// Misc.
+//-----------------
 #define CO_MIN_PROFIT 100
-
-#define CO_DEFAULT_PRICE 10
+#define CO_DEFAULT_PRICE 100
 
 void cleanUpFactoryPurgatoryStatic(void);
 

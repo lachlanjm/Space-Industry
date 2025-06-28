@@ -148,11 +148,23 @@ void withdrawFundsCompany(Company* const company, const int funds)
 	company->wealth -= funds;
 }
 
-static inline IND_BOOL nearFullFactoryStockpileInputs(const Factory* const factory)
+static inline IND_BOOL oneNearEmptyFactoryStockpileInputs(const Factory* const factory)
 {
 	for (int i = 0; i < factory->stockpiles_in_num; i++)
 	{
-		if (factory->stockpiles_in[i].quantity < CO_DESIRED_BUY_STOCKPILE_ROOT*CO_DESIRED_BUY_STOCKPILE_ROOT)
+		if (factory->stockpiles_in[i].quantity <= CO_DESIRED_BUY_STOCKPILE_MIN)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+static inline IND_BOOL allNearFullFactoryStockpileInputs(const Factory* const factory)
+{
+	for (int i = 0; i < factory->stockpiles_in_num; i++)
+	{
+		if (factory->stockpiles_in[i].quantity < CO_DESIRED_BUY_STOCKPILE_MAX)
 		{
 			return FALSE;
 		}
@@ -160,11 +172,23 @@ static inline IND_BOOL nearFullFactoryStockpileInputs(const Factory* const facto
 	return TRUE;
 }
 
-static inline IND_BOOL nearEmptyFactoryStockpileOutputs(const Factory* const factory)
+static inline IND_BOOL oneNearFullFactoryStockpileOutputs(const Factory* const factory)
 {
 	for (int i = 0; i < factory->stockpiles_out_num; i++)
 	{
-		if (factory->stockpiles_out[i].quantity > CO_DESIRED_SELL_STOCKPILE_ROOT*CO_DESIRED_SELL_STOCKPILE_ROOT)
+		if (factory->stockpiles_out[i].quantity >= CO_DESIRED_SELL_STOCKPILE_MAX)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+static inline IND_BOOL allNearEmptyFactoryStockpileOutputs(const Factory* const factory)
+{
+	for (int i = 0; i < factory->stockpiles_out_num; i++)
+	{
+		if (factory->stockpiles_out[i].quantity > CO_DESIRED_SELL_STOCKPILE_MIN)
 		{
 			return FALSE;
 		}
@@ -213,10 +237,29 @@ static inline void updateEmployeeOffers(Company* const company)
 	for (int i = 0; i < company->controlled_factories_num; i++)
 	{
 		Factory* const curr_fact = company->controlled_factories[i];
-		const IND_BOOL input_full = nearFullFactoryStockpileInputs(curr_fact);
-		const IND_BOOL output_empty = nearEmptyFactoryStockpileOutputs(curr_fact);
-		const IND_BOOL hiring = (input_full && output_empty);
-		if (!hiring) 
+
+		const IND_BOOL input_empty = oneNearEmptyFactoryStockpileInputs(curr_fact);
+		const IND_BOOL input_full = allNearFullFactoryStockpileInputs(curr_fact);
+		const IND_BOOL output_empty = allNearEmptyFactoryStockpileOutputs(curr_fact);
+		const IND_BOOL output_full = oneNearFullFactoryStockpileOutputs(curr_fact);
+
+		IND_BOOL hiring = FALSE;
+		IND_BOOL firing = FALSE;
+		
+		if (curr_fact->profit_history.avg < 0)
+		{
+			firing = TRUE;
+		}
+		else if (input_empty || output_full)
+		{
+			firing = TRUE;
+		}
+		else if (input_full || output_empty) // effectively [in this elseif order] (input_full && !output_full) || (output_empty && !input_empty)
+		{
+			hiring = TRUE;
+		}
+
+		if (firing && curr_fact->current_employee_num > 0) 
 		{
 			const int employee_dec = MIN(
 				curr_fact->current_employee_num,
@@ -230,12 +273,7 @@ static inline void updateEmployeeOffers(Company* const company)
 				removeEmployees(curr_fact, employee_dec);
 			}
 		}
-		else if (curr_fact->current_employee_num >= curr_fact->max_employee_num)
-		{
-			// Can't increase worker numbers
-			// pass
-		}
-		else if (hiring)
+		else if (hiring && curr_fact->current_employee_num <= curr_fact->max_employee_num)
 		{
 			const int employee_inc = MIN(
 				curr_fact->max_employee_num - curr_fact->current_employee_num,
@@ -272,20 +310,7 @@ static inline void updateOfferedPrices(Company* const company)
 			);
 			const QUANTITY_INT stockpile_max = curr_fact->stockpiles_in_max_quant[i];
 
-			if (stockpile_ordered_quantity < stockpile_max - CO_ORDER_QUANTITY_MIN)
-			{		
-				if (curr_fact->orders_in[i].offer_num == 0)
-				{
-					// Add to market
-					if (addBuyOrder(
-						getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_in[i].product_type),
-						&curr_fact->orders_in[i])
-					) {
-						printf("Failed to add buy order\n");
-					}
-				}
-				curr_fact->orders_in[i].offer_num = stockpile_max - stockpile_ordered_quantity;
-			}
+			curr_fact->orders_in[i].offer_num = stockpile_max - stockpile_ordered_quantity;
 
 			if (curr_fact->orders_in[i].offer_num > 0)
 			{
@@ -297,15 +322,20 @@ static inline void updateOfferedPrices(Company* const company)
 					company->wealth / MAX(1, curr_fact->stockpiles_in_num-1), 
 					getBaseBuyPrice(productMarket, getGovernmentByLocation(productMarket->location), product_type)
 				);
-				const double stockpile_factor = sqrt((double)curr_fact->orders_in[i].offer_num) / CO_DESIRED_BUY_STOCKPILE_ROOT;
+				const double stockpile_factor = sqrt((double)curr_fact->orders_in[i].offer_num) / CO_ORDER_DESIRED_BUY_STOCKPILE_ROOT;
 
 				// TODO TBU
-				curr_fact->orders_in[i].price = MAX(1, base_price * profit_factor_buy * stockpile_factor);
+				uint_fast64_t market_based_price = (uint_fast64_t) MAX(1, base_price * profit_factor_buy * stockpile_factor);
+				uint_fast64_t wealth_based_price = (uint_fast64_t) MAX(1, 
+					2 * (double)company->wealth 
+					/ (double)(curr_fact->orders_in[i].offer_num 
+						* company->controlled_factories_num 
+						* curr_fact->stockpiles_in_num
+					));
+				curr_fact->orders_in[i].price = MIN(market_based_price, wealth_based_price);
 
-				if (curr_fact->orders_in[i].price <= 0 || curr_fact->orders_in[i].price > 1000000000) // FOR debugging
-				{
-					printf("b; %u, %f, %f, %u\n", base_price, profit_factor_buy, stockpile_factor, curr_fact->orders_in[i].price);
-				}
+				// FOR debugging
+				if (curr_fact->orders_in[i].price <= 0 || curr_fact->orders_in[i].price > 1000000000) printf("b; %u, %f, %f, %u\n", base_price, profit_factor_buy, stockpile_factor, curr_fact->orders_in[i].price);
 
 				if (resetBuyOrder(productMarket, &curr_fact->orders_in[i])) 
 				{
@@ -328,20 +358,7 @@ static inline void updateOfferedPrices(Company* const company)
 				printf("stockpile_free_quantity = %u; %u, %u\n", stockpile_free_quantity, curr_fact->stockpiles_out[i].quantity, *getOrderedOutQuantity(curr_fact, curr_fact->stockpiles_out[i].product_type));
 			}
 
-			if (stockpile_free_quantity > CO_ORDER_QUANTITY_MIN)
-			{
-				if (curr_fact->orders_out[i].offer_num == 0)
-				{
-					// Add to market
-					if (addSellOrder(
-						getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_out[i].product_type),
-						&curr_fact->orders_out[i])
-					) {
-						printf("Failed to add sell order\n");
-					}
-				}
-				curr_fact->orders_out[i].offer_num = stockpile_free_quantity;
-			}
+			curr_fact->orders_out[i].offer_num = stockpile_free_quantity;
 
 			if (curr_fact->orders_out[i].offer_num > 0)
 			{
@@ -350,7 +367,7 @@ static inline void updateOfferedPrices(Company* const company)
 				
 				const Product product_type = productMarket->product_type;
 				const uint64_t base_price = getBaseSellPrice(productMarket, getGovernmentByLocation(productMarket->location), product_type);
-				const double stockpile_factor = CO_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)curr_fact->orders_out[i].offer_num);
+				const double stockpile_factor = CO_ORDER_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)curr_fact->orders_out[i].offer_num);
 
 				curr_fact->orders_out[i].price = MAX(1, base_price * profit_factor_sell * stockpile_factor);
 
@@ -440,24 +457,17 @@ void loadCompanyAssignOrders(Company* const company)
 					curr_fact->stockpiles_in[i].product_type
 			);
 			const QUANTITY_INT stockpile_max = curr_fact->stockpiles_in_max_quant[i];
+			curr_fact->orders_in[i].offer_num = stockpile_max - stockpile_ordered_quantity;
 
-			if (stockpile_max - CO_ORDER_QUANTITY_MIN > stockpile_ordered_quantity)
-			{
-				// Add to market
-				if (addBuyOrder(
-					getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_in[i].product_type),
-					&curr_fact->orders_in[i])
-				) {
-					printf("Failed to add buy order\n");
-				}
-				curr_fact->orders_in[i].offer_num = stockpile_max - stockpile_ordered_quantity;
-			}
-			else 
-			{
-				curr_fact->orders_in[i].offer_num = 0;
+			// Add to market
+			if (addBuyOrder(
+				getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_in[i].product_type),
+				&curr_fact->orders_in[i])
+			) {
+				printf("Failed to add buy order\n");
 			}
 		}
-
+		
 		for (int i = 0; i < curr_fact->stockpiles_out_num; i++)
 		{
 			QUANTITY_INT stockpile_free_quantity = 
@@ -466,20 +476,14 @@ void loadCompanyAssignOrders(Company* const company)
 					curr_fact, 
 					curr_fact->stockpiles_out[i].product_type
 			);
-			if (CO_ORDER_QUANTITY_MIN < stockpile_free_quantity)
-			{
-				// Add to market
-				if (addSellOrder(
-					getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_out[i].product_type),
-					&curr_fact->orders_out[i])
-				) {
-					printf("Failed to add sell order\n");
-				}
-				curr_fact->orders_out[i].offer_num = stockpile_free_quantity;
-			}
-			else 
-			{
-				curr_fact->orders_out[i].offer_num = 0;
+			curr_fact->orders_out[i].offer_num = stockpile_free_quantity;
+
+			// Add to market
+			if (addSellOrder(
+				getProductMarketAtLocation(curr_fact->location, curr_fact->stockpiles_out[i].product_type),
+				&curr_fact->orders_out[i])
+			) {
+				printf("Failed to add sell order\n");
 			}
 		}
 	}

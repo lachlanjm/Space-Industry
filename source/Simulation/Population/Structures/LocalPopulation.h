@@ -37,7 +37,7 @@ struct LocalPopulation {
 #define LP_DESIRED_BUY_STOCKPILE_ROOT 12.3
 #define LP_ORDER_QUANTITY_MIN 100
 
-#define LP_DEFAULT_PRICE 30
+#define LP_DEFAULT_PRICE 150
 #define LP_MIN_PROFIT 100
 
 void setTransportNodeCountLocalPopulationStatic(const int transport_node_count);

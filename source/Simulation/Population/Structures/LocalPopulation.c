@@ -122,12 +122,17 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			const double stockpile_factor = sqrt((double)population->population_centre.orders_in[i].offer_num) / LP_DESIRED_BUY_STOCKPILE_ROOT;
 
 			// TODO TBU
-			population->population_centre.orders_in[i].price = MAX(1, base_price * profit_factor_buy * stockpile_factor);
+			uint_fast64_t market_based_price = (uint_fast64_t) MAX(1, base_price * profit_factor_buy * stockpile_factor);
+			uint_fast64_t wealth_based_price = (uint_fast64_t) MAX(1, 
+				2 * (double)population->wealth 
+				/ (double)(population->population_centre.orders_in[i].offer_num 
+					* population->population_centre.stockpiles_in_num
+				));
+			population->population_centre.orders_in[i].price = MIN(market_based_price, wealth_based_price);
 
 			if (resetBuyOrder(productMarket, &population->population_centre.orders_in[i])) 
 			{
-				printf("");
-				printf("Failed to reset buy order; PM=%x, Order=%x\n", productMarket, &population->population_centre.orders_in[i]);
+				printf("\nFailed to reset buy order; PM=%x, Order=%x\n", productMarket, &population->population_centre.orders_in[i]);
 			}
 		}
 	}
