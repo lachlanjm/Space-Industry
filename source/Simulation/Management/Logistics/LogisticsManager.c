@@ -36,7 +36,7 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 	logisticsManager->id = id_next++;
 }
 
-LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile const* pickup_stockpile, Stockpile const* dropoff_stockpile, QUANTITY_INT* const ordered_in_val, QUANTITY_INT* const ordered_out_val, const Product product, const QUANTITY_INT quantity)
+static LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile* const pickup_stockpile, Stockpile* const dropoff_stockpile, QUANTITY_INT* const ordered_in_val, QUANTITY_INT* const ordered_out_val, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
 	LogisticsContract* const new_contract = &logisticsManager->contracts[logisticsManager->contracts_num-1];
@@ -242,7 +242,6 @@ void staticAssignLogisticsContracts(void)
 		double eff_max = 0;
 	
 		double eff = 0;
-		int dist_to = 0;
 	
 		for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
 		{
@@ -302,7 +301,7 @@ void staticAssignLogisticsContracts(void)
 		QUANTITY_INT* const ordered_in_val = getOrderedInQuantity(buying_factory, product_max);
 		QUANTITY_INT* const ordered_out_val = getOrderedOutQuantity(selling_factory, product_max);
 	
-		const LogisticsContract* const new_contract = addNewLogisticsContract(
+		LogisticsContract* const new_contract = addNewLogisticsContract(
 			logisticsManager,
 			vehicle,
 			from_max,

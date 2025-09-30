@@ -802,7 +802,7 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 				switch (ordered_in_obj_type)
 				{
 					case FACTORY_SAVE:
-						const Factory const* factory = (Factory*) getObject(FACTORY_SAVE, id)->data;
+						const Factory* const factory = (Factory*) getObject(FACTORY_SAVE, id)->data;
 						int f_index = 0;
 						const enum Product f_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
 						for (int i = 0; i < factory->stockpiles_in_num; i++)
@@ -816,7 +816,7 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 						((LogisticsContract*)current_obj_ptr->data)->ordered_in_val = &factory->ordered_in[f_index];
 						break;
 					case LOCAL_POPULATION_SAVE:
-						const LocalPopulation const* local_pop = (LocalPopulation*) getObject(LOCAL_POPULATION_SAVE, id)->data;
+						const LocalPopulation* const local_pop = (LocalPopulation*) getObject(LOCAL_POPULATION_SAVE, id)->data;
 						int lp_index = 0;
 						const enum Product lp_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
 						for (int i = 0; i < local_pop->population_centre.stockpiles_in_num; i++)
@@ -842,7 +842,7 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 				switch (ordered_out_obj_type)
 				{
 					case FACTORY_SAVE:
-						const Factory const* factory = (Factory*) getObject(FACTORY_SAVE, id)->data;
+						const Factory* const factory = (Factory*) getObject(FACTORY_SAVE, id)->data;
 						int f_index = 0;
 						const enum Product f_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
 						for (int i = 0; i < factory->stockpiles_out_num; i++)
@@ -856,7 +856,7 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 						((LogisticsContract*)current_obj_ptr->data)->ordered_out_val = &factory->ordered_out[f_index];
 						break;
 					case LOCAL_POPULATION_SAVE:
-						const LocalPopulation const* local_pop = (LocalPopulation*) getObject(LOCAL_POPULATION_SAVE, id)->data;
+						const LocalPopulation* const local_pop = (LocalPopulation*) getObject(LOCAL_POPULATION_SAVE, id)->data;
 						int lp_index = 0;
 						const enum Product lp_product_type = ((LogisticsContract*)current_obj_ptr->data)->product;
 						for (int i = 0; i < local_pop->population_centre.stockpiles_out_num; i++)

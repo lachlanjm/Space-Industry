@@ -513,8 +513,8 @@ static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logistic
 		getSaveFormatPointerAttribute(buffer, SAVE_FILE_LOG_CON_DRO_STO_ID, STOCKPILE_SAVE, logisticsContract->dropoff_stockpile->id)
 	);
 
-	const int const* ordered_in = logisticsContract->ordered_in_val;
-	const int const* ordered_out = logisticsContract->ordered_out_val;
+	const int* const ordered_in = logisticsContract->ordered_in_val;
+	const int* const ordered_out = logisticsContract->ordered_out_val;
 
 	IND_BOOL found_ordered_in = FALSE;
 	IND_BOOL found_ordered_out = FALSE;
@@ -523,7 +523,7 @@ static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logistic
 		const Company company = current_app_state->companies[i];
 		for (int x = 0; x < company.controlled_factories_num; x++)
 		{
-			const Factory const* factory = company.controlled_factories[x];
+			const Factory* const factory = company.controlled_factories[x];
 			
 			if (!found_ordered_in){ for (int y = 0; y < factory->stockpiles_in_num; y++)
 			{
@@ -555,7 +555,7 @@ static inline void saveLogisticsContract(FILE* fptr, LogisticsContract* logistic
 	{
 		for (int i = 0; i < getLocalPopulationNum(); i++)
 		{
-			const LocalPopulation const* local_pop = getLocalPopulationByLocation(i);
+			const LocalPopulation* const local_pop = getLocalPopulationByLocation(i);
 			
 			if (!found_ordered_in){ for (int x = 0; x < local_pop->population_centre.stockpiles_in; x++)
 			{

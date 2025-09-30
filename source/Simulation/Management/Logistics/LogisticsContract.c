@@ -1,7 +1,7 @@
 #include "LogisticsContract.h"
 
 static LOGISTICS_CONTRACT_ID_INT id_next = 0;
-LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile const* pickup_stockpile, Stockpile const* dropoff_stockpile, QUANTITY_INT const* ordered_in_val, QUANTITY_INT const* ordered_out_val, const Product product, const QUANTITY_INT quantity)
+LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile* const pickup_stockpile, Stockpile* const dropoff_stockpile, QUANTITY_INT* const ordered_in_val, QUANTITY_INT* const ordered_out_val, const Product product, const QUANTITY_INT quantity)
 {
 	LogisticsContract* logisticsContract = (LogisticsContract*) calloc(1, sizeof(LogisticsContract));
 	assignLogisticsContractValues(logisticsContract, assigned_vehicle, pickup_location, dropoff_location, pickup_stockpile, dropoff_stockpile, ordered_in_val, ordered_out_val, ASSIGNMENT, product, quantity);

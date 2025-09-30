@@ -42,10 +42,10 @@ LogisticsContract* newLogisticsContract(
 	const Vehicle* assigned_vehicle,
 	const TransportNode pickup_location,
 	const TransportNode dropoff_location,
-	Stockpile const* pickup_stockpile,
-	Stockpile const* dropoff_stockpile,
-	QUANTITY_INT const* ordered_in_val,
-	QUANTITY_INT const* ordered_out_val,
+	Stockpile* const pickup_stockpile,
+	Stockpile* const dropoff_stockpile,
+	QUANTITY_INT* const ordered_in_val,
+	QUANTITY_INT* const ordered_out_val,
 	const Product product, 
 	const QUANTITY_INT quantity
 );
