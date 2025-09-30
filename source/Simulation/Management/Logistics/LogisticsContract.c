@@ -8,7 +8,7 @@ LogisticsContract* newLogisticsContract(const Vehicle* assigned_vehicle, const T
 	return logisticsContract;
 }
 
-void assignLogisticsContractValues(LogisticsContract* logisticsContract, const Vehicle* assigned_vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile const* pickup_stockpile, Stockpile const* dropoff_stockpile, QUANTITY_INT const* ordered_in_val, QUANTITY_INT const* ordered_out_val, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity)
+void assignLogisticsContractValues(LogisticsContract* const logisticsContract, const Vehicle* const assigned_vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile* const pickup_stockpile, Stockpile* const dropoff_stockpile, QUANTITY_INT* const ordered_in_val, QUANTITY_INT* const ordered_out_val, const enum ContractPhase current_phase, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsContract->assigned_vehicle = assigned_vehicle;
 	
@@ -38,6 +38,9 @@ void assignLoadIdLogisticsContract(LogisticsContract* obj, const int id)
 
 /*
 TODO: ACCOUNT FOR END FACTORY diff END LOCATION
+
+Returns 1: end of contract
+Returns 0: contract still needs to be completed
 */
 int processTickLogisticsContract(LogisticsContract* const logisticsContract)
 {
@@ -49,8 +52,10 @@ int processTickLogisticsContract(LogisticsContract* const logisticsContract)
 		assigned_vehicle->max_capacity = logisticsContract->quantity; // TODO: VEHICLE MAX CAP
 		logisticsContract->quantity_unassigned = MAX(0, logisticsContract->quantity_unassigned - assigned_vehicle->max_capacity);
 		logisticsContract->current_phase = PICK_UP;
+		return processTickLogisticsContract(logisticsContract); // Complete next phase
+
 	case PICK_UP:
-		if (assigned_vehicle->current_location == assigned_vehicle->end_location)
+		if (assigned_vehicle->current_location == logisticsContract->pickup_location)
 		{
 			if (loadCargo(assigned_vehicle, logisticsContract->pickup_stockpile, logisticsContract->product)) return 0;
 			
@@ -64,13 +69,14 @@ int processTickLogisticsContract(LogisticsContract* const logisticsContract)
 
 			assignDelivery(assigned_vehicle, logisticsContract->dropoff_location);
 			logisticsContract->current_phase = DELIVERY;
+			return processTickLogisticsContract(logisticsContract); // Complete next phase
 		}
 		else
 		{
 			return 0;
 		}
 	case DELIVERY:
-		if (assigned_vehicle->current_location == assigned_vehicle->end_location)
+		if (assigned_vehicle->current_location == logisticsContract->dropoff_location)
 		{
 			const QUANTITY_INT dropped_off_quantity = assigned_vehicle->stockpile.quantity;
 			if (unloadCargo(assigned_vehicle, logisticsContract->dropoff_stockpile)) return 0;
@@ -85,13 +91,14 @@ int processTickLogisticsContract(LogisticsContract* const logisticsContract)
 
 			assigned_vehicle->end_location = -1;
 			logisticsContract->current_phase = COMPLETED;
+			return processTickLogisticsContract(logisticsContract); // Complete next phase
 		}
 		else
 		{
 			return 0;
 		}
 	case COMPLETED:
-		/* do nothing until later */
+		setVehicleStatusToFree(logisticsContract->assigned_vehicle);
 		return 1;
 	
 	default:

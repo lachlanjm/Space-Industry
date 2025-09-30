@@ -19,14 +19,14 @@ void processTickAppState(AppState* appState)
 	processBuildingTickCompany(&appState->companies[building_company]);
 	building_company = ++building_company % appState->companies_num;
 
-	update_dist_to_profit_eff();
+	staticAssignLogisticsContracts();
 	for (int i = 0; i < appState->logistics_managers_num; i++)
 	{
 		if (i % AS_LOG_MAN_GROUPS == appState->logistics_managers_next_process_tick_index)
 		{
 			processTickLogisticsManager(&appState->logistics_managers[i]); // TODO MOVE
-			processTickLogisticsManagerContracts(&appState->logistics_managers[i]);
 		}
+		processTickLogisticsManagerContracts(&appState->logistics_managers[i]);
 		processTickLogisticsManagerVehicles(&appState->logistics_managers[i]);
 	}
 	appState->logistics_managers_next_process_tick_index++;
@@ -53,6 +53,7 @@ AppState* newGameAppState()
 	setGovernmentControlStatic(TRANSPORT_NODE_COUNT);
 	setTransportNodeCountLocalPopulationStatic(TRANSPORT_NODE_COUNT);
 	instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT);
+	instantiateNewTransportMap(TRANSPORT_NODE_COUNT);
 	for (int i = 0; i < TRANSPORT_NODE_COUNT; i++)
 	{
 		setGovernmentControlByLocation(getGovernmentByIndex(i%gov_count), i);
@@ -106,4 +107,5 @@ void cleanAppState(AppState* appState)
 	cleanTransportNodeCountLocalPopulationStatic();
 	cleanGovernmentStatic();
 	cleanMarketMap();
+	cleanTransportMap();
 }

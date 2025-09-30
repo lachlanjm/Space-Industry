@@ -104,3 +104,29 @@ const TransportConnectionType getConnectionType(const TransportNode from, const 
 	return __transport_node_conn_type_arr[from][to];
 }
 
+const static TransportNode* __transport_node_closest_arr[] =
+{
+	(TransportNode[]) {North_America, South_America, Western_Europe, West_Africa, East_Asia, South_Africa, Oceania, Eastern_Europe, North_Africa, Central_Asia, South_Asia, South_East_Asia, Middle_East, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {South_America, North_America, South_Africa, West_Africa, Oceania, Western_Europe, East_Asia, North_Africa, South_Asia, South_East_Asia, Eastern_Europe, Central_Asia, Middle_East, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Western_Europe, North_America, Eastern_Europe, North_Africa, South_America, West_Africa, East_Asia, Middle_East, Central_Asia, South_Africa, Oceania, South_Asia, South_East_Asia, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Eastern_Europe, Western_Europe, Middle_East, Central_Asia, North_Africa, North_America, South_Asia, East_Asia, West_Africa, South_Africa, South_America, South_East_Asia, Oceania, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {West_Africa, North_America, South_America, North_Africa, South_Africa, Western_Europe, East_Asia, Oceania, Eastern_Europe, Middle_East, South_Asia, Central_Asia, South_East_Asia, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {North_Africa, West_Africa, South_Africa, Western_Europe, Eastern_Europe, Middle_East, North_America, South_America, South_Asia, Oceania, Central_Asia, East_Asia, South_East_Asia, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {South_Africa, West_Africa, North_Africa, South_America, South_Asia, Oceania, North_America, Western_Europe, Eastern_Europe, Middle_East, Central_Asia, East_Asia, South_East_Asia, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Middle_East, Eastern_Europe, North_Africa, Central_Asia, South_Asia, Western_Europe, West_Africa, South_Africa, East_Asia, South_East_Asia, North_America, South_America, Oceania, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Central_Asia, Middle_East, Eastern_Europe, East_Asia, South_Asia, North_Africa, Western_Europe, South_East_Asia, North_America, South_Africa, West_Africa, Oceania, South_America, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {East_Asia, Central_Asia, South_Asia, South_East_Asia, North_America, Middle_East, Eastern_Europe, South_Africa, Oceania, South_America, Western_Europe, West_Africa, North_Africa, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {South_Asia, Central_Asia, East_Asia, South_East_Asia, Middle_East, South_Africa, Eastern_Europe, North_America, Oceania, North_Africa, West_Africa, South_America, Western_Europe, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {South_East_Asia, East_Asia, South_Asia, Oceania, Central_Asia, North_America, Middle_East, South_Africa, South_America, Eastern_Europe, Western_Europe, West_Africa, North_Africa, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Oceania, South_East_Asia, South_Africa, South_America, East_Asia, South_Asia, West_Africa, North_Africa, North_America, Central_Asia, Middle_East, Western_Europe, Eastern_Europe, Earth_Orbit, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Earth_Orbit, North_America, South_America, North_Africa, West_Africa, Middle_East, East_Asia, South_Asia, Central_Asia, South_East_Asia, Western_Europe, South_Africa, Oceania, Eastern_Europe, Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis}, 
+	(TransportNode[]) {Mars_Orbit, Tharsis_Rise, Utopia_Basin, Hellas_Basin, Vastitas_Borealis, Earth_Orbit, North_America, South_America, North_Africa, West_Africa, Middle_East, East_Asia, South_Asia, Central_Asia, South_East_Asia, Western_Europe, South_Africa, Oceania, Eastern_Europe}, 
+	(TransportNode[]) {Tharsis_Rise, Hellas_Basin, Utopia_Basin, Vastitas_Borealis, Mars_Orbit, Earth_Orbit, North_America, South_America, North_Africa, West_Africa, Middle_East, East_Asia, South_Asia, Central_Asia, South_East_Asia, Western_Europe, South_Africa, Oceania, Eastern_Europe}, 
+	(TransportNode[]) {Hellas_Basin, Tharsis_Rise, Utopia_Basin, Vastitas_Borealis, Mars_Orbit, Earth_Orbit, North_America, South_America, North_Africa, West_Africa, Middle_East, East_Asia, South_Asia, Central_Asia, South_East_Asia, Western_Europe, South_Africa, Oceania, Eastern_Europe}, 
+	(TransportNode[]) {Utopia_Basin, Tharsis_Rise, Hellas_Basin, Vastitas_Borealis, Mars_Orbit, Earth_Orbit, North_America, South_America, North_Africa, West_Africa, Middle_East, East_Asia, South_Asia, Central_Asia, South_East_Asia, Western_Europe, South_Africa, Oceania, Eastern_Europe}, 
+	(TransportNode[]) {Vastitas_Borealis, Tharsis_Rise, Hellas_Basin, Utopia_Basin, Mars_Orbit, Earth_Orbit, North_America, South_America, North_Africa, West_Africa, Middle_East, East_Asia, South_Asia, Central_Asia, South_East_Asia, Western_Europe, South_Africa, Oceania, Eastern_Europe}
+};
+const TransportNode getClosest(const TransportNode location, const int index) {
+	return __transport_node_closest_arr[location][index];
+}
+

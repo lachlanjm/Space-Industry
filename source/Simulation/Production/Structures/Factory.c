@@ -19,7 +19,7 @@ Factory* loadNewFactoryCompany(void)
 	return factory;
 }
 
-void assignFactoryValuesCompany(Factory* const factory, const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location)
+void assignFactoryValuesCompany(Factory* const factory, Company* const company, const ProductionRecipe productionRecipe, const TransportNode location)
 {
 	loadFactoryConstructor(factory, productionRecipe);
 
@@ -42,7 +42,7 @@ void assignFactoryValuesCompany(Factory* const factory, const Company* const com
 		factory->management = company;
 	}
 
-	Stockpile* tmp_arr = getInputs(productionRecipe);
+	const Stockpile* tmp_arr = getInputs(productionRecipe);
 	for (int i = 0; i < factory->stockpiles_in_num; i++) {
 		assignStockpileValues(&factory->stockpiles_in[i], tmp_arr[i].product_type, FACTORY_DEFAULT_STOCKPILE_QUANT);
 		factory->stockpiles_in_max_quant[i] = FACTORY_DEFAULT_STOCKPILE_MAX; // TODO better max quantity
@@ -187,7 +187,7 @@ void assignLoadIdFactory(Factory* obj, const int id)
 	}
 }
 
-void reassignOrderOfferingPtrs(const Factory* factory)
+void reassignOrderOfferingPtrs(Factory* const factory)
 {
 	for (int i = 0; i < factory->stockpiles_in_num; i++) 
 	{

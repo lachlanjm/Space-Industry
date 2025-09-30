@@ -10,5 +10,6 @@ const TransportNode getNext(const TransportNode from, const TransportNode to);
 const uint_fast16_t getTotalDistance(const TransportNode from, const TransportNode to);
 const uint_fast16_t getNextDistance(const TransportNode from, const TransportNode to);
 const TransportConnectionType getConnectionType(const TransportNode from, const TransportNode to);
+const TransportNode getClosest(const TransportNode location, const int index);
 
 #endif

@@ -46,12 +46,13 @@ void addVehicleToLogisticsManager(LogisticsManager* const logisticsManager);
 void insertFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds);
 void withdrawFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds);
 
-void update_dist_to_profit_eff(void);
-
 void processTickLogisticsManager(LogisticsManager* const logisticsManager);
 void processTickLogisticsManagerContracts(LogisticsManager* const logisticsManager);
 void processTickLogisticsManagerVehicles(const LogisticsManager* const logisticsManager);
 
 void cleanLogisticsManager(LogisticsManager* logisticsManager);
+
+// Needs transport map up and running
+void staticAssignLogisticsContracts(void);
 
 #endif

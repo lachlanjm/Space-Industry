@@ -24,7 +24,7 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 
 	for (int i = 0; i < logisticsManager->vehicles_num; i++)
 	{
-		logisticsManager->vehicles[i] = newVehicle(headquarters_location);
+		logisticsManager->vehicles[i] = newVehicle(headquarters_location, logisticsManager);
 	}
 
 	logisticsManager->contracts_num = 0;
@@ -39,7 +39,7 @@ void assignLogisticsManagerValues(LogisticsManager* logisticsManager, const uint
 LogisticsContract* addNewLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle, const TransportNode pickup_location, const TransportNode dropoff_location, Stockpile const* pickup_stockpile, Stockpile const* dropoff_stockpile, QUANTITY_INT* const ordered_in_val, QUANTITY_INT* const ordered_out_val, const Product product, const QUANTITY_INT quantity)
 {
 	logisticsManager->contracts = realloc(logisticsManager->contracts, ++logisticsManager->contracts_num * sizeof(LogisticsContract));
-	const LogisticsContract* new_contract = &logisticsManager->contracts[logisticsManager->contracts_num-1];
+	LogisticsContract* const new_contract = &logisticsManager->contracts[logisticsManager->contracts_num-1];
 	memset(new_contract, 0, sizeof(LogisticsContract));
 
 	if (ordered_out_val != NULL) // TODO make better
@@ -81,7 +81,7 @@ void addVehicleToLogisticsManager(LogisticsManager* const logisticsManager)
 	{
 		logisticsManager->vehicles = realloc(logisticsManager->vehicles, logisticsManager->vehicles_num * sizeof(Vehicle*));
 	}
-	logisticsManager->vehicles[logisticsManager->vehicles_num-1] = newVehicle(logisticsManager->headquarters_location);
+	logisticsManager->vehicles[logisticsManager->vehicles_num-1] = newVehicle(logisticsManager->headquarters_location, logisticsManager);
 }
 
 void insertFundsLogisticsManager(LogisticsManager* logisticsManager, const int funds)
@@ -92,149 +92,6 @@ void withdrawFundsLogisticsManager(LogisticsManager* logisticsManager, const int
 {
 	if (logisticsManager->wealth < funds) return; // reject payment
 	logisticsManager->wealth -= funds;
-}
-
-static double __dist_to_profit_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
-static inline void calculate_route_profit(const int from, const ProductMarket* const from_market, const int to, const ProductMarket* const to_market, const int product)
-{
-	if (to_market->buy_order_num > 0
-		&& from_market->sell_order_num > 0)
-	{
-		const int_fast64_t export_price = from_market->sell_order_arr[0]->price;
-		const int_fast64_t export_tax = (double)export_price * (
-			(double)getExportTaxRate(product, from, to) 
-			/ 100000.0f
-		);
-
-		const int_fast64_t import_price = to_market->buy_order_arr[0]->price;
-		const int_fast64_t import_tax = (double)import_price * (
-			(double)(getGstTaxRate(product, to)
-			+ getImportTaxRate(product, from, to)) 
-			/ 100000.0f
-		);
-
-		const double profit = (double) (import_price - import_tax - export_price - export_tax);
-		const double quantity = (double) MIN(from_market->sell_order_arr[0]->offer_num, to_market->buy_order_arr[0]->offer_num);
-		
-		if (getTotalDistance(from, to) == 0)
-			__dist_to_profit_eff__[from][to][product] = profit * quantity;
-		else 
-			__dist_to_profit_eff__[from][to][product] = (profit / (double)getTotalDistance(from, to)) * quantity;
-		
-	}
-	else
-		__dist_to_profit_eff__[from][to][product] = 0;
-}
-
-void update_dist_to_profit_eff(void)
-{
-	for (int product = 0; product < PRODUCT_COUNT; product++)
-	{
-		for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
-		{
-			const ProductMarket* const from_market = getProductMarketAtLocation(from, product);
-			for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
-			{
-				calculate_route_profit(from, from_market, to, getProductMarketAtLocation(to, product), product);
-			}
-		}
-	}
-}
-
-static inline void update_dist_to_profit_eff_product_filtered(int product)
-{
-	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
-	{
-		const ProductMarket* const from_market = getProductMarketAtLocation(from, product);
-		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
-		{
-			calculate_route_profit(from, from_market, to, getProductMarketAtLocation(to, product), product);
-		}
-	}
-}
-
-LogisticsContract* assignLogisticsContract(LogisticsManager* logisticsManager, Vehicle* vehicle)
-{
-	int from_max = -1;
-	int to_max = -1;
-	int product_max = -1;
-	double eff_max = 0;
-
-	double eff = 0;
-	int dist_to = 0;
-
-	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
-	{
-		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
-		{
-			for (int product = 0; product < PRODUCT_COUNT; product++)
-			{
-				eff = __dist_to_profit_eff__[from][to][product];
-				dist_to = getTotalDistance(vehicle->current_location, from);
-				if (dist_to != 0) eff /= (double) dist_to;
-
-				if (eff > eff_max)
-				{
-					from_max = from;
-					to_max = to;
-					product_max = product;
-					eff_max = eff;
-				}
-			}
-		}
-	}
-
-	if (from_max == -1)
-	{
-		return NULL;
-	}
-
-	// TODO !!!! IMPROVE FLOW AND MEMORY ASSIGNMENT
-	Factory const* selling_factory = getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0]->offering_factory;
-	Factory const* buying_factory = getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]->offering_factory;
-
-	QUANTITY_INT quantity = match_orders(
-		logisticsManager,
-		getProductMarketAtLocation(from_max, product_max), 
-		getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0],
-		getProductMarketAtLocation(to_max, product_max),
-		getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]
-	);
-
-	Stockpile const* pickup_stockpile = getStockpileOutByProduct(selling_factory, product_max);
-	Stockpile const* dropoff_stockpile = getStockpileInByProduct(buying_factory, product_max);
-
-	QUANTITY_INT const* ordered_in_val = getOrderedInQuantity(buying_factory, product_max);
-	QUANTITY_INT const* ordered_out_val = getOrderedOutQuantity(selling_factory, product_max);
-
-	const LogisticsContract* const new_contract = addNewLogisticsContract(
-		logisticsManager,
-		vehicle,
-		from_max,
-		to_max,
-		pickup_stockpile,
-		dropoff_stockpile,
-		ordered_in_val,
-		ordered_out_val,
-		product_max,
-		quantity
-	);
-
-	update_dist_to_profit_eff_product_filtered(product_max);
-	return new_contract;
-}
-
-static inline void assignFreeVehicles(LogisticsManager* const logisticsManager)
-{
-	for (int i = 0; i < logisticsManager->vehicles_num; i++)
-	{
-		if (logisticsManager->vehicles[i]->end_location == -1)
-		{
-			const LogisticsContract* new_contract = assignLogisticsContract(logisticsManager, logisticsManager->vehicles[i]);
-			if (new_contract) processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
-			else return;
-		}
-	}
 }
 
 void processTickLogisticsManager(LogisticsManager* const logisticsManager)
@@ -264,9 +121,6 @@ void processTickLogisticsManager(LogisticsManager* const logisticsManager)
 
 void processTickLogisticsManagerContracts(LogisticsManager* const logisticsManager)
 {
-	// Search and add contracts
-	assignFreeVehicles(logisticsManager);
-
 	// Tick contracts
 	for (int i = 0; i < logisticsManager->contracts_num; i++)
 	{
@@ -317,3 +171,151 @@ void cleanLogisticsManager(LogisticsManager* logisticsManager)
 	free(logisticsManager->contracts);
 }
 
+static double __dist_to_profit_eff__[TRANSPORT_NODE_COUNT][TRANSPORT_NODE_COUNT][PRODUCT_COUNT];
+static inline void calculate_route_profit(const int from, const ProductMarket* const from_market, const int to, const ProductMarket* const to_market, const int product)
+{
+	if (to_market->buy_order_num > 0
+		&& from_market->sell_order_num > 0)
+	{
+		const int_fast64_t export_price = from_market->sell_order_arr[0]->price;
+		const int_fast64_t export_tax = (double)export_price * (
+			(double)getExportTaxRate(product, from, to) 
+			/ 100000.0f
+		);
+
+		const int_fast64_t import_price = to_market->buy_order_arr[0]->price;
+		const int_fast64_t import_tax = (double)import_price * (
+			(double)(getGstTaxRate(product, to)
+			+ getImportTaxRate(product, from, to)) 
+			/ 100000.0f
+		);
+
+		const double profit = (double) (import_price - import_tax - export_price - export_tax);
+		const double quantity = (double) MIN(from_market->sell_order_arr[0]->offer_num, to_market->buy_order_arr[0]->offer_num);
+		
+		if (getTotalDistance(from, to) == 0)
+			__dist_to_profit_eff__[from][to][product] = profit * quantity;
+		else 
+			__dist_to_profit_eff__[from][to][product] = (profit / (double)getTotalDistance(from, to)) * quantity;
+		
+	}
+	else
+		__dist_to_profit_eff__[from][to][product] = 0;
+}
+
+static inline void update_dist_to_profit_eff(void)
+{
+	for (int product = 0; product < PRODUCT_COUNT; product++)
+	{
+		for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
+		{
+			const ProductMarket* const from_market = getProductMarketAtLocation(from, product);
+			for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
+			{
+				calculate_route_profit(from, from_market, to, getProductMarketAtLocation(to, product), product);
+			}
+		}
+	}
+}
+
+static inline void update_dist_to_profit_eff_product_filtered(int product)
+{
+	for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
+	{
+		const ProductMarket* const from_market = getProductMarketAtLocation(from, product);
+		for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
+		{
+			calculate_route_profit(from, from_market, to, getProductMarketAtLocation(to, product), product);
+		}
+	}
+}
+
+void staticAssignLogisticsContracts(void)
+{
+	update_dist_to_profit_eff();
+
+	while (TRUE)
+	{
+		int from_max = -1;
+		int to_max = -1;
+		int product_max = -1;
+		double eff_max = 0;
+	
+		double eff = 0;
+		int dist_to = 0;
+	
+		for (int from = 0; from < TRANSPORT_NODE_COUNT; from++)
+		{
+			for (int to = 0; to < TRANSPORT_NODE_COUNT; to++)
+			{
+				for (int product = 0; product < PRODUCT_COUNT; product++)
+				{
+					eff = __dist_to_profit_eff__[from][to][product];
+	
+					if (eff > eff_max)
+					{
+						from_max = from;
+						to_max = to;
+						product_max = product;
+						eff_max = eff;
+					}
+				}
+			}
+		}
+	
+		if (from_max == -1)
+		{
+			return; // No more routes can be found
+		}
+
+		VehicleLocationHook* hook = NULL;
+		int i = 0;
+		while (i < TRANSPORT_NODE_COUNT)
+		{
+			hook = getNextFreeHookAt(getClosest(from_max, i));
+			if (hook != NULL) break;
+			i++;
+		}
+		if (hook == NULL)
+		{
+			return; // No more free vehicles to assign
+		}
+
+		LogisticsManager* const logisticsManager = hook->manager;
+		Vehicle* const vehicle = hook->vehicle;
+	
+		// TODO !!!! IMPROVE FLOW AND MEMORY ASSIGNMENT
+		Factory* const selling_factory = getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0]->offering_factory;
+		Factory* const buying_factory = getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]->offering_factory;
+	
+		QUANTITY_INT quantity = match_orders(
+			logisticsManager,
+			getProductMarketAtLocation(from_max, product_max), 
+			getProductMarketAtLocation(from_max, product_max)->sell_order_arr[0],
+			getProductMarketAtLocation(to_max, product_max),
+			getProductMarketAtLocation(to_max, product_max)->buy_order_arr[0]
+		);
+	
+		Stockpile* const pickup_stockpile = getStockpileOutByProduct(selling_factory, product_max);
+		Stockpile* const dropoff_stockpile = getStockpileInByProduct(buying_factory, product_max);
+	
+		QUANTITY_INT* const ordered_in_val = getOrderedInQuantity(buying_factory, product_max);
+		QUANTITY_INT* const ordered_out_val = getOrderedOutQuantity(selling_factory, product_max);
+	
+		const LogisticsContract* const new_contract = addNewLogisticsContract(
+			logisticsManager,
+			vehicle,
+			from_max,
+			to_max,
+			pickup_stockpile,
+			dropoff_stockpile,
+			ordered_in_val,
+			ordered_out_val,
+			product_max,
+			quantity
+		);
+		processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
+		
+		update_dist_to_profit_eff_product_filtered(product_max);
+	}
+}

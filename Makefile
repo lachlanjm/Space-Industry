@@ -51,6 +51,7 @@ OBJ_FILES += $(BUILD_OBJ_PATH)\TransportConnectionType.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\TransportNode.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\Map.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\MarketMap.c.o
+OBJ_FILES += $(BUILD_OBJ_PATH)\TransportMap.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\AppState.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\SaveAppState.c.o
 OBJ_FILES += $(BUILD_OBJ_PATH)\LoadAppState.c.o

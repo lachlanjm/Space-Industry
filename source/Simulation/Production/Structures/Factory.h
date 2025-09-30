@@ -65,12 +65,12 @@ struct Factory
 
 Factory* newFactoryCompany(const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
 Factory* loadNewFactoryCompany(void);
-void assignFactoryValuesCompany(Factory* const factory, const Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
+void assignFactoryValuesCompany(Factory* const factory, Company* const company, const ProductionRecipe productionRecipe, const TransportNode location);
 void assignFactoryValuesLocalPopulation(Factory* const factory, const TransportNode location);
 
 void loadFactoryConstructor(Factory* factory, const ProductionRecipe productionRecipe);
 void assignLoadIdFactory(Factory* obj, const int id);
-void reassignOrderOfferingPtrs(const Factory* factory);
+void reassignOrderOfferingPtrs(Factory* const factory);
 
 QUANTITY_INT* getOrderedInQuantity(const Factory* factory, const Product product);
 QUANTITY_INT* getOrderedOutQuantity(const Factory* factory, const Product product);

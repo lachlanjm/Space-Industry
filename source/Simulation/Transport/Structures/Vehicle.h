@@ -8,6 +8,7 @@ typedef struct VehicleLocationHook VehicleLocationHook;
 #include "..\..\Production\Structures\Factory.h"
 #include "..\..\Management\Logistics\LogisticsManager.h"
 #include "..\..\Environment\Enums\TransportNode.h"
+#include "..\..\Environment\Structures\TransportMap.h"
 
 #include <stdint.h>
 
@@ -41,8 +42,8 @@ struct Vehicle {
 #define VEHICLE_SPEED 1
 #define VEHICLE_CAPACITY 100
 
-Vehicle* newVehicle(const TransportNode start_location);
-void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location);
+Vehicle* newVehicle(const TransportNode start_location, LogisticsManager* const manager);
+void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location, LogisticsManager* const manager);
 void assignLoadIdVehicle(Vehicle* obj, const int id);
 
 void assignPickup(Vehicle* vehicle, const TransportNode location, const Product product);
@@ -52,6 +53,8 @@ uint_fast16_t getVehiclesNextDistance(const Vehicle* vehicle);
 
 int loadCargo(Vehicle* vehicle, Stockpile* stockpile, const Product product_type);
 int unloadCargo(Vehicle* vehicle, Stockpile* stockpile);
+
+void setVehicleStatusToFree(Vehicle* const vehicle);
 
 // TODO TBU
 void processTickVehicle(Vehicle* vehicle);

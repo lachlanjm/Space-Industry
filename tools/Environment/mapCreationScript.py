@@ -35,11 +35,12 @@ typedef enum TransportNode {{
 		def __init__(self, name) -> None:
 			self.name = name
 			self.index = -1
-			self.connections = []
-			self.next_map = []
-			self.tot_dist = []
-			self.next_dist = []
+			self.connections: list[Connection] = []
+			self.next_map: list[Node] = []
+			self.tot_dist: list[int] = []
+			self.next_dist: list[int] = []
 			self.next_type = []
+			self.closest_nodes: list[Node] = []
 		
 		def __str__(self) -> str:
 			return self.name
@@ -51,21 +52,21 @@ typedef enum TransportNode {{
 		def __init__(self, name, conn_type, dist) -> None:
 			self.dest_name = name
 			self.type = conn_type
-			self.distance = dist
-			self.dest = None
+			self.distance: int = dist
+			self.dest: Node | None = None
 
 	function_format = """const static {1} {2}[] =
 {{
 {3}
 }};
 const {0} {{
-	return {2}[from][to];
+	return {2}[{4}][{5}];
 }}
 
 """
 
 	### Start of program
-	nodes = []
+	nodes: list[Node] = []
 	node_funcs = [
 		"char* getNameTransportNode(TransportNode node)"
 	]
@@ -74,7 +75,8 @@ const {0} {{
 		f"TransportNode getNext{norm_params}",
 		f"uint_fast16_t getTotalDistance{norm_params}",
 		f"uint_fast16_t getNextDistance{norm_params}",
-		f"TransportConnectionType getConnectionType{norm_params}"
+		f"TransportConnectionType getConnectionType{norm_params}",
+		f"TransportNode getClosest(const TransportNode location, const int index)"
 	]
 	arr_groups = [""]
 
@@ -112,7 +114,7 @@ const {0} {{
 	with open(os.path.join(os.path.dirname(__file__), "..\..\source\Simulation\Environment\Enums\TransportNode.c"), "w") as f:
 		f.write(node_c_start)
 
-		f.write(function_format.format(node_funcs[0], "char*", "__transport_node_names_char_arr__", arr_groups[0]).replace("from][to", "node").replace("][", ""))
+		f.write(function_format.format(node_funcs[0], "char*", "__transport_node_names_char_arr__", arr_groups[0], "from", "to").replace("from][to", "node").replace("][", ""))
 
 	##### Map definition
 	node_dict = {}
@@ -129,10 +131,14 @@ const {0} {{
 	for start in nodes:
 		# Run BFS
 		found_nodes = {node : [None, -1] for node in nodes}
-		queue = [(start, 0, [], 0)]
+		queue: list[tuple[Node, int, list[Node], int]] = [(start, 0, [], 0)]
 
 		while len(queue):
 			curr = queue.pop(0)
+			
+			if curr[0] not in start.closest_nodes:
+				start.closest_nodes.append(curr[0])
+			
 			if found_nodes[curr[0]][0] is None:
 				new_path = curr[2] + [curr[0]]
 				found_nodes[curr[0]][0] = new_path
@@ -144,19 +150,23 @@ const {0} {{
 				#print()
 
 				for conn in curr[0].connections:
-					if found_nodes[conn.dest][0] is None:
+					if found_nodes[conn.dest][0] is None: # type: ignore
 						if conn.type == "Terrestrial":
 							priority = curr[1] + conn.distance
 						elif conn.type == "Transit":
 							priority = curr[1] + launch_weight * conn.distance
 						elif conn.type == "Space":
 							priority = curr[1] + space_weight * conn.distance
+						else:
+							print("Error: priority not set")
+							import sys
+							sys.exit(1)
 						new_dist = curr[3] + conn.distance ### TODO CAN REMOVE OR MODIFY TO ACCOUNT FOR DIFF TYPES OF DIST
 						# Insert sort
 						i = 0
 						while i < len(queue) and queue[i][1] <= priority:
 							i += 1
-						queue.insert(i, (conn.dest, priority, new_path, new_dist))
+						queue.insert(i, (conn.dest, priority, new_path, new_dist)) # type: ignore
 		
 		conn_dict = {}
 		for conn in start.connections:
@@ -194,28 +204,40 @@ const {0} {{
 		f.write(function_format.format(map_funcs[0], f"{type_}*", "__transport_node_next_node_arr", 
 			str(
 				[f"\n\t({type_}<|>) {[n.name for n in node.next_map]}" for node in nodes]
-			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1]
+			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1], 
+			"from", "to"
 		))
 
 		type_ = "uint_fast16_t"
 		f.write(function_format.format(map_funcs[1], f"{type_}*", "__transport_node_total_dist_arr", 
 			str(
 				[f"\n\t({type_}<|>) {node.tot_dist}" for node in nodes]
-			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1]
+			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1], 
+			"from", "to"
 		))
 
 		type_ = "uint_fast16_t"
 		f.write(function_format.format(map_funcs[2], f"{type_}*", "__transport_node_next_dist_arr", 
 			str(
 				[f"\n\t({type_}<|>) {node.next_dist}" for node in nodes]
-			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1]
+			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1], 
+			"from", "to"
 		))
 
 		type_ = "TransportConnectionType"
 		f.write(function_format.format(map_funcs[3], f"{type_}*", "__transport_node_conn_type_arr", 
 			str(
 				[f"\n\t({type_}<|>) {node.next_type}" for node in nodes]
-			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1]
+			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1], 
+			"from", "to"
+		))
+
+		type_ = "TransportNode"
+		f.write(function_format.format(map_funcs[4], f"{type_}*", "__transport_node_closest_arr", 
+			str(
+				[f"\n\t({type_}<|>) {[n.name for n in node.closest_nodes]}" for node in nodes]
+			).replace("[", "{").replace("]", "}").replace("\\t", "\t").replace("\\n", "\n").replace("'", "").replace('"', "").replace("<|>", "[]")[2:-1], 
+			"location", "index"
 		))
 
 

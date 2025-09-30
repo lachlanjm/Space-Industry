@@ -12,6 +12,7 @@ typedef struct AppState AppState;
 #include "..\..\Population\Structures\Government.h"
 #include "..\..\Population\Structures\LocalPopulation.h"
 #include "..\..\Environment\Structures\MarketMap.h"
+#include "..\..\Environment\Structures\TransportMap.h"
 
 #include ".\LoadAppState.h"
 #include ".\SaveAppState.h"

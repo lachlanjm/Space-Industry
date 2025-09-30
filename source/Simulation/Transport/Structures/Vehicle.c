@@ -2,14 +2,16 @@
 
 static VEHICLE_ID_INT id_next = 0;
 
-Vehicle* newVehicle(const TransportNode start_location)
+Vehicle* newVehicle(const TransportNode start_location, LogisticsManager* const manager)
 {
 	Vehicle* vehicle = calloc(1, sizeof(Vehicle));
-	assignVehicleValues(vehicle, start_location);
+	assignVehicleValues(vehicle, start_location, manager);
 	return vehicle;
 }
 
-void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location)
+// TODOOO CHECK DEFAULTS SET ON LOAD APP STATE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO make sure LOAD APP STATE sets to the right hook state
+void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location, LogisticsManager* const manager)
 {
 	vehicle->current_location = start_location;
 	vehicle->end_location = -1;
@@ -18,7 +20,9 @@ void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location)
 	vehicle->location_hook.next = NULL;
 	vehicle->location_hook.prev = NULL;
 	vehicle->location_hook.vehicle = vehicle;
-	vehicle->location_hook.manager = NULL; // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	vehicle->location_hook.manager = manager;
+	// Assumes vehicle is free upon creation 
+	appendFreeHook(&vehicle->location_hook, vehicle->current_location);
 
 	assignStockpileValues(&vehicle->stockpile, 0, 0);
 
@@ -55,6 +59,11 @@ void moveVehicleToNextLoc(Vehicle* vehicle)
 {
 	vehicle->current_location = getNext(vehicle->current_location, vehicle->end_location);
 	vehicle->distance_travelled = 0;
+
+	// ASSUMES MOVEMENT IS ALWAYS FOR A BUSY REASON
+	// Relies on the Manager/Contract to set to Free status by calling setVehicleStatusToFree()
+	// Not done when vehicle gets to end loc as contract/job may still need the vehicle
+	moveBusyVehicleHookTo(&vehicle->location_hook, vehicle->current_location); 
 }
 
 void stepToNextLocation(Vehicle* vehicle)
@@ -125,6 +134,11 @@ int unloadCargo(Vehicle* vehicle, Stockpile* stockpile)
 		return 0;
 	}
 	else return 1; // Fail
+}
+
+void setVehicleStatusToFree(Vehicle* const vehicle)
+{
+	moveFreeVehicleHookTo(&vehicle->location_hook, vehicle->current_location);
 }
 
 void processTickVehicle(Vehicle* vehicle)
