@@ -43,7 +43,7 @@ struct Vehicle {
 #define VEHICLE_CAPACITY 100
 
 Vehicle* newVehicle(const TransportNode start_location, LogisticsManager* const manager);
-void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location, LogisticsManager* const manager);
+void assignVehicleValues(Vehicle* const vehicle, const TransportNode start_location, LogisticsManager* const manager);
 void assignLoadIdVehicle(Vehicle* obj, const int id);
 
 void assignPickup(Vehicle* vehicle, const TransportNode location, const Product product);

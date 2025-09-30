@@ -205,7 +205,8 @@ static inline void addNewStructForPtrs(char new_data_point[BUF_SIZE + 1], enum A
 		// TODO make it adjust to var sizes and in the appState loading
 		if (getProductMarketAtLocation(0,0) != NULL) cleanMarketMap();
 		instantiateNewMarketMap(TRANSPORT_NODE_COUNT, PRODUCT_COUNT); // TODO TBU
-
+		instantiateNewTransportMap(TRANSPORT_NODE_COUNT); // TODO TBU
+		
 		for (int x=0; x<TRANSPORT_NODE_COUNT; x++) // TODO TBU
 		{
 			for (int y=0; y<PRODUCT_COUNT; y++) // TODO TBU
@@ -567,6 +568,15 @@ static inline void addNewAttributeForPtrs(char new_data_point[BUF_SIZE + 1], con
 
 				addNewStructIdPtr(STOCKPILE_SAVE, extractObjectId(attr_value), &((Vehicle*)current_obj_ptr->data)->stockpile);
 			}
+			else if (strcmp(new_data_point, SAVE_FILE_VEH_CUR_LOC_ID) == 0)
+			{
+				((Vehicle*)current_obj_ptr->data)->current_location = atoi(attr_value);
+				moveFreeVehicleHookTo(
+					&((Vehicle*)current_obj_ptr->data)->location_hook, 
+					((Vehicle*)current_obj_ptr->data)->current_location
+				);
+			}
+			else 
 			break;
 		default:
 			break;
@@ -764,7 +774,9 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 		case LOGISTICS_CONTRACT_SAVE:
 			if (strcmp(new_data_point, SAVE_FILE_LOG_CON_VEH_ID) == 0)
 			{
-				((LogisticsContract*)current_obj_ptr->data)->assigned_vehicle = (Vehicle*) getObject(VEHICLE_SAVE, extractObjectId(attr_value))->data;
+				Vehicle* const vehicle = (Vehicle*) getObject(VEHICLE_SAVE, extractObjectId(attr_value))->data;
+				((LogisticsContract*)current_obj_ptr->data)->assigned_vehicle = vehicle;
+				moveBusyVehicleHookTo(&vehicle->location_hook, vehicle->current_location);
 			}
 			else if (strcmp(new_data_point, SAVE_FILE_LOG_CON_PIC_LOC_ID) == 0)
 			{
@@ -913,11 +925,7 @@ static inline void assignAttributesForValues(char new_data_point[BUF_SIZE + 1], 
 			}
 			break;
 		case VEHICLE_SAVE:
-			if (strcmp(new_data_point, SAVE_FILE_VEH_CUR_LOC_ID) == 0)
-			{
-				((Vehicle*)current_obj_ptr->data)->current_location = atoi(attr_value);
-			}
-			else if (strcmp(new_data_point, SAVE_FILE_VEH_END_LOC_ID) == 0)
+			if (strcmp(new_data_point, SAVE_FILE_VEH_END_LOC_ID) == 0)
 			{
 				((Vehicle*)current_obj_ptr->data)->end_location = atoi(attr_value);
 			}

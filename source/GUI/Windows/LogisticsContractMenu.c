@@ -56,6 +56,30 @@ void drawLogisticsContractMenu(AppPlatform* platform, LogisticsContract* logisti
 		nk_label(platform->ctx, "Quantity: ", NK_TEXT_LEFT);
 		snprintf(buffer, BUF_SIZE, "%d", logisticsContract->quantity);
 		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_label(platform->ctx, "Pickup Location: ", NK_TEXT_LEFT);
+		if (logisticsContract->pickup_location == -1)
+		{
+			snprintf(buffer, BUF_SIZE, "No start location");
+		}
+		else
+		{
+			snprintf(buffer, BUF_SIZE, "%s", getNameTransportNode(logisticsContract->pickup_location));
+		}
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
+
+		nk_layout_row_static(platform->ctx, 30, 100, 2);
+		nk_label(platform->ctx, "Dropoff Location: ", NK_TEXT_LEFT);
+		if (logisticsContract->dropoff_location == -1)
+		{
+			snprintf(buffer, BUF_SIZE, "No end location");
+		}
+		else
+		{
+			snprintf(buffer, BUF_SIZE, "%s", getNameTransportNode(logisticsContract->dropoff_location));
+		}
+		nk_label(platform->ctx, buffer, NK_TEXT_LEFT);
 	}
 	nk_end(platform->ctx);
 }

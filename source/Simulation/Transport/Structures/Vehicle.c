@@ -9,9 +9,7 @@ Vehicle* newVehicle(const TransportNode start_location, LogisticsManager* const 
 	return vehicle;
 }
 
-// TODOOO CHECK DEFAULTS SET ON LOAD APP STATE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO make sure LOAD APP STATE sets to the right hook state
-void assignVehicleValues(Vehicle* vehicle, const TransportNode start_location, LogisticsManager* const manager)
+void assignVehicleValues(Vehicle* const vehicle, const TransportNode start_location, LogisticsManager* const manager)
 {
 	vehicle->current_location = start_location;
 	vehicle->end_location = -1;

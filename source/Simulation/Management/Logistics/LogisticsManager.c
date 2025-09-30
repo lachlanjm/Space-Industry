@@ -314,6 +314,7 @@ void staticAssignLogisticsContracts(void)
 			quantity
 		);
 		processTickLogisticsContract(new_contract); // Completes the ASSIGNMENT phase
+		moveBusyVehicleHookTo(&vehicle->location_hook, vehicle->current_location);
 		
 		update_dist_to_profit_eff_product_filtered(product_max);
 	}
