@@ -759,7 +759,7 @@ const static uint_fast16_t __production_recipe_base_proc_speed_arr[] =
 	10, 
 	100, 
 	10, 
-	10, 
+	100, 
 	10, 
 	10, 
 	10, 
