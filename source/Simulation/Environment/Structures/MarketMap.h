@@ -17,6 +17,9 @@ int getMarketSellAvgByProduct(const Product product);
 int getMarketBuyOfferAvgByProduct(const Product product);
 int getMarketSellOfferAvgByProduct(const Product product);
 
+int getBuyOfferNumSumGlobal(const Product product);
+int getSellOfferNumSumGlobal(const Product product);
+
 HistoryWtdAvgArray* getMarketBuyHistoryWtdAvgArrByProduct(const Product product);
 HistoryWtdAvgArray* getMarketSellHistoryWtdAvgArrByProduct(const Product product);
 

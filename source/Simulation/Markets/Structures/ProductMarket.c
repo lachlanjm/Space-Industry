@@ -296,7 +296,7 @@ int resetSellOrderIndexed(ProductMarket* productMarket, int index)
 	return 0;
 }
 
-QUANTITY_INT getBuyOfferNumSum(const ProductMarket* const productMarket)
+QUANTITY_INT getBuyOfferNumSumLocal(const ProductMarket* const productMarket)
 {
 	QUANTITY_INT result = 0;
 	for (int i = 0; i < productMarket->buy_order_num; i++)
@@ -306,7 +306,7 @@ QUANTITY_INT getBuyOfferNumSum(const ProductMarket* const productMarket)
 	return result;
 }
 
-QUANTITY_INT getSellOfferNumSum(const ProductMarket* const productMarket)
+QUANTITY_INT getSellOfferNumSumLocal(const ProductMarket* const productMarket)
 {
 	QUANTITY_INT result = 0;
 	for (int i = 0; i < productMarket->sell_order_num; i++)

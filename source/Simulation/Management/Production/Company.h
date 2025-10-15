@@ -50,6 +50,10 @@ struct Company {
 #define CO_NEW_FACTORY_MIN_RETURN 10 // per prod. tick, exclusive
 #define CO_DESTROY_FACTORY_TICKS 10000
 
+#define CO_MAX_THROUGHPUT_NUM 10
+#define CO_BUY_THROUGHPUT_FACTOR 3 // TODO TBU need to just get avg order size
+#define CO_SELL_THROUGHPUT_FACTOR 3 // TODO TBU need to just get avg order size
+
 //-----------------
 // Misc.
 //-----------------

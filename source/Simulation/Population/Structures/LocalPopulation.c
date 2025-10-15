@@ -2,6 +2,42 @@
 
 static int local_population_count = 0;
 static LocalPopulation* __static_local_populations = NULL;
+
+static inline const int getBaseBuyPrice(const ProductMarket* const productMarket, const Government* const government, const Product product)
+{
+	return (getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
+			? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
+			: ( (getGovMarketSellAvgByProduct(government, product) != 0)
+				? getGovMarketSellAvgByProduct(government, product)
+				: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
+					? getGovMarketBuyAvgByProduct(government, product)
+					: ( (getMarketSellAvgByProduct(product) != 0)
+						? getMarketSellAvgByProduct(product)
+						: ( (getMarketBuyAvgByProduct(product) != 0)
+							? getMarketBuyAvgByProduct(product)
+							: ( (getMarketSellOfferAvgByProduct(product) != 0)
+								? getMarketSellOfferAvgByProduct(product)
+								: CO_DEFAULT_PRICE
+		)))));
+}
+static inline const int getBaseSellPrice(const ProductMarket* const productMarket, const Government* const government, const Product product)
+{
+	return (getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
+			? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
+			: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
+				? getGovMarketBuyAvgByProduct(government, product)
+				: ( (getGovMarketSellAvgByProduct(government, product) != 0)
+					? getGovMarketSellAvgByProduct(government, product)
+					: ( (getMarketBuyAvgByProduct(product) != 0)
+						? getMarketBuyAvgByProduct(product)
+						: ( (getMarketSellAvgByProduct(product) != 0)
+							? getMarketSellAvgByProduct(product)
+							: ( (getMarketBuyOfferAvgByProduct(product) != 0)
+								? getMarketBuyOfferAvgByProduct(product)
+								: CO_DEFAULT_PRICE
+		)))));
+}
+
 void setTransportNodeCountLocalPopulationStatic(const int transport_node_count)
 {
 	__static_local_populations = (LocalPopulation*) calloc(transport_node_count, sizeof(LocalPopulation));
@@ -36,7 +72,7 @@ void assignLocalPopulationValues(const TransportNode location, const uint32_t po
 	assignFactoryValuesLocalPopulation(&population->population_centre, location);
 	population->population_centre.current_employee_num = population->population_centre.max_employee_num;
 
-	population->wealth = 100000;
+	population->wealth = 10000000;
 
 	population->id = id_next++;
 }
@@ -106,28 +142,20 @@ void updateLocalPopulationOfferedPrices(LocalPopulation* population)
 			ProductMarket* productMarket = getProductMarketAtLocation(population->population_centre.location, population->population_centre.stockpiles_in[i].product_type);
 
 			const Product product_type = productMarket->product_type;
-			// TODO TBU better the calculation of the max allowable price
+
 			const int base_price = MIN(
-				population->wealth / MAX(1, population->population_centre.stockpiles_in_num-1), ( 
-					(getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
-					? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
-					: ( (getMarketBuyAvgByProduct(product_type) != 0)
-						? getMarketBuyAvgByProduct(product_type)
-						: ( (getMarketSellAvgByProduct(product_type) != 0)
-							? getMarketSellAvgByProduct(product_type)
-							: ( (getMarketSellOfferAvgByProduct(product_type) != 0)
-								? getMarketSellOfferAvgByProduct(product_type)
-								: LP_DEFAULT_PRICE
-			))))); // ?: needed to allow for const
+				population->wealth / MAX(1, population->population_centre.stockpiles_in_num-1), 
+				getBaseBuyPrice(productMarket, getGovernmentByLocation(productMarket->location), product_type)
+			);
 			const double stockpile_factor = sqrt((double)population->population_centre.orders_in[i].offer_num) / LP_DESIRED_BUY_STOCKPILE_ROOT;
 
 			// TODO TBU
-			uint_fast64_t market_based_price = (uint_fast64_t) MAX(1, base_price * profit_factor_buy * stockpile_factor);
-			uint_fast64_t wealth_based_price = (uint_fast64_t) MAX(1, 
+			const uint_fast64_t market_based_price = (uint_fast64_t) MAX(1, base_price * profit_factor_buy * stockpile_factor);
+			const uint_fast64_t wealth_based_price = (uint_fast64_t) MAX(1, 
 				2 * (double)population->wealth 
-				/ (double)(population->population_centre.orders_in[i].offer_num 
-					* population->population_centre.stockpiles_in_num
-				));
+				/ (double)(population->population_centre.orders_in[i].offer_num * 3 // approx root 13 for stockpile in
+			));
+
 			population->population_centre.orders_in[i].price = MIN(market_based_price, wealth_based_price);
 
 			if (resetBuyOrder(productMarket, &population->population_centre.orders_in[i])) 

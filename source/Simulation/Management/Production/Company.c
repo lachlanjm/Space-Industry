@@ -200,14 +200,14 @@ static inline const int getBaseBuyPrice(const ProductMarket* const productMarket
 {
 	return (getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) != 0) 
 			? getAvgHistoryWtdAvgArray(&productMarket->buy_hist_array) 
-			: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
-				? getGovMarketBuyAvgByProduct(government, product)
-				: ( (getGovMarketSellAvgByProduct(government, product) != 0)
-					? getGovMarketSellAvgByProduct(government, product)
-					: ( (getMarketBuyAvgByProduct(product) != 0)
-						? getMarketBuyAvgByProduct(product)
-						: ( (getMarketSellAvgByProduct(product) != 0)
-							? getMarketSellAvgByProduct(product)
+			: ( (getGovMarketSellAvgByProduct(government, product) != 0)
+				? getGovMarketSellAvgByProduct(government, product)
+				: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
+					? getGovMarketBuyAvgByProduct(government, product)
+					: ( (getMarketSellAvgByProduct(product) != 0)
+						? getMarketSellAvgByProduct(product)
+						: ( (getMarketBuyAvgByProduct(product) != 0)
+							? getMarketBuyAvgByProduct(product)
 							: ( (getMarketSellOfferAvgByProduct(product) != 0)
 								? getMarketSellOfferAvgByProduct(product)
 								: CO_DEFAULT_PRICE
@@ -217,14 +217,14 @@ static inline const int getBaseSellPrice(const ProductMarket* const productMarke
 {
 	return (getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) != 0) 
 			? getAvgHistoryWtdAvgArray(&productMarket->sell_hist_array) 
-			: ( (getGovMarketSellAvgByProduct(government, product) != 0)
-				? getGovMarketSellAvgByProduct(government, product)
-				: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
-					? getGovMarketBuyAvgByProduct(government, product)
-					: ( (getMarketSellAvgByProduct(product) != 0)
-						? getMarketSellAvgByProduct(product)
-						: ( (getMarketBuyAvgByProduct(product) != 0)
-							? getMarketBuyAvgByProduct(product)
+			: ( (getGovMarketBuyAvgByProduct(government, product) != 0)
+				? getGovMarketBuyAvgByProduct(government, product)
+				: ( (getGovMarketSellAvgByProduct(government, product) != 0)
+					? getGovMarketSellAvgByProduct(government, product)
+					: ( (getMarketBuyAvgByProduct(product) != 0)
+						? getMarketBuyAvgByProduct(product)
+						: ( (getMarketSellAvgByProduct(product) != 0)
+							? getMarketSellAvgByProduct(product)
 							: ( (getMarketBuyOfferAvgByProduct(product) != 0)
 								? getMarketBuyOfferAvgByProduct(product)
 								: CO_DEFAULT_PRICE
@@ -300,6 +300,8 @@ static inline void updateOfferedPrices(Company* const company)
 		const long double profit_factor_sell = (profit>=CO_MIN_PROFIT) ? 1 : (log10((double)((2*CO_MIN_PROFIT)-profit))-1);
 		const long double profit_factor_buy = (profit>=CO_MIN_PROFIT) ? 1 : (1/profit_factor_sell);
 
+		int cost_of_inputs = 0;
+
 		for (int i = 0; i < curr_fact->stockpiles_in_num; i++)
 		{
 			const QUANTITY_INT stockpile_ordered_quantity = 
@@ -325,8 +327,8 @@ static inline void updateOfferedPrices(Company* const company)
 				const double stockpile_factor = sqrt((double)curr_fact->orders_in[i].offer_num) / CO_ORDER_DESIRED_BUY_STOCKPILE_ROOT;
 
 				// TODO TBU
-				uint_fast64_t market_based_price = (uint_fast64_t) MAX(1, base_price * profit_factor_buy * stockpile_factor);
-				uint_fast64_t wealth_based_price = (uint_fast64_t) MAX(1, 
+				const uint_fast64_t market_based_price = (uint_fast64_t) MAX(1, base_price * profit_factor_buy * stockpile_factor);
+				const uint_fast64_t wealth_based_price = (uint_fast64_t) MAX(1, 
 					2 * (double)company->wealth 
 					/ (double)(curr_fact->orders_in[i].offer_num 
 						* company->controlled_factories_num 
@@ -342,7 +344,12 @@ static inline void updateOfferedPrices(Company* const company)
 					printf("Failed to reset buy order\n");
 				}
 			}
+
+			cost_of_inputs += curr_fact->orders_in[i].price * getInputs(curr_fact->productionRecipe)[i].quantity;
 		}
+
+		const int total_cost_of_inputs = cost_of_inputs;
+		const long double min_output_price_per_prod = total_cost_of_inputs / getNumOfOutputs(curr_fact->productionRecipe);
 
 		for (int i = 0; i < curr_fact->stockpiles_out_num; i++)
 		{
@@ -369,7 +376,9 @@ static inline void updateOfferedPrices(Company* const company)
 				const uint64_t base_price = getBaseSellPrice(productMarket, getGovernmentByLocation(productMarket->location), product_type);
 				const double stockpile_factor = CO_ORDER_DESIRED_SELL_STOCKPILE_ROOT / sqrt((double)curr_fact->orders_out[i].offer_num);
 
-				curr_fact->orders_out[i].price = MAX(1, base_price * profit_factor_sell * stockpile_factor);
+				const long double min_output_price = min_output_price_per_prod / getOutputs(curr_fact->productionRecipe)[i].quantity;
+			
+				curr_fact->orders_out[i].price = MAX(MAX(1, min_output_price), base_price * profit_factor_sell * stockpile_factor);
 
 				if (curr_fact->orders_out[i].price <= 0 || curr_fact->orders_out[i].price > 1000000000) // FOR debugging
 				{
@@ -420,10 +429,23 @@ static inline void buildNewFactories(Company* const company)
 						gov,
 						outputs[i].product_type
 					);
+				
+				int throughput = CO_MAX_THROUGHPUT_NUM;
+				for (int i = 0; i < input_num; i++)
+					throughput = MIN(throughput, (int) (
+						(getSellOfferNumSumGlobal(inputs[i].product_type) - getBuyOfferNumSumGlobal(inputs[i].product_type)) 
+						/ (int)(inputs[i].quantity * CO_BUY_THROUGHPUT_FACTOR))
+					);
+				for (int i = 0; i < output_num; i++)
+					throughput = MIN(throughput, (int) (
+						(getBuyOfferNumSumGlobal(outputs[i].product_type) - getSellOfferNumSumGlobal(outputs[i].product_type)) 
+						/ (int)(outputs[i].quantity * CO_SELL_THROUGHPUT_FACTOR))
+					);
 
-				if (revenues - costs > max_profit)
+				const int profit = (revenues - costs) * MAX(0, throughput);
+				if (profit > max_profit && throughput > 0)
 				{
-					max_profit = revenues - costs;
+					max_profit = profit;
 					max_loc = loc;
 					max_rcp = rcp;
 				}

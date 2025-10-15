@@ -103,6 +103,16 @@ int getMarketSellOfferAvgByProduct(const Product product)
 	return __market_wide_avg_sell_offer_arr__[product];
 }
 
+int getBuyOfferNumSumGlobal(const Product product)
+{
+	return __market_wide_buy_order_num_sum_arr__[product];
+}
+
+int getSellOfferNumSumGlobal(const Product product)
+{
+	return __market_wide_sell_order_num_sum_arr__[product];
+}
+
 HistoryWtdAvgArray* getMarketBuyHistoryWtdAvgArrByProduct(const Product product)
 {
 	if (product >= __product_num) return NULL;
@@ -146,10 +156,10 @@ void processTickMarketMap(void)
 					sell_order_num++;
 				}
 
-				__local_buy_order_num_sum_arr__[y][x] = getBuyOfferNumSum(&__product_market_at_location_arr__[x][y]);
+				__local_buy_order_num_sum_arr__[y][x] = getBuyOfferNumSumLocal(&__product_market_at_location_arr__[x][y]);
 				buy_offer_num += __local_buy_order_num_sum_arr__[y][x];
 
-				__local_sell_order_num_sum_arr__[y][x] = getSellOfferNumSum(&__product_market_at_location_arr__[x][y]);
+				__local_sell_order_num_sum_arr__[y][x] = getSellOfferNumSumLocal(&__product_market_at_location_arr__[x][y]);
 				sell_offer_num += __local_sell_order_num_sum_arr__[y][x];
 			}
 			__market_wide_avg_buy_offer_arr__[y] = (buy_order_num > 0) ? (buy_order_price_sum / buy_order_num) : 0;
